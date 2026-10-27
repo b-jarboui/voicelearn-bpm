@@ -79,23 +79,58 @@
   if (VS.mode !== "captions") VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
   const enVoices = () => (synth ? synth.getVoices().filter((v) => /^en/i.test(v.lang)) : []);
-  const IS_EDGE = /\bEdg\//.test(navigator.userAgent);
-  // Default voice: in Edge, a Microsoft "Online (Natural)" voice (Edge plays these itself); elsewhere a LOCAL Microsoft or
-  // system voice. Local "(Natural)" voices that Narrator installs are skipped outside Edge, because Chrome lists them
-  // but often cannot play them. After a network-voice failure (avoidNetwork) only local voices are used.
-  function voice() {
-    const vs = enVoices(), us = (v) => /en[-_]US/i.test(v.lang), gb = (v) => /en[-_]GB/i.test(v.lang);
-    const local = vs.filter((v) => v.localService), plainLocal = local.filter((v) => !/natural/i.test(v.name));
-    const saved = vs.find((v) => v.voiceURI === VS.uri);
-    if (saved && !(avoidNetwork && !saved.localService)) return saved;
-    if (IS_EDGE && !avoidNetwork) { const n = vs.find((v) => /online \(natural\)/i.test(v.name) && us(v)) || vs.find((v) => /online \(natural\)/i.test(v.name) && gb(v)); if (n) return n; }
-    return plainLocal.find((v) => /microsoft/i.test(v.name) && us(v)) || plainLocal.find(us) || plainLocal[0] || local.find(us) || local[0] ||
-      (avoidNetwork ? undefined : vs.find((v) => v.default) || vs[0]);
+  const UA = navigator.userAgent, IS_EDGE = /\bEdg[A-Za-z]*\//.test(UA), IS_ANDROID = /Android/i.test(UA);
+  const IS_APPLE = /iPhone|iPad|iPod|Macintosh/i.test(UA) && !/Chrome|CriOS|Edg|Android/i.test(UA) || /iPhone|iPad|iPod/i.test(UA);
+  // Free voice ranking (27 Oct 2026). Only the voices the device or browser already has, no downloads, no accounts.
+  // Higher score = more natural. Edge "Online (Natural)" > Apple Premium/Enhanced/Siri > Google voices > good local voices
+  // > compact/legacy voices; novelty and eSpeak voices are pushed to the bottom.
+  const NOVELTY = /\b(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|pipe organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|kathy|ralph|princess|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
+  const EDGE_BEST = ["ava", "andrew", "emma", "brian", "jenny", "aria", "guy", "christopher", "eric", "michelle", "roger", "steffan", "sonia", "ryan", "libby", "natasha", "william"];
+  const APPLE_GOOD = ["ava", "zoe", "allison", "samantha", "susan", "evan", "nathan", "tom", "nicky", "aaron", "joelle", "noelle", "daniel", "serena", "kate", "oliver", "karen", "moira", "tessa", "rishi", "lee"];
+  function vScore(v) {
+    const n = (v.name || "") + " " + (v.voiceURI || ""), lang = String(v.lang || "").replace("_", "-");
+    let s = 0;
+    if (/undefined/i.test(v.name || "") || !v.lang) s -= 300; // broken entries (Edge 150 bug: "Microsoft undefined Online (Natural)")
+    if (/espeak|eloquence|speech\.synthesis\.voice\./i.test(n) || NOVELTY.test(v.name || "")) s -= 80; // eSpeak, Apple Eloquence/Effects packs
+    if (/compact/i.test(n)) s -= 15;
+    if (IS_ANDROID && /^en[-_]us$/i.test(lang)) s += 64; // Chrome Android lists locales; en-US plays the phone's Google voice
+    if (/online \(natural\)/i.test(n)) s += IS_EDGE ? 100 : 20; // Edge plays these itself; elsewhere they rarely work
+    else if (/\(natural\)/i.test(n)) s += IS_EDGE ? 40 : -10;    // local Narrator voices: fine in Edge, often silent in Chrome
+    if (/premium/i.test(n)) s += 90; else if (/enhanced/i.test(n)) s += 80; else if (/siri/i.test(n)) s += 75;
+    if (/^google/i.test(v.name || "")) s += IS_ANDROID ? 70 : 55;
+    if (IS_ANDROID && /-x-[a-z]{3}-(network|local)/i.test(n)) s += /network/i.test(n) ? 66 : 62;
+    if (IS_ANDROID && v.default) s += 65; // the phone's own Google TTS voice
+    if (IS_APPLE && v.localService) { const i = APPLE_GOOD.findIndex((g) => new RegExp("\\b" + g + "\\b", "i").test(v.name)); if (i >= 0) s += 40 - i; }
+    if (IS_EDGE) { const i = EDGE_BEST.findIndex((g) => new RegExp("\\b" + g, "i").test(v.name)); if (i >= 0 && /natural/i.test(n)) s += 20 - i; if (/multilingual/i.test(n)) s -= 3; } // plain English voice before the multilingual twin
+    if (/microsoft (zira|david|mark|hazel|george|susan)/i.test(n)) s += 30; // classic Windows voices: clear, a bit robotic
+    if (/^en-US/i.test(lang)) s += 8; else if (/^en-GB/i.test(lang)) s += 6; else if (/^en-(AU|CA|IE|NZ)/i.test(lang)) s += 4;
+    if (v.default) s += 3;
+    if (avoidNetwork && !v.localService) s -= 500; // after a network-voice failure only local voices are used
+    return s;
   }
+  const rankedVoices = () => enVoices().map((v, i) => ({ v, s: vScore(v), i })).sort((a, b) => b.s - a.s || a.i - b.i).map((x) => x.v);
+  const bestVoice = () => { const r = rankedVoices()[0]; return r && !(avoidNetwork && !r.localService) ? r : rankedVoices().find((v) => v.localService); };
+  // The learner's own choice (saved per device) always wins; otherwise the best-ranked voice on this device.
+  function voice() {
+    const vs = enVoices(), saved = VS.uri && vs.find((v) => v.voiceURI === VS.uri);
+    if (saved && !(avoidNetwork && !saved.localService)) return saved;
+    return bestVoice() || (avoidNetwork ? undefined : vs.find((v) => v.default) || vs[0]);
+  }
+  // Speech-only text: what the voice reads (captions keep the original wording). Avoids symbols and abbreviations that
+  // voices spell out or skip, and keeps the punctuation that carries intonation.
+  const SAY = [
+    [/\be\.g\.,?\s*/gi, "for example, "], [/\bi\.e\.,?\s*/gi, "that is, "], [/\betc\./gi, "et cetera."], [/\bvs\.?\s/gi, "versus "],
+    [/(\d)\s*%/g, "$1 percent"], [/%/g, " percent"], [/\s*&\s*/g, " and "], [/\s*(→|->|⇒)\s*/g, ", then "], [/\s+[—–]\s+|—/g, ", "],
+    [/(\w)\/(\w)/g, "$1 or $2"], [/\s*[•·]\s*/g, ", "], [/\bBPMN\b/g, "B P M N"], [/\bBPM\b/g, "B P M"], [/\bBPI\b/g, "B P I"],
+    [/\bKPIs\b/g, "K P Is"], [/\bKPI\b/g, "K P I"], [/\bCLOs\b/g, "C L Os"], [/\bCLO\b/g, "C L O"], [/\bSOPs\b/g, "S O Ps"],
+    [/[*_#`~^|<>]/g, " "], [/\s*\(\s*/g, ", "], [/\s*\)\s*([,.;:!?])/g, "$1"], [/\s*\)\s*/g, ", "], [/,\s*,/g, ","], [/,\s*([.!?])/g, "$1"], [/\s{2,}/g, " "],
+  ];
+  const sayText = (t) => SAY.reduce((s, [a, b]) => s.replace(a, b), String(t)).trim();
   // ---------- pacing (all pauses in one place, milliseconds) ----------
   const PACE = {
-    lead: 350,        // the visual appears, then this short beat, then the voice
-    sentence: 600,    // pause after each sentence
+    lead: 350,        // the visual appears, then this short beat, then the voice (never longer than the gap itself)
+    sentence: 300,    // pause between sentences of the same paragraph (talking, not a list)
+    join: 28,        // two short sentences of the same moment are spoken as ONE utterance when together ≤ this many words
     moment: 1100,     // pause before a sentence that brings in a new visual moment
     part: 1800,       // pause before a new lesson part, review, result or report screen
     question: 1800,   // pause before each question screen
@@ -116,53 +151,84 @@
     bar();
   }
   const FATAL = ["not-allowed", "synthesis-unavailable", "audio-hardware", "audio-busy"];
-  // Speak list[from..] ONE sentence at a time: show the sentence's visual, a short beat, speak it, wait for the
-  // engine's "end", pause, then the next sentence. The step only moves on after the last sentence has been spoken.
+  // Speak list[from..] as complete sentences: show the sentence's visual, a short beat, speak it, wait for the engine's
+  // "end", pause, then the next one. Never splits a sentence. For flowing narration, two short consecutive sentences of the
+  // same moment (opts.canJoin(k) = sentence k+1 brings no new visual) are spoken as ONE utterance so the intonation carries;
+  // the second caption/visual appears at the word boundary where it starts (or at an estimated time on engines without
+  // boundary events, e.g. Android and network voices). The step only moves on after the last sentence has been spoken.
   // opts.pre = pause before the first sentence; opts.gapAfter(k) = pause after sentence k.
+  const IS_CHROME_DESKTOP = /Chrome\//.test(UA) && !IS_EDGE && !IS_ANDROID && !/CriOS|OPR\//.test(UA);
+  const ENDS = /[.!?…]["'”’)\]]*$/;
   function speak(list, from, onSentence, onDone, opts = {}) {
     const my = ++tok; if (synth) synth.cancel();
     const later = (ms, f) => setTimeout(() => { if (my === tok) f(); }, ms);
     const gapAfter = opts.gapAfter || (() => PACE.sentence);
+    const canJoin = opts.canJoin || (() => false);
     let i = from;
-    const next = () => { if (i >= list.length) return onDone(); const k = i++; onSentence(k); later(FAST ? 40 : PACE.lead, () => say(k, 0)); };
-    // The silence between two sentences equals the gap (the lead beat before the voice is part of it).
-    const after = (k) => later(FAST ? 60 : Math.max(0, (k + 1 < list.length ? gapAfter(k) : PACE.sentence) - PACE.lead), next);
-    const say = (k, attempt) => {
-      if (FAST) return later(120, () => after(k));
-      if (silent || VS.mode === "captions") return later(readMs(list[k]), () => after(k));
-      const u = new SpeechSynthesisUtterance(list[k]);
+    // How many sentences (1 or 2) the utterance starting at k carries.
+    const group = (k) => (!FAST && !silent && VS.mode !== "captions" && synth && k + 1 < list.length && canJoin(k) &&
+      ENDS.test(String(list[k]).trim()) && words(list[k]) + words(list[k + 1]) <= PACE.join ? 2 : 1);
+    const next = (lead) => { if (i >= list.length) return onDone(); const k = i, n = group(k); i += n; onSentence(k); later(FAST ? 40 : lead, () => say(k, n, 0)); };
+    // The silence between two utterances equals the gap (the lead beat before the voice is part of it).
+    const after = (last) => {
+      const gap = last + 1 < list.length ? gapAfter(last) : PACE.sentence, lead = Math.min(PACE.lead, gap);
+      later(FAST ? 60 : Math.max(0, gap - lead), () => next(lead));
+    };
+    // Reading pace (captions only / no voice): each sentence shown for its own reading time.
+    const readOut = (k, n, wait = 0) => later(Math.max(0, readMs(list[k]) - wait), () => { if (n === 2) { onSentence(k + 1); later(readMs(list[k + 1]), () => after(k + 1)); } else after(k); });
+    const say = (k, n, attempt) => {
+      if (FAST) return later(120, () => { if (n === 2) onSentence(k + 1); after(k + n - 1); });
+      if (silent || VS.mode === "captions") return readOut(k, n);
+      const parts = list.slice(k, k + n).map(sayText), text = parts.join(" "), split = parts[0].length + 1;
+      const u = new SpeechSynthesisUtterance(text);
       const v = voice();
       if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
-      u.rate = VS.rate; u.pitch = VS.pitch; u.volume = 1;
+      u.rate = VS.rate; u.pitch = VS.pitch; u.volume = window.__vlMute ? 0 : 1;
       window.__vlU = u; // keep a reference so the engine cannot lose the utterance before it starts
-      let started = false, ended = false, words0 = 0; const t0 = performance.now();
-      u.onstart = () => { started = true; noStart = 0; log("start"); };
-      u.onboundary = () => { words0++; };
-      u.onend = () => { if (ended) return; ended = true; log(`end ${Math.round(performance.now() - t0)}ms ${words0}w`); if (my === tok) after(k); };
+      let started = false, ended = false, words0 = 0, second = n === 1, keep = 0; const t0 = performance.now();
+      const showSecond = () => { if (second || my !== tok) return; second = true; onSentence(k + 1); log("join"); };
+      const done = () => { clearInterval(keep); if (!second) showSecond(); };
+      u.onstart = () => {
+        started = true; noStart = 0; log("start");
+        // Engines without boundary events: show the second sentence at its estimated start.
+        if (n === 2) later(speakMs(list[k]) * 0.92, () => { if (!words0) showSecond(); });
+        // Chrome desktop cuts network (Google) voices after ~15 s: a pause/resume every 10 s keeps them talking.
+        if (IS_CHROME_DESKTOP && v && !v.localService) keep = setInterval(() => { if (my !== tok || ended) return clearInterval(keep); if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); } }, 10000);
+      };
+      u.onboundary = (e) => { words0++; if (n === 2 && e.charIndex >= split) showSecond(); };
+      u.onend = () => { if (ended) return; ended = true; done(); log(`end ${Math.round(performance.now() - t0)}ms ${words0}w`); if (my === tok) after(k + n - 1); };
       u.onerror = (e) => {
-        if (ended || e.error === "interrupted" || e.error === "canceled") return;
-        ended = true; log("error:" + e.error);
+        if (ended) return;
+        if (e.error === "interrupted" || e.error === "canceled") {
+          if (my !== tok) return; // our own cancel (pause, skip, a new step)
+          // Interrupted by something else (another tab, a system sound, iOS audio session): say it again once, then go on.
+          ended = true; clearInterval(keep); log("interrupted");
+          return attempt < 1 ? later(250, () => say(k, n, attempt + 1)) : (done(), after(k + n - 1));
+        }
+        ended = true; clearInterval(keep); log("error:" + e.error);
         if (my !== tok) return;
-        // A network voice (e.g. Google or "Online") that fails: switch to a local voice and say the sentence again.
-        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(200, () => say(k, attempt)); }
-        if (FATAL.includes(e.error) || attempt >= 1) { goSilent(`the speech engine reported "${e.error}".`); return later(readMs(list[k]), () => after(k)); }
-        later(300, () => say(k, attempt + 1));
+        // A network voice (e.g. Google or "Online") that fails: switch to a local voice and say the sentences again.
+        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(200, () => say(k, n, attempt)); }
+        if (FATAL.includes(e.error) || attempt >= 1) { goSilent(`the speech engine reported "${e.error}".`); return readOut(k, n); }
+        later(300, () => say(k, n, attempt + 1));
       };
       try { if (synth.paused) synth.resume(); } catch (e) {}
       synth.speak(u);
-      // The engine never started this sentence: try once more (switching away from a network voice), then reading pace.
-      later(PACE.startTimeout, () => {
+      // The engine never started: try once more (switching away from a network voice), then reading pace.
+      // A quick check for network voices (Edge "Online (Natural)", Google) so a dead connection costs little time.
+      const startMs = v && !v.localService && !IS_ANDROID ? 3500 : PACE.startTimeout;
+      later(startMs, () => {
         if (started || ended || document.hidden) return;
-        ended = true; synth.cancel(); log("no-start");
-        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return say(k, attempt); }
+        ended = true; clearInterval(keep); synth.cancel(); log("no-start");
+        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(150, () => say(k, n, attempt)); }
         if (++noStart >= 2) goSilent("the speech engine never starts speaking.");
-        if (attempt < 1 && !silent) return say(k, attempt + 1);
-        later(Math.max(0, readMs(list[k]) - PACE.startTimeout), () => after(k));
+        if (attempt < 1 && !silent) return later(150, () => say(k, n, attempt + 1));
+        readOut(k, n, startMs);
       });
-      // Safety net for engines that drop the "end" event (or Chrome's long-utterance cut-off): move on after a generous time.
-      later(Math.max(9000, speakMs(list[k]) * 2.5 + 4000), () => { if (started && !ended) { ended = true; log("no-end"); synth.cancel(); after(k); } });
+      // Safety net for engines that drop the "end" event: move on after a generous time.
+      later(Math.max(9000, speakMs(text) * 2.5 + 4000), () => { if (started && !ended) { ended = true; done(); log("no-end"); synth.cancel(); after(k + n - 1); } });
     };
-    later(FAST ? 0 : opts.pre || 0, next);
+    later(FAST ? 0 : opts.pre || 0, () => next(PACE.lead));
   }
   const stopSpeech = () => { tok++; if (synth) synth.cancel(); };
 
@@ -499,6 +565,8 @@
     const mset = new Set(mkey && window.MOMENTS && MOMENTS[mkey] ? MOMENTS[mkey].map((m) => m.at + script.offset) : []);
     const pre = P.sent === 0 ? (P.part === "feedback" ? PACE.feedback : st.kind === "quiz" ? PACE.question : PACE.part) : 0;
     const gapAfter = (k) => (P.part === "main" && mset.has(k + 1) ? PACE.moment : PACE.sentence);
+    // Flowing narration: join two short sentences only inside one moment (never across a new visual, never in a question).
+    const canJoin = (k) => (P.part === "feedback" || (st.kind !== "quiz" && !mset.has(k + 1) && k + 1 !== script.offset));
     speak(list, P.sent, (i) => {
       P.sent = i; save(); caption(list[i]);
       if (P.part === "main") vstep(i - script.offset);
@@ -510,7 +578,7 @@
         return bar();
       }
       advance();
-    }, { pre, gapAfter });
+    }, { pre, gapAfter, canJoin });
   }
   function advance() {
     const st = cur();
@@ -555,8 +623,11 @@
 
   // ---------- voice & look panel ----------
   function fillVoices() {
-    const sel = $("vVoice"), cv = voice(), vs = enVoices();
-    sel.innerHTML = vs.length ? vs.map((v) => `<option value="${esc(v.voiceURI)}" ${cv && v.voiceURI === cv.voiceURI ? "selected" : ""}>${esc(v.name.replace(/^(Microsoft|Google)\s+/, ""))} · ${esc(v.lang)}</option>`).join("") : "<option>Default voice</option>";
+    // Voices sorted best-first; the automatic pick carries "★ recommended". The first option follows the best voice.
+    const sel = $("vVoice"), cv = voice(), vs = rankedVoices(), best = bestVoice();
+    const label = (v) => esc(v.name.replace(/^(Microsoft|Google)\s+/, "").replace(/\s+-\s+English.*$/, "")) + " · " + esc(v.lang) + (v.localService ? "" : " · online") + (best && v.voiceURI === best.voiceURI ? " ★ recommended" : "");
+    sel.innerHTML = vs.length ? `<option value="" ${!VS.uri ? "selected" : ""}>★ Automatic: best voice${best ? " (" + esc(best.name.replace(/^(Microsoft|Google)\s+/, "").replace(/\s+-\s+English.*$/, "")) + ")" : ""}</option>` +
+      vs.map((v) => `<option value="${esc(v.voiceURI)}" ${VS.uri && cv && v.voiceURI === cv.voiceURI ? "selected" : ""}>${label(v)}</option>`).join("") : "<option>Default voice</option>";
     const n = $("vNote"); if (n) n.textContent = silent ? `Voice unavailable here: ${silentWhy} Captions advance at reading pace.` : !synth ? "This browser has no speech engine." : vs.length ? `${vs.length} English voice${vs.length > 1 ? "s" : ""} on this device.` : "Voices are still loading on this device…";
     if (n && SLOG.length) n.textContent += ` (engine: ${SLOG.slice(-4).join(", ")})`;
   }
@@ -588,13 +659,15 @@
     if (playing) pause(); if (!synth) return fillVoices();
     silent = false; noStart = 0; avoidNetwork = false;
     const go = () => { const u = new SpeechSynthesisUtterance("Hello. This is how your lessons will sound."); const v = voice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
-      u.rate = VS.rate; u.pitch = VS.pitch; u.volume = 1; u.onstart = () => log("test:start"); u.onend = () => { log("test:end"); fillVoices(); }; u.onerror = (e) => { log("test:error:" + e.error); fillVoices(); };
+      u.rate = VS.rate; u.pitch = VS.pitch; u.volume = window.__vlMute ? 0 : 1; u.onstart = () => log("test:start"); u.onend = () => { log("test:end"); fillVoices(); }; u.onerror = (e) => { log("test:error:" + e.error); fillVoices(); };
       window.__vlTestU = u; try { if (synth.paused) synth.resume(); } catch (e) {} synth.speak(u); };
     if (synth.speaking || synth.pending) { tok++; synth.cancel(); setTimeout(go, 80); } else go(); // never cancel and speak in the same tick
   };
   if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", () => { if (!$("vPanel").hidden) fillVoices(); });
   if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {}; // as in the original prototype
   if (synth) synth.getVoices(); // start loading the device voices early
+  // Some engines (Chrome Android, Windows) never fire "voiceschanged": poll briefly until the list is there.
+  if (synth) { let tries = 0; const poll = setInterval(() => { if (synth.getVoices().length || ++tries > 20) { clearInterval(poll); if (!$("vPanel").hidden) fillVoices(); } }, 250); }
   // Space toggles play, except when a control (answer button, list, input) has focus.
   document.addEventListener("keydown", (e) => { if (e.code === "Space" && view === "player" && !e.target.closest("button,select,input,textarea,label")) { e.preventDefault(); $("toggle").click(); } });
 
@@ -605,6 +678,6 @@
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
     jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = s; P.part = "main"; P.sent = 0; P.q = 0; save(); if (view !== "player") { view = "player"; document.body.dataset.view = "player"; $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`; $("slot").replaceWith(stageEl); stageEl.after(lookEl); } load(); },
     setLook: (id) => { VS.look = id; saveVS(); },
-    fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, rate: VS.rate, log: SLOG.slice(-12) }) };
+    fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, ranked: rankedVoices().slice(0, 6).map((v) => v.name + " [" + vScore(v) + "]"), sayText, rate: VS.rate, log: SLOG.slice(-12) }) };
   renderHome();
 })();
