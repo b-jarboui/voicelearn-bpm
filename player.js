@@ -70,68 +70,99 @@
 
   // ---------- speech ----------
   const synth = window.speechSynthesis;
-  const VKEY = "voicelearn.voice.v1";
-  let VS = { uri: "", rate: 1, pitch: 1, look: "story" };
+  // Own settings key: the original prototype lives on the same github.io origin and must not share (or break) our settings.
+  const VKEY = "voicelearn.oper621.voice.v2";
+  let VS = { uri: "", rate: 0.95, pitch: 1, look: "story" };
   try { VS = Object.assign(VS, JSON.parse(localStorage.getItem(VKEY)) || {}); } catch (e) {}
+  // Sanitize saved values: a bad rate/pitch (NaN, a string, out of range) makes some engines silent.
+  const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
+  VS.rate = num(VS.rate, 0.5, 2, 0.95); VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
   const enVoices = () => (synth ? synth.getVoices().filter((v) => /^en/i.test(v.lang)) : []);
+  const IS_EDGE = /\bEdg\//.test(navigator.userAgent);
+  // Default voice: in Edge, a Microsoft "Online (Natural)" voice (Edge plays these itself); elsewhere a LOCAL Microsoft or
+  // system voice. Local "(Natural)" voices that Narrator installs are skipped outside Edge, because Chrome lists them
+  // but often cannot play them. After a network-voice failure (avoidNetwork) only local voices are used.
   function voice() {
-    const vs = enVoices();
-    return vs.find((v) => v.voiceURI === VS.uri) || vs.find((v) => v.localService && /en[-_](GB|US)/i.test(v.lang) && /natural|online/i.test(v.name)) || vs.find((v) => v.localService && /en[-_]US/i.test(v.lang)) || vs.find((v) => v.localService) || vs.find((v) => v.default) || vs[0];
+    const vs = enVoices(), us = (v) => /en[-_]US/i.test(v.lang), gb = (v) => /en[-_]GB/i.test(v.lang);
+    const local = vs.filter((v) => v.localService), plainLocal = local.filter((v) => !/natural/i.test(v.name));
+    const saved = vs.find((v) => v.voiceURI === VS.uri);
+    if (saved && !(avoidNetwork && !saved.localService)) return saved;
+    if (IS_EDGE && !avoidNetwork) { const n = vs.find((v) => /online \(natural\)/i.test(v.name) && us(v)) || vs.find((v) => /online \(natural\)/i.test(v.name) && gb(v)); if (n) return n; }
+    return plainLocal.find((v) => /microsoft/i.test(v.name) && us(v)) || plainLocal.find(us) || plainLocal[0] || local.find(us) || local[0] ||
+      (avoidNetwork ? undefined : vs.find((v) => v.default) || vs[0]);
   }
+  // ---------- pacing (all pauses in one place, milliseconds) ----------
+  const PACE = {
+    lead: 350,        // the visual appears, then this short beat, then the voice
+    sentence: 600,    // pause after each sentence
+    moment: 1100,     // pause before a sentence that brings in a new visual moment
+    part: 1800,       // pause before a new lesson part, review, result or report screen
+    question: 1800,   // pause before each question screen
+    feedback: 700,    // pause after answering, before the feedback is spoken
+    rate: 0.95,       // default speaking rate (the Speed slider overrides it)
+    startTimeout: 6000, // no "start" from the engine within this time = retry, then reading pace
+  };
   // Reading pace used only when the device cannot speak: about 170 words per minute, never under 3 seconds a sentence.
   const words = (s) => String(s).trim().split(/\s+/).length;
   const readMs = (s) => Math.max(3000, (words(s) / 170) * 60000);
-  // Expected spoken time at the chosen rate (about 165 words per minute at 1×), used to spot "silent" engines.
   const speakMs = (s) => (words(s) / 165) * 60000 / (VS.rate || 1);
   const SLOG = []; // recent speech events, shown in the Voice panel to diagnose devices
-  let silent = !synth, silentWhy = synth ? "" : "This browser has no speech engine.", fastEnds = 0;
+  const log = (x) => { SLOG.push(x); if (SLOG.length > 30) SLOG.shift(); };
+  let silent = !synth, silentWhy = synth ? "" : "this browser has no speech engine.", noStart = 0, avoidNetwork = false;
   function goSilent(why) {
-    if (silent) return; silent = true; silentWhy = why;
-    const n = $("vNote"); if (n) n.textContent = `Voice unavailable here: ${why} Captions now advance at reading pace. Open the page in Chrome, Edge or Safari to hear it.`;
+    if (silent) return; silent = true; silentWhy = why; log("silent:" + why);
+    const n = $("vNote"); if (n) n.textContent = `Voice unavailable here: ${why} Captions now advance at reading pace. Try another voice in this panel, or open the page in Chrome, Edge or Safari.`;
     bar();
   }
-  // Speak list[from..] as one continuous queue (as in the original prototype): each sentence's onstart drives the visuals,
-  // and the step only moves on when the LAST sentence's speech ends. A watchdog recovers stalls. If the engine errors or
-  // ends sentences without audio, we switch to reading pace — never to a fast timer.
-  function speak(list, from, onSentence, onDone, tries = 0) {
+  const FATAL = ["not-allowed", "synthesis-unavailable", "audio-hardware", "audio-busy"];
+  // Speak list[from..] ONE sentence at a time: show the sentence's visual, a short beat, speak it, wait for the
+  // engine's "end", pause, then the next sentence. The step only moves on after the last sentence has been spoken.
+  // opts.pre = pause before the first sentence; opts.gapAfter(k) = pause after sentence k.
+  function speak(list, from, onSentence, onDone, opts = {}) {
     const my = ++tok; if (synth) synth.cancel();
-    if (from >= list.length) return onDone();
-    if (FAST || silent) { let i = from; const tick = () => { if (my !== tok) return; if (i >= list.length) return onDone(); const s = list[i]; onSentence(i++); setTimeout(tick, FAST ? 260 : readMs(s)); }; return tick(); }
-    let shown = from - 1, started = from - 1, done = false, quiet = 0;
-    const t0 = {};
-    const show = (i) => { if (my === tok && i > shown) { shown = i; onSentence(i); } };
-    const finish = () => { if (done || my !== tok) return; done = true; clearInterval(dog); onDone(); };
-    const fallback = (i, why) => { if (done || my !== tok) return; done = true; clearInterval(dog); goSilent(why); speak(list, Math.max(from, i), onSentence, onDone); };
-    const v = voice();
-    for (let i = from; i < list.length; i++) {
-      const u = new SpeechSynthesisUtterance(list[i]);
+    const later = (ms, f) => setTimeout(() => { if (my === tok) f(); }, ms);
+    const gapAfter = opts.gapAfter || (() => PACE.sentence);
+    let i = from;
+    const next = () => { if (i >= list.length) return onDone(); const k = i++; onSentence(k); later(FAST ? 40 : PACE.lead, () => say(k, 0)); };
+    // The silence between two sentences equals the gap (the lead beat before the voice is part of it).
+    const after = (k) => later(FAST ? 60 : Math.max(0, (k + 1 < list.length ? gapAfter(k) : PACE.sentence) - PACE.lead), next);
+    const say = (k, attempt) => {
+      if (FAST) return later(120, () => after(k));
+      if (silent) return later(readMs(list[k]), () => after(k));
+      const u = new SpeechSynthesisUtterance(list[k]);
+      const v = voice();
       if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
-      u.rate = VS.rate; u.pitch = VS.pitch;
-      u.onstart = () => { SLOG.push("start"); if (my !== tok) return; started = Math.max(started, i); t0[i] = performance.now(); show(i); };
-      u.onend = () => {
-        if (t0[i] != null) SLOG.push("end:" + Math.round(performance.now() - t0[i]) + "ms/" + Math.round(speakMs(list[i])) + "ms");
+      u.rate = VS.rate; u.pitch = VS.pitch; u.volume = 1;
+      window.__vlU = u; // keep a reference so the engine cannot lose the utterance before it starts
+      let started = false, ended = false, words0 = 0; const t0 = performance.now();
+      u.onstart = () => { started = true; noStart = 0; log("start"); };
+      u.onboundary = () => { words0++; };
+      u.onend = () => { if (ended) return; ended = true; log(`end ${Math.round(performance.now() - t0)}ms ${words0}w`); if (my === tok) after(k); };
+      u.onerror = (e) => {
+        if (ended || e.error === "interrupted" || e.error === "canceled") return;
+        ended = true; log("error:" + e.error);
         if (my !== tok) return;
-        const exp = speakMs(list[i]);
-        // An end far earlier than any real voice could manage means the engine is dropping audio.
-        if (exp > 1500 && t0[i] != null && performance.now() - t0[i] < exp * 0.4) { if (++fastEnds >= 2) return fallback(i, "the speech engine ends sentences without audio."); }
-        else fastEnds = 0;
-        if (i === list.length - 1) finish();
+        // A network voice (e.g. Google or "Online") that fails: switch to a local voice and say the sentence again.
+        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(200, () => say(k, attempt)); }
+        if (FATAL.includes(e.error) || attempt >= 1) { goSilent(`the speech engine reported "${e.error}".`); return later(readMs(list[k]), () => after(k)); }
+        later(300, () => say(k, attempt + 1));
       };
-      u.onerror = (e) => { SLOG.push("error:" + e.error); if (my !== tok || e.error === "interrupted" || e.error === "canceled") return; fallback(i, `the speech engine reported "${e.error}".`); };
+      try { if (synth.paused) synth.resume(); } catch (e) {}
       synth.speak(u);
-    }
-    show(from);
-    const dog = setInterval(() => {
-      if (my !== tok || done) return clearInterval(dog);
-      if (document.hidden || synth.speaking || synth.pending) { quiet = 0; return; }
-      if (++quiet < (started >= from ? 3 : 10)) return;
-      clearInterval(dog);
-      if (started >= list.length - 1) return finish();
-      if (started < from && tries >= 1) { done = true; goSilent("the speech engine never starts speaking."); return speak(list, from, onSentence, onDone); }
-      const next = started >= from ? started + 1 : from;
-      speak(list, next, onSentence, onDone, started >= from ? 0 : tries + 1);
-    }, 500);
+      // The engine never started this sentence: try once more (switching away from a network voice), then reading pace.
+      later(PACE.startTimeout, () => {
+        if (started || ended || document.hidden) return;
+        ended = true; synth.cancel(); log("no-start");
+        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return say(k, attempt); }
+        if (++noStart >= 2) goSilent("the speech engine never starts speaking.");
+        if (attempt < 1 && !silent) return say(k, attempt + 1);
+        later(Math.max(0, readMs(list[k]) - PACE.startTimeout), () => after(k));
+      });
+      // Safety net for engines that drop the "end" event (or Chrome's long-utterance cut-off): move on after a generous time.
+      later(Math.max(9000, speakMs(list[k]) * 2.5 + 4000), () => { if (started && !ended) { ended = true; log("no-end"); synth.cancel(); after(k); } });
+    };
+    later(FAST ? 0 : opts.pre || 0, next);
   }
   const stopSpeech = () => { tok++; if (synth) synth.cancel(); };
 
@@ -190,6 +221,10 @@
     document.querySelectorAll("[data-l]").forEach((b) => (b.onclick = () => { P.queue = lessonPlan(+b.dataset.l); P.idx = 0; P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(); }));
     bar();
   }
+  // Called inside click handlers: the first utterance of the page is queued during a real user gesture.
+  let primed = false;
+  function primeSpeech() { if (primed || !synth || FAST) return; primed = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; window.__vlPrime = u; synth.speak(u); } catch (e) {} }
+  document.addEventListener("pointerdown", primeSpeech, { capture: true }); document.addEventListener("keydown", primeSpeech, { capture: true });
   function openPlayer() {
     view = "player"; document.body.dataset.view = "player";
     $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`;
@@ -448,6 +483,11 @@
     const st = cur();
     const list = P.part === "feedback" ? script.feedback : script.main;
     if (!list) { P.part = "main"; P.sent = 0; return play(); }
+    // Human pacing: a clear pause before a new screen, a longer beat before each new visual moment, a short one otherwise.
+    const mkey = st.kind === "sec" ? `${C.lessons[st.l].id}:${st.s}` : st.kind === "review" ? `review:${st.sec}:${st.v}` : null;
+    const mset = new Set(mkey && window.MOMENTS && MOMENTS[mkey] ? MOMENTS[mkey].map((m) => m.at + script.offset) : []);
+    const pre = P.sent === 0 ? (P.part === "feedback" ? PACE.feedback : st.kind === "quiz" ? PACE.question : PACE.part) : 0;
+    const gapAfter = (k) => (P.part === "main" && mset.has(k + 1) ? PACE.moment : PACE.sentence);
     speak(list, P.sent, (i) => {
       P.sent = i; save(); caption(list[i]);
       if (P.part === "main") vstep(i - script.offset);
@@ -459,7 +499,7 @@
         return bar();
       }
       advance();
-    });
+    }, { pre, gapAfter });
   }
   function advance() {
     const st = cur();
@@ -526,10 +566,18 @@
   $("vPitch").oninput = (e) => { VS.pitch = +e.target.value; showPitch(); };
   $("vPitch").onchange = () => { saveVS(); applyLive(); };
   $("vClose").onclick = () => ($("vPanel").hidden = true);
-  $("vVoice").onchange = (e) => { VS.uri = e.target.value; saveVS(); if (synth) { silent = false; fastEnds = 0; } applyLive(); };
+  $("vVoice").onchange = (e) => { VS.uri = e.target.value; saveVS(); if (synth) { silent = false; noStart = 0; avoidNetwork = false; } applyLive(); };
   $("vRate").oninput = (e) => { VS.rate = +e.target.value; showRate(); };
   $("vRate").onchange = () => { saveVS(); applyLive(); };
-  $("vTest").onclick = () => { if (playing) pause(); if (synth) { silent = false; fastEnds = 0; } speak(["Hello. This is how your lessons will sound."], 0, () => {}, () => {}); };
+  // Test voice: spoken directly inside the click (user gesture), with the same voice/rate/pitch the lessons use.
+  $("vTest").onclick = () => {
+    if (playing) pause(); if (!synth) return fillVoices();
+    silent = false; noStart = 0; avoidNetwork = false;
+    const go = () => { const u = new SpeechSynthesisUtterance("Hello. This is how your lessons will sound."); const v = voice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
+      u.rate = VS.rate; u.pitch = VS.pitch; u.volume = 1; u.onstart = () => log("test:start"); u.onend = () => { log("test:end"); fillVoices(); }; u.onerror = (e) => { log("test:error:" + e.error); fillVoices(); };
+      window.__vlTestU = u; try { if (synth.paused) synth.resume(); } catch (e) {} synth.speak(u); };
+    if (synth.speaking || synth.pending) { tok++; synth.cancel(); setTimeout(go, 80); } else go(); // never cancel and speak in the same tick
+  };
   if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", () => { if (!$("vPanel").hidden) fillVoices(); });
   if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {}; // as in the original prototype
   if (synth) synth.getVoices(); // start loading the device voices early
@@ -543,6 +591,6 @@
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
     jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = s; P.part = "main"; P.sent = 0; P.q = 0; save(); if (view !== "player") { view = "player"; document.body.dataset.view = "player"; $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`; $("slot").replaceWith(stageEl); stageEl.after(lookEl); } load(); },
     setLook: (id) => { VS.look = id; saveVS(); },
-    fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, rate: VS.rate }) };
+    fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, rate: VS.rate, log: SLOG.slice(-12) }) };
   renderHome();
 })();

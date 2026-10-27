@@ -59,7 +59,7 @@
           ["One process inside it is: admit a patient, which involves several departments.", dg("Level 2 · a process", D.hier(hosp, 1), "Admitting a patient is one process, and it passes through several departments.")],
           ["Inside admission there is a sub-process, register the patient, and inside that an activity, verify the insurance.", dg("Levels 3 and 4", D.hier(hosp, 3), "Registering the patient contains the activity of verifying the insurance.")],
           ["And at the bottom there is one single task: scan the patient's Emirates ID card.", dg("Level 5 · a task", D.hier(hosp, 4), "Scanning the ID card is one action, done by one person.")],
-          ["If a nurse is mapping admission while a manager is mapping the ID scan, they will argue all afternoon, so they should agree the level first.", st("Two people drawing different levels will argue without knowing why, so agree the level before you draw.")],
+          ["If a nurse is mapping admission while a manager is mapping the ID scan, they will argue all afternoon. So they should agree the level first.", st("Two people drawing different levels will argue without knowing why, so agree the level before you draw.")],
         ] },
         { title: "Drawing the boundary: an online return", lines: [
           ["Now let's practise drawing a boundary, using an online return.", t("Another way to see it", "Where does a return start and end?")],
@@ -166,7 +166,7 @@
         { title: "Using maturity honestly", lines: [
           ["Let's see how to use maturity honestly, with a small clinic.", t("Another way to see it", "Appointments at a small clinic")],
           ["At this clinic, each receptionist books appointments in their own way, so results vary from person to person.", iss("Every receptionist books appointments differently, so the process is at level one.", "Level 1")],
-          ["Buying an advanced AI scheduling tool now would fail, because there is no standard way of working yet; first, they need to write one down.", iss("An advanced tool would be rejected, because there is no standard way of working for it to support.", "Rejected")],
+          ["Buying an advanced AI scheduling tool now would fail, because there is no standard way of working yet. First, they need to write one down.", iss("An advanced tool would be rejected, because there is no standard way of working for it to support.", "Rejected")],
           ["Meanwhile, the same clinic's billing might already be measured and controlled, which is level four.", dg("Different levels, same clinic", D.stairs([0, 3], { alt: "Appointments at level 1, billing at level 4" }), "Appointments are at level one while billing is at level four, so each process needs its own assessment.")],
           ["And a level only counts if there is evidence for it, such as documents, measures and records.", st("A maturity level only counts if you can show the evidence for it.")],
         ] },
