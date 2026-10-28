@@ -1,133 +1,1885 @@
-// Style: Story cards (GSAP) — full-screen cards like social "stories": progress segments on top,
-// each beat turns in like a cube face, then its content plays a short choreographed timeline.
+// FILE: style-story.js
+
+/*
+ * VoiceLearn — Story Cards v25
+ * OPER621 Business Process Management
+ *
+ * Visual presentation revision of the v24 Story Cards renderer.
+ *
+ * Preserved:
+ * - STYLES registration interface
+ * - id: "story"
+ * - mount(el)
+ * - load(section)
+ * - step(sentenceIndex)
+ * - All original moment types
+ * - Cover card
+ * - Sentence-indexed moment progression
+ * - Grouped issue and comparison moments
+ * - DIAG-generated SVG content
+ * - LAB icon support
+ *
+ * Improved:
+ * - Calm editorial presentation
+ * - Responsive typography
+ * - Mobile-first spacing
+ * - Accessible contrast
+ * - Long-text wrapping
+ * - Diagram sizing
+ * - Reduced-motion behavior
+ * - No duplicated progress indicators
+ * - No decorative sentence counters
+ * - No 3D card rotation
+ * - No character-by-character animation
+ *
+ * Speech and narration logic are not modified.
+ */
+
 (() => {
+  "use strict";
+
+  /* ======================================================
+     01. STYLES
+     ====================================================== */
+
   const css = `
-  .ss{position:absolute;inset:0;overflow:hidden;perspective:1100px;background:#0c0c10;font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:#fff}
-  .ss-seg{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px;z-index:5}
-  .ss-seg i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.3);overflow:hidden;position:relative}
-  .ss-seg i b{position:absolute;inset:0;width:0;background:#fff}
-  .ss-cap{position:absolute;top:22px;left:14px;right:14px;z-index:5;display:flex;align-items:center;gap:8px;font:700 13px system-ui}
-  .ss-cap .av{width:26px;height:26px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font:800 12px "Bricolage Grotesque"}
-  .ss-cap span{opacity:.85}
-  .ss-card{position:absolute;inset:0;padding:78px 26px 36px;display:flex;flex-direction:column;justify-content:center;gap:16px;
-    backface-visibility:hidden;transform-origin:left center;visibility:hidden}
-  .ss-card.now{visibility:visible}
-  .ss h2{font:800 clamp(30px,9vw,46px)/1.02 "Bricolage Grotesque",system-ui;margin:0;letter-spacing:-.01em}
-  .ss .ch{display:inline-block;will-change:transform}
-  .ss .k{font:700 12px system-ui;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
-  .ss .p{font-size:19px;line-height:1.35;opacity:.92;max-width:34ch}
-  .ss h2.sm{font-size:clamp(23px,6.2vw,32px);line-height:1.12}
-  .ss .ring{width:112px;height:112px;position:relative;display:grid;place-items:center}
-  .ss .ring svg.r{position:absolute;inset:0;transform:rotate(-90deg)}
-  .ss .ring svg.r circle{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round}
-  .ss .ring .ic{width:46px;height:46px;color:#fff}
-  .ss .cnt{position:absolute;right:22px;bottom:30px;font:800 64px/1 "Bricolage Grotesque";opacity:.25;font-variant-numeric:tabular-nums}
-  .ss .bigq{font:800 220px/0.8 "Bricolage Grotesque";opacity:.18;position:absolute;right:10px;top:70px}
-  .ss .frac{display:grid;justify-items:start;gap:8px;font:800 44px/1 "Bricolage Grotesque"}
-  .ss .frac .bar{height:6px;width:100%;background:#fff;border-radius:6px;transform-origin:left}
-  .ss .chips{display:grid;gap:10px}
-  .ss .chip{display:flex;justify-content:space-between;align-items:center;gap:10px;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);
-    border:1px solid rgba(255,255,255,.25);border-radius:16px;padding:12px 14px;font-size:17px}
-  .ss .chip b{background:#fff;color:#111;border-radius:99px;padding:3px 9px;font-size:13px;white-space:nowrap}
-  .ss .arr{font:800 130px/0.8 "Bricolage Grotesque";display:inline-block}
-  .ss .stmt{font:800 24px/1.2 "Bricolage Grotesque";border-left:4px solid #fff;padding-left:12px}
-  .ss .dgw{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:12px;color:#fff}
-  .ss .dgw svg{display:block;width:100%;height:auto;max-height:34vh}
-  .ss .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .ss .vs-i{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:14px;display:grid;gap:6px;align-content:start}
-  .ss .vs-i.b{background:#fff;color:#111}
-  .ss .vs-n{font:800 21px/1.15 "Bricolage Grotesque"}
-  .ss .arr.s{font-size:44px}`;
-  const st = document.createElement("style"); st.textContent = LAB.k(css); document.head.appendChild(st);
 
-  // Rich duotone backgrounds, one per card.
-  const BG = ["linear-gradient(160deg,#0F5257 0%,#0B2B40 100%)", "linear-gradient(160deg,#E2552D 0%,#8C1C3E 100%)", "linear-gradient(160deg,#1C3FAA 0%,#0A1340 100%)",
-    "linear-gradient(160deg,#2E7D4F 0%,#0F3325 100%)", "linear-gradient(160deg,#B8325E 0%,#3A0F35 100%)", "linear-gradient(160deg,#D99A1E 0%,#7A3A05 100%)", "linear-gradient(160deg,#334155 0%,#0B1120 100%)"];
-  const escS = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const chars = (t) => String(t).split(" ").map((w) => `<span style="display:inline-block;white-space:nowrap">${[...w].map((c) => `<span class="ch">${escS(c)}</span>`).join("")}</span>`).join(" ");
-  // Respect the device's "reduce motion" setting: no card turns or letter animations.
-  const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const G = () => (RM ? null : window.gsap);
+  .ss {
+    position: absolute;
+    inset: 0;
 
-  function cardHtml(ms, sec) {
-    const m = ms[0];
-    if (m.cover) return `<div class="k">${sec.lesson}</div><h2>${chars(sec.title)}</h2><div class="p">Tap play and listen.</div>`;
-    switch (m.type) {
-      case "title": return `<div class="k">${m.kicker}</div><h2${m.text.length > 36 ? ' class="sm"' : ""}>${chars(m.text)}</h2>${m.count ? `<div class="cnt" data-count="${m.count}">0</div>` : ""}`;
-      case "item": return `<div class="ring"><svg class="r" viewBox="0 0 112 112"><circle cx="56" cy="56" r="50" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>${LAB.icon(m.icon, "ic")}</div>
-        <div class="k">${m.n} of ${m.of}</div><h2>${chars(m.title)}</h2><div class="p">${m.text}</div><div class="cnt">${String(m.n).padStart(2, "0")}</div>`;
-      case "question": return `<div class="bigq">?</div><h2${m.text.length > 36 ? ' class="sm"' : ""}>${chars(m.text)}</h2>`;
-      case "formula": return `<div class="k">${m.label}</div><div class="frac"><div class="num">${m.num}</div><div class="bar"></div><div class="den">${m.den}</div></div>`;
-      case "issue": return `<div class="k">What went wrong</div><div class="chips">${ms.map((x) => `<div class="chip"><span>${x.text}</span><b>${x.effect}</b></div>`).join("")}</div>`;
-      case "compare": { const s = ms.find((x) => x.type === "statement"), cs = ms.filter((x) => x.type === "compare");
-        if (cs.length > 1) return `<div class="vs">${cs.map((c) => `<div class="vs-i${c.side === "b" ? " b" : ""}">${c.dir ? `<div class="arr s">${c.dir === "down" ? "↓" : "↑"}</div>` : ""}<div class="k">${c.label}</div><div class="vs-n">${c.note}</div></div>`).join("")}</div>${s ? `<div class="stmt">${s.text}</div>` : ""}`;
-        return `${m.dir ? `<div class="arr">${m.dir === "down" ? "↓" : "↑"}</div>` : ""}<div class="k">${m.label}</div><h2${m.note.length > 36 ? ' class="sm"' : ""}>${chars(m.note)}</h2>${s ? `<div class="stmt">${s.text}</div>` : ""}`; }
-      case "diagram": return `<div class="k">${m.kicker || ""}</div><div class="dgw">${m.svg}</div>${m.caption ? `<div class="p">${m.caption}</div>` : ""}`;
-      case "statement": return `<div class="stmt">${m.text}</div>`;
-      default: return `<h2>${chars(m.text || "")}</h2>`;
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+    isolation: isolate;
+
+    background: #102B3C;
+    color: #FFFFFF;
+
+    font-family:
+      "Atkinson Hyperlegible",
+      system-ui,
+      sans-serif;
+  }
+
+  /*
+   * One authoritative progress indicator exists
+   * in the player navigation.
+   *
+   * Story Cards must not duplicate it.
+   */
+
+  .ss .ss-seg,
+  .ss .ss-cap {
+    display: none !important;
+  }
+
+  /* ======================================================
+     02. CARD STRUCTURE
+     ====================================================== */
+
+  .ss-card {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    padding:
+      clamp(24px, 4vw, 64px);
+
+    gap:
+      clamp(12px, 1.8vw, 24px);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+
+    visibility: hidden;
+    opacity: 0;
+
+    transform: none;
+
+    backface-visibility: visible;
+
+    transition:
+      opacity 280ms ease,
+      visibility 280ms ease;
+  }
+
+  .ss-card.now {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /*
+   * Do not animate the entire lesson with
+   * perspective transforms.
+   *
+   * A simple opacity transition preserves
+   * orientation and reduces visual fatigue.
+   */
+
+  .ss-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+      radial-gradient(
+        circle at 85% 12%,
+        rgba(255,255,255,.075),
+        transparent 42%
+      );
+
+    z-index: 0;
+  }
+
+  .ss-card > * {
+    position: relative;
+    z-index: 1;
+
+    max-width: 100%;
+  }
+
+  /* ======================================================
+     03. TYPOGRAPHY
+     ====================================================== */
+
+  .ss .k {
+    max-width: 70ch;
+
+    margin: 0;
+
+    color: rgba(255,255,255,.86);
+
+    font-family:
+      "Atkinson Hyperlegible",
+      system-ui,
+      sans-serif;
+
+    font-size:
+      clamp(12px, 1vw, 14px);
+
+    font-weight: 700;
+
+    line-height: 1.4;
+    letter-spacing: .11em;
+
+    text-transform: uppercase;
+
+    overflow-wrap: anywhere;
+  }
+
+  .ss h2 {
+    max-width: 23ch;
+
+    margin: 0;
+
+    color: #FFFFFF;
+
+    font-family:
+      "Bricolage Grotesque",
+      "Atkinson Hyperlegible",
+      system-ui,
+      sans-serif;
+
+    font-size:
+      clamp(29px, 4.2vw, 60px);
+
+    font-weight: 800;
+
+    line-height: 1.09;
+    letter-spacing: -.035em;
+
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .ss h2.sm {
+    max-width: 29ch;
+
+    font-size:
+      clamp(25px, 3.3vw, 46px);
+
+    line-height: 1.13;
+  }
+
+  .ss .p {
+    max-width: 52ch;
+
+    margin: 0;
+
+    color: rgba(255,255,255,.94);
+
+    font-size:
+      clamp(16px, 1.5vw, 21px);
+
+    font-weight: 400;
+
+    line-height: 1.55;
+
+    overflow-wrap: anywhere;
+  }
+
+  /*
+   * Compatibility class retained for any
+   * existing authored content or selectors.
+   */
+
+  .ss .ch {
+    display: inline;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* ======================================================
+     04. COVER CARD
+     ====================================================== */
+
+  .ss-card.ss-cover {
+    justify-content: center;
+  }
+
+  .ss-cover .ss-cover-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    margin-bottom: 8px;
+
+    border: 1px solid
+      rgba(255,255,255,.38);
+
+    border-radius: 16px;
+
+    background:
+      rgba(255,255,255,.10);
+
+    color: #FFFFFF;
+
+    font-family:
+      "Bricolage Grotesque",
+      system-ui,
+      sans-serif;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: -.06em;
+  }
+
+  .ss-cover h2 {
+    max-width: 21ch;
+  }
+
+  .ss-cover .p {
+    max-width: 42ch;
+  }
+
+  /* ======================================================
+     05. ITEM MOMENTS
+     ====================================================== */
+
+  .ss .ring {
+    position: relative;
+
+    display: grid;
+    place-items: center;
+
+    flex: 0 0 auto;
+
+    width: 82px;
+    height: 82px;
+
+    border: 1px solid
+      rgba(255,255,255,.38);
+
+    border-radius: 24px;
+
+    background:
+      rgba(255,255,255,.10);
+  }
+
+  .ss .ring svg.r {
+    display: none;
+  }
+
+  .ss .ring .ic {
+    display: block;
+
+    width: 38px;
+    height: 38px;
+
+    color: #FFFFFF;
+  }
+
+  /*
+   * The item number is represented once,
+   * in the semantic kicker.
+   *
+   * The original large decorative counter
+   * is intentionally suppressed.
+   */
+
+  .ss .cnt {
+    display: none !important;
+  }
+
+  /* ======================================================
+     06. QUESTION MOMENTS
+     ====================================================== */
+
+  .ss .bigq {
+    position: relative;
+
+    display: grid;
+    place-items: center;
+
+    width: 62px;
+    height: 62px;
+
+    margin-bottom: 6px;
+
+    border: 1px solid
+      rgba(255,255,255,.35);
+
+    border-radius: 50%;
+
+    background:
+      rgba(255,255,255,.10);
+
+    color: #FFFFFF;
+
+    font-family:
+      "Bricolage Grotesque",
+      system-ui,
+      sans-serif;
+
+    font-size: 38px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    opacity: 1;
+  }
+
+  /* ======================================================
+     07. FORMULA MOMENTS
+     ====================================================== */
+
+  .ss .frac {
+    display: grid;
+
+    justify-items: start;
+    align-content: center;
+
+    width: min(100%, 620px);
+
+    gap: 14px;
+
+    color: #FFFFFF;
+
+    font-family:
+      "Bricolage Grotesque",
+      system-ui,
+      sans-serif;
+
+    font-size:
+      clamp(24px, 3.2vw, 44px);
+
+    font-weight: 800;
+
+    line-height: 1.15;
+  }
+
+  .ss .frac .num,
+  .ss .frac .den {
+    width: 100%;
+
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .ss .frac .bar {
+    display: block;
+
+    width: 100%;
+    height: 4px;
+
+    border-radius: 4px;
+
+    background: #FFFFFF;
+
+    transform: none;
+  }
+
+  /* ======================================================
+     08. ISSUE MOMENTS
+     ====================================================== */
+
+  .ss .chips {
+    display: grid;
+
+    width: min(100%, 820px);
+
+    gap: 12px;
+  }
+
+  .ss .chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-width: 0;
+
+    gap: 16px;
+
+    padding:
+      clamp(14px, 1.5vw, 20px);
+
+    border: 1px solid
+      rgba(255,255,255,.28);
+
+    border-radius: 14px;
+
+    background:
+      rgba(255,255,255,.10);
+
+    color: #FFFFFF;
+
+    font-size:
+      clamp(15px, 1.3vw, 18px);
+
+    line-height: 1.45;
+
+    backdrop-filter: none;
+  }
+
+  .ss .chip span {
+    flex: 1 1 auto;
+
+    min-width: 0;
+
+    overflow-wrap: anywhere;
+  }
+
+  .ss .chip b {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    max-width: 42%;
+
+    min-height: 30px;
+
+    padding: 5px 11px;
+
+    border-radius: 999px;
+
+    background: #FFFFFF;
+    color: #142535;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    line-height: 1.25;
+
+    text-align: center;
+
+    overflow-wrap: anywhere;
+  }
+
+  /* ======================================================
+     09. COMPARISON MOMENTS
+     ====================================================== */
+
+  .ss .vs {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    width: min(100%, 940px);
+
+    gap: 14px;
+  }
+
+  .ss .vs-i {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: center;
+
+    min-width: 0;
+
+    gap: 12px;
+
+    padding:
+      clamp(18px, 2vw, 28px);
+
+    border: 1px solid
+      rgba(255,255,255,.30);
+
+    border-radius: 16px;
+
+    background:
+      rgba(255,255,255,.10);
+
+    color: #FFFFFF;
+  }
+
+  .ss .vs-i.b {
+    background: #FFFFFF;
+    color: #172535;
+
+    border-color: #FFFFFF;
+  }
+
+  .ss .vs-i.b .k {
+    color: #455466;
+  }
+
+  .ss .vs-n {
+    max-width: 100%;
+
+    font-family:
+      "Bricolage Grotesque",
+      system-ui,
+      sans-serif;
+
+    font-size:
+      clamp(19px, 2vw, 29px);
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    overflow-wrap: anywhere;
+  }
+
+  .ss .arr {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 68px;
+    height: 68px;
+
+    border: 1px solid
+      rgba(255,255,255,.35);
+
+    border-radius: 18px;
+
+    background:
+      rgba(255,255,255,.10);
+
+    color: #FFFFFF;
+
+    font-family:
+      "Bricolage Grotesque",
+      system-ui,
+      sans-serif;
+
+    font-size: 43px;
+    font-weight: 800;
+
+    line-height: 1;
+  }
+
+  .ss .arr.s {
+    width: 48px;
+    height: 48px;
+
+    font-size: 30px;
+  }
+
+  .ss .vs-i.b .arr {
+    color: #172535;
+
+    border-color: #C7D0DA;
+
+    background: #EDF2F7;
+  }
+
+  .ss .stmt {
+    max-width: 760px;
+
+    margin: 4px 0 0;
+
+    padding: 8px 0 8px 18px;
+
+    border-left: 4px solid #FFFFFF;
+
+    color: #FFFFFF;
+
+    font-family:
+      "Bricolage Grotesque",
+      system-ui,
+      sans-serif;
+
+    font-size:
+      clamp(19px, 2.1vw, 28px);
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    overflow-wrap: anywhere;
+  }
+
+  /* ======================================================
+     10. DIAGRAM MOMENTS
+     ====================================================== */
+
+  .ss .dgw {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: min(100%, 1100px);
+
+    min-width: 0;
+
+    max-height: min(64dvh, 650px);
+
+    padding:
+      clamp(10px, 1.5vw, 20px);
+
+    overflow: auto;
+
+    border: 1px solid
+      rgba(255,255,255,.25);
+
+    border-radius: 16px;
+
+    background: #142535;
+    color: #FFFFFF;
+  }
+
+  .ss .dgw svg {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    max-width: 100%;
+    max-height: min(57dvh, 570px);
+
+    margin: auto;
+
+    overflow: visible;
+  }
+
+  /*
+   * Diagram cards have their own layout.
+   * This avoids unnecessarily shrinking
+   * complex diagrams beneath oversized
+   * introductory typography.
+   */
+
+  .ss-card.ss-diagram {
+    gap: 12px;
+  }
+
+  .ss-card.ss-diagram .k {
+    flex: 0 0 auto;
+  }
+
+  .ss-card.ss-diagram .p {
+    max-width: 80ch;
+
+    font-size:
+      clamp(14px, 1.2vw, 17px);
+  }
+
+  /* ======================================================
+     11. RESPONSIVE TABLET
+     ====================================================== */
+
+  @media (max-width: 900px) {
+
+    .ss-card {
+      padding: 28px 24px;
+    }
+
+    .ss h2 {
+      font-size:
+        clamp(29px, 5vw, 46px);
+    }
+
+    .ss h2.sm {
+      font-size:
+        clamp(25px, 4vw, 36px);
+    }
+
+    .ss .p {
+      font-size: 17px;
+    }
+
+    .ss .dgw {
+      max-height: 58dvh;
+    }
+
+    .ss .dgw svg {
+      max-height: 50dvh;
     }
   }
-  // Each card's entrance choreography.
-  function intro(card) {
-    const g = G(); if (!g) return;
-    const tl = g.timeline({ defaults: { ease: "power3.out" } });
-    tl.from(card.querySelectorAll(".k"), { y: 14, opacity: 0, duration: .45 }, .15);
-    const ch = card.querySelectorAll(".ch");
-    if (ch.length) tl.from(ch, { yPercent: 120, rotate: 12, opacity: 0, duration: .55, stagger: .025, ease: "back.out(2)" }, .25);
-    card.querySelectorAll(".ring").forEach((r) => {
-      tl.from(r, { scale: 0, rotate: -40, duration: .9, ease: "elastic.out(1,.5)" }, .1);
-      tl.to(r.querySelector("circle"), { attr: { "stroke-dashoffset": 0 }, duration: 1.2, ease: "power2.inOut" }, .3);
-    });
-    tl.from(card.querySelectorAll(".p"), { y: 20, opacity: 0, duration: .6 }, .7);
-    card.querySelectorAll(".cnt").forEach((c) => {
-      tl.from(c, { x: 60, opacity: 0, duration: .8 }, .2);
-      if (c.dataset.count) { const o = { v: 0 }; tl.to(o, { v: +c.dataset.count, duration: 1.2, ease: "power1.out", onUpdate: () => (c.textContent = Math.round(o.v)) }, .4); }
-    });
-    tl.from(card.querySelectorAll(".bigq"), { scale: .2, rotate: -30, opacity: 0, duration: 1, ease: "elastic.out(1,.4)" }, .1);
-    tl.from(card.querySelectorAll(".num"), { y: -60, opacity: 0, duration: .6, ease: "bounce.out" }, .2)
-      .from(card.querySelectorAll(".frac .bar"), { scaleX: 0, duration: .6, ease: "power4.inOut" }, .6)
-      .from(card.querySelectorAll(".den"), { y: 60, opacity: 0, duration: .6, ease: "bounce.out" }, .9);
-    card.querySelectorAll(".chip").forEach((c, k) => {
-      tl.from(c, { x: k % 2 ? 260 : -260, rotate: k % 2 ? 8 : -8, opacity: 0, duration: .7, ease: "back.out(1.6)" }, .3 + k * 1.1);
-      tl.from(c.querySelector("b"), { scale: 2.6, opacity: 0, duration: .45, ease: "back.out(3)" }, .8 + k * 1.1);
-    });
-    tl.from(card.querySelectorAll(".arr"), { y: (i, el) => (el.textContent === "↓" ? -120 : 120), opacity: 0, duration: 1, ease: "bounce.out" }, .1);
-    tl.from(card.querySelectorAll(".stmt"), { x: -30, opacity: 0, duration: .7 }, 1.2);
-    tl.from(card.querySelectorAll(".dgw"), { y: 30, scale: .94, opacity: 0, duration: .7, ease: "back.out(1.4)" }, .2);
-    card.querySelectorAll(".vs-i").forEach((c, k) => tl.from(c, { y: 40, opacity: 0, duration: .6, ease: "back.out(1.6)" }, .2 + k * .35));
+
+  /* ======================================================
+     12. PHONE
+     ====================================================== */
+
+  @media (max-width: 600px) {
+
+    .ss-card {
+      justify-content: center;
+
+      padding: 22px 18px;
+
+      gap: 14px;
+    }
+
+    .ss h2 {
+      max-width: 100%;
+
+      font-size:
+        clamp(27px, 8vw, 37px);
+
+      line-height: 1.12;
+    }
+
+    .ss h2.sm {
+      font-size:
+        clamp(24px, 6.8vw, 31px);
+    }
+
+    .ss .k {
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+
+    .ss .p {
+      max-width: 100%;
+
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .ss .ring {
+      width: 64px;
+      height: 64px;
+
+      border-radius: 18px;
+    }
+
+    .ss .ring .ic {
+      width: 31px;
+      height: 31px;
+    }
+
+    .ss .bigq {
+      width: 52px;
+      height: 52px;
+
+      font-size: 32px;
+    }
+
+    .ss .frac {
+      font-size:
+        clamp(23px, 7vw, 32px);
+    }
+
+    .ss .chips {
+      gap: 9px;
+    }
+
+    .ss .chip {
+      align-items: flex-start;
+
+      gap: 10px;
+
+      padding: 12px;
+
+      font-size: 15px;
+    }
+
+    .ss .chip b {
+      max-width: 38%;
+
+      font-size: 12px;
+    }
+
+    .ss .vs {
+      grid-template-columns: 1fr;
+
+      gap: 10px;
+    }
+
+    .ss .vs-i {
+      padding: 15px;
+
+      gap: 8px;
+    }
+
+    .ss .vs-n {
+      font-size: 20px;
+    }
+
+    .ss .arr {
+      width: 54px;
+      height: 54px;
+
+      font-size: 35px;
+    }
+
+    .ss .arr.s {
+      width: 40px;
+      height: 40px;
+
+      font-size: 26px;
+    }
+
+    .ss .stmt {
+      font-size: 19px;
+      line-height: 1.35;
+    }
+
+    .ss .dgw {
+      width: 100%;
+
+      max-height: 53dvh;
+
+      padding: 8px;
+
+      border-radius: 10px;
+    }
+
+    .ss .dgw svg {
+      max-height: 47dvh;
+    }
+
+    .ss-card.ss-diagram {
+      justify-content: center;
+
+      gap: 10px;
+    }
+
+    .ss-card.ss-diagram .p {
+      font-size: 14px;
+    }
+
+    .ss-cover .ss-cover-mark {
+      width: 46px;
+      height: 46px;
+
+      font-size: 18px;
+    }
   }
 
-  let root, cards = [], keys = [], cur = -1, segs = [], sec;
-  STYLES.push({
-    id: "story", name: "Story cards", note: "Full-screen cards like social media stories. Each beat turns in like a cube and plays its own little animation (GSAP).",
-    mount(el) { root = el; root.innerHTML = `<div class="ss"><div class="ss-seg"></div><div class="ss-cap"><div class="av">VL</div><span></span></div></div>`; },
-    load(s) {
-      sec = s; const box = root.querySelector(".ss"); box.querySelectorAll(".ss-card").forEach((c) => c.remove());
-      root.querySelector(".ss-cap span").textContent = s.lesson;
-      root.querySelector(".ss-seg").innerHTML = s.sentences.map(() => "<i><b></b></i>").join(""); segs = [...root.querySelectorAll(".ss-seg b")];
-      const groups = new Map(); s.moments.forEach((m) => { if (!groups.has(m.at)) groups.set(m.at, []); groups.get(m.at).push(m); });
-      keys = [-1, ...groups.keys()];
-      cards = keys.map((k, idx) => { const c = document.createElement("div"); c.className = "ss-card"; c.style.background = BG[idx % BG.length];
-        c.innerHTML = cardHtml(k === -1 ? [{ cover: true }] : groups.get(k), s); box.appendChild(c); return c; });
-      cur = -1;
-    },
-    step(i) {
-      // progress segments: done ones full, current one fills over an estimate of the sentence length
-      segs.forEach((b, k) => { const g = G(); if (g) g.killTweensOf(b);
-        if (k < i) b.style.width = "100%"; else if (k > i) b.style.width = "0";
-        else { b.style.width = "0"; const dur = Math.max(1.5, sec.sentences[k].split(" ").length * .36); g ? g.to(b, { width: "100%", duration: dur, ease: "none" }) : (b.style.width = "100%"); } });
-      let n = 0; keys.forEach((k, idx) => { if (k <= i) n = idx; });
-      if (n === cur) return;
-      const g = G(), prev = cards[cur], next = cards[n];
-      cards.forEach((c) => c !== prev && c !== next && c.classList.remove("now"));
-      next.classList.add("now");
-      if (g && prev && n > cur) {
-        g.set(next, { rotateY: 90, transformOrigin: "left center", x: 0 });
-        g.timeline().to(prev, { rotateY: -90, transformOrigin: "right center", duration: .7, ease: "power2.in" }, 0)
-          .to(next, { rotateY: 0, duration: .8, ease: "power2.out" }, .35)
-          .add(() => { prev.classList.remove("now"); g.set(prev, { rotateY: 0 }); }, 1.2);
-      } else if (prev) prev.classList.remove("now");
-      cur = n; intro(next);
-    },
+  /* ======================================================
+     13. SHORT VIEWPORTS
+     ====================================================== */
+
+  @media (max-height: 600px) {
+
+    .ss-card {
+      justify-content: flex-start;
+
+      padding-top: 18px;
+      padding-bottom: 18px;
+
+      gap: 10px;
+    }
+
+    .ss h2 {
+      font-size:
+        clamp(24px, 5vh, 36px);
+    }
+
+    .ss .p {
+      font-size: 15px;
+    }
+
+    .ss .ring {
+      width: 54px;
+      height: 54px;
+    }
+
+    .ss .ring .ic {
+      width: 27px;
+      height: 27px;
+    }
+
+    .ss .dgw {
+      max-height: 48dvh;
+    }
+
+    .ss .dgw svg {
+      max-height: 42dvh;
+    }
+  }
+
+  /* ======================================================
+     14. REDUCED MOTION
+     ====================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .ss-card {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .ss-card *,
+    .ss-card *::before,
+    .ss-card *::after {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+
+  `;
+
+  const styleElement =
+    document.createElement("style");
+
+  styleElement.id = "vl-story-v25";
+
+  styleElement.textContent =
+    window.LAB &&
+    typeof LAB.k === "function"
+      ? LAB.k(css)
+      : css;
+
+  document.head.appendChild(styleElement);
+
+  /* ======================================================
+     15. COLOR SYSTEM
+     ====================================================== */
+
+  /*
+   * Dark, muted backgrounds provide a coherent
+   * premium appearance.
+   *
+   * White text remains readable against every
+   * background.
+   */
+
+  const BG = Object.freeze([
+    "linear-gradient(155deg,#174E57 0%,#102B3C 100%)",
+
+    "linear-gradient(155deg,#754337 0%,#382B3A 100%)",
+
+    "linear-gradient(155deg,#294B75 0%,#172A4A 100%)",
+
+    "linear-gradient(155deg,#285B49 0%,#17372E 100%)",
+
+    "linear-gradient(155deg,#64405E 0%,#30243D 100%)",
+
+    "linear-gradient(155deg,#73532C 0%,#393021 100%)",
+
+    "linear-gradient(155deg,#35465B 0%,#172535 100%)"
+  ]);
+
+  /* ======================================================
+     16. HTML SAFETY
+     ====================================================== */
+
+  function esc(value) {
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]
+    );
+  }
+
+  /*
+   * Preserve normal words and punctuation.
+   *
+   * Unlike the original character animation,
+   * this does not split words into many spans.
+   *
+   * Screen readers therefore receive ordinary,
+   * continuous text.
+   */
+
+  function heading(value) {
+    return esc(value);
+  }
+
+  function smallHeading(value) {
+    return String(value ?? "").length > 36
+      ? ' class="sm"'
+      : "";
+  }
+
+  function safeIcon(name) {
+    if (
+      window.LAB &&
+      typeof LAB.icon === "function"
+    ) {
+      return LAB.icon(name, "ic");
+    }
+
+    return "";
+  }
+
+  /*
+   * Diagram SVG is generated by the trusted
+   * local DIAG module.
+   *
+   * It is deliberately not escaped because
+   * escaping would prevent SVG rendering.
+   */
+
+  function diagramHTML(moment) {
+    return typeof moment.svg === "string"
+      ? moment.svg
+      : "";
+  }
+
+  /* ======================================================
+     17. MOMENT RENDERING
+     ====================================================== */
+
+  function cardHtml(moments, section) {
+    const ms = Array.isArray(moments)
+      ? moments
+      : [];
+
+    const m = ms[0];
+
+    if (!m) {
+      return `
+        <div class="k">Learning moment</div>
+        <h2>Continue listening.</h2>
+      `;
+    }
+
+    /*
+     * COVER
+     */
+
+    if (m.cover) {
+      return `
+        <div
+          class="ss-cover-mark"
+          aria-hidden="true"
+        >VL</div>
+
+        <div class="k">
+          ${esc(section.lesson)}
+        </div>
+
+        <h2>
+          ${heading(section.title)}
+        </h2>
+
+        <div class="p">
+          Press Play to begin listening.
+        </div>
+      `;
+    }
+
+    switch (m.type) {
+
+      /*
+       * TITLE
+       */
+
+      case "title":
+        return `
+          ${m.kicker
+            ? `
+              <div class="k">
+                ${esc(m.kicker)}
+              </div>
+            `
+            : ""
+          }
+
+          <h2${smallHeading(m.text)}>
+            ${heading(m.text)}
+          </h2>
+        `;
+
+      /*
+       * ITEM
+       */
+
+      case "item":
+        return `
+          <div
+            class="ring"
+            aria-hidden="true"
+          >
+            ${safeIcon(m.icon)}
+          </div>
+
+          <div class="k">
+            ${esc(m.n)} of ${esc(m.of)}
+          </div>
+
+          <h2${smallHeading(m.title)}>
+            ${heading(m.title)}
+          </h2>
+
+          ${m.text
+            ? `
+              <div class="p">
+                ${esc(m.text)}
+              </div>
+            `
+            : ""
+          }
+        `;
+
+      /*
+       * QUESTION
+       */
+
+      case "question":
+        return `
+          <div
+            class="bigq"
+            aria-hidden="true"
+          >?</div>
+
+          <h2${smallHeading(m.text)}>
+            ${heading(m.text)}
+          </h2>
+        `;
+
+      /*
+       * FORMULA
+       */
+
+      case "formula":
+        return `
+          ${m.label
+            ? `
+              <div class="k">
+                ${esc(m.label)}
+              </div>
+            `
+            : ""
+          }
+
+          <div class="frac">
+
+            <div class="num">
+              ${esc(m.num)}
+            </div>
+
+            <div
+              class="bar"
+              aria-hidden="true"
+            ></div>
+
+            <div class="den">
+              ${esc(m.den)}
+            </div>
+
+          </div>
+        `;
+
+      /*
+       * ISSUE
+       */
+
+      case "issue":
+        return `
+          <div class="k">
+            What went wrong
+          </div>
+
+          <div class="chips">
+            ${ms.map(item => `
+              <div class="chip">
+
+                <span>
+                  ${esc(item.text)}
+                </span>
+
+                ${item.effect
+                  ? `
+                    <b>
+                      ${esc(item.effect)}
+                    </b>
+                  `
+                  : ""
+                }
+
+              </div>
+            `).join("")}
+          </div>
+        `;
+
+      /*
+       * COMPARE
+       */
+
+      case "compare": {
+        const statement = ms.find(
+          item => item.type === "statement"
+        );
+
+        const comparisons = ms.filter(
+          item => item.type === "compare"
+        );
+
+        if (comparisons.length > 1) {
+          return `
+            <div class="vs">
+
+              ${comparisons.map(item => `
+                <div
+                  class="vs-i${
+                    item.side === "b" ? " b" : ""
+                  }"
+                >
+
+                  ${item.dir
+                    ? `
+                      <div
+                        class="arr s"
+                        aria-hidden="true"
+                      >
+                        ${item.dir === "down"
+                          ? "↓"
+                          : "↑"
+                        }
+                      </div>
+                    `
+                    : ""
+                  }
+
+                  <div class="k">
+                    ${esc(item.label)}
+                  </div>
+
+                  <div class="vs-n">
+                    ${esc(item.note)}
+                  </div>
+
+                </div>
+              `).join("")}
+
+            </div>
+
+            ${statement
+              ? `
+                <div class="stmt">
+                  ${esc(statement.text)}
+                </div>
+              `
+              : ""
+            }
+          `;
+        }
+
+        return `
+          ${m.dir
+            ? `
+              <div
+                class="arr"
+                aria-hidden="true"
+              >
+                ${m.dir === "down"
+                  ? "↓"
+                  : "↑"
+                }
+              </div>
+            `
+            : ""
+          }
+
+          ${m.label
+            ? `
+              <div class="k">
+                ${esc(m.label)}
+              </div>
+            `
+            : ""
+          }
+
+          <h2${smallHeading(m.note)}>
+            ${heading(m.note)}
+          </h2>
+
+          ${statement
+            ? `
+              <div class="stmt">
+                ${esc(statement.text)}
+              </div>
+            `
+            : ""
+          }
+        `;
+      }
+
+      /*
+       * DIAGRAM
+       */
+
+      case "diagram":
+        return `
+          ${m.kicker
+            ? `
+              <div class="k">
+                ${esc(m.kicker)}
+              </div>
+            `
+            : ""
+          }
+
+          <div class="dgw">
+            ${diagramHTML(m)}
+          </div>
+
+          ${m.caption
+            ? `
+              <div class="p">
+                ${esc(m.caption)}
+              </div>
+            `
+            : ""
+          }
+        `;
+
+      /*
+       * STATEMENT
+       */
+
+      case "statement":
+        return `
+          <div class="stmt">
+            ${esc(m.text)}
+          </div>
+        `;
+
+      /*
+       * SAFE DEFAULT
+       */
+
+      default:
+        return `
+          <h2${smallHeading(m.text)}>
+            ${heading(m.text || "")}
+          </h2>
+        `;
+    }
+  }
+
+  /* ======================================================
+     18. OPTIONAL GSAP SUPPORT
+     ====================================================== */
+
+  /*
+   * GSAP is optional.
+   *
+   * The renderer remains fully functional
+   * without it.
+   *
+   * Animations never control speech.
+   */
+
+  function reducedMotion() {
+    return Boolean(
+      window.matchMedia &&
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches
+    );
+  }
+
+  function gsapInstance() {
+    if (reducedMotion()) return null;
+
+    return window.gsap || null;
+  }
+
+  function killAnimations(element) {
+    const gsap = window.gsap;
+
+    if (
+      !gsap ||
+      !element ||
+      typeof gsap.killTweensOf !== "function"
+    ) {
+      return;
+    }
+
+    gsap.killTweensOf(element);
+
+    element.querySelectorAll("*").forEach(
+      child => gsap.killTweensOf(child)
+    );
+  }
+
+  /*
+   * One restrained content entrance.
+   *
+   * No:
+   * - 3D rotations
+   * - elastic movement
+   * - bouncing formulas
+   * - staggered character animations
+   * - long choreographed sequences
+   */
+
+  function intro(card) {
+    const gsap = gsapInstance();
+
+    if (!gsap || !card) return;
+
+    const elements = [
+      ...card.querySelectorAll(
+        ":scope > .k, " +
+        ":scope > h2, " +
+        ":scope > .p, " +
+        ":scope > .ring, " +
+        ":scope > .bigq, " +
+        ":scope > .frac, " +
+        ":scope > .chips, " +
+        ":scope > .vs, " +
+        ":scope > .stmt, " +
+        ":scope > .dgw, " +
+        ":scope > .arr"
+      )
+    ];
+
+    if (!elements.length) return;
+
+    gsap.fromTo(
+      elements,
+      {
+        opacity: 0,
+        y: 10
+      },
+      {
+        opacity: 1,
+        y: 0,
+
+        duration: 0.32,
+        stagger: 0.035,
+
+        ease: "power2.out",
+
+        overwrite: true,
+        clearProps: "opacity,transform"
+      }
+    );
+  }
+
+  /* ======================================================
+     19. STATE
+     ====================================================== */
+
+  let root = null;
+  let section = null;
+
+  let cards = [];
+  let keys = [];
+
+  let currentCard = -1;
+
+  /*
+   * Separate generation number prevents
+   * stale animation callbacks from affecting
+   * newly loaded lessons.
+   */
+
+  let generation = 0;
+
+  /* ======================================================
+     20. MOUNT
+     ====================================================== */
+
+  function mount(element) {
+    root = element;
+
+    if (!root) return;
+
+    root.innerHTML = `
+      <div
+        class="ss"
+        aria-label="Story Cards lesson presentation"
+      ></div>
+    `;
+
+    cards = [];
+    keys = [];
+    section = null;
+
+    currentCard = -1;
+
+    generation++;
+  }
+
+  /* ======================================================
+     21. LOAD
+     ====================================================== */
+
+  function load(nextSection) {
+    if (!root) return;
+
+    const container =
+      root.querySelector(".ss");
+
+    if (!container) return;
+
+    generation++;
+
+    section = nextSection || {};
+
+    const moments = Array.isArray(
+      section.moments
+    )
+      ? section.moments
+      : [];
+
+    const sentences = Array.isArray(
+      section.sentences
+    )
+      ? section.sentences
+      : [];
+
+    /*
+     * Remove all old cards.
+     *
+     * This prevents stale lesson content
+     * from remaining in the DOM.
+     */
+
+    cards.forEach(card => {
+      killAnimations(card);
+      card.remove();
+    });
+
+    cards = [];
+    keys = [];
+
+    currentCard = -1;
+
+    /*
+     * Group moments by their sentence index.
+     *
+     * The original source used Map insertion
+     * order. Sorting ensures deterministic
+     * behavior even if moments are supplied
+     * out of order.
+     */
+
+    const groups = new Map();
+
+    moments.forEach(moment => {
+      if (!moment || typeof moment !== "object") {
+        return;
+      }
+
+      const rawIndex = Number(moment.at);
+
+      if (!Number.isFinite(rawIndex)) {
+        return;
+      }
+
+      const index = Math.trunc(rawIndex);
+
+      if (
+        index < 0 ||
+        index >= sentences.length
+      ) {
+        return;
+      }
+
+      if (!groups.has(index)) {
+        groups.set(index, []);
+      }
+
+      groups.get(index).push(moment);
+    });
+
+    const sortedKeys = [
+      ...groups.keys()
+    ].sort((a, b) => a - b);
+
+    keys = [-1, ...sortedKeys];
+
+    /*
+     * Every moment group becomes one card.
+     *
+     * This preserves the original progression
+     * model: a new card appears when its
+     * sentence index is reached.
+     */
+
+    const fragment =
+      document.createDocumentFragment();
+
+    cards = keys.map((key, index) => {
+      const card =
+        document.createElement("div");
+
+      card.className = "ss-card";
+
+      card.style.background =
+        BG[index % BG.length];
+
+      const isCover = key === -1;
+
+      const group = isCover
+        ? [{ cover: true }]
+        : groups.get(key);
+
+      const primaryMoment = group?.[0];
+
+      if (isCover) {
+        card.classList.add("ss-cover");
+      }
+
+      if (
+        primaryMoment?.type === "diagram"
+      ) {
+        card.classList.add("ss-diagram");
+      }
+
+      card.innerHTML =
+        cardHtml(group, section);
+
+      /*
+       * Only the current card should be
+       * available to assistive technology.
+       */
+
+      card.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      card.inert = true;
+
+      fragment.appendChild(card);
+
+      return card;
+    });
+
+    container.replaceChildren(fragment);
+
+    /*
+     * Display the cover immediately.
+     *
+     * This does not start narration.
+     */
+
+    if (cards.length) {
+      currentCard = 0;
+
+      const cover = cards[0];
+
+      cover.classList.add("now");
+
+      cover.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      cover.inert = false;
+    }
+  }
+
+  /* ======================================================
+     22. CARD ACTIVATION
+     ====================================================== */
+
+  function activateCard(index) {
+    if (
+      index < 0 ||
+      index >= cards.length
+    ) {
+      return;
+    }
+
+    if (index === currentCard) {
+      return;
+    }
+
+    const previous =
+      cards[currentCard] || null;
+
+    const next =
+      cards[index];
+
+    if (!next) return;
+
+    const thisGeneration = generation;
+
+    /*
+     * Kill old animations before changing
+     * card visibility.
+     */
+
+    if (previous) {
+      killAnimations(previous);
+
+      previous.classList.remove("now");
+
+      previous.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      previous.inert = true;
+    }
+
+    cards.forEach((card, cardIndex) => {
+      if (cardIndex === index) return;
+
+      card.classList.remove("now");
+
+      card.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      card.inert = true;
+    });
+
+    /*
+     * Reset scrolling when moving to a
+     * different learning moment.
+     */
+
+    next.scrollTop = 0;
+
+    next.classList.add("now");
+
+    next.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    next.inert = false;
+
+    currentCard = index;
+
+    /*
+     * A generation guard prevents a stale
+     * animation from a previous lesson.
+     */
+
+    if (thisGeneration === generation) {
+      intro(next);
+    }
+  }
+
+  /* ======================================================
+     23. SENTENCE STEP
+     ====================================================== */
+
+  function step(sentenceIndex) {
+    if (
+      !section ||
+      !cards.length
+    ) {
+      return;
+    }
+
+    const raw = Number(sentenceIndex);
+
+    if (!Number.isFinite(raw)) {
+      return;
+    }
+
+    const sentences = Array.isArray(
+      section.sentences
+    )
+      ? section.sentences
+      : [];
+
+    /*
+     * The cover corresponds to -1.
+     *
+     * Sentence 0 begins the actual lesson.
+     */
+
+    const index = Math.max(
+      -1,
+      Math.min(
+        Math.trunc(raw),
+        Math.max(-1, sentences.length - 1)
+      )
+    );
+
+    let target = 0;
+
+    /*
+     * keys[0] is -1.
+     *
+     * Select the latest moment whose
+     * sentence index is <= current index.
+     */
+
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] <= index) {
+        target = i;
+      } else {
+        break;
+      }
+    }
+
+    activateCard(target);
+  }
+
+  /* ======================================================
+     24. REGISTRATION
+     ====================================================== */
+
+  if (!Array.isArray(window.STYLES)) {
+    window.STYLES = [];
+  }
+
+  window.STYLES.push({
+    id: "story",
+
+    name: "Story cards",
+
+    note:
+      "Calm, full-screen visual cards with " +
+      "clear typography, accessible diagrams " +
+      "and restrained transitions.",
+
+    mount,
+    load,
+    step
   });
+
 })();
+
+// END FILE
