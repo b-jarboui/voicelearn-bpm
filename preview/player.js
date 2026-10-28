@@ -377,14 +377,14 @@
         <div class="row">${CLOS.map((c) => badge(`CLO ${c}`, cloM(c), A.clos[c].full)).join(" ")}</div>
         <div class="row">${LOS.map((k) => badge(A.outcomes[k].name, loM(k), A.outcomes[k].full)).join(" ")}</div>
         ${flagged.length ? `<div class="muted" style="font-size:15px">Flagged for instructor review: ${flagged.map((s) => esc(A.sections[s].name)).join(", ")}</div>` : ""}</div>
-      <div class="card"><div class="eyebrow">${esc(C.code)} · ${esc(C.subtitle)}</div><h2>${esc(C.title)}</h2>
+      <div class="card s1-card"><div class="eyebrow">Session 1 · Lessons · ${esc(C.code)}</div><h2>${esc(C.title)}</h2>
         <div>${C.lessons.map((x, l) => { const r = P.lessons[x.id];
           const pill = r ? (r.passed && !hasDeferredForLesson(l) ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
           return `<div class="lesson"><div style="min-width:0"><b>${l + 1}. ${esc(x.title)}</b><div class="muted" style="font-size:15px">${x.sections.length} part${x.sections.length > 1 ? "s" : ""} + check</div></div>
-          <div class="row">${pill}<button data-l="${l}" aria-label="Play lesson ${l + 1}">Play</button></div></div>`; }).join("")}</div></div>`;
+          <div class="row">${pill}<button data-l="${l}" aria-label="Play lesson ${l + 1}">Play</button></div></div>`; }).join("")}</div></div>${window.S2 ? S2.homeCard() : ""}`;
     $("wkSel").onchange = (e) => switchWeek(e.target.value);
     document.querySelectorAll("[data-later]").forEach(b=>b.onclick=()=>resumeDeferred(b.dataset.later));
-    probeWeeks();
+    probeWeeks(); if (window.S2) S2.bindHome($("main"));
     $("resume").onclick = () => openPlayer();
     $("restart").onclick = () => { P = fresh(); save(); openPlayer(); };
     document.querySelectorAll("[data-look]").forEach((b) => (b.onclick = () => { VS.look = b.dataset.look; saveVS(); document.querySelectorAll("[data-look]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("vLook").value = VS.look; }));
@@ -451,7 +451,7 @@
     else if (st.kind === "result") loadResult(st);
     else if (st.kind === "report") loadReport();
     renderSend(st.kind === "report" && !!T.sendReport);
-    if (st.kind === "report") { const old = $("rateCard"); if (old) old.remove(); const rc = document.createElement("div"); rc.className = "card rate-card"; rc.id = "rateCard"; rc.innerHTML = `<div class="eyebrow">Your opinion</div><button class="primary" id="rateWeek" type="button">★ Rate this week</button><div class="muted" style="font-size:15px">Anonymous, two minutes. Opens in a new tab.</div>`; $("main").appendChild(rc); $("rateWeek").onclick = openFeedback; }
+    if (st.kind === "report") { const old = $("rateCard"); if (old) old.remove(); const rc = document.createElement("div"); rc.className = "card rate-card"; rc.id = "rateCard"; rc.innerHTML = `<div class="eyebrow">Your opinion</div><button class="primary" id="rateWeek" type="button">★ Rate this week</button><div class="muted" style="font-size:15px">Anonymous, two minutes. Opens in a new tab.</div>`; if (window.S2 && S2.reportCard) { const old2 = $("s2ReportCard"); if (old2) old2.remove(); const h = S2.reportCard(); if (h) { const w = document.createElement("div"); w.id = "s2ReportCard"; w.innerHTML = h; $("main").appendChild(w); S2.bindReport(w); } } $("main").appendChild(rc); $("rateWeek").onclick = openFeedback; }
     if(st.kind==="report"&&deferred.length){const note=document.createElement("div");note.className="card pending-report";note.setAttribute("role","status");note.textContent=`Week not complete: ${deferred.length} question(s) saved To answer later. Return Home to finish them.`;$("main").prepend(note);}
   }
 
@@ -641,7 +641,7 @@
       ...C.lessons.map((x, l) => { const r = P.lessons[x.id]; return `- Lesson ${l + 1}, ${x.title}: ${r ? `first check ${pct(r.first)}%, ${r.rounds} round${r.rounds > 1 ? "s" : ""}, ${r.passed ? "mastered" : r.flagged ? "flagged" : "in progress"}` : "not completed"}`; }),
       ``,
       `Questions answered: ${P.hist.length}, correct: ${P.hist.filter((h) => h.ok).length}.`,
-    ].join("\n");
+    ].concat(window.S2 ? ["", ...S2.reportText()] : []).join("\n");
   }
   function renderSend(show) {
     const box = $("send"); if (!box) return;
@@ -950,7 +950,7 @@
     function setupAI(){
       showScreen("setupAI",`<section class="card onboard ai-setup"><div class="eyebrow">Setup · Step 3 of 3</div>
         <h1>Get AI feedback <span class="muted">(optional, recommended)</span></h1>
-        <p>Would you like personal feedback on your case-study essays? You can bring your own free AI key from Google Gemini or Groq. VoiceLearn will remember it on this device, ready for the essay checker when that feature is available. You can use one, both, or neither.</p>
+        <p>Would you like personal feedback on your case-study essays? You can bring your own free AI key from Google Gemini or Groq. VoiceLearn will remember it on this device, ready for the Session 2 case-study essay feedback in every week. You can use one, both, or neither.</p>
         ${aiEditorMarkup()}
         <div class="actions"><button id="aiBack" type="button">← Voice setup</button><button id="aiSkip" type="button">Skip for now</button><button id="aiDone" class="primary" type="button">Continue to course →</button></div></section>`);
       bindAIEditor();$("aiBack").onclick=setupVoice;$("aiSkip").onclick=finishOnboarding;$("aiDone").onclick=finishOnboarding;
@@ -1292,6 +1292,7 @@ if (settingsWeek) {
 positionSettingsButton();
     window.addEventListener("popstate",e=>{let target=e.state&&e.state.voicelearn?e.state.screen:"welcome";
       if(onboardingFinishedThisVisit&&(target==="setupDesign"||target==="setupVoice"||target==="setupAI")){history.replaceState(routeState("welcome"),"",location.href);target="welcome";}
+      if(e.state&&e.state.voicelearn&&e.state.s2&&window.S2){restoringRoute=true;try{setFs(false);pause();S2.open(e.state.s2,{fromPop:true});}finally{restoringRoute=false;}return;}
       restoringRoute=true;try{setFs(false);pause();if(target==="player"||target==="report")openPlayer();else if(target==="home")renderHome();else if(target==="setupAI")setupAI();else if(target==="setupVoice")setupVoice();else if(target==="setupDesign")setupDesign();else welcome();}finally{restoringRoute=false;}});
     $("vFeedback").onclick = openFeedback;
     $("vSetup").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); setupDesign(); };
@@ -1303,6 +1304,7 @@ positionSettingsButton();
       const navEntry=performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
       const isReload=!!(navEntry&&navEntry.type==="reload");
       const state=history.state;
+      if(isReload&&state&&state.voicelearn&&state.week===WK&&state.s2&&window.S2){restoringRoute=true;try{S2.open(state.s2,{fromPop:true});}finally{restoringRoute=false;}return;}
       if(isReload&&state&&state.voicelearn&&state.week===WK){restoringRoute=true;try{if(state.screen==="player"||state.screen==="report")openPlayer();else if(state.screen==="home")renderHome();else if(state.screen==="setupAI")setupAI();else if(state.screen==="setupVoice")setupVoice();else if(state.screen==="setupDesign")setupDesign();else welcome();}finally{restoringRoute=false;}return;}
       // Setup is global: only the very first visit starts with Welcome. A new week (or a later visit) opens Home.
       if (onboardDone()) { onboardingFinishedThisVisit = true; history.replaceState(routeState("home"), "", location.href); renderHome(); return; }
@@ -1318,5 +1320,11 @@ positionSettingsButton();
     showQ: (id) => { pause(); const st = cur(); st.qs = [id]; P.q = 0; P.part = "main"; P.sent = 0; load(); }, // QA: show one specific question (current step must be a quiz)
     setLook: (id) => { VS.look = id; saveVS(); },
     fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, ranked: rankedVoices().slice(0, 6).map((v) => v.name + " [" + vScore(v) + "]"), sayText, rate: VS.rate, log: SLOG.slice(-12) }) };
+  if (window.S2) S2.init({ week: WK, esc, smooth,
+    showScreen: (name, html, st) => { pause(); waiting = false; view = name; const was = restoringRoute; restoringRoute = true; try { setRoute(name); } finally { restoringRoute = was; }
+      const s2 = st && st.s2; if (!(st && st.fromPop) && !was) { const cur = history.state; if (!(cur && cur.s2 && JSON.stringify(cur.s2) === JSON.stringify(s2) && cur.screen === name)) history.pushState(Object.assign(routeState(name), { s2 }), "", location.href); }
+      $("main").innerHTML = html; window.scrollTo({ top: 0, behavior: "instant" }); $("main").focus({ preventScroll: true }); updateNavigation(); },
+    goHome: () => renderHome(),
+    openSettings: () => { if ($("vPanel").hidden) $("vBtn").click(); const a = $("aiSettings"); if (a) a.scrollIntoView({ block: "center" }); } });
   initOnboarding();
 })();
