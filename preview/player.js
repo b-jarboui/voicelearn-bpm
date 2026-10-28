@@ -451,6 +451,7 @@
     else if (st.kind === "result") loadResult(st);
     else if (st.kind === "report") loadReport();
     renderSend(st.kind === "report" && !!T.sendReport);
+    if (st.kind === "report") { const old = $("rateCard"); if (old) old.remove(); const rc = document.createElement("div"); rc.className = "card rate-card"; rc.id = "rateCard"; rc.innerHTML = `<div class="eyebrow">Your opinion</div><button class="primary" id="rateWeek" type="button">★ Rate this week</button><div class="muted" style="font-size:15px">Anonymous, two minutes. Opens in a new tab.</div>`; $("main").appendChild(rc); $("rateWeek").onclick = openFeedback; }
     if(st.kind==="report"&&deferred.length){const note=document.createElement("div");note.className="card pending-report";note.setAttribute("role","status");note.textContent=`Week not complete: ${deferred.length} question(s) saved To answer later. Return Home to finish them.`;$("main").prepend(note);}
   }
 
@@ -818,7 +819,12 @@
   document.addEventListener("keydown", (e) => { if (e.code === "Space" && view === "player" && !e.target.closest("button,select,input,textarea,label")) { e.preventDefault(); $("toggle").click(); } });
 
     // ---------- Astra onboarding and browser navigation (v9) ----------
-    const ONKEY = "voicelearn.oper621.onboard.v1";
+    const ONKEY = "voicelearn.oper621.onboard.v1"; // global: shared by all weeks (progress is the only per-week storage)
+    const FORM_URL = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=VEzcgzgLZ0CUzUjdUqdjq8HLB2cl_P1BuWvIvyGwFeZUQUlDOTY0MFMyQTM5N1ZYMTNGUlQ4TFI1Ni4u";
+    const openFeedback = () => { try { window.open(FORM_URL, "_blank", "noopener"); } catch (e) {} };
+    const onboardDone = () => { try { return localStorage.getItem(ONKEY) !== null; } catch (e) { return false; } };
+    // One-time migration: a profile that finished onboarding or saved settings under an older per-week layout counts as set up.
+    (function migrateGlobalSetup() { try { if (localStorage.getItem(ONKEY) === null && (localStorage.getItem(VKEY) !== null || localStorage.getItem(LISTEN_KEY) !== null)) localStorage.setItem(ONKEY, "done"); } catch (e) {} })();
     let restoringRoute = false;
     let onboardingFinishedThisVisit = false;
     const routeState = (screen) => ({ voicelearn: true, screen, week: WK });
@@ -1287,6 +1293,8 @@ positionSettingsButton();
     window.addEventListener("popstate",e=>{let target=e.state&&e.state.voicelearn?e.state.screen:"welcome";
       if(onboardingFinishedThisVisit&&(target==="setupDesign"||target==="setupVoice"||target==="setupAI")){history.replaceState(routeState("welcome"),"",location.href);target="welcome";}
       restoringRoute=true;try{setFs(false);pause();if(target==="player"||target==="report")openPlayer();else if(target==="home")renderHome();else if(target==="setupAI")setupAI();else if(target==="setupVoice")setupVoice();else if(target==="setupDesign")setupDesign();else welcome();}finally{restoringRoute=false;}});
+    $("vFeedback").onclick = openFeedback;
+    $("vSetup").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); setupDesign(); };
     function switchWeek(n){const next=Number(n);if(!Number.isInteger(next)||next<1||next>14||next===WK)return;pause();setFs(false);
       try{localStorage.setItem(ONKEY,"done");}catch(e){}
       const url=new URL(location.href);url.searchParams.set("week",String(next));location.assign(url.href);}
@@ -1296,8 +1304,8 @@ positionSettingsButton();
       const isReload=!!(navEntry&&navEntry.type==="reload");
       const state=history.state;
       if(isReload&&state&&state.voicelearn&&state.week===WK){restoringRoute=true;try{if(state.screen==="player"||state.screen==="report")openPlayer();else if(state.screen==="home")renderHome();else if(state.screen==="setupAI")setupAI();else if(state.screen==="setupVoice")setupVoice();else if(state.screen==="setupDesign")setupDesign();else welcome();}finally{restoringRoute=false;}return;}
-      // Every fresh navigation (including a new week) begins with Welcome.
-      // Replacing this entry prevents old routes leaking into the new visit.
+      // Setup is global: only the very first visit starts with Welcome. A new week (or a later visit) opens Home.
+      if (onboardDone()) { onboardingFinishedThisVisit = true; history.replaceState(routeState("home"), "", location.href); renderHome(); return; }
       history.replaceState(routeState("welcome"), "", location.href);
       welcome();
     }
