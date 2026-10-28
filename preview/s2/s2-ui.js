@@ -110,6 +110,11 @@
       text += `. The target is 400 to 600 words. ${hint}.`;
     }
     count.textContent = text;
+    if (active.tooFew && n >= (active.c === 2 ? 120 : 20)) {
+      active.tooFew = false;
+      const notice = active.root.querySelector("#s2-notice");
+      if (notice) notice.textContent = "";
+    }
   }
 
   function announce(text) {
@@ -337,17 +342,19 @@
   function feedbackButtons() {
     return `<div class="s2-actions" id="s2-actions">
       <div class="s2-action-group">
-        <button type="button" id="s2-check-local">Check locally</button>
-        <small>Works without internet.</small>
+        <button type="button" id="s2-check-local" class="s2-secondary">Check locally</button>
       </div>
       ${["gemini", "groq"].map(id => `<div class="s2-action-group s2-provider-group" data-provider="${id}">
         <button type="button" class="s2-fb" data-provider="${id}">Get feedback from ${providerName(id)}</button>
         <button type="button" class="s2-settings-link" data-provider="${id}">Add your ${providerName(id)} key in Settings</button>
       </div>`).join("")}
     </div>
+    <p class="s2-actions-help">Check locally works without internet. Feedback from Gemini or Groq needs your own key and an internet connection.</p>
     <p class="s2-privacy">When you ask for feedback, your essay is sent to the provider you choose (Google for Gemini, Groq for Groq), using your own key. It is not sent to VoiceLearn or to your teacher.</p>
     <div id="s2-notice" class="s2-notice" role="status" aria-live="polite"></div>
     <div id="s2-request-status" class="s2-request-status" role="status" aria-live="polite"></div>
+    <div id="s2-rate" class="s2-rate"></div>
+    <div id="s2-sr" class="s2-sr" role="status" aria-live="polite"></div>
     <button type="button" id="s2-cancel" hidden>Cancel the feedback request</button>`;
   }
 
@@ -413,8 +420,75 @@
       if (running) running.controller.abort();
     });
     updateCount();
+    ["gemini", "groq"].forEach(p => { if (remaining(p) <= 0) rateReady[p] = false; });
     refreshKeys();
+    renderRate();
     renderSavedFeedback();
+  }
+
+  // Rate-limit pause per provider (kept while the student moves between questions).
+  const cooldown = { gemini: { until: 0, total: 0 }, groq: { until: 0, total: 0 } };
+  const rateReady = { gemini: false, groq: false };
+  let rateTimer = null;
+
+  function remaining(id) {
+    return Math.max(0, Math.ceil((cooldown[id].until - Date.now()) / 1000));
+  }
+
+  function startCooldown(id, seconds) {
+    const s = seconds > 0 ? seconds : P().DEFAULT_WAIT;
+    cooldown[id] = { until: Date.now() + s * 1000, total: s };
+    rateReady[id] = true;
+  }
+
+  function stopRateTimer() {
+    clearInterval(rateTimer);
+    rateTimer = null;
+  }
+
+  function renderRate(announceText) {
+    stopRateTimer();
+    if (!active?.root?.isConnected) return;
+    const box = active.root.querySelector("#s2-rate");
+    if (!box) return;
+    const cards = ["gemini", "groq"].map(id => {
+      const wait = remaining(id);
+      if (wait > 0) {
+        const pct = Math.max(0, Math.min(100, Math.round(100 * (1 - wait / cooldown[id].total))));
+        return `<section class="s2-rate-card" data-provider="${id}">
+          <p class="s2-rate-text">${esc(P().rateLimitMessage(id, wait, true))}</p>
+          <div class="s2-rate-bar" aria-hidden="true"><span style="width:${pct}%"></span></div>
+        </section>`;
+      }
+      return rateReady[id]
+        ? `<section class="s2-rate-card s2-rate-ready" data-provider="${id}">
+            <p class="s2-rate-text">${esc(providerName(id))} is ready again. You can press &ldquo;Get feedback from ${esc(providerName(id))}&rdquo; now.</p>
+          </section>` : "";
+    }).join("");
+    box.innerHTML = cards;
+    refreshKeys();
+    const sr = active.root.querySelector("#s2-sr");
+    if (sr && announceText) sr.textContent = announceText;
+    if (["gemini", "groq"].some(id => remaining(id) > 0)) {
+      rateTimer = setInterval(() => {
+        if (!active?.root?.isConnected) { stopRateTimer(); return; }
+        let finished = false;
+        ["gemini", "groq"].forEach(id => {
+          const wait = remaining(id);
+          const card = box.querySelector(`.s2-rate-card[data-provider="${id}"]:not(.s2-rate-ready)`);
+          if (!card) return;
+          if (wait <= 0) { finished = true; return; }
+          card.querySelector(".s2-rate-text").textContent = P().rateLimitMessage(id, wait, true);
+          card.querySelector(".s2-rate-bar span").style.width =
+            Math.max(0, Math.min(100, Math.round(100 * (1 - wait / cooldown[id].total)))) + "%";
+        });
+        if (finished) {
+          renderRate("You can ask for feedback again now.");
+        } else {
+          refreshKeys();
+        }
+      }, 1000);
+    }
   }
 
   function refreshKeys() {
@@ -423,8 +497,12 @@
       const id = group.dataset.provider, available = P().hasKey(id);
       const button = group.querySelector(".s2-fb");
       const settings = group.querySelector(".s2-settings-link");
-      button.disabled = !available;
-      button.setAttribute("aria-disabled", String(!!running || !available));
+      const wait = remaining(id);
+      button.disabled = !available || wait > 0;
+      button.textContent = wait > 0
+        ? `${providerName(id)} ready in ${wait} s`
+        : `Get feedback from ${providerName(id)}`;
+      button.setAttribute("aria-disabled", String(!!running || !available || wait > 0));
       button.setAttribute("aria-busy", String(!!running));
       button.title = available
         ? `Ask ${providerName(id)} to review your answer.`
@@ -440,11 +518,13 @@
     const minimum = active.c === 2 ? 120 : 20;
     const notice = active.root.querySelector("#s2-notice");
     if (n < minimum) {
+      active.tooFew = true;
       notice.textContent = active.c === 2
         ? `Your forum post has ${n} words. Please write at least 120 words before checking it. The final target is 400 to 600 words.`
         : `Your answer has ${n} words. Please write at least 20 words so the feedback can respond to your reasoning.`;
       return null;
     }
+    active.tooFew = false;
     notice.textContent = active.c === 2 && n < 350
       ? `This is a partial draft of ${n} words. The feedback may identify missing points because you have not finished your post yet.`
       : "";
@@ -637,6 +717,7 @@
       host.openSettings();
       return;
     }
+    if (remaining(provider) > 0) return;
     const prepared = preparedAnswer();
     if (!prepared) return;
     try {
@@ -649,6 +730,8 @@
     const controller = new AbortController();
     running = { controller, provider, id };
     root.querySelector("#s2-error").innerHTML = "";
+    rateReady[provider] = false;
+    renderRate();
     root.querySelector("#s2-request-status").textContent =
       `Asking ${providerName(provider)}... this can take up to a minute.`;
     root.querySelector("#s2-cancel").hidden = false;
@@ -665,8 +748,13 @@
         ? `Feedback from ${providerName(provider)} is ready below.`
         : `Feedback from ${providerName(provider)} is ready below. It could not be saved because your browser blocks storage, so please copy anything you want to keep.`);
     } catch (err) {
+      const limited = err?.code === "RATE_LIMIT" && !controller.signal.aborted;
+      if (limited) startCooldown(provider, err.retryAfter);
       if (active?.root !== root || active.id !== id) return;
-      if (controller.signal.aborted) {
+      if (limited) {
+        root.querySelector("#s2-notice").textContent = "";
+        renderRate(P().rateLimitMessage(provider, remaining(provider), false));
+      } else if (controller.signal.aborted) {
         root.querySelector("#s2-notice").textContent =
           "The feedback request was cancelled. Your essay and local check are still available.";
       } else {
@@ -699,6 +787,7 @@
       running = null;
     }
     flushDraft();
+    stopRateTimer();
     clearTimeout(timer);
     timer = null;
     active = null;

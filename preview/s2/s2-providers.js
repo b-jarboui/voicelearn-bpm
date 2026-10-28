@@ -72,6 +72,8 @@
       "Please add your own API key in Settings.",
     KEY_REJECTED:
       "The provider did not accept your API key.",
+    RATE_LIMIT:
+      "The provider asked for a short pause between requests.",
     QUOTA:
       "The provider has reached a usage limit.",
     BUSY:
@@ -134,7 +136,52 @@
       this.status = status;
       this.provider = provider;
       this.model = model;
+      this.retryAfter = Number.isFinite(options.retryAfter) && options.retryAfter > 0
+        ? Math.ceil(options.retryAfter)
+        : null;
     }
+  }
+
+  // Wait time (whole seconds) from a 429: Retry-After header, Groq "try again in 1m23.4s",
+  // Gemini RetryInfo retryDelay "23s" or "Please retry in 23.4s". Null when nothing usable.
+  function durationSeconds(text) {
+    const m = /^\s*(?:(\d+(?:\.\d+)?)\s*h(?:ours?|rs?)?)?\s*(?:(\d+(?:\.\d+)?)\s*m(?:in(?:ute)?s?)?(?![a-z]))?\s*(?:(\d+(?:\.\d+)?)\s*(?:s(?:ec(?:ond)?s?)?|ms))?/i.exec(String(text || ""));
+    if (!m || (!m[1] && !m[2] && !m[3])) { return null; }
+    let total = (Number(m[1]) || 0) * 3600 + (Number(m[2]) || 0) * 60 + (Number(m[3]) || 0);
+    if (/ms\s*$/i.test(m[0].trim())) { total = (Number(m[3]) || 0) / 1000; }
+    return total > 0 ? total : null;
+  }
+
+  function parseRetryAfter(headerValue, body) {
+    let seconds = null;
+    const header = String(headerValue == null ? "" : headerValue).trim();
+
+    if (/^\d+(\.\d+)?$/.test(header)) {
+      seconds = Number(header);
+    } else if (header) {
+      const date = Date.parse(header);
+      if (Number.isFinite(date)) { seconds = (date - Date.now()) / 1000; }
+    }
+
+    if (!(seconds > 0)) {
+      seconds = null;
+      const details = Array.isArray(body?.error?.details) ? body.error.details : [];
+      for (const d of details) {
+        if (d && typeof d.retryDelay === "string") {
+          seconds = durationSeconds(d.retryDelay);
+          if (seconds) { break; }
+        }
+      }
+      if (!seconds) {
+        const message = typeof body?.error?.message === "string"
+          ? body.error.message
+          : typeof body?.message === "string" ? body.message : "";
+        const found = /(?:try again|retry)\s+in\s+([0-9hms. ]+?)(?:[^0-9hms. ]|\.\s|$)/i.exec(message);
+        if (found) { seconds = durationSeconds(found[1]); }
+      }
+    }
+
+    return seconds > 0 ? Math.min(Math.ceil(seconds), 86400) : null;
   }
 
   function getKey(id) {
@@ -338,10 +385,15 @@
     }
 
     if (status === 429) {
-      return new S2Error("QUOTA", {
+      let body = null;
+      try { body = await response.json(); } catch (_) { /* empty or non-JSON body */ }
+      let header = null;
+      try { header = response.headers?.get?.("retry-after"); } catch (_) { /* no headers */ }
+      return new S2Error("RATE_LIMIT", {
         status,
         provider,
-        model
+        model,
+        retryAfter: parseRetryAfter(header, body)
       });
     }
 
@@ -1149,7 +1201,7 @@
 
   function geminiBody(text, schema, includeSchema) {
     const generationConfig = {
-      temperature: 0.2,
+      temperature: 0,
       maxOutputTokens: 8192,
       responseMimeType: "application/json"
     };
@@ -1174,7 +1226,8 @@
         role: "user",
         content: text
       }],
-      temperature: 0.2,
+      temperature: 0,
+      top_p: 1,
       max_completion_tokens: 4096,
       response_format: {
         type: "json_object"
@@ -1457,7 +1510,7 @@
       let text;
 
       try {
-        text = promptModule.render(payload);
+        text = promptModule.render(payload, id);
       } catch (_) {
         throw new S2Error("PROMPT_MISSING", {
           provider: id
@@ -1595,6 +1648,26 @@
     }
   }
 
+  const DEFAULT_WAIT = 60;
+
+  function waitText(seconds) {
+    const s = Math.max(0, Math.ceil(seconds));
+    if (s <= 120) { return s + (s === 1 ? " second" : " seconds"); }
+    const m = Math.ceil(s / 60);
+    return m + " minutes";
+  }
+
+  // seconds: remaining wait (null -> default). withCountdown only changes the closing punctuation.
+  function rateLimitMessage(providerId, seconds, live) {
+    const name = providerId === "gemini" ? "Gemini" : "Groq";
+    const wait = seconds > 0 ? seconds : DEFAULT_WAIT;
+    const rule = providerId === "gemini"
+      ? "Gemini\u2019s free plan limits how many feedbacks you can ask for in a minute."
+      : "Groq\u2019s free plan allows about one feedback per minute.";
+    return rule + " Please wait " + waitText(wait) + (live ? "\u2026" : ".") +
+      " Your essay is untouched and is still saved on this device.";
+  }
+
   function friendlyError(error, providerId) {
     const id = PROVIDERS[providerId]
       ? providerId
@@ -1630,6 +1703,10 @@
           name +
           " did not accept your key. Please check or replace it in Settings.";
         break;
+
+      case "RATE_LIMIT":
+        // The feedback panel normally shows this with a live countdown; this is the plain-text version.
+        return rateLimitMessage(id, error?.retryAfter, false);
 
       case "QUOTA":
         message =
@@ -1722,6 +1799,10 @@
     validateReview,
     buildPayload,
     friendlyError,
+    rateLimitMessage,
+    waitText,
+    parseRetryAfter,
+    DEFAULT_WAIT,
 
     __test: Object.freeze({
       pickModels,
