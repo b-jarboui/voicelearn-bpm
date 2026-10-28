@@ -12,6 +12,7 @@ window.WEEKS = [
   {n:10,title:"The People Phase: Roles, Measures and Capability"},
   {n:11,title:"The Develop Phase"},
   {n:12,title:"The Implement Phase"},
-  {n:13,title:"The Realize Value Phase"}
+  {n:13,title:"The Realize Value Phase"},
+  {n:14,title:"Sustainable Performance"}
 ];
 window.REVISION_WEEK = 15;
