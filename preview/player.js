@@ -240,7 +240,7 @@
       if (wait) later(wait, go); else go();
       // Watchdog: no "start" from the engine = cancel, wait 300 ms, retry once; then reading pace with a clear notice.
       // A quick check for network voices (Edge "Online (Natural)", Google) so a dead connection costs little time.
-      const startMs = wait + (v && !v.localService && !IS_ANDROID ? 3500 : 2500);
+      const startMs = wait + (v && !v.localService && !IS_ANDROID ? 3500 : spoken ? 2500 : 6000); // the very first start of a page can take several seconds
       later(startMs, () => {
         if (started || ended || document.hidden) return;
         ended = true; clearInterval(keep); cancelSpeech(true); log("no-start");
