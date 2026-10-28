@@ -180,13 +180,13 @@
   const sayText = (t) => SAY.reduce((s, [a, b]) => s.replace(a, b), String(t)).trim();
   // ---------- pacing (all pauses in one place, milliseconds) ----------
   const PACE = {
-    lead: 350,        // the visual appears, then this short beat, then the voice (never longer than the gap itself)
-    sentence: 300,    // pause between sentences of the same paragraph (talking, not a list)
+    lead: 200,       // the visual appears, then this short beat, then the voice (never longer than the gap itself)
+    sentence: 200,   // pause between sentences of the same paragraph (talking, not a list)
     join: 28,        // two short sentences of the same moment are spoken as ONE utterance when together ≤ this many words
-    moment: 1100,     // pause before a sentence that brings in a new visual moment
-    part: 1800,       // pause before a new lesson part, review, result or report screen
-    question: 1800,   // pause before each question screen
-    feedback: 700,    // pause after answering, before the feedback is spoken
+    moment: 600,    // pause before a sentence that brings in a new visual moment
+    part: 1000,      // pause before a new lesson part, review, result or report screen
+    question: 1000,  // pause before each question screen
+    feedback: 400,   // pause after answering, before the feedback is spoken
     rate: 0.95,       // default speaking rate (the Speed slider overrides it)
     startTimeout: 6000, // no "start" from the engine within this time = retry, then reading pace
   };
