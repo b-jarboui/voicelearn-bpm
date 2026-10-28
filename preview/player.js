@@ -151,7 +151,23 @@
     const n = $("vNote"); if (n) n.textContent = `Voice unavailable here: ${why} Captions now advance at reading pace. Try another voice in this panel, or open the page in Chrome, Edge or Safari.`;
     bar();
   }
-  const FATAL = ["not-allowed", "synthesis-unavailable", "audio-hardware", "audio-busy"];
+  const FATAL = ["synthesis-unavailable", "audio-hardware", "audio-busy"];
+  // Chrome blocks speech that starts without a user gesture (page load, week switch, timers). Instead of giving up on the voice,
+  // pause and show a prominent button; its click handler speaks synchronously, which is allowed.
+  const UA_API = typeof navigator !== "undefined" && navigator.userActivation;
+  const gestureNow = () => !UA_API || UA_API.isActive;
+  let spoken = false, tapBtn = null;
+  function hideTap() { if (tapBtn) { tapBtn.remove(); tapBtn = null; } }
+  function needTap(why) {
+    log("needtap:" + (why || ""));
+    playing = false; stopSpeech(); hideTap();
+    tapBtn = document.createElement("button");
+    tapBtn.id = "vTap"; tapBtn.className = "primary"; tapBtn.type = "button"; tapBtn.textContent = "▶ Tap to hear the voice";
+    tapBtn.style.cssText = "position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:90;font-size:22px;font-weight:700;padding:18px 28px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.45)";
+    tapBtn.onclick = () => { hideTap(); play(true); }; // real click: speech starts synchronously in this handler
+    document.body.appendChild(tapBtn);
+    bar();
+  }
   // Speak list[from..] as complete sentences: show the sentence's visual, a short beat, speak it, wait for the engine's
   // "end", pause, then the next one. Never splits a sentence. For flowing narration, two short consecutive sentences of the
   // same moment (opts.canJoin(k) = sentence k+1 brings no new visual) are spoken as ONE utterance so the intonation carries;
@@ -161,7 +177,7 @@
   const IS_CHROME_DESKTOP = /Chrome\//.test(UA) && !IS_EDGE && !IS_ANDROID && !/CriOS|OPR\//.test(UA);
   const ENDS = /[.!?…]["'”’)\]]*$/;
   function speak(list, from, onSentence, onDone, opts = {}) {
-    const my = ++tok; if (synth) synth.cancel();
+    const my = ++tok; cancelSpeech();
     const later = (ms, f) => setTimeout(() => { if (my === tok) f(); }, ms);
     const gapAfter = opts.gapAfter || (() => PACE.sentence);
     const canJoin = opts.canJoin || (() => false);
@@ -169,7 +185,7 @@
     // How many sentences (1 or 2) the utterance starting at k carries.
     const group = (k) => (!FAST && !silent && VS.mode !== "captions" && synth && k + 1 < list.length && canJoin(k) &&
       ENDS.test(String(list[k]).trim()) && words(list[k]) + words(list[k + 1]) <= PACE.join ? 2 : 1);
-    const next = (lead) => { if (i >= list.length) return onDone(); const k = i, n = group(k); i += n; onSentence(k); later(FAST ? 40 : lead, () => say(k, n, 0)); };
+    const next = (lead, sync) => { if (i >= list.length) return onDone(); const k = i, n = group(k); i += n; onSentence(k); if (sync && !FAST) return say(k, n, 0); later(FAST ? 40 : lead, () => say(k, n, 0)); };
     // The silence between two utterances equals the gap (the lead beat before the voice is part of it).
     const after = (last) => {
       const gap = last + 1 < list.length ? gapAfter(last) : PACE.sentence, lead = Math.min(PACE.lead, gap);
@@ -190,7 +206,7 @@
       const showSecond = () => { if (second || my !== tok) return; second = true; onSentence(k + 1); log("join"); };
       const done = () => { clearInterval(keep); if (!second) showSecond(); };
       u.onstart = () => {
-        started = true; noStart = 0; log("start");
+        started = true; spoken = true; noStart = 0; log("start");
         // Engines without boundary events: show the second sentence at its estimated start.
         if (n === 2) later(speakMs(list[k]) * 0.92, () => { if (!words0) showSecond(); });
         // Chrome desktop cuts network (Google) voices after ~15 s: a pause/resume every 10 s keeps them talking.
@@ -204,34 +220,46 @@
           if (my !== tok) return; // our own cancel (pause, skip, a new step)
           // Interrupted by something else (another tab, a system sound, iOS audio session): say it again once, then go on.
           ended = true; clearInterval(keep); log("interrupted");
-          return attempt < 1 ? later(250, () => say(k, n, attempt + 1)) : (done(), after(k + n - 1));
+          if (attempt < 1) return later(250, () => say(k, n, attempt + 1));
+          if (!started && !spoken) return needTap("interrupted");
+          return (done(), after(k + n - 1));
         }
         ended = true; clearInterval(keep); log("error:" + e.error);
         if (my !== tok) return;
+        if (e.error === "not-allowed") return needTap("not-allowed"); // no gesture: wait for a tap, never switch modes
         // A network voice (e.g. Google or "Online") that fails: switch to a local voice and say the sentences again.
         if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(200, () => say(k, n, attempt)); }
         if (FATAL.includes(e.error) || attempt >= 1) { goSilent(`the speech engine reported "${e.error}".`); return readOut(k, n); }
         later(300, () => say(k, n, attempt + 1));
       };
       try { if (synth.paused) synth.resume(); } catch (e) {}
-      synth.speak(u);
-      // The engine never started: try once more (switching away from a network voice), then reading pace.
+      // Chrome's engine can wedge if speak() directly follows cancel(): wait >= 300 ms after any cancel (the first utterance
+      // of a page, with nothing to cancel, still speaks synchronously inside the click handler).
+      const wait = Math.max(0, 320 - (performance.now() - lastCancel));
+      const go = () => { try { if (synth.paused) synth.resume(); } catch (e) {} synth.speak(u); };
+      if (wait) later(wait, go); else go();
+      // Watchdog: no "start" from the engine = cancel, wait 300 ms, retry once; then reading pace with a clear notice.
       // A quick check for network voices (Edge "Online (Natural)", Google) so a dead connection costs little time.
-      const startMs = v && !v.localService && !IS_ANDROID ? 3500 : PACE.startTimeout;
+      const startMs = wait + (v && !v.localService && !IS_ANDROID ? 3500 : 2500);
       later(startMs, () => {
         if (started || ended || document.hidden) return;
-        ended = true; clearInterval(keep); synth.cancel(); log("no-start");
-        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(150, () => say(k, n, attempt)); }
-        if (++noStart >= 2) goSilent("the speech engine never starts speaking.");
-        if (attempt < 1 && !silent) return later(150, () => say(k, n, attempt + 1));
+        ended = true; clearInterval(keep); cancelSpeech(true); log("no-start");
+        if (!spoken && UA_API && !UA_API.hasBeenActive) return needTap("no-start");
+        if (v && !v.localService && !avoidNetwork) { avoidNetwork = true; return later(350, () => say(k, n, attempt)); }
+        if (++noStart >= 2) goSilent("the browser's voice engine is not responding. Reload the page (close other tabs that are speaking) to hear the voice again.");
+        if (attempt < 1 && !silent) return later(350, () => say(k, n, attempt + 1));
         readOut(k, n, startMs);
       });
       // Safety net for engines that drop the "end" event: move on after a generous time.
-      later(Math.max(9000, speakMs(text) * 2.5 + 4000), () => { if (started && !ended) { ended = true; done(); log("no-end"); synth.cancel(); after(k + n - 1); } });
+      later(Math.max(9000, speakMs(text) * 2.5 + 4000), () => { if (started && !ended) { ended = true; done(); log("no-end"); cancelSpeech(true); after(k + n - 1); } });
     };
-    later(FAST ? 0 : opts.pre || 0, () => next(PACE.lead));
+    if (opts.sync && !FAST) next(0, true); // first utterance inside the click handler: no timer before speak()
+    else later(FAST ? 0 : opts.pre || 0, () => next(PACE.lead));
   }
-  const stopSpeech = () => { tok++; if (synth) synth.cancel(); };
+  let lastCancel = -1e9;
+  // Only cancel when the engine has something to cancel (a needless cancel() can wedge Chrome's engine); remember when.
+  function cancelSpeech(force) { if (!synth) return; try { if (force || synth.speaking || synth.pending) { synth.cancel(); lastCancel = performance.now(); } } catch (e) {} }
+  const stopSpeech = () => { tok++; cancelSpeech(); };
 
   let wake = null;
   async function keepAwake() { try { if (!wake && "wakeLock" in navigator && !document.hidden) { wake = await navigator.wakeLock.request("screen"); wake.onrelease = () => (wake = null); } } catch (e) {} }
@@ -311,7 +339,10 @@
   }
   // Called inside click handlers: the first utterance of the page is queued during a real user gesture.
   let primed = false;
-  function primeSpeech() { if (primed || !synth || FAST) return; primed = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; window.__vlPrime = u; synth.speak(u); } catch (e) {} }
+  // A tap or key press is also a fresh chance for the voice: after an engine error the app only reads at pace until the next tap.
+  function retryVoice() { if (synth && silent) { silent = false; noStart = 0; avoidNetwork = false; bar(); } }
+  document.addEventListener("pointerdown", retryVoice, { capture: true }); document.addEventListener("keydown", retryVoice, { capture: true });
+  function primeSpeech() { return; /* disabled: the zero-volume priming utterance + cancel wedged Chrome's speech engine */ if (primed || !synth || FAST) return; primed = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; window.__vlPrime = u; synth.speak(u); } catch (e) {} }
   document.addEventListener("pointerdown", primeSpeech, { capture: true }); document.addEventListener("keydown", primeSpeech, { capture: true });
   function openPlayer() {
     view = "player"; document.body.dataset.view = "player";
@@ -571,8 +602,12 @@
   }
 
   // ---------- playback ----------
-  function play() {
+  function play(fromTap) {
     if (view !== "player") return openPlayer();
+    // The first utterance of a page load needs a real user gesture (Chrome autoplay policy); without one, ask for a tap.
+    const gesture = fromTap === true || gestureNow();
+    if (!spoken && !FAST && synth && !silent && VS.mode !== "captions" && !gesture) return needTap("no-gesture");
+    hideTap();
     playing = true; waiting = false; keepAwake(); bar();
     const st = cur();
     const list = P.part === "feedback" ? script.feedback : script.main;
@@ -595,7 +630,7 @@
         return bar();
       }
       advance();
-    }, { pre, gapAfter, canJoin });
+    }, { pre, gapAfter, canJoin, sync: !spoken && gesture });
   }
   function advance() {
     const st = cur();
@@ -615,7 +650,7 @@
     P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save();
     load(); play();
   }
-  function pause() { playing = false; stopSpeech(); bar(); }
+  function pause() { playing = false; stopSpeech(); hideTap(); bar(); }
 
   $("toggle").onclick = () => { if (waiting) { P.sent = 0; waiting = false; return play(); } playing ? pause() : play(); };
   $("home").onclick = () => { setFs(false); pause(); waiting = false; renderHome(); };
@@ -678,7 +713,7 @@
     const go = () => { const u = new SpeechSynthesisUtterance("Hello. This is how your lessons will sound."); const v = voice(); if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
       u.rate = VS.rate; u.pitch = VS.pitch; u.volume = window.__vlMute ? 0 : 1; u.onstart = () => log("test:start"); u.onend = () => { log("test:end"); fillVoices(); }; u.onerror = (e) => { log("test:error:" + e.error); fillVoices(); };
       window.__vlTestU = u; try { if (synth.paused) synth.resume(); } catch (e) {} synth.speak(u); };
-    if (synth.speaking || synth.pending) { tok++; synth.cancel(); setTimeout(go, 80); } else go(); // never cancel and speak in the same tick
+    if (synth.speaking || synth.pending) { tok++; cancelSpeech(true); setTimeout(go, 350); } else go(); // never cancel and speak in the same tick
   };
   if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", () => { if (!$("vPanel").hidden) fillVoices(); });
   if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {}; // as in the original prototype
