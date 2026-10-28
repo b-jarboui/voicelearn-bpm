@@ -45,9 +45,12 @@
   const GROQ_BASE =
     "https://api.groq.com/openai/v1";
 
-  const REQUEST_TIMEOUT = 60000;
+  let REQUEST_TIMEOUT = 60000;
   const MAX_MODEL_ATTEMPTS = 2;
   const MAX_CANDIDATES = 3;
+  // Gemini: newest Flash first, then older Flash, then Flash-Lite; up to 3 attempts per request.
+  const MAX_GEMINI_CANDIDATES = 6;
+  const MAX_GEMINI_ATTEMPTS = 3;
 
   const REQUIREMENT_STATUSES = new Set([
     "addressed",
@@ -503,7 +506,7 @@
 
     if (id === "gemini") {
       const excluded =
-        /lite|image|live|tts|audio|embedding|thinking-exp|vision/i;
+        /image|live|tts|audio|embedding|thinking-exp|vision|transcribe|robotics|computer-use|-pro/i;
 
       const candidates = [];
 
@@ -515,7 +518,7 @@
         }
 
         const match = name.match(
-          /^gemini-(\d+(?:\.\d+)?)-flash(?:-(preview|latest))?$/i
+          /^gemini-(\d+(?:\.\d+)?)-flash(-lite)?(?:-(preview|latest))?$/i
         );
 
         if (!match) {
@@ -529,7 +532,7 @@
           continue;
         }
 
-        const suffix = (match[2] || "").toLowerCase();
+        const suffix = (match[3] || "").toLowerCase();
 
         const stability =
           suffix === "" ? 0 :
@@ -537,12 +540,18 @@
 
         candidates.push({
           id: name,
+          lite: match[2] ? 1 : 0,
           version,
           stability
         });
       }
 
+      // Full Flash models first (newest first), Flash-Lite only after them.
       candidates.sort((a, b) => {
+        if (a.lite !== b.lite) {
+          return a.lite - b.lite;
+        }
+
         if (b.version !== a.version) {
           return b.version - a.version;
         }
@@ -556,7 +565,7 @@
 
       return uniqueIds(
         candidates.map(item => item.id)
-      ).slice(0, MAX_CANDIDATES);
+      ).slice(0, MAX_GEMINI_CANDIDATES);
     }
 
     const preferred = [
@@ -1419,7 +1428,39 @@
     );
   }
 
-  function createRequestScope(externalSignal) {
+  // "gemini-3.6-flash" -> "Gemini 3.6 Flash"; "gemini-3.5-flash-lite" -> "Gemini 3.5 Flash Lite".
+  function modelLabel(providerId, model) {
+    if (providerId !== "gemini") {
+      return PROVIDERS[providerId] ? PROVIDERS[providerId].label : "";
+    }
+
+    const parts = String(model || "").replace(/^models\//, "").split("-");
+
+    if (parts[0] !== "gemini" || parts.length < 3 || !/^\d+(\.\d+)?$/.test(parts[1])) {
+      return "Gemini";
+    }
+
+    return "Gemini " + parts.slice(1).map(part =>
+      /^\d/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1)
+    ).join(" ");
+  }
+
+  // Gemini switches to the next model when this model is overloaded, broken or too slow.
+  // A 429 (RATE_LIMIT) never switches: the student waits for the countdown instead.
+  function shouldFallbackGemini(error) {
+    if (!(error instanceof S2Error)) {
+      return false;
+    }
+
+    if (error.code === "BUSY" || error.code === "TIMEOUT") {
+      return true;
+    }
+
+    return error.code === "HTTP" &&
+      (error.status === 404 || error.status >= 500);
+  }
+
+  function createRequestScope(externalSignal, ms) {
     const controller = new AbortController();
 
     let timedOut = false;
@@ -1428,7 +1469,7 @@
     const timeout = setTimeout(() => {
       timedOut = true;
       controller.abort();
-    }, REQUEST_TIMEOUT);
+    }, ms || REQUEST_TIMEOUT);
 
     function externalAbort() {
       cancelled = true;
@@ -1494,14 +1535,21 @@
       });
     }
 
-    const scope = createRequestScope(opts.signal);
     const fingerprint = keyFingerprint(key);
     const fetchImpl = fetchFunction(opts.fetchImpl);
+    const external = opts.signal;
+    const onStatus = typeof opts.onStatus === "function"
+      ? opts.onStatus
+      : null;
 
     let activeModel = "";
 
+    function cancelled() {
+      return !!(external && external.aborted);
+    }
+
     try {
-      if (scope.signal.aborted) {
+      if (cancelled()) {
         throw new S2Error("TIMEOUT", {
           provider: id
         });
@@ -1525,14 +1573,33 @@
 
       const schema = promptModule.schema;
 
-      const models = await discoverModels(
-        id,
-        {
-          fetchImpl,
-          signal: scope.signal
-        },
-        fingerprint
-      );
+      let models;
+
+      {
+        // The model list gets its own time limit, separate from the model attempts.
+        const listScope = createRequestScope(external);
+
+        try {
+          models = await discoverModels(
+            id,
+            {
+              fetchImpl,
+              signal: listScope.signal
+            },
+            fingerprint
+          );
+        } catch (error) {
+          if (listScope.timedOut || listScope.cancelled) {
+            throw new S2Error("TIMEOUT", {
+              provider: id
+            });
+          }
+
+          throw error;
+        } finally {
+          listScope.cleanup();
+        }
+      }
 
       if (!models.length) {
         throw new S2Error("EMPTY", {
@@ -1542,7 +1609,7 @@
 
       const candidates = models.slice(
         0,
-        MAX_MODEL_ATTEMPTS
+        id === "gemini" ? MAX_GEMINI_ATTEMPTS : MAX_MODEL_ATTEMPTS
       );
 
       let lastError = null;
@@ -1550,12 +1617,15 @@
       for (let index = 0; index < candidates.length; index++) {
         activeModel = candidates[index];
 
-        if (scope.signal.aborted) {
+        if (cancelled()) {
           throw new S2Error("TIMEOUT", {
             provider: id,
             model: activeModel
           });
         }
+
+        // Each model attempt has its own time limit.
+        const scope = createRequestScope(external);
 
         try {
           const responseText = id === "gemini"
@@ -1601,27 +1671,56 @@
           return {
             review: validated,
             provider: id,
-            label: provider.label,
+            label: modelLabel(id, activeModel),
             model: activeModel,
             at: Date.now()
           };
         } catch (error) {
-          const normalized = normalizeError(
-            error,
-            id,
-            activeModel,
-            scope.signal
-          );
+          if (cancelled()) {
+            throw new S2Error("TIMEOUT", {
+              provider: id,
+              model: activeModel
+            });
+          }
+
+          const normalized = scope.timedOut
+            ? new S2Error("TIMEOUT", {
+                provider: id,
+                model: activeModel
+              })
+            : normalizeError(
+                error,
+                id,
+                activeModel,
+                scope.signal
+              );
 
           lastError = normalized;
           if (normalized.status === 404) { modelCache.delete(id); }
 
-          if (
-            index + 1 >= candidates.length ||
-            !shouldTryNextModel(normalized)
-          ) {
+          const retry = id === "gemini"
+            ? shouldFallbackGemini(normalized)
+            : normalized.code !== "TIMEOUT" && shouldTryNextModel(normalized);
+
+          if (index + 1 >= candidates.length || !retry) {
             throw normalized;
           }
+
+          if (onStatus) {
+            try {
+              onStatus({
+                type: "fallback",
+                provider: id,
+                failedModel: activeModel,
+                nextModel: candidates[index + 1],
+                reason: normalized.code
+              });
+            } catch (_) {
+              // A faulty status listener must never break the request.
+            }
+          }
+        } finally {
+          scope.cleanup();
         }
       }
 
@@ -1630,7 +1729,7 @@
         model: activeModel
       });
     } catch (error) {
-      if (scope.timedOut || scope.cancelled) {
+      if (cancelled()) {
         throw new S2Error("TIMEOUT", {
           provider: id,
           model: activeModel
@@ -1641,10 +1740,8 @@
         error,
         id,
         activeModel,
-        scope.signal
+        external
       );
-    } finally {
-      scope.cleanup();
     }
   }
 
@@ -1802,9 +1899,11 @@
     rateLimitMessage,
     waitText,
     parseRetryAfter,
+    modelLabel,
     DEFAULT_WAIT,
 
     __test: Object.freeze({
+      setRequestTimeout(ms) { REQUEST_TIMEOUT = ms > 0 ? ms : 60000; },
       pickModels,
       parseModelJson,
       validateReview

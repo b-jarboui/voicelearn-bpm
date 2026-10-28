@@ -739,14 +739,22 @@
     refreshKeys();
 
     try {
-      const result = await P().review(provider, prepared.payload, { signal: controller.signal });
+      const result = await P().review(provider, prepared.payload, {
+        signal: controller.signal,
+        onStatus: (event) => {
+          if (event?.type !== "fallback" || !root.isConnected || active?.root !== root) return;
+          root.querySelector("#s2-request-status").textContent =
+            "Google is busy \u2014 trying another Gemini model\u2026";
+        }
+      });
       if (active?.root !== root || active.id !== id) return;
       active.fresh = safeArray(active.fresh).concat(result);
       const saved = storeResult(id, result, prepared.n);
       renderSavedFeedback();
+      const who = result.label || providerName(provider);
       announce(saved
-        ? `Feedback from ${providerName(provider)} is ready below.`
-        : `Feedback from ${providerName(provider)} is ready below. It could not be saved because your browser blocks storage, so please copy anything you want to keep.`);
+        ? `Feedback from ${who} is ready below.`
+        : `Feedback from ${who} is ready below. It could not be saved because your browser blocks storage, so please copy anything you want to keep.`);
     } catch (err) {
       const limited = err?.code === "RATE_LIMIT" && !controller.signal.aborted;
       if (limited) startCooldown(provider, err.retryAfter);
