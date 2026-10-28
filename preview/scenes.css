@@ -227,3 +227,14 @@ button.st-card:hover{border-color:var(--st-accent)}
 .stage.scroll .st-fade{display:none}
 .stage.scroll .st-bar{position:sticky;bottom:0}
 .stage.scroll .st-beat.dim{opacity:1}
+
+/* multi-week fix: long select options / chips must never widen the stage on a 375 px phone */
+.player,.stage,.qbox,.qrow>*,.qpool{min-width:0;max-width:100%}
+.qrow{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+@media (max-width:480px){.qrow{grid-template-columns:minmax(0,1fr)}}
+.qsel{max-width:100%;min-width:0;text-overflow:ellipsis}
+.qchip,.qplaced{max-width:100%;text-align:left;overflow-wrap:anywhere}
+.qorder{min-width:0;overflow-wrap:anywhere}
+
+main{grid-template-columns:minmax(0,1fr)}
+main>*{min-width:0}

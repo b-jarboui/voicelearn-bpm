@@ -108,5 +108,45 @@
     }
     return svg(W, H, b, o.alt || (kind === "line" ? "A project: start, fix the process, finish" : "A continuous loop: own, measure, govern, year after year"));
   };
-  window.DIAG = D;
+  // ---------- safe fallbacks: an unknown diagram type must never break a lesson ----------
+  // Known "extra" types used by some weeks (matrix2x2, progress, branch) get a small dedicated drawing; any other unknown
+  // name (lines, cards, curve, ...) gets a plain card list built from every text argument. All are counted in DIAG.__fb.
+  const FB = {};
+  const strs = (a, out = []) => { if (a == null || typeof a === "function") return out; if (Array.isArray(a)) a.forEach((x) => strs(x, out)); else if (typeof a === "object") Object.values(a).forEach((x) => strs(x, out)); else if (String(a).trim()) out.push(String(a).trim()); return out; };
+  const wrapTxt = (s, n) => { const w = String(s).split(/\s+/); const ls = []; let l = ""; w.forEach((x) => { if ((l + " " + x).trim().length > n && l) { ls.push(l); l = x; } else l = (l + " " + x).trim(); }); if (l) ls.push(l); return ls.slice(0, 4).join("|"); };
+  const cardsFb = (items, alt) => {
+    items = items.slice(0, 10); const W = 320, cols = items.length > 3 ? 2 : 1, cw = (W - 8 - (cols - 1) * 8) / cols, ch = 40, rows = Math.ceil(items.length / cols); let b = "";
+    items.forEach((s, i) => { const x = 4 + (i % cols) * (cw + 8), y = 4 + Math.floor(i / cols) * (ch + 8); b += box(x, y, cw, ch, wrapTxt(s, cols === 1 ? 44 : 22), i === 0 && items.length > 1 ? "hi" : "", 9.5); });
+    return svg(W, rows * (ch + 8) + 4, b, alt || items.join(". "));
+  };
+  const fbMatrix = (cols, rows, cells) => {
+    cols = [].concat(cols || []); rows = [].concat(rows || []); cells = [].concat(cells || []);
+    if (cols.length !== 2 || rows.length !== 2) return null;
+    const W = 320, lw = 70, cw = (W - lw - 8) / 2, hh = 26, ch = 52; let b = "";
+    cols.forEach((c, i) => (b += txt(lw + 4 + i * cw + cw / 2 - 2, 13, wrapTxt(c, 20), { size: 9.5, fill: C.hi })));
+    rows.forEach((r, j) => (b += txt(4 + lw / 2 - 2, hh + 4 + j * (ch + 4) + ch / 2, wrapTxt(r, 12), { size: 9, fill: C.hi })));
+    for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) b += box(lw + 4 + i * cw, hh + 4 + j * (ch + 4), cw - 4, ch, wrapTxt(cells[j * 2 + i] || "", 20), "", 9.5);
+    return svg(W, hh + 8 + 2 * (ch + 4), b, `Two by two grid: ${rows.join(" and ")} against ${cols.join(" and ")}. ${cells.join(", ")}`);
+  };
+  const fbProgress = (label, v, max, unit) => {
+    v = Number(v); max = Number(max) || 100; if (!Number.isFinite(v)) return null; const W = 320, f = Math.max(0, Math.min(1, v / max)); unit = unit || "";
+    const b = txt(160, 14, String(label || ""), { size: 11 }) + `<rect x="10" y="30" width="300" height="22" rx="11" fill="${C.box}" stroke="${C.line}"/><rect x="10" y="30" width="${300 * f}" height="22" rx="11" fill="${C.hi}"/>` + txt(160, 41, `${v}${unit} of ${max}${unit}`, { size: 11, fill: f > 0.5 ? C.dark : C.ink });
+    return svg(W, 62, b, `${label}: ${v}${unit} out of ${max}${unit}`);
+  };
+  const fbBranch = (root, kids) => {
+    kids = [].concat(kids || []).map(String).slice(0, 4); if (!kids.length) return null; const W = 320, n = kids.length, g = 8, w = (W - 8 - (n - 1) * g) / n; let b = box(70, 4, 180, 34, wrapTxt(root, 30), "hi", 10);
+    kids.forEach((k, i) => { const x = 4 + i * (w + g); b += `<path d="M160 38V50H${x + w / 2}V62" stroke="${C.line}" fill="none" stroke-width="1.5"/>` + box(x, 62, w, 56, wrapTxt(k, n > 2 ? 11 : 18), "", n > 3 ? 8.5 : 9.5); });
+    return svg(W, 124, b, `${root}, leading to: ${kids.join(", ")}`);
+  };
+  const fallback = (name, args) => {
+    FB[name] = (FB[name] || 0) + 1;
+    try {
+      const r = name === "matrix2x2" ? fbMatrix(...args) : name === "progress" ? fbProgress(...args) : name === "branch" ? fbBranch(...args) : null;
+      if (r) return r;
+      const items = strs(args); return cardsFb(items.length ? items : [name]);
+    } catch (e) { return svg(320, 40, box(4, 4, 312, 32, String(name), "", 10), String(name)); }
+  };
+  Object.defineProperty(D, "__fb", { get: () => FB, enumerable: false });
+  window.addEventListener("load", () => { const n = Object.values(FB).reduce((a, b) => a + b, 0); if (n) console.info("[DIAG fallback] " + n + " diagram(s) drawn by the safe fallback: " + JSON.stringify(FB)); });
+  window.DIAG = new Proxy(D, { get: (t, k) => (k in t || typeof k !== "string" || k === "then" || k === "toJSON" ? t[k] : (...a) => fallback(k, a)) });
 })();

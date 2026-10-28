@@ -22,7 +22,8 @@
   }
 
   // ---------- state (this device) ----------
-  const KEY = "voicelearn.oper621.w1.preview";
+  const WK = window.WEEK || 1; // progress and history are stored per week
+  const KEY = `voicelearn.oper621.w${WK}.v1`;
   const lessonPlan = (l) => C.lessons[l].sections.map((_, s) => ({ kind: "sec", l, s })).concat([{ kind: "quiz", l, round: 0, qs: null }, { kind: "result", l, round: 0 }]);
   const fresh = () => ({ seed: Math.random().toString(36).slice(2), queue: lessonPlan(0), idx: 0, part: "main", sent: 0, q: 0, used: {}, hist: [], rounds: {}, lessons: {}, flags: {}, rev: {} });
   let P;
@@ -69,7 +70,7 @@
   // ---------- speech ----------
   const synth = window.speechSynthesis;
   // Own settings key: the original prototype lives on the same github.io origin and must not share (or break) our settings.
-  const VKEY = "voicelearn.oper621.voice.preview";
+  const VKEY = "voicelearn.oper621.voice.v2";
   let VS = { uri: "", rate: 0.95, pitch: 1, look: "story" };
   try { VS = Object.assign(VS, JSON.parse(localStorage.getItem(VKEY)) || {}); } catch (e) {}
   // Sanitize saved values: a bad rate/pitch (NaN, a string, out of range) makes some engines silent.
@@ -266,11 +267,25 @@
   const badge = (label, m, title) => `<span class="pill ${m == null ? "" : m >= A.target - 1e-9 ? "done" : "warn"}" title="${esc(title)}">${esc(label)}${m == null ? "" : " · " + pct(m) + "%"}</span>`;
   const LOOKS = [["story", "Story cards", "Full-screen cards that turn like social stories"], ["codex", "Signal Studio", "A growing field guide, one idea at a time"],
     ["notebook", "Teacher's Notebook", "Warm paper notes, sketches and teaching annotations"], ["journey", "Process Journey", "Each idea is a stop along one connected route"]];
+  // Weeks listed in weeks/manifest.js, plus any other week folder found on the server (a HEAD probe of its four files), so a new week appears without code changes.
+  const weekList = () => { const l = (window.WEEKS || []).slice(); if (!l.some((w) => w.n === WK)) l.push({ n: WK, title: C.title }); return l.sort((a, b) => a.n - b.n); };
+  let probed = false;
+  function probeWeeks() {
+    if (probed || !window.fetch || location.protocol === "file:") return; probed = true;
+    const known = new Set((window.WEEKS || []).map((w) => w.n)); let found = 0;
+    for (let n = 2; n <= 14; n++) if (!known.has(n)) {
+      const d = `weeks/week${n < 10 ? "0" : ""}${n}/`;
+      Promise.all(["course.js", "bank.js", "moments.js", "adaptive-week.js"].map((f) => fetch(d + f, { method: "HEAD", cache: "no-store" }).then((r) => r.ok))).then((r) => {
+        if (r.every(Boolean)) { (window.WEEKS = window.WEEKS || []).push({ n, title: "Week " + n + " (new)" }); found++; const s = $("wkSel"); if (s && !s.querySelector(`option[value="${n}"]`)) { const o = document.createElement("option"); o.value = n; o.textContent = `Week ${n}`; const after = [...s.options].find((x) => +x.value > n); s.insertBefore(o, after || null); } }
+      }).catch(() => {});
+    }
+  }
   function renderHome() {
     view = "home"; document.body.dataset.view = "home";
     const st = cur(), les = C.lessons[st.l] || C.lessons[0];
     const flagged = SECS.filter((s) => P.flags[s]);
     $("main").innerHTML = `
+      <div class="card"><div class="eyebrow">Week</div><label class="fld" style="display:grid;gap:6px"><span class="muted" style="font-size:15px">Choose the week to study. Each week keeps its own progress.</span><select id="wkSel" style="font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%">${weekList().map((w) => `<option value="${w.n}"${w.n === WK ? " selected" : ""}>Week ${w.n} · ${esc(w.title)}</option>`).join("")}</select></label>${window.REVISION_WEEK ? `<div class="muted" style="font-size:15px">Week ${window.REVISION_WEEK}: revision week, see Moodle (no lessons here).</div>` : ""}</div>
       <div class="card"><div class="eyebrow">Continue</div><h1>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</h1>
         <div class="row"><button class="primary" id="resume">▶ Continue</button><button id="restart">Start over</button></div></div>
       <div class="card"><div class="eyebrow">Look · how the lessons appear</div>
@@ -284,6 +299,8 @@
           const pill = r ? (r.passed ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
           return `<div class="lesson"><div style="min-width:0"><b>${l + 1}. ${esc(x.title)}</b><div class="muted" style="font-size:15px">${x.sections.length} part${x.sections.length > 1 ? "s" : ""} + check</div></div>
           <div class="row">${pill}<button data-l="${l}" aria-label="Play lesson ${l + 1}">Play</button></div></div>`; }).join("")}</div></div>`;
+    $("wkSel").onchange = (e) => { location.search = "?week=" + e.target.value; };
+    probeWeeks();
     $("resume").onclick = () => openPlayer();
     $("restart").onclick = () => { P = fresh(); save(); openPlayer(); };
     document.querySelectorAll("[data-look]").forEach((b) => (b.onclick = () => { VS.look = b.dataset.look; saveVS(); document.querySelectorAll("[data-look]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("vLook").value = VS.look; }));
@@ -493,7 +510,7 @@
     const status = (s) => (P.flags[s] ? "INSTRUCTOR REVIEW (no fresh questions left, target not reached)" : secOk(s) ? "mastered" : secHist(s).length ? "in progress" : "not started");
     const flagged = SECS.filter((s) => P.flags[s]);
     return [
-      `VoiceLearn achievement report`,
+      `VoiceLearn achievement report · Week ${WK}`,
       `Student: ${name || "(not given)"}`,
       `Teacher: ${T.name}`,
       `Course: ${C.code} · ${C.subtitle} · ${C.title}`,
@@ -503,7 +520,7 @@
       `Course learning outcomes:`,
       ...CLOS.map((c) => `- ${c} ${A.clos[c].full}: ${v(cloM(c))}${cloM(c) != null && cloM(c) < A.target ? "  (below target)" : ""}`),
       ``,
-      `Week 1 outcomes:`,
+      `Week ${WK} outcomes:`,
       ...LOS.map((k) => `- ${A.outcomes[k].name} (${A.outcomes[k].clo}): ${A.outcomes[k].full}: ${v(loM(k))}`),
       ``,
       `Parts (sections):`,
@@ -527,7 +544,7 @@
       <div class="row"><button class="primary" id="sMail">✉ Send report</button>${navigator.share ? '<button id="sShare">Share…</button>' : ""}<button id="sCopy">Copy report</button></div>
       <div class="muted" id="sMsg" role="status" style="font-size:15px">Opens your mail app with the report ready. Tap Send there.</div>`;
     const keep = () => { pref = { name: $("sName").value.trim() }; try { localStorage.setItem(PREF, JSON.stringify(pref)); } catch (e) {} };
-    const subject = () => `${C.code} Week 1 achievement report – ${$("sName").value.trim() || "student"}`;
+    const subject = () => `${C.code} Week ${WK} achievement report – ${$("sName").value.trim() || "student"}`;
     $("sMail").onclick = () => { keep(); if (!pref.name) { $("sMsg").textContent = "Enter your name first."; $("sName").focus(); return; }
       location.href = `mailto:${encodeURIComponent(T.email || "")}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(reportText(pref.name))}`; $("sMsg").textContent = "Your mail app should open with the report. Tap Send there."; };
     if ($("sShare")) $("sShare").onclick = async () => { keep(); try { await navigator.share({ title: subject(), text: reportText(pref.name) }); } catch (e) {} };
@@ -543,9 +560,9 @@
     script = { main: say, offset: 0 };
     const bar = (label, m, at, small) => `<div class="st-it st-lo${small ? " sm" : ""}" data-at="${at}"><div class="st-lo-h"><b>${esc(label)}</b><span>${m == null ? "–" : pct(m) + "%"}</span></div><div class="st-lo-t"><i class="${m != null && m >= A.target - 1e-9 ? "good" : "bad"}" style="--w:${pct(m)}%"></i><em style="left:${pct(A.target)}%"></em></div></div>`;
     Scenes.loadBeats("<b>Achievement report</b>", "", [
-      { at: 0, html: `<div class="st-kicker">${esc(C.code)} · Week 1 achievement</div><h2 class="st-h">${esc(C.title)}</h2>` },
+      { at: 0, html: `<div class="st-kicker">${esc(C.code)} · Week ${WK} achievement</div><h2 class="st-h">${esc(C.title)}</h2>` },
       { at: 1, fx: "bars", html: `<div class="st-score ${k1 != null && k1 >= A.target ? "good" : "bad"}"><span data-count="${pct(k1)}" data-unit="%">0%</span><small>CLO ${CLOS[0]} · ${esc(A.clos[CLOS[0]].full)}</small></div>` },
-      { at: 2, html: `<div class="st-kicker">Week 1 outcomes</div><div class="st-los">${LOS.map((k, i) => bar(A.outcomes[k].full, loM(k), 2 + i)).join("")}</div>` },
+      { at: 2, html: `<div class="st-kicker">Week ${WK} outcomes</div><div class="st-los">${LOS.map((k, i) => bar(A.outcomes[k].full, loM(k), 2 + i)).join("")}</div>` },
       { at: 2 + LOS.length, html: `<div class="st-kicker">Every part</div><div class="st-los">${SECS.map((s) => bar(A.sections[s].name + (P.flags[s] ? " · flagged" : ""), secM(s), 2 + LOS.length, true)).join("")}</div>` },
       { at: say.length - 1, html: flagged.length ? `<div class="st-quote">Flagged for <em>instructor review</em>: ${esc(flagged.map((s) => A.sections[s].name).join(", "))}</div>` : `<div class="st-quote">Every part <em>achieved</em>.</div>` },
       ...(T.sendReport ? [{ at: say.length - 1, html: `<button class="st-card st-send"><b>✉ Send this report</b><span>By email or share</span></button>` }] : []),
@@ -677,6 +694,7 @@
     at: (i) => { pause(); P.sent = i; caption(script.main[i]); vstep(i - script.offset); },
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
     jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = s; P.part = "main"; P.sent = 0; P.q = 0; save(); if (view !== "player") { view = "player"; document.body.dataset.view = "player"; $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`; $("slot").replaceWith(stageEl); stageEl.after(lookEl); } load(); },
+    showQ: (id) => { pause(); const st = cur(); st.qs = [id]; P.q = 0; P.part = "main"; P.sent = 0; load(); }, // QA: show one specific question (current step must be a quiz)
     setLook: (id) => { VS.look = id; saveVS(); },
     fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, ranked: rankedVoices().slice(0, 6).map((v) => v.name + " [" + vScore(v) + "]"), sayText, rate: VS.rate, log: SLOG.slice(-12) }) };
   renderHome();
