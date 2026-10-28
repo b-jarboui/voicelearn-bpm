@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VoiceLearn OPER621</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="scenes.css?v=24"><link rel="stylesheet" href="visual-v25.css?v=29">
+<style>
+/* Narrated presentation: the stage plays like a video; one Pause/Continue control. */
+:root{
+  --bg:#EEF2F6; --surface:#FFFFFF; --ink:#142033; --muted:#5B6B82; --line:#D5DDE7;
+  --accent:#1F5EFF; --accent-ink:#FFFFFF; --ok:#1E8E5A; --warn:#B26A00;
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D131C; --surface:#151D29; --ink:#E8EEF6; --muted:#93A3B8; --line:#263245;
+  --accent:#6C9BFF; --accent-ink:#0D131C; --ok:#3DD68C; --warn:#FFB84D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D131C; --surface:#151D29; --ink:#E8EEF6; --muted:#93A3B8; --line:#263245;
+  --accent:#6C9BFF; --accent-ink:#0D131C; --ok:#3DD68C; --warn:#FFB84D; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);padding:0 16px 120px}
+[hidden]{display:none!important}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto;padding-block:14px}
+.brand{font:800 20px var(--display);letter-spacing:-.01em;cursor:pointer;background:none;border:0;padding:0;color:var(--ink)}
+.brand span{color:var(--accent)}
+main{max-width:760px;margin:0 auto;display:grid;gap:14px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:28px} h2{font-size:21px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:10px;min-width:0}
+.muted{color:var(--muted)}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.lesson{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.lesson:first-child{border-top:0}
+.pill{font-size:13px;padding:2px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.done{color:var(--ok);border-color:var(--ok)}
+.pill.now{color:var(--accent);border-color:var(--accent)}
+.pill.warn{color:var(--warn);border-color:var(--warn)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.player .stage,.player .look{height:max(340px,calc(100dvh - 250px))}
+.player .look{position:relative;border-radius:16px;overflow:hidden;background:#0c0c10}
+body.fs .player .look{position:fixed;left:0;right:0;top:0;bottom:calc(150px + env(safe-area-inset-bottom,0px));height:auto;border-radius:0;z-index:50}
+.cc{min-height:3.2em;font-size:18px;line-height:1.45;text-align:center;padding-inline:8px;text-wrap:balance}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.bar .status{flex:1;min-width:0;font-size:15px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-course{font-size:14px;margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.vbtn{padding:7px 12px;font-size:15px;white-space:nowrap}
+.vpanel{position:fixed;z-index:20;left:16px;right:16px;top:calc(64px + env(safe-area-inset-top,0px));max-width:420px;margin-left:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.vpanel select,.vpanel input[type=range]{width:100%;font:inherit}
+.vpanel select{padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.vpanel input[type=range]{accent-color:var(--accent)}
+.send{margin-top:6px}
+.fld{display:grid;gap:4px;font-size:15px;color:var(--muted)}
+.fld input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+#fsBtn{display:none;padding:12px 14px;border-radius:99px;font-size:18px;line-height:1}
+body[data-view="player"] #fsBtn{display:block}
+/* Full screen player: stage fills the screen, caption + controls float over it like a video player. */
+body.fs{overflow:hidden}
+body.fs header,body.fs .vpanel{display:none}
+/* The picture stops above a black caption band, so subtitles and controls never cover content. */
+body.fs{background:#000}
+body.fs .player .stage{position:fixed;left:0;right:0;top:0;bottom:calc(150px + env(safe-area-inset-bottom,0px));height:auto;border-radius:0;z-index:50}
+body.fs .cc{position:fixed;left:0;right:0;bottom:0;z-index:51;margin:0;height:calc(150px + env(safe-area-inset-bottom,0px));
+  padding:12px 20px 0;color:#fff;background:#000;pointer-events:none}
+body.fs .bar{z-index:52;background:transparent;border:0}
+body.fs .bar .status{color:rgba(255,255,255,.8)}
+body.fs #fsBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,255,255,.3);backdrop-filter:blur(8px)}
+body.fs .send{display:none}
+#toggle{min-width:170px;padding:14px 22px;font-size:19px;border-radius:99px}
+/* Home: visible Look toggle (four looks) */
+.looks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.lookbtn{display:grid;gap:5px;min-width:0;text-align:left;padding:13px;border-radius:12px}
+.lookbtn b{font-size:16px;line-height:1.25}
+.lookbtn .muted{font-size:14px;line-height:1.35}
+.lookbtn .sw{display:block;height:54px;border-radius:8px;border:1px solid rgba(0,0,0,.12)}
+.lookbtn.story .sw{background:linear-gradient(160deg,#E2552D 0%,#8C1C3E 55%,#1C3FAA 100%)}
+.lookbtn.codex .sw{background:linear-gradient(90deg,#152d2a 0 70%,#d9f879 70% 74%,#152d2a 74%)}
+.lookbtn.notebook .sw{background:linear-gradient(90deg,transparent 0 17%,#A04432 17% 19%,transparent 19%),repeating-linear-gradient(0deg,#FAF7EF 0 10px,#D7DFDC 10px 11px);border:1px solid #CFC9BA}
+.lookbtn.journey .sw{background-color:#F3F0E8;background-image:radial-gradient(circle at 20% 50%,#24675B 0 6px,transparent 7px),radial-gradient(circle at 50% 50%,#963D21 0 7px,transparent 8px),radial-gradient(circle at 80% 50%,#24675B 0 6px,transparent 7px),linear-gradient(to right,transparent 20%,#24675B 20% 80%,transparent 80%);background-size:100% 100%,100% 100%,100% 100%,100% 3px;background-position:center;background-repeat:no-repeat;border:1px solid #C5CEC8}
+.lookbtn[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.lookbtn[aria-pressed="true"] b::after{content:" ✓";color:var(--accent)}
+@media (max-width:600px){.looks{grid-template-columns:1fr;gap:10px}.lookbtn{grid-template-columns:70px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;row-gap:3px;align-items:center;padding:11px 12px}.lookbtn .sw{grid-column:1;grid-row:1/3;height:52px}.lookbtn b{grid-column:2;grid-row:1}.lookbtn .muted{grid-column:2;grid-row:2}}
+/* Light looks get a light frame */
+.player .look.vl-notebook{background:#FAF7EF}
+.player .look.vl-journey{background:#F3F0E8}
+#repBtn{display:none;padding:12px 14px;border-radius:99px;font-size:18px;line-height:1}
+body[data-view="player"] #repBtn{display:block}
+body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,255,255,.3)}
+</style>
+</head>
+<body>
+<header id="siteHeader">
+  <button class="brand"
+          id="home"
+          type="button"
+          aria-label="Course home">
+    Voice<span>Learn</span>
+  </button>
+
+  <span class="muted hdr-course">
+    OPER621 · BPM
+    <span id="weekLabel"></span>
+  </span>
+
+  <span id="headerSettingsSlot"
+        class="settings-slot"><button id="vBtn" class="vbtn" type="button" aria-expanded="false" aria-controls="vPanel" aria-label="Voice, speed and look settings">⚙ Settings</button></span>
+</header>
+<div class="vpanel card" id="vPanel" hidden role="dialog" aria-modal="false" aria-label="Settings">
+  <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
+  <div class="muted" id="vNote" role="status" style="font-size:14px"></div>
+  <label class="fld">Narration<select id="vMode"><option value="voice">Voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
+  <label class="fld">Look<select id="vLook"><option value="story">Story cards</option><option value="codex">Signal Studio</option><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option></select></label>
+  <div class="settings-week-row">
+  <label for="settingsWeek">
+    Course week
+  </label>
+
+  <select id="settingsWeek"
+          aria-label="Select course week">
+  </select>
+</div>
+  <label class="fld">Voice<select id="vVoice"></select></label>
+  <label class="fld">Speed <output id="vRateOut">1×</output><input id="vRate" type="range" min="0.5" max="2" step="0.05" value="1"></label>
+  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.5×</span><span>1×</span><span>1.5×</span><span>2×</span></div>
+  <label class="listen-choice"><input id="settingsListen" type="checkbox"> <span>Listen only (hands-free)</span></label>
+  <label class="fld">Tone <output id="vPitchOut">normal</output><input id="vPitch" type="range" min="0.5" max="1.5" step="0.1" value="1"></label>
+  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>Deeper</span><span>Higher</span></div>
+  <button id="vTest">▶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div>
+  <div class="muted" style="font-size:13px">Voices come from your phone. For a male voice on Android: Settings → Text-to-speech → Speech Services by Google → ⚙️ → Install voice data → English → pick a male voice.</div>
+</div>
+<nav id="courseNav"
+     class="course-nav player-topbar"
+     aria-label="Course navigation"
+     hidden>
+
+  <div class="player-topbar-row">
+
+    <button id="navHome"
+            class="player-home"
+            type="button"
+            title="Return to course home"
+            aria-label="Return to course home">
+
+      <svg viewBox="0 0 24 24"
+           width="19"
+           height="19"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           aria-hidden="true">
+        <path d="m3 10 9-7 9 7"/>
+        <path d="M5 9v12h14V9"/>
+        <path d="M9 21v-7h6v7"/>
+      </svg>
+
+      <span>Home</span>
+    </button>
+
+    <div class="player-location">
+      <div id="crumb"
+           class="player-crumb"
+           aria-live="polite"
+           aria-atomic="true">
+      </div><span id="lookCount" class="look-count" aria-hidden="true"></span>
+    </div>
+
+    <span id="playerSettingsSlot"
+          class="settings-slot player-settings-slot">
+    </span>
+
+  </div>
+
+  <div id="navProgress"
+       class="nav-progress player-progress"
+       role="progressbar"
+       aria-label="Current part progress"
+       aria-valuemin="0"
+       aria-valuemax="100"
+       aria-valuenow="0">
+
+    <i style="width:0%"></i>
+  </div>
+
+</nav><main id="main" tabindex="-1"></main>
+<div id="handsControls" class="hands-controls" aria-label="Hands-free playback controls"><label class="listen-choice hands-toggle"><input id="playerListen" type="checkbox"> <span id="listenState">Hands-free listening off</span></label><div class="hands-buttons"><button id="handsPlay" type="button" aria-label="Play narrated lesson">▶ Play</button><button id="handsPause" type="button" aria-label="Pause narration">Ⅱ Pause</button><button id="handsNext" type="button" aria-label="Next part or question">Next →</button><button id="skipQuestion" type="button" hidden>Skip for now · Answer later</button></div></div><div id="moreMenu" class="more-menu" role="menu" aria-label="More playback controls" hidden></div>
+<div class="bar" id="playerBar" hidden>
+
+  <div class="bar-in">
+
+    <div class="player-status-row">
+      <span id="status"
+            class="status"
+            role="status"
+            aria-live="polite">
+      </span>
+    </div>
+
+    <div class="player-control-row"
+         role="group"
+         aria-label="Lesson playback controls">
+
+      <button id="navPrevPart"
+              class="player-icon-btn"
+              type="button"
+              title="Previous part"
+              aria-label="Previous part">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M4 5v14"/>
+          <path d="m13 6-7 6 7 6V6Z"/>
+          <path d="m21 6-7 6 7 6V6Z"/>
+        </svg>
+      </button>
+
+      <button id="navPrev"
+              class="player-icon-btn"
+              type="button"
+              title="Previous sentence"
+              aria-label="Previous sentence">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2.2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="m15 5-7 7 7 7"/>
+        </svg>
+      </button>
+
+      <button id="toggle"
+              class="player-primary"
+              type="button"
+              title="Play or continue narration"
+              aria-label="Play or continue narration">
+        ▶ Continue
+      </button>
+
+      <button id="navNext"
+              class="player-icon-btn"
+              type="button"
+              title="Next sentence"
+              aria-label="Next sentence">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2.2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="m9 5 7 7-7 7"/>
+        </svg>
+      </button>
+
+      <button id="navNextPart"
+              class="player-icon-btn"
+              type="button"
+              title="Next part"
+              aria-label="Next part">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M20 5v14"/>
+          <path d="m11 6 7 6-7 6V6Z"/>
+          <path d="m3 6 7 6-7 6V6Z"/>
+        </svg>
+      </button>
+
+      <button id="repBtn"
+              class="player-icon-btn player-utility"
+              type="button"
+              title="Repeat narration"
+              aria-label="Repeat narration">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M20 7v5h-5"/>
+          <path d="M4 17v-5h5"/>
+          <path d="M5.5 9A7 7 0 0 1 18 7"/>
+          <path d="M18.5 15A7 7 0 0 1 6 17"/>
+        </svg>
+      </button>
+
+      <button id="fsBtn"
+              class="player-icon-btn player-utility"
+              type="button"
+              title="Toggle fullscreen"
+              aria-label="Toggle fullscreen">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M8 3H3v5"/>
+          <path d="M16 3h5v5"/>
+          <path d="M3 16v5h5"/>
+          <path d="M21 16v5h-5"/>
+        </svg>
+      </button>
+      <button id="ccBtn" class="player-icon-btn player-utility" type="button" aria-pressed="false" title="Captions on or off" aria-label="Captions on or off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 10.5a2 2 0 1 0 0 3M17 10.5a2 2 0 1 0 0 3"/></svg></button>
+      <button id="moreBtn" class="player-icon-btn player-more" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="moreMenu" title="More controls" aria-label="More controls"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+
+    </div>
+  </div>
+</div>
+
+<script src="diagrams.js?v=25"></script>
+<script src="weeks/manifest.js?v=9"></script>
+<script>
+/* Multi-week loader: ?week=N picks the week (default 1). Each week is a full page load, so globals never mix. */
+(function () {
+  var m = location.search.match(/[?&]week=(\d+)/), w = m ? +m[1] : 1; if (!(w >= 1 && w <= 14)) w = 1;
+  window.WEEK = w; window.WEEKDIR = w === 1 ? "" : "weeks/week" + (w < 10 ? "0" : "") + w + "/";
+  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = w === 1 ? "" : "?v=9";
+  window.__wkWrite = function (list) { list.forEach(function (s) { document.write("<script src=\"" + window.WEEKDIR + s + (s.indexOf("?") < 0 ? v : "") + "\"><" + "/script>"); }); };
+  window.__wkWrite(f);
+})();
+</script>
+<script src="scenes.js?v=25"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="lab/content.js?v=25"></script>
+<script src="lab/style-story.js?v=28"></script>
+<script src="lab/style-codex.js?v=25"></script>
+<script src="lab/style-notebook.js?v=25"></script>
+<script src="lab/style-journey.js?v=26"></script>
+<script>window.__wkWrite(["moments.js" + (window.WEEK === 1 ? "?v=9" : "")]);</script>
+<script>
+(function () {
+  var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
+  if (ok) { document.write("<script src=\"player.js?v=26\"><" + "/script>"); }
+  else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
+  else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
+})();
+</script>
+</body>
+</html>
+

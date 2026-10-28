@@ -1,0 +1,2069 @@
+/* FILE: visual-v25.css */
+
+/*
+ * VoiceLearn — Visual Presentation System v25
+ *
+ * Visual-only corrections for the supplied v24 build.
+ *
+ * Load after scenes.css.
+ *
+ * Does not modify:
+ * - speech synthesis
+ * - narration timing
+ * - sentence progression
+ * - adaptive assessment
+ * - learner progress
+ *
+ * Design principles:
+ * 1. Lesson content dominates the viewport.
+ * 2. One navigation header.
+ * 3. One progress indicator.
+ * 4. One thin caption line.
+ * 5. One controls bar.
+ * 6. No duplicated titles or counters.
+ * 7. Minimum 44px interactive targets.
+ * 8. Calm motion and accessible focus.
+ */
+
+/* =========================================================
+   01. DESIGN TOKENS
+   ========================================================= */
+
+:root {
+  --vl25-bg: #F4F6F9;
+  --vl25-surface: #FFFFFF;
+  --vl25-surface-soft: #EDF1F6;
+
+  --vl25-ink: #172235;
+  --vl25-muted: #526176;
+  --vl25-border: #D6DEE8;
+
+  --vl25-primary: #2854C5;
+  --vl25-primary-hover: #2045A5;
+  --vl25-primary-text: #FFFFFF;
+
+  --vl25-success: #176A49;
+  --vl25-warning: #925000;
+  --vl25-danger: #B42332;
+
+  --vl25-focus: #2854C5;
+
+  --vl25-font-ui:
+    "Manrope",
+    system-ui,
+    sans-serif;
+
+  --vl25-font-reading:
+    "Atkinson Hyperlegible",
+    system-ui,
+    sans-serif;
+
+  --vl25-font-editorial:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  --vl25-space-1: 4px;
+  --vl25-space-2: 8px;
+  --vl25-space-3: 12px;
+  --vl25-space-4: 16px;
+  --vl25-space-5: 20px;
+  --vl25-space-6: 24px;
+  --vl25-space-8: 32px;
+  --vl25-space-10: 40px;
+  --vl25-space-12: 48px;
+
+  --vl25-radius-sm: 8px;
+  --vl25-radius-md: 12px;
+  --vl25-radius-lg: 18px;
+  --vl25-radius-xl: 24px;
+
+  --vl25-shadow:
+    0 8px 28px rgba(17, 30, 52, 0.07);
+
+  --vl25-shadow-strong:
+    0 18px 48px rgba(17, 30, 52, 0.12);
+
+  --vl25-header-h: 44px;
+  --vl25-progress-h: 3px;
+  --vl25-caption-h: 28px;
+  --vl25-controls-h: 56px;
+  --vl25-gap: 4px;
+  --vl25-inline: 8px;
+
+  --vl25-motion-fast: 160ms;
+  --vl25-motion-normal: 280ms;
+
+  --vl25-ease:
+    cubic-bezier(.22, 1, .36, 1);
+}
+
+/* =========================================================
+   02. DARK THEME
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --vl25-bg: #101722;
+    --vl25-surface: #1A2533;
+    --vl25-surface-soft: #263447;
+
+    --vl25-ink: #F2F5FA;
+    --vl25-muted: #B7C4D5;
+    --vl25-border: #405066;
+
+    --vl25-primary: #91ADFF;
+    --vl25-primary-hover: #B0C4FF;
+    --vl25-primary-text: #101722;
+
+    --vl25-success: #79E0B2;
+    --vl25-warning: #FFD08A;
+    --vl25-danger: #FF9AA5;
+
+    --vl25-focus: #B4C8FF;
+  }
+}
+
+:root[data-theme="dark"] {
+  --vl25-bg: #101722;
+  --vl25-surface: #1A2533;
+  --vl25-surface-soft: #263447;
+
+  --vl25-ink: #F2F5FA;
+  --vl25-muted: #B7C4D5;
+  --vl25-border: #405066;
+
+  --vl25-primary: #91ADFF;
+  --vl25-primary-hover: #B0C4FF;
+  --vl25-primary-text: #101722;
+
+  --vl25-focus: #B4C8FF;
+}
+
+/* =========================================================
+   03. GLOBAL FOUNDATIONS
+   ========================================================= */
+
+html {
+  min-width: 320px;
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: clip;
+
+  background: var(--vl25-bg);
+  color: var(--vl25-ink);
+
+  font-family: var(--vl25-font-reading);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: var(--vl25-font-ui);
+}
+
+button {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:where(
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [tabindex]
+):focus-visible {
+  outline: 3px solid var(--vl25-focus);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+::selection {
+  background: #B8CBFF;
+  color: #10234A;
+}
+
+/* =========================================================
+   04. SHARED TYPOGRAPHY
+   ========================================================= */
+
+.brand {
+  font-family: var(--vl25-font-ui);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.eyebrow,
+.onboard-eyebrow {
+  font-family: var(--vl25-font-ui);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+
+.card h1 {
+  font-size: clamp(25px, 3vw, 38px);
+  line-height: 1.13;
+}
+
+.card h2 {
+  font-size: clamp(20px, 2vw, 27px);
+  line-height: 1.2;
+}
+
+.muted {
+  color: var(--vl25-muted);
+}
+
+/* =========================================================
+   05. GENERAL CARDS
+   ========================================================= */
+
+.card {
+  min-width: 0;
+
+  border: 1px solid var(--vl25-border);
+  border-radius: var(--vl25-radius-lg);
+
+  background: var(--vl25-surface);
+  color: var(--vl25-ink);
+
+  box-shadow: var(--vl25-shadow);
+}
+
+body:not([data-view="player"]) .card {
+  padding: clamp(18px, 2.4vw, 28px);
+}
+
+body:not([data-view="player"]) main {
+  width: 100%;
+  max-width: 1100px;
+  gap: 18px;
+}
+
+body:not([data-view="player"]) header {
+  max-width: 1100px;
+}
+
+body:not([data-view="player"]) .card:hover {
+  transform: none;
+}
+
+/* =========================================================
+   06. WELCOME AND ONBOARDING
+   ========================================================= */
+
+.onboard {
+  width: 100%;
+  max-width: 920px;
+
+  margin: clamp(12px, 3vh, 32px) auto;
+  padding: clamp(24px, 4vw, 54px);
+
+  border-radius: 24px;
+}
+
+.onboard h1 {
+  max-width: 18ch;
+
+  margin: 18px 0 20px;
+
+  font-family: var(--vl25-font-editorial);
+  font-size: clamp(34px, 4.4vw, 66px);
+  font-weight: 400;
+
+  line-height: 1.07;
+  letter-spacing: -.035em;
+}
+
+.onboard p {
+  max-width: 67ch;
+
+  margin: 0 0 18px;
+
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.7;
+}
+
+.onboard .actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.onboard .actions button {
+  min-height: 48px;
+
+  padding: 12px 22px;
+
+  border-radius: 999px;
+
+  font-weight: 700;
+}
+
+/* =========================================================
+   07. SETUP LOOK SELECTOR
+   ========================================================= */
+
+.setup-looks {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+.setup-look {
+  min-width: 0;
+
+  padding: 16px;
+
+  border: 2px solid var(--vl25-border);
+  border-radius: 18px;
+
+  background: var(--vl25-surface);
+  color: var(--vl25-ink);
+
+  text-align: left;
+}
+
+.setup-look[aria-pressed="true"] {
+  border-color: var(--vl25-primary);
+
+  box-shadow:
+    0 0 0 2px var(--vl25-primary);
+}
+
+.setup-look b {
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.setup-look .muted {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.setup-look .mini {
+  height: 120px;
+  border-radius: 12px;
+}
+
+/* =========================================================
+   08. HOME SCREEN
+   ========================================================= */
+
+.lesson {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  min-height: 72px;
+  padding: 16px 0;
+
+  border-radius: 0;
+}
+
+.lesson:hover {
+  transform: none;
+}
+
+.lesson > div:first-child {
+  min-width: 0;
+  flex: 1;
+}
+
+.lesson b {
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.lesson .row {
+  justify-content: flex-end;
+}
+
+.lesson button {
+  min-width: 64px;
+  min-height: 44px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 28px;
+
+  padding: 4px 10px;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  border-radius: 999px;
+}
+
+.looks {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.lookbtn {
+  min-width: 0;
+  min-height: 110px;
+
+  padding: 14px;
+
+  border: 1px solid var(--vl25-border);
+  border-radius: 14px;
+
+  text-align: left;
+}
+
+.lookbtn[aria-pressed="true"] {
+  border-color: var(--vl25-primary);
+
+  box-shadow:
+    inset 0 0 0 2px var(--vl25-primary);
+}
+
+.lookbtn .sw {
+  height: 58px;
+  border-radius: 10px;
+}
+
+.later-list {
+  display: grid;
+  gap: 8px;
+
+  max-height: min(320px, 45vh);
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.later-resume {
+  min-height: 52px;
+  padding: 12px 14px;
+}
+
+/* =========================================================
+   09. PLAYER VIEWPORT
+   ========================================================= */
+
+body[data-view="player"] {
+  margin: 0;
+
+  padding:
+    0
+    0
+    calc(
+      var(--vl25-controls-h)
+      + env(safe-area-inset-bottom, 0px)
+    ) !important;
+
+  overflow-x: clip;
+
+  background: var(--vl25-bg);
+  color: var(--vl25-ink);
+}
+
+body[data-view="player"] #siteHeader {
+  display: none !important;
+}
+
+body[data-view="player"] #courseNav {
+  position: relative;
+
+  top: auto;
+  z-index: 70;
+
+  display: block;
+
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 0;
+
+  background: var(--vl25-surface);
+
+  box-shadow: none;
+}
+
+body[data-view="player"] .player-topbar-row {
+  display: grid;
+
+  grid-template-columns:
+    76px
+    minmax(0, 1fr)
+    44px;
+
+  align-items: center;
+
+  gap: 8px;
+
+  width: 100%;
+  max-width: 1600px;
+
+  height: var(--vl25-header-h);
+
+  margin: 0 auto;
+  padding: 0 var(--vl25-inline);
+}
+
+body[data-view="player"] #navHome {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  width: 76px;
+  min-width: 76px;
+  height: 44px;
+  min-height: 44px;
+
+  padding: 0 6px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+}
+
+body[data-view="player"] #crumb {
+  display: block;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-family: var(--vl25-font-ui);
+  font-size: 13px;
+  font-weight: 700;
+
+  line-height: 1.3;
+  text-align: center;
+}
+
+body[data-view="player"] .player-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+}
+
+body[data-view="player"] .look-count {
+  display: none !important;
+}
+
+body[data-view="player"] #vBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+
+  padding: 0;
+
+  border-radius: 10px;
+}
+
+/* =========================================================
+   10. SINGLE PROGRESS INDICATOR
+   ========================================================= */
+
+body[data-view="player"] #navProgress {
+  display: block;
+
+  width: 100%;
+  height: var(--vl25-progress-h);
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 0;
+
+  background: var(--vl25-border);
+  overflow: hidden;
+}
+
+body[data-view="player"] #navProgress i {
+  display: block;
+
+  width: 0;
+  height: 100%;
+
+  background: var(--vl25-primary);
+
+  transition:
+    width var(--vl25-motion-normal) ease;
+}
+
+/* =========================================================
+   11. LESSON CANVAS
+   ========================================================= */
+
+body[data-view="player"] main {
+  display: grid;
+
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+  padding:
+    var(--vl25-gap)
+    var(--vl25-inline)
+    0;
+
+  gap: 0;
+
+  align-content: start;
+}
+
+body[data-view="player"] .player {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+
+  margin: 0;
+  padding: 0;
+}
+
+body[data-view="player"] .player .stage,
+body[data-view="player"] .player .look {
+  width: 100%;
+  max-width: 100%;
+
+  height: calc(
+    100dvh
+    - var(--vl25-header-h)
+    - var(--vl25-progress-h)
+    - var(--vl25-caption-h)
+    - var(--vl25-controls-h)
+    - env(safe-area-inset-bottom, 0px)
+    - 2 * var(--vl25-gap)
+  );
+
+  min-height: 0;
+
+  margin: 0;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+}
+
+body[data-view="player"] .player .look {
+  position: relative;
+  isolation: isolate;
+}
+
+body[data-view="player"] .player .stage {
+  position: relative;
+}
+
+/* =========================================================
+   12. CAPTIONS
+   ========================================================= */
+
+body[data-view="player"] .cc {
+  position: static;
+
+  display: block;
+
+  width: 100%;
+  max-width: none;
+
+  height: var(--vl25-caption-h);
+  min-height: 0;
+  max-height: var(--vl25-caption-h);
+
+  margin: 0;
+  padding: 0 16px;
+
+  overflow: hidden;
+
+  border-top: 1px solid var(--vl25-border);
+  border-radius: 0;
+
+  background: var(--vl25-surface);
+  color: var(--vl25-muted);
+
+  font-family: var(--vl25-font-reading);
+  font-size: 13px;
+  font-weight: 400;
+
+  line-height: var(--vl25-caption-h);
+
+  text-align: center;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  transform: none;
+  backdrop-filter: none;
+}
+
+body[data-view="player"] .cc:empty {
+  display: block;
+}
+
+body[data-view="player"] .cc.cc-dup {
+  visibility: hidden;
+}
+
+body.cc-off {
+  --vl25-caption-h: 0px;
+}
+
+body.cc-off .cc {
+  display: none !important;
+}
+
+/* =========================================================
+   13. CONTROLS BAR
+   ========================================================= */
+
+body[data-view="player"] .bar {
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 75;
+
+  display: block;
+
+  height: calc(
+    var(--vl25-controls-h)
+    + env(safe-area-inset-bottom, 0px)
+  );
+
+  margin: 0;
+
+  padding:
+    0
+    var(--vl25-inline)
+    env(safe-area-inset-bottom, 0px);
+
+  border-top: 1px solid var(--vl25-border);
+
+  background: var(--vl25-surface);
+  color: var(--vl25-ink);
+
+  box-shadow: none;
+}
+
+body[data-view="player"] .bar-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 1200px;
+
+  height: var(--vl25-controls-h);
+
+  margin: 0 auto;
+  padding: 0;
+
+  gap: 12px;
+
+  flex-wrap: nowrap;
+}
+
+body[data-view="player"] .player-status-row {
+  flex: 1 1 120px;
+
+  min-width: 0;
+  max-width: 240px;
+
+  overflow: hidden;
+}
+
+body[data-view="player"] .bar .status {
+  display: block;
+
+  overflow: hidden;
+
+  font-size: 12px;
+  line-height: 1.3;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--vl25-muted);
+}
+
+body[data-view="player"] .player-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  min-width: 0;
+
+  gap: 6px;
+}
+
+body[data-view="player"] .player-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 44px;
+
+  width: 44px;
+  min-width: 44px;
+
+  height: 44px;
+  min-height: 44px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 1px solid transparent;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--vl25-muted);
+}
+
+body[data-view="player"] .player-icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+body[data-view="player"] .player-icon-btn:disabled {
+  opacity: .38;
+}
+
+body[data-view="player"] #toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: auto;
+  min-width: 124px;
+  max-width: none;
+
+  height: 48px;
+  min-height: 48px;
+
+  margin: 0;
+  padding: 0 18px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: var(--vl25-primary);
+  color: var(--vl25-primary-text);
+
+  font-family: var(--vl25-font-ui);
+  font-size: 14px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  white-space: nowrap;
+  text-align: center;
+
+  box-shadow: none;
+}
+
+body[data-view="player"] #toggle:hover {
+  background: var(--vl25-primary-hover);
+  transform: none;
+}
+
+/* =========================================================
+   14. REMOVE DUPLICATED LOOK CHROME
+   ========================================================= */
+
+body[data-view="player"] .player .ss-cap,
+body[data-view="player"] .player .ss-seg,
+body[data-view="player"] .player .cx-top,
+body[data-view="player"] .player .cx-progress,
+body[data-view="player"] .player .nb-header,
+body[data-view="player"] .player .nb-progress,
+body[data-view="player"] .player .jy-header,
+body[data-view="player"] .player .jy-progress {
+  display: none !important;
+}
+
+body[data-view="player"] .player .cx-lesson,
+body[data-view="player"] .player .nb-lesson,
+body[data-view="player"] .player .jy-lesson {
+  display: none !important;
+}
+
+body[data-view="player"] .player .cx-counter,
+body[data-view="player"] .player .nb-counter,
+body[data-view="player"] .player .jy-counter {
+  display: none !important;
+}
+
+/* =========================================================
+   15. STORY CARDS
+   ========================================================= */
+
+.player .ss {
+  background: #101B2C;
+  color: #FFFFFF;
+}
+
+.player .ss-card {
+  padding:
+    clamp(24px, 4vw, 64px);
+
+  gap: clamp(12px, 2vw, 24px);
+}
+
+.player .ss h2 {
+  max-width: 24ch;
+
+  font-size: clamp(28px, 4.2vw, 58px);
+  line-height: 1.08;
+
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.player .ss h2.sm {
+  font-size: clamp(24px, 3.2vw, 42px);
+}
+
+.player .ss .p {
+  max-width: 48ch;
+
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.5;
+}
+
+.player .ss .k {
+  font-size: 12px;
+  letter-spacing: .12em;
+}
+
+.player .ss .chip {
+  min-width: 0;
+
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.4;
+
+  overflow-wrap: anywhere;
+}
+
+.player .ss .vs {
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+}
+
+.player .ss .vs-i {
+  min-width: 0;
+
+  padding: clamp(12px, 2vw, 20px);
+
+  border-radius: 12px;
+}
+
+.player .ss .dgw {
+  width: 100%;
+  min-width: 0;
+
+  padding: clamp(10px, 1.5vw, 20px);
+
+  border-radius: 12px;
+}
+
+.player .ss .dgw svg {
+  width: 100%;
+  height: auto;
+
+  max-height: min(55dvh, 520px);
+}
+
+/* =========================================================
+   16. SIGNAL STUDIO
+   ========================================================= */
+
+.player .cx-signal {
+  --cx-bg: #102D2C;
+  --cx-paper: #F5F7F1;
+  --cx-lime: #D6F28A;
+  --cx-muted: #C5D8D0;
+
+  background: var(--cx-bg);
+  color: var(--cx-paper);
+}
+
+.player .cx-signal .cx-scroll {
+  padding:
+    clamp(18px, 3vw, 40px);
+
+  scroll-padding-bottom: 30px;
+}
+
+.player .cx-signal .cx-content {
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+.player .cx-signal .cx-heading {
+  max-width: 25ch;
+
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.08;
+}
+
+.player .cx-signal .cx-item {
+  grid-template-columns:
+    44px
+    minmax(0, 1fr)
+    auto;
+
+  gap: 14px;
+
+  padding: 16px;
+
+  border-radius: 10px;
+}
+
+.player .cx-signal .cx-item h3 {
+  font-size: clamp(19px, 2vw, 25px);
+  line-height: 1.18;
+}
+
+.player .cx-signal .cx-item p {
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.5;
+}
+
+.player .cx-signal .cx-question,
+.player .cx-signal .cx-formula,
+.player .cx-signal .cx-diagram {
+  border-radius: 12px;
+}
+
+.player .cx-signal .cx-dg svg {
+  width: 100%;
+  height: auto;
+
+  max-height: min(52dvh, 500px);
+}
+
+/* =========================================================
+   17. TEACHER'S NOTEBOOK
+   ========================================================= */
+
+.player .vl-notebook {
+  --nb-paper: #FAF8F2;
+  --nb-ink: #292D2A;
+  --nb-blue: #244B65;
+  --nb-red: #963F30;
+  --nb-line: #DCE3E0;
+
+  background: var(--nb-paper);
+  color: var(--nb-ink);
+}
+
+.player .vl-notebook .nb-scroll {
+  background-color: var(--nb-paper);
+
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 35px,
+      rgba(36, 75, 101, .065) 35px,
+      rgba(36, 75, 101, .065) 36px
+    );
+}
+
+.player .vl-notebook .nb-page {
+  max-width: 1000px;
+
+  margin-inline: auto;
+
+  padding:
+    clamp(20px, 3vw, 42px)
+    clamp(18px, 4vw, 54px)
+    48px
+    clamp(38px, 5vw, 72px);
+}
+
+.player .vl-notebook .nb-page::before {
+  left: clamp(25px, 3vw, 48px);
+  opacity: .55;
+}
+
+.player .vl-notebook .nb-title h2 {
+  font-size: clamp(27px, 3.5vw, 46px);
+  line-height: 1.16;
+}
+
+.player .vl-notebook .nb-item h3 {
+  font-size: clamp(20px, 2.2vw, 28px);
+}
+
+.player .vl-notebook .nb-item p {
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.55;
+}
+
+.player .vl-notebook .nb-diagram {
+  padding: 16px;
+
+  border-width: 2px;
+  border-radius: 10px;
+}
+
+.player .vl-notebook .nb-diagram-svg svg {
+  max-height: min(52dvh, 500px);
+}
+
+/* =========================================================
+   18. PROCESS JOURNEY
+   ========================================================= */
+
+.player .vl-journey {
+  --jy-bg: #F5F2EB;
+  --jy-paper: #FFFEFA;
+  --jy-ink: #263D47;
+  --jy-muted: #455A62;
+  --jy-teal: #24675B;
+  --jy-orange: #963D21;
+  --jy-line: #C5CEC8;
+
+  background: var(--jy-bg);
+  color: var(--jy-ink);
+}
+
+.player .vl-journey .jy-map {
+  flex: none;
+
+  padding: 6px 14px;
+
+  border-bottom: 1px solid var(--jy-line);
+}
+
+.player .vl-journey .jy-map-label,
+.player .vl-journey .jy-route-text {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  overflow: hidden;
+
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.player .vl-journey .jy-map-scroll {
+  padding: 2px 0 4px;
+}
+
+.player .vl-journey .jy-route-stop {
+  flex-basis: 36px;
+  gap: 0;
+}
+
+.player .vl-journey
+.jy-route-stop:not(:last-child)::after {
+  left: calc(50% + 10px);
+  top: 10px;
+
+  width: 16px;
+  height: 2px;
+}
+
+.player .vl-journey .jy-route-node {
+  width: 22px;
+  height: 22px;
+
+  border-width: 2px;
+
+  font-size: 9px;
+}
+
+.player .vl-journey
+.jy-route-stop.jy-current .jy-route-node {
+  width: 26px;
+  height: 26px;
+
+  margin-top: -2px;
+  margin-bottom: -2px;
+
+  border-width: 2px;
+
+  font-size: 10px;
+}
+
+.player .vl-journey .jy-workspace {
+  max-width: 1000px;
+
+  padding:
+    clamp(18px, 3vw, 42px);
+}
+
+.player .vl-journey .jy-title h2 {
+  font-size: clamp(27px, 3.5vw, 46px);
+}
+
+.player .vl-journey .jy-item h3 {
+  font-size: clamp(20px, 2vw, 27px);
+}
+
+.player .vl-journey .jy-item p {
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.5;
+}
+
+.player .vl-journey .jy-station-card {
+  border-radius: 12px;
+}
+
+.player .vl-journey .jy-diagram {
+  border-width: 2px;
+  border-radius: 10px;
+}
+
+.player .vl-journey .jy-diagram-svg svg {
+  max-height: min(52dvh, 500px);
+}
+
+/* =========================================================
+   19. DIAGRAM PRESENTATION
+   ========================================================= */
+
+.player svg.dg,
+.stage svg.dg {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  max-width: 1000px;
+  max-height: min(55dvh, 520px);
+
+  margin-inline: auto;
+
+  overflow: visible;
+}
+
+.player .dgw,
+.player .cx-dg,
+.player .nb-diagram-svg,
+.player .jy-diagram-svg,
+.stage .dgo {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.player svg.dg text,
+.stage svg.dg text {
+  paint-order: stroke fill;
+}
+
+.stage .st-opts.vis {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.stage .st-opts.vis .st-opt {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 10px;
+
+  min-width: 0;
+
+  padding: 14px;
+}
+
+.stage .st-opts.vis .dgo {
+  min-width: 0;
+  width: 100%;
+}
+
+.stage .st-opts.vis .dgo svg {
+  width: 100%;
+  height: auto;
+
+  max-height: 230px;
+}
+
+/* =========================================================
+   20. QUIZ PRESENTATION
+   ========================================================= */
+
+.stage.scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+}
+
+.stage.scroll .st-track {
+  position: relative;
+
+  padding:
+    clamp(16px, 2vw, 30px);
+
+  gap: 20px;
+}
+
+.stage.scroll .st-cap {
+  position: sticky;
+  top: 0;
+
+  padding: 12px 16px;
+
+  background: var(--st-bg);
+
+  z-index: 5;
+}
+
+.stage .qstem {
+  max-width: 70ch;
+
+  font-size: clamp(21px, 2.5vw, 32px) !important;
+  line-height: 1.25;
+}
+
+.stage .st-opt {
+  min-height: 56px;
+
+  padding: 12px 14px;
+
+  border-radius: 12px;
+
+  line-height: 1.45;
+}
+
+.stage .st-opt b {
+  width: 40px;
+  height: 40px;
+}
+
+.stage .qbox {
+  min-width: 0;
+
+  padding: clamp(14px, 2vw, 22px);
+
+  border-radius: 14px;
+}
+
+.stage .qsel {
+  min-height: 44px;
+  max-width: 100%;
+}
+
+.stage .qchip,
+.stage .qplaced,
+.stage .qclear,
+.stage .qcheck,
+.stage .qskip-inline {
+  min-height: 44px;
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+}
+
+.stage .qrow {
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1.2fr);
+}
+
+.stage .qskip-actions {
+  gap: 12px;
+
+  margin-top: 16px;
+  padding-top: 16px;
+}
+
+/* =========================================================
+   21. RESULTS AND REPORTS
+   ========================================================= */
+
+.stage .st-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+
+  gap: 14px;
+}
+
+.stage .st-score span {
+  font-variant-numeric: tabular-nums;
+}
+
+.stage .st-los {
+  display: grid;
+  gap: 16px;
+}
+
+.stage .st-lo-h {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  line-height: 1.4;
+}
+
+.stage .st-lo-h b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.stage .st-lo-h span {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.stage .st-lo-t {
+  min-height: 10px;
+}
+
+/* =========================================================
+   22. SETTINGS
+   ========================================================= */
+
+.vpanel {
+  width: min(440px, calc(100vw - 24px));
+
+  max-height: min(85dvh, 820px);
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  border: 1px solid var(--vl25-border);
+  border-radius: 18px;
+
+  background: var(--vl25-surface);
+  color: var(--vl25-ink);
+
+  box-shadow: var(--vl25-shadow-strong);
+}
+
+.vpanel .fld {
+  display: grid;
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.vpanel select,
+.vpanel input[type="text"],
+.vpanel input[type="password"] {
+  min-height: 44px;
+}
+
+.vpanel input[type="range"] {
+  width: 100%;
+  height: 44px;
+}
+
+.settings-week-row {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.voice-tests {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.voice-test-row {
+  min-height: 52px;
+  padding: 8px 12px;
+}
+
+.voice-test-row button {
+  min-width: 70px;
+  min-height: 44px;
+}
+
+/* =========================================================
+   23. MORE MENU
+   ========================================================= */
+
+.more-menu {
+  position: fixed;
+
+  right: 12px;
+
+  bottom: calc(
+    var(--vl25-controls-h)
+    + env(safe-area-inset-bottom, 0px)
+    + 8px
+  );
+
+  z-index: 95;
+
+  width: min(300px, calc(100vw - 24px));
+
+  padding: 8px;
+
+  border: 1px solid var(--vl25-border);
+  border-radius: 14px;
+
+  background: var(--vl25-surface);
+  color: var(--vl25-ink);
+
+  box-shadow: var(--vl25-shadow-strong);
+}
+
+.more-menu button {
+  width: 100%;
+  min-height: 44px;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  text-align: left;
+}
+
+/* =========================================================
+   24. FULLSCREEN
+   ========================================================= */
+
+body.fs {
+  overflow: hidden;
+}
+
+body.fs #siteHeader,
+body.fs #courseNav {
+  display: none !important;
+}
+
+body.fs .player .stage,
+body.fs .player .look {
+  position: fixed !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+
+  bottom: calc(
+    var(--vl25-controls-h)
+    + var(--vl25-caption-h)
+    + env(safe-area-inset-bottom, 0px)
+  ) !important;
+
+  width: 100% !important;
+  height: auto !important;
+
+  margin: 0 !important;
+
+  border-radius: 0 !important;
+
+  z-index: 50;
+}
+
+body.fs .cc {
+  position: fixed !important;
+
+  left: 0;
+  right: 0;
+
+  bottom: calc(
+    var(--vl25-controls-h)
+    + env(safe-area-inset-bottom, 0px)
+  );
+
+  z-index: 51;
+
+  width: 100%;
+  height: var(--vl25-caption-h);
+  max-height: var(--vl25-caption-h);
+
+  padding: 0 16px;
+
+  background: #111820;
+  color: #F5F7FA;
+
+  font-size: 13px;
+  line-height: var(--vl25-caption-h);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+body.fs .bar {
+  z-index: 52;
+
+  background: #111820;
+  color: #FFFFFF;
+
+  border-top-color: #364454;
+}
+
+body.fs .player-icon-btn {
+  color: #E6EDF7;
+}
+
+/* =========================================================
+   25. TABLET
+   ========================================================= */
+
+@media (min-width: 601px) and (max-width: 899px) {
+  :root {
+    --vl25-header-h: 44px;
+    --vl25-progress-h: 3px;
+    --vl25-caption-h: 26px;
+    --vl25-controls-h: 56px;
+    --vl25-gap: 4px;
+    --vl25-inline: 6px;
+  }
+
+  body[data-view="player"] .bar-in {
+    gap: 6px;
+  }
+
+  body[data-view="player"] .player-control-row {
+    gap: 2px;
+  }
+
+  body[data-view="player"] .player-status-row {
+    display: none;
+  }
+}
+
+/* =========================================================
+   26. PHONE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  :root {
+    --vl25-header-h: 44px;
+    --vl25-progress-h: 3px;
+    --vl25-caption-h: 22px;
+    --vl25-controls-h: 48px;
+    --vl25-gap: 2px;
+    --vl25-inline: 2px;
+  }
+
+  body[data-view="player"] .player-topbar-row {
+    grid-template-columns:
+      72px
+      minmax(0, 1fr)
+      44px;
+
+    gap: 4px;
+
+    padding-inline: 2px;
+  }
+
+  body[data-view="player"] #navHome {
+    width: 72px;
+    min-width: 72px;
+
+    font-size: 12px;
+  }
+
+  body[data-view="player"] #crumb {
+    font-size: 12px;
+  }
+
+  body[data-view="player"] main {
+    padding-inline: 2px;
+  }
+
+  body[data-view="player"] .player .look,
+  body[data-view="player"] .player .stage {
+    border-radius: 8px;
+  }
+
+  body[data-view="player"] .bar {
+    padding-inline: 2px;
+  }
+
+  body[data-view="player"] .bar-in {
+    height: 48px;
+
+    padding: 0;
+
+    gap: 0;
+  }
+
+  body[data-view="player"] .player-status-row {
+    display: none;
+  }
+
+  body[data-view="player"] .player-control-row {
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 4px;
+  }
+
+  body[data-view="player"] .player-icon-btn {
+    flex: 0 0 44px;
+
+    width: 44px;
+    min-width: 44px;
+
+    height: 44px;
+    min-height: 44px;
+  }
+
+  body[data-view="player"] #toggle {
+    min-width: 112px;
+
+    height: 44px;
+    min-height: 44px;
+
+    padding: 0 12px;
+
+    font-size: 13px;
+  }
+
+  body[data-view="player"] #navPrevPart,
+  body[data-view="player"] #navNextPart,
+  body[data-view="player"] #repBtn,
+  body[data-view="player"] #fsBtn,
+  body[data-view="player"] #ccBtn {
+    display: none !important;
+  }
+
+  body[data-view="player"] #moreBtn {
+    display: inline-flex !important;
+  }
+
+  body[data-view="player"] .cc {
+    padding-inline: 10px;
+
+    font-size: 12px;
+    line-height: 22px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: initial;
+  }
+
+  .onboard {
+    margin: 10px auto;
+    padding: 24px 18px;
+  }
+
+  .onboard h1 {
+    font-size: clamp(31px, 8.5vw, 40px);
+    line-height: 1.1;
+  }
+
+  .onboard p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .setup-looks {
+    grid-template-columns: 1fr;
+  }
+
+  .setup-look {
+    padding: 12px;
+  }
+
+  .setup-look .mini {
+    height: 90px;
+  }
+
+  .looks {
+    grid-template-columns: 1fr;
+  }
+
+  .lookbtn {
+    min-height: 80px;
+  }
+
+  .lesson {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .lesson .row {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .stage .st-opts.vis {
+    grid-template-columns: 1fr;
+  }
+
+  .stage .st-opts.tf {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .stage .qrow {
+    grid-template-columns: 1fr;
+  }
+
+  .player .ss-card {
+    padding: 22px 18px;
+  }
+
+  .player .ss h2 {
+    font-size: clamp(27px, 8vw, 38px);
+  }
+
+  .player .ss .p {
+    font-size: 16px;
+  }
+
+  .player .ss .vs {
+    grid-template-columns: 1fr;
+  }
+
+  .player .cx-signal .cx-scroll {
+    padding: 20px 16px;
+  }
+
+  .player .cx-signal .cx-item {
+    grid-template-columns:
+      40px
+      minmax(0, 1fr);
+
+    gap: 10px;
+  }
+
+  .player .cx-signal .cx-index {
+    grid-column: 2;
+  }
+
+  .player .vl-notebook .nb-page {
+    padding:
+      20px
+      16px
+      40px
+      36px;
+  }
+
+  .player .vl-notebook .nb-page::before {
+    left: 25px;
+  }
+
+  .player .vl-journey .jy-workspace {
+    padding: 18px 14px 36px;
+  }
+
+  .player .vl-journey .jy-stations {
+    padding-left: 28px;
+  }
+
+  .player .vl-journey .jy-station-marker {
+    left: -28px;
+  }
+
+  .player .vl-journey .jy-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   27. SHORT VIEWPORTS
+   ========================================================= */
+
+@media (max-height: 600px) {
+  .player .ss-card {
+    gap: 10px;
+  }
+
+  .player .ss h2 {
+    font-size: clamp(24px, 5vh, 38px);
+  }
+
+  .player .ss .p {
+    font-size: 15px;
+  }
+
+  .player .cx-signal .cx-scroll,
+  .player .vl-notebook .nb-page,
+  .player .vl-journey .jy-workspace {
+    padding-top: 14px;
+  }
+}
+
+/* =========================================================
+   28. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+
+    transition-duration: .01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .player .ss-card,
+  .player .cx-entry,
+  .player .nb-entry,
+  .player .jy-station-card {
+    animation: none !important;
+  }
+
+  .player .ss .ch {
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   29. FORCED COLORS
+   ========================================================= */
+
+@media (forced-colors: active) {
+  button,
+  select,
+  input {
+    forced-color-adjust: auto;
+  }
+
+  body[data-view="player"] #toggle {
+    border: 2px solid ButtonText;
+  }
+
+  body[data-view="player"] #navProgress {
+    border: 1px solid CanvasText;
+  }
+
+  body[data-view="player"] #navProgress i {
+    background: Highlight;
+  }
+
+  .setup-look[aria-pressed="true"],
+  .lookbtn[aria-pressed="true"] {
+    outline: 3px solid Highlight;
+  }
+
+  .stage .st-opt.right {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* =========================================================
+   30. PRINT
+   ========================================================= */
+
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  .bar,
+  .more-menu,
+  .vpanel,
+  .hands-controls {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+}
+
+/* END FILE */
+/* v25 QA patch: phone captions may use two full lines (never a one-line ellipsis) */
+@media (max-width:600px){
+  body[data-view="player"]{--vl25-caption-h:38px}
+  body[data-view="player"]:not(.cc-off) .cc{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;white-space:normal!important;line-height:17px!important;font-size:12.5px!important;padding-top:2px!important;padding-bottom:2px!important;box-sizing:border-box}
+}@media (max-width:600px){
+  body .st-opts.vis{gap:8px}
+  body .st-opts.vis .st-opt{display:flex!important;flex-direction:row!important;align-items:center!important;gap:10px!important;padding:6px 10px!important;min-height:0!important}
+  body .st-opts.vis .st-opt b{flex:none!important;width:30px!important;height:30px!important;font-size:14px!important}
+  body .st-opts.vis .st-opt .dgo{flex:1 1 auto!important;min-width:0!important}
+  body .st-opts.vis .st-opt .dgo svg{max-height:70px!important;width:100%!important}
+}body label:has(>input[type=checkbox]){display:flex;align-items:center;gap:10px;min-height:44px}
+body label:has(>input[type=checkbox]){display:flex;align-items:center;gap:10px;min-height:44px}
