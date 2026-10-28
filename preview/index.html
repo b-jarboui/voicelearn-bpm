@@ -93,8 +93,6 @@ body.fs .send{display:none}
 .lookbtn b{font-size:16px;line-height:1.25}
 .lookbtn .muted{font-size:14px;line-height:1.35}
 .lookbtn .sw{display:block;height:54px;border-radius:8px;border:1px solid rgba(0,0,0,.12)}
-.lookbtn.story .sw{background:linear-gradient(160deg,#E2552D 0%,#8C1C3E 55%,#1C3FAA 100%)}
-.lookbtn.codex .sw{background:linear-gradient(90deg,#152d2a 0 70%,#d9f879 70% 74%,#152d2a 74%)}
 .lookbtn.notebook .sw{background:linear-gradient(90deg,transparent 0 17%,#A04432 17% 19%,transparent 19%),repeating-linear-gradient(0deg,#FAF7EF 0 10px,#D7DFDC 10px 11px);border:1px solid #CFC9BA}
 .lookbtn.journey .sw{background-color:#F3F0E8;background-image:radial-gradient(circle at 20% 50%,#24675B 0 6px,transparent 7px),radial-gradient(circle at 50% 50%,#963D21 0 7px,transparent 8px),radial-gradient(circle at 80% 50%,#24675B 0 6px,transparent 7px),linear-gradient(to right,transparent 20%,#24675B 20% 80%,transparent 80%);background-size:100% 100%,100% 100%,100% 100%,100% 3px;background-position:center;background-repeat:no-repeat;border:1px solid #C5CEC8}
 .lookbtn[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
@@ -129,7 +127,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
   <div class="muted" id="vNote" role="status" style="font-size:14px"></div>
   <label class="fld">Narration<select id="vMode"><option value="voice">Voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
-  <label class="fld">Look<select id="vLook"><option value="story">Story cards</option><option value="codex">Signal Studio</option><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option><option value="board">Animated Whiteboard</option><option value="motion">Motion Explainer</option></select></label>
+  <label class="fld">Look<select id="vLook"><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option><option value="board">Animated Whiteboard</option><option value="motion">Motion Explainer</option></select></label>
   <div class="settings-week-row">
   <label for="settingsWeek">
     Course week
@@ -358,8 +356,6 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script src="scenes.js?v=25"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="lab/content.js?v=25"></script>
-<script src="lab/style-story.js?v=28"></script>
-<script src="lab/style-codex.js?v=25"></script>
 <script src="lab/style-notebook.js?v=25"></script>
 <script src="lab/style-journey.js?v=26"></script>
 <script src="lab/style-board.js?v=2"></script>
@@ -368,7 +364,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=3\"><" + "/script>"); }); document.write("<script src=\"player.js?v=28\"><" + "/script>"); }
+  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=3\"><" + "/script>"); }); document.write("<script src=\"player.js?v=29\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();

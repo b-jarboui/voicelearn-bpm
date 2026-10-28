@@ -122,12 +122,12 @@
   const synth = window.speechSynthesis;
   // Own settings key: the original prototype lives on the same github.io origin and must not share (or break) our settings.
   const VKEY = "voicelearn.oper621.voice.v2";
-  let VS = { uri: "", rate: 0.95, pitch: 1, look: "story" };
+  let VS = { uri: "", rate: 0.95, pitch: 1, look: "board" };
   try { VS = Object.assign(VS, JSON.parse(localStorage.getItem(VKEY)) || {}); } catch (e) {}
   // Sanitize saved values: a bad rate/pitch (NaN, a string, out of range) makes some engines silent.
   const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
   VS.rate = num(VS.rate, 0.5, 2, 0.95); VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
-  if (!["story", "codex", "notebook", "journey", "board", "motion"].includes(VS.look)) VS.look = "story";
+  if (!["notebook", "journey", "board", "motion"].includes(VS.look)) VS.look = "board"; // the removed looks "story" and "codex" move to Animated Whiteboard silently
   if (VS.mode !== "captions") VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
   const enVoices = () => (synth ? synth.getVoices().filter((v) => /^en/i.test(v.lang)) : []);
@@ -323,14 +323,14 @@
   const lookEl = document.createElement("div");
   lookEl.className = "look";
   let look = null, lookStep = -1;
-  const lookStyle = () => (window.STYLES || []).find((s) => s.id === (VS.look || "story")) || null;
+  const lookStyle = () => (window.STYLES || []).find((s) => s.id === (VS.look || "board")) || null;
   function fitLook() {
     const k = Math.max(1, Math.min(lookEl.clientHeight / 600, lookEl.clientWidth / 300, 2.2));
     lookEl.style.setProperty("--k", k.toFixed(3));
     lookEl.toggleAttribute("data-tall", lookEl.clientHeight / Math.max(1, lookEl.clientWidth) > 1.75);
   }
-  // The quiz/result stage takes the colours of the chosen look (Story cards keeps the default dark blue).
-  function updateLookClass() { stageEl.classList.remove("look-codex", "look-notebook", "look-journey"); if (["codex", "notebook", "journey"].includes(VS.look)) stageEl.classList.add("look-" + VS.look); }
+  // The quiz/result stage takes the colours of the chosen look (the other looks keep the default dark blue).
+  function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey"); if (["notebook", "journey"].includes(VS.look)) stageEl.classList.add("look-" + VS.look); }
   function showLook(on) { lookEl.hidden = !on; stageEl.hidden = on; }
   function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); }
   function loadLook(key, lessonLabel, title, body) {
@@ -345,7 +345,7 @@
   }
 
   const badge = (label, m, title) => `<span class="pill ${m == null ? "" : m >= A.target - 1e-9 ? "done" : "warn"}" title="${esc(title)}">${esc(label)}${m == null ? "" : " · " + pct(m) + "%"}</span>`;
-  const LOOKS = [["story", "Story cards", "Full-screen cards that turn like social stories"], ["codex", "Signal Studio", "A growing field guide, one idea at a time"],
+  const LOOKS = [
     ["notebook", "Teacher's Notebook", "Warm paper notes, sketches and teaching annotations"], ["journey", "Process Journey", "Each idea is a stop along one connected route"],
     ["board", "Animated Whiteboard", "Ideas and diagrams are drawn live as the teacher explains them"], ["motion", "Motion Explainer", "Clean explainer-video scenes: moving tokens, bold key words, growing bars"]];
   // Weeks listed in weeks/manifest.js, plus any other week folder found on the server (a HEAD probe of its four files), so a new week appears without code changes.
@@ -373,7 +373,7 @@
       <div class="card"><div class="eyebrow">Continue</div><h1>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</h1>
         <div class="row"><button class="primary" id="resume">▶ Continue</button><button id="restart">Start over</button></div></div>
       <div class="card"><div class="eyebrow">Look · how the lessons appear</div>
-        <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "story") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
+        <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "board") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
       <div class="card"><div class="eyebrow">Achievement · target ${pct(A.target)}% on every part</div>
         <div class="row">${CLOS.map((c) => badge(`CLO ${c}`, cloM(c), A.clos[c].full)).join(" ")}</div>
         <div class="row">${LOS.map((k) => badge(A.outcomes[k].name, loM(k), A.outcomes[k].full)).join(" ")}</div>
@@ -794,7 +794,7 @@
   $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
-  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "story"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
+  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "board"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
   $("vPitch").oninput = (e) => { VS.pitch = +e.target.value; showPitch(); };
   $("vPitch").onchange = () => { saveVS(); applyLive(); };
   $("vClose").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); $("vBtn").focus(); };
@@ -856,7 +856,7 @@
       if (returning) $("welcomeSkip").onclick = () => { onboardingFinishedThisVisit = true; history.replaceState(routeState("home"), "", location.href); renderHome(); };
     }
     function mini(id) {
-      const text = { story:["An idea","One clear insight"],codex:["SIGNAL 01","Process → outcome"],notebook:["Lesson note","Observe · reflect"],journey:["Stop 1","Explore the process"],board:["Draw it","Box → arrow → idea"],motion:["Scene 1","Token moves along"] }[id];
+      const text = { notebook:["Lesson note","Observe · reflect"],journey:["Stop 1","Explore the process"],board:["Draw it","Box → arrow → idea"],motion:["Scene 1","Token moves along"] }[id];
       return `<span class="mini ${id}" aria-hidden="true"><span class="tile"><b>${text[0]}</b><br>${text[1]}</span><span>● →</span></span>`;
     }
     function setupDesign() {
