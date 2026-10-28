@@ -127,7 +127,7 @@
   // Sanitize saved values: a bad rate/pitch (NaN, a string, out of range) makes some engines silent.
   const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
   VS.rate = num(VS.rate, 0.5, 2, 0.95); VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
-  if (!["story", "codex", "notebook", "journey"].includes(VS.look)) VS.look = "story";
+  if (!["story", "codex", "notebook", "journey", "board", "motion"].includes(VS.look)) VS.look = "story";
   if (VS.mode !== "captions") VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
   const enVoices = () => (synth ? synth.getVoices().filter((v) => /^en/i.test(v.lang)) : []);
@@ -346,7 +346,8 @@
 
   const badge = (label, m, title) => `<span class="pill ${m == null ? "" : m >= A.target - 1e-9 ? "done" : "warn"}" title="${esc(title)}">${esc(label)}${m == null ? "" : " · " + pct(m) + "%"}</span>`;
   const LOOKS = [["story", "Story cards", "Full-screen cards that turn like social stories"], ["codex", "Signal Studio", "A growing field guide, one idea at a time"],
-    ["notebook", "Teacher's Notebook", "Warm paper notes, sketches and teaching annotations"], ["journey", "Process Journey", "Each idea is a stop along one connected route"]];
+    ["notebook", "Teacher's Notebook", "Warm paper notes, sketches and teaching annotations"], ["journey", "Process Journey", "Each idea is a stop along one connected route"],
+    ["board", "Animated Whiteboard", "Ideas and diagrams are drawn live as the teacher explains them"], ["motion", "Motion Explainer", "Clean explainer-video scenes: moving tokens, bold key words, growing bars"]];
   // Weeks listed in weeks/manifest.js, plus any other week folder found on the server (a HEAD probe of its four files), so a new week appears without code changes.
   const weekList = () => { const l = (window.WEEKS || []).slice(); if (!l.some((w) => w.n === WK)) l.push({ n: WK, title: C.title }); return l.sort((a, b) => a.n - b.n); };
   let probed = false;
@@ -855,7 +856,7 @@
       if (returning) $("welcomeSkip").onclick = () => { onboardingFinishedThisVisit = true; history.replaceState(routeState("home"), "", location.href); renderHome(); };
     }
     function mini(id) {
-      const text = { story:["An idea","One clear insight"],codex:["SIGNAL 01","Process → outcome"],notebook:["Lesson note","Observe · reflect"],journey:["Stop 1","Explore the process"] }[id];
+      const text = { story:["An idea","One clear insight"],codex:["SIGNAL 01","Process → outcome"],notebook:["Lesson note","Observe · reflect"],journey:["Stop 1","Explore the process"],board:["Draw it","Box → arrow → idea"],motion:["Scene 1","Token moves along"] }[id];
       return `<span class="mini ${id}" aria-hidden="true"><span class="tile"><b>${text[0]}</b><br>${text[1]}</span><span>● →</span></span>`;
     }
     function setupDesign() {

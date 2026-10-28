@@ -1879,3 +1879,13 @@ body:not([data-view="player"]) #toggle{background:var(--accent);color:var(--acce
 body:not([data-view="player"]) #toggle:hover{filter:brightness(1.08)}
 .st-kicker{margin-bottom:8px}
 #vTap{width:min(86vw,340px);box-sizing:border-box;font-size:18px!important;padding:16px 20px!important;white-space:nowrap;min-height:52px}
+
+/* ---- two new animated looks: picker swatches and onboarding mini-previews ---- */
+.lookbtn.board .sw{background:linear-gradient(90deg,transparent 0 12%,#17619a 12% 13.5%,transparent 13.5% 40%,#17619a 40% 41.5%,transparent 41.5%),linear-gradient(180deg,transparent 0 62%,#a64c16 62% 68%,transparent 68%),repeating-linear-gradient(0deg,#FBFAF5 0 12px,#D9DFDC 12px 13px);border:1px solid #CFC9BA}
+.lookbtn.motion .sw{background:radial-gradient(circle at 74% 50%,#FFC857 0 7px,transparent 8px),linear-gradient(90deg,transparent 0 14%,#2EC4B6 14% 50%,transparent 50%) 0 50%/100% 18px no-repeat,linear-gradient(135deg,#12304A 0 62%,#1F6F78 62%)}
+.mini.board{background:repeating-linear-gradient(0deg,#FBFAF5 0 14px,#D9DFDC 14px 15px);color:#202F39}
+.mini.board .tile{background:#FBFAF5;border:2px solid #17619A;border-radius:11px 8px 12px 7px;box-shadow:none;position:relative}
+.mini.board .tile{padding-bottom:13px}.mini.board .tile::after{content:"";position:absolute;left:9px;right:30%;bottom:3px;height:2px;border-radius:3px;background:#A64C16;transform:rotate(-1.5deg)}
+.mini.motion{background:linear-gradient(135deg,#12304A 0 70%,#1F6F78 70%);color:#fff}
+.mini.motion .tile{background:#1F6F78;border-left:6px solid #FFC857;border-radius:6px;box-shadow:none}
+.mini.motion .tile b{background:#FFC857;color:#12304A;padding:0 4px;border-radius:3px}
