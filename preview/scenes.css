@@ -238,3 +238,97 @@ button.st-card:hover{border-color:var(--st-accent)}
 
 main{grid-template-columns:minmax(0,1fr)}
 main>*{min-width:0}
+
+/* Astra v9: responsive navigation, guided setup and accessibility. */
+:root{scroll-padding-top:1rem}
+body{padding-bottom:calc(120px + env(safe-area-inset-bottom));overflow-x:hidden}
+header{max-width:1100px;flex-wrap:wrap;position:relative}
+main{max-width:1000px;min-width:0;width:100%}
+.card,.player,.look,.stage{min-width:0;max-width:100%}
+button,select,input{font:inherit}
+button{min-height:44px;cursor:pointer;touch-action:manipulation}
+:where(button,a,input,select,[tabindex]):focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.course-nav{max-width:1100px;margin:0 auto 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.course-nav #crumb{flex:1 1 220px;font-size:15px;font-weight:700;overflow-wrap:anywhere}
+.nav-progress{flex:0 0 100%;height:5px;background:var(--line);border-radius:8px;overflow:hidden}
+.nav-progress i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.course-nav button{border-radius:10px;padding:8px 12px}
+.onboard{max-width:840px;margin:10px auto}
+.onboard h1{font-size:clamp(29px,5vw,49px)}
+.onboard p{max-width:65ch}
+.onboard .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.onboard .actions button{min-height:48px;padding:10px 20px}
+.setup-looks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.setup-look{display:grid;gap:8px;text-align:left;min-width:0;padding:12px;border:2px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink)}
+.setup-look[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.mini{height:115px;border-radius:10px;padding:12px;display:flex;align-items:center;gap:8px;overflow:hidden;font-size:13px}
+.mini .tile{border-radius:9px;padding:9px;min-width:0;flex:1;box-shadow:0 2px 8px #0002}
+.mini.story{background:#17263e;color:white}.mini.story .tile{background:#2b4e83}
+.mini.codex{background:#071b24;color:#83ecdc}.mini.codex .tile{border:1px solid #2f8f9d;background:#12333b}
+.mini.notebook{background:#f6eedb;color:#493b2d}.mini.notebook .tile{background:#fff9ed;border-left:3px solid #b48b4a}
+.mini.journey{background:#edf7f4;color:#1c584c}.mini.journey .tile{background:#fff;border-top:4px solid #398a76}
+.voice-tests{display:grid;gap:6px;max-height:250px;overflow:auto;margin:10px 0}
+.voice-test-row{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:8px;border:1px solid var(--line);border-radius:10px}
+.voice-test-row span{min-width:0;overflow-wrap:anywhere;font-size:14px}
+.voice-test-row button{flex:none}
+.vpanel{max-height:min(85vh,800px);overflow:auto;z-index:80}
+#main:focus{outline:none}
+@media(min-width:900px){header,.course-nav{max-width:1100px}body[data-view=player] main{max-width:1100px}}
+@media(max-width:480px){body{padding-inline:10px}.card{padding:14px}header{padding-block:8px}.hdr-course{display:none}.setup-looks{grid-template-columns:1fr 1fr;gap:8px}.mini{height:96px;padding:7px}.mini .tile{padding:6px}.course-nav{gap:5px}.course-nav button{font-size:13px;padding:7px 8px}.course-nav #crumb{flex-basis:100%;order:-1}.vpanel{left:8px!important;right:8px!important;width:auto!important;max-width:none!important}.bar-in{flex-wrap:wrap}.stage,.look{max-width:100%;overflow:hidden}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Astra navigation repair v10: breadcrumb, week switcher, progress, onboarding controls. */
+.course-nav{position:sticky;top:0;z-index:50;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:0 3px 14px #0001;align-items:center}
+.course-nav .nav-location{order:2;flex:0 0 100%;min-width:0;padding:8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.course-nav .nav-location-title{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.course-nav #crumb{display:block;font-size:clamp(14px,2.8vw,17px);font-weight:700;line-height:1.5;overflow-wrap:anywhere;color:var(--ink)}
+.course-nav .nav-progress-text{font-size:13px;font-weight:700;color:var(--muted);margin:4px 0}
+.course-nav .nav-progress{width:100%;height:7px;background:var(--line);border-radius:9px;overflow:hidden}
+.course-nav .nav-week-label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink);min-width:0}
+.course-nav #navWeek{max-width:min(45vw,250px);min-height:44px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);padding:6px;font-size:14px}
+.course-nav button{flex:0 0 auto}
+.bar[hidden],.course-nav[hidden]{display:none!important}
+@media(max-width:480px){.course-nav{top:0;gap:6px;padding:8px}.course-nav .nav-location{order:1;flex-basis:100%;padding:8px}.course-nav .nav-week-label{flex:1 1 180px}.course-nav #navWeek{max-width:100%;width:100%}.course-nav button{font-size:13px}.course-nav #crumb{font-size:14px}}
+
+/* Claude review corrections v11 */
+body.fs .course-nav{display:none!important}
+.mini.story{background:linear-gradient(160deg,#E2552D,#8C1C3E 55%,#1C3FAA);color:#fff}.mini.story .tile{background:#0006}
+.mini.codex{background:#152d2a;color:#f3f0e5}.mini.codex .tile{background:#1d3a35;border-left:4px solid #d9f879}
+.mini.notebook{background:repeating-linear-gradient(0deg,#FAF7EF 0 14px,#D7DFDC 14px 15px);color:#3a2e24}.mini.notebook .tile{background:#FAF7EF;border-left:3px solid #A04432}
+.mini.journey{background:#F3F0E8;color:#24675B}.mini.journey .tile{background:#fff;border-top:4px solid #963D21}
+.qsel{min-height:44px}
+
+/* Optional AI feedback key setup and Settings */
+.ai-provider-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.ai-provider{min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:16px;overflow-wrap:anywhere}
+.ai-provider h2{font-size:21px;margin:0 0 10px}
+.ai-provider p{font-size:15px;line-height:1.55}
+.ai-provider input[type=password]{display:block;width:100%;min-width:0;min-height:46px;border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--bg);color:var(--ink);font:inherit}
+.ai-key-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ai-key-actions button{min-height:44px;padding:8px 12px}
+.ai-key-status{min-height:24px;color:var(--muted);font-weight:700;overflow-wrap:anywhere}
+.ai-key-status.ai-ok{color:var(--ok)}
+.ai-privacy{font-size:14px;line-height:1.6;border-left:4px solid var(--accent);padding:10px 14px;background:var(--bg);border-radius:6px}
+.ai-settings{border-top:1px solid var(--line);margin-top:20px;padding-top:18px}
+.ai-settings .ai-provider-grid{grid-template-columns:1fr}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:600px){.ai-provider-grid{grid-template-columns:1fr}.ai-provider{padding:13px}.ai-key-actions button{flex:1 1 auto}}
+
+/* Listen-only and deferred assessments */
+.hands-controls{display:none;max-width:1100px;margin:8px auto 12px;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px #0001}
+body[data-view=player] .hands-controls{display:grid;gap:10px}
+.hands-buttons{display:flex;flex-wrap:wrap;gap:10px}.hands-buttons button{min-height:52px;padding:10px 17px;border-radius:11px;font-weight:700}.hands-buttons button:first-child{background:var(--accent);color:var(--accent-ink)}
+.listen-choice{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--ink)}
+.listen-choice input{width:24px;height:24px;flex:none;accent-color:var(--accent)}
+.later-list{display:grid;gap:8px;max-height:320px;overflow:auto}.later-list button{text-align:left;white-space:normal;overflow-wrap:anywhere;padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+.pending-report{border:2px solid var(--warn);font-weight:700}.hands-controls [hidden]{display:none!important}
+@media(max-width:480px){.hands-controls{padding:10px}.hands-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.hands-buttons button{min-width:0;font-size:15px}.hands-buttons #skipQuestion{grid-column:1/-1}}
+
+/* v14: question-level Skip for now, visible for all six check types. */
+.qskip-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:14px 0 8px;padding:12px 0;border-top:1px solid var(--st-line,var(--line))}
+.qskip-inline{min-height:48px;padding:10px 18px;border:2px solid var(--st-accent,var(--accent));border-radius:11px;background:var(--surface);color:var(--ink);font:700 16px var(--body,system-ui);cursor:pointer}
+.qskip-inline:focus-visible,.later-resume:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.qskip-hint{font-size:13px;line-height:1.5;color:var(--st-muted,var(--muted));max-width:28ch}
+.later-list .later-resume{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px}
+.later-resume span{min-width:0;flex:1}.later-resume strong{flex:none;color:var(--accent);font-size:15px}
+@media(max-width:480px){.qskip-actions{flex-direction:column;align-items:stretch}.qskip-inline{width:100%}.later-list .later-resume{flex-wrap:wrap}.later-resume strong{margin-left:auto}}

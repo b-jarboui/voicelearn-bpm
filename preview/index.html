@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>VoiceLearn OPER621</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
-<link rel="stylesheet" href="scenes.css?v=8">
+<link rel="stylesheet" href="scenes.css?v=14">
 <style>
 /* Narrated presentation: the stage plays like a video; one Pause/Continue control. */
 :root{
@@ -99,54 +99,55 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <body>
 <header>
   <button class="brand" id="home" aria-label="Course home">Voice<span>Learn</span></button>
-  <span class="muted hdr-course">OPER621 · BPM Week 1</span>
-  <button id="vBtn" class="vbtn" aria-label="Voice, speed and look settings">🔊 Voice</button>
+  <span class="muted hdr-course">OPER621 · BPM <span id="weekLabel"></span></span>
+  <button id="vBtn" class="vbtn" aria-expanded="false" aria-label="Voice, speed and look settings">⚙ Settings</button>
 </header>
-<div class="vpanel card" id="vPanel" hidden>
+<div class="vpanel card" id="vPanel" hidden role="dialog" aria-modal="false" aria-label="Settings">
   <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
   <div class="muted" id="vNote" role="status" style="font-size:14px"></div>
   <label class="fld">Narration<select id="vMode"><option value="voice">Voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
   <label class="fld">Look<select id="vLook"><option value="story">Story cards</option><option value="codex">Signal Studio</option><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option></select></label>
   <label class="fld">Voice<select id="vVoice"></select></label>
-  <label class="fld">Speed <output id="vRateOut">1×</output><input id="vRate" type="range" min="0.75" max="2" step="0.25" value="1"></label>
-  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.75×</span><span>1×</span><span>1.5×</span><span>2×</span></div>
+  <label class="fld">Speed <output id="vRateOut">1×</output><input id="vRate" type="range" min="0.5" max="2" step="0.05" value="1"></label>
+  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.5×</span><span>1×</span><span>1.5×</span><span>2×</span></div>
+  <label class="listen-choice"><input id="settingsListen" type="checkbox"> <span>Listen only (hands-free)</span></label>
   <label class="fld">Tone <output id="vPitchOut">normal</output><input id="vPitch" type="range" min="0.5" max="1.5" step="0.1" value="1"></label>
   <div class="row muted" style="justify-content:space-between;font-size:13px"><span>Deeper</span><span>Higher</span></div>
-  <button id="vTest">▶ Test voice</button>
+  <button id="vTest">▶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div>
   <div class="muted" style="font-size:13px">Voices come from your phone. For a male voice on Android: Settings → Text-to-speech → Speech Services by Google → ⚙️ → Install voice data → English → pick a male voice.</div>
 </div>
-<main id="main"></main>
-<div class="bar"><div class="bar-in">
+<nav id="courseNav" class="course-nav" aria-label="Course navigation" hidden><button id="navHome" type="button">← Home</button><label class="nav-week-label">Switch week <select id="navWeek" aria-label="Switch course week"></select></label><div class="nav-location"><div class="nav-location-title">Your place in the course</div><div id="crumb" aria-live="polite"></div><div id="navProgressText" class="nav-progress-text"></div><div id="navProgress" class="nav-progress" role="progressbar" aria-label="Part progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div><button id="navPrevPart" type="button">← Part</button><button id="navPrev" type="button">← Sentence</button><button id="navNext" type="button">Sentence →</button><button id="navNextPart" type="button">Part →</button></nav><main id="main" tabindex="-1"></main>
+<div id="handsControls" class="hands-controls" aria-label="Hands-free playback controls"><label class="listen-choice hands-toggle"><input id="playerListen" type="checkbox"> <span id="listenState">Hands-free listening off</span></label><div class="hands-buttons"><button id="handsPlay" type="button" aria-label="Play narrated lesson">▶ Play</button><button id="handsPause" type="button" aria-label="Pause narration">Ⅱ Pause</button><button id="handsNext" type="button" aria-label="Next part or question">Next →</button><button id="skipQuestion" type="button" hidden>Skip for now · Answer later</button></div></div><div class="bar" hidden><div class="bar-in">
   <div class="status" id="status" role="status">Ready</div>
   <button id="repBtn" aria-label="Repeat this sentence" title="Repeat this sentence">↺</button>
   <button id="fsBtn" aria-label="Full screen">⛶</button>
   <button class="primary" id="toggle">▶ Continue</button>
 </div></div>
 
-<script src="diagrams.js?v=1"></script>
-<script src="weeks/manifest.js?v=1"></script>
+<script src="diagrams.js?v=9"></script>
+<script src="weeks/manifest.js?v=9"></script>
 <script>
 /* Multi-week loader: ?week=N picks the week (default 1). Each week is a full page load, so globals never mix. */
 (function () {
   var m = location.search.match(/[?&]week=(\d+)/), w = m ? +m[1] : 1; if (!(w >= 1 && w <= 14)) w = 1;
   window.WEEK = w; window.WEEKDIR = w === 1 ? "" : "weeks/week" + (w < 10 ? "0" : "") + w + "/";
-  var f = w === 1 ? ["course.js?v=3", "adaptive.js?v=3", "bank.js?v=2"] : ["course.js", "adaptive-week.js", "bank.js"], v = w === 1 ? "" : "?v=20261028";
+  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = w === 1 ? "" : "?v=9";
   window.__wkWrite = function (list) { list.forEach(function (s) { document.write("<script src=\"" + window.WEEKDIR + s + (s.indexOf("?") < 0 ? v : "") + "\"><" + "/script>"); }); };
   window.__wkWrite(f);
 })();
 </script>
-<script src="scenes.js?v=1"></script>
+<script src="scenes.js?v=9"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="lab/content.js?v=1"></script>
 <script src="lab/style-story.js?v=2"></script>
 <script src="lab/style-codex.js?v=1"></script>
 <script src="lab/style-notebook.js?v=1"></script>
 <script src="lab/style-journey.js?v=1"></script>
-<script>window.__wkWrite(["moments.js" + (window.WEEK === 1 ? "?v=1" : "")]);</script>
+<script>window.__wkWrite(["moments.js" + (window.WEEK === 1 ? "?v=9" : "")]);</script>
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-  if (ok) { document.write("<script src=\"player.js?v=8\"><" + "/script>"); }
+  if (ok) { document.write("<script src=\"player.js?v=14\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();

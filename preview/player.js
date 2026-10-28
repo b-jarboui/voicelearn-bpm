@@ -12,6 +12,8 @@
   let FAST = false; // QA only: switched on from the console with __vl.fast(true); never from the URL, never saved
   const lessonSecs = (l) => C.lessons[l].sections.map((s) => s.sec).filter(Boolean);
   const plain = (s) => String(s).replace(/\|/g, " ");
+  const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+  const smooth = () => (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
 
   // Stable pseudo-random numbers from a string (per learner seed), used for shuffles and item choice.
   const hash = (s) => { let h = 2166136261; for (const ch of s) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0; return h; };
@@ -29,10 +31,59 @@
   let P;
   try { P = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
   if (!P || !Array.isArray(P.queue) || !P.queue[P.idx] || !Array.isArray(P.hist)) P = fresh();
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {} };
+  const save = () => { try { if(deferredReturn){const snapshot={...P,queue:deferredReturn.queue,idx:deferredReturn.idx,part:deferredReturn.part,sent:deferredReturn.sent,q:deferredReturn.q};localStorage.setItem(KEY,JSON.stringify(snapshot));}else localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {} };
   const cur = () => P.queue[P.idx];
   const rkey = (st) => `${st.l}:${st.round}`;
 
+  const DEFER_KEY = `voicelearn.oper621.w${WK}.toAnswerLater.v1`;
+  let deferred = [];
+  try { const x=JSON.parse(localStorage.getItem(DEFER_KEY)); if(Array.isArray(x)) deferred=x.filter(id=>typeof id==="string"&&allQ[id]&&!P.hist.some(h=>h.id===id)); } catch (_) {}
+  const saveDeferred=()=>{try{localStorage.setItem(DEFER_KEY,JSON.stringify(deferred));}catch(_){}};
+  const deferQuestion=id=>{if(id&&!P.hist.some(h=>h.id===id)&&!deferred.includes(id)){deferred.push(id);saveDeferred();}};
+  const resolveDeferred=id=>{if(deferred.includes(id)){deferred=deferred.filter(x=>x!==id);saveDeferred();}};
+  const hasDeferredForLesson=l=>deferred.some(id=>lessonSecs(l).includes(allQ[id].sec));
+  const LISTEN_KEY="voicelearn.oper621.listenOnly.v1";
+  let listenOnly=false;
+  try{listenOnly=localStorage.getItem(LISTEN_KEY)==="true";}catch(_){}
+  let deferredReturn=null, notePending=false;
+  const saveListen=()=>{try{localStorage.setItem(LISTEN_KEY,String(listenOnly));}catch(_){};updateListenControls();};
+  function updateListenControls(){for(const id of ["setupListen","settingsListen","playerListen"]){const el=$(id);if(el)el.checked=listenOnly;}const label=$("listenState");if(label)label.textContent=listenOnly?"Hands-free listening on":"Hands-free listening off";}
+  function setListen(on){listenOnly=!!on;saveListen();updateMediaSession();if(listenOnly&&view==="player"&&cur().kind==="quiz"&&!cur().deferred){skipQuestion(true);}}
+  function mediaAction(name,handler){try{if("mediaSession" in navigator)navigator.mediaSession.setActionHandler(name,handler);}catch(_){}}
+  function updateMediaSession(){if(!("mediaSession" in navigator))return;try{navigator.mediaSession.playbackState=playing?"playing":"paused";if("MediaMetadata" in window){const st=cur();navigator.mediaSession.metadata=new MediaMetadata({title:st&&st.kind==="quiz"?"Knowledge check":`Week ${WK} · VoiceLearn`,artist:"OPER621 Business Process Management"});}}catch(_){}
+  }
+  function handsFreeNext(){if(view!=="player")return;if(cur().kind==="quiz"){skipQuestion(true);return;}if(playing)pause();advance();}
+
+  function updateSkipButton(){const b=$("skipQuestion");if(!b)return;const st=cur();b.hidden=!(view==="player"&&st&&st.kind==="quiz"&&P.part!=="feedback");}
+  function skipQuestion(auto=false){
+    const st=cur();if(!st||st.kind!=="quiz"||P.part==="feedback")return;
+    if(!st.qs){st.qs=firstCheck(st.l);save();}
+    const id=st.qs[P.q];if(!id)return;
+    deferQuestion(id);playing=false;waiting=false;stopSpeech();
+    P.part="main";P.sent=0;
+    if(st.deferred){ // Return to the exact original queue step after a deferred response is skipped again.
+      if(deferredReturn){P.queue=deferredReturn.queue;P.idx=deferredReturn.idx;P.part=deferredReturn.part;P.sent=deferredReturn.sent;P.q=deferredReturn.q;deferredReturn=null;}
+      save();load();bar();return;
+    }
+    save();
+    if(auto&&listenOnly){notePending=true;}
+    if(auto){
+      for(let i=P.q+1;i<st.qs.length;i++)deferQuestion(st.qs[i]);
+      P.q=st.qs.length-1;
+    }
+    advance();
+  }
+  function resumeDeferred(id){
+    if(!id||!deferred.includes(id)||!allQ[id])return;
+    pause();deferredReturn={queue:P.queue,idx:P.idx,part:P.part,sent:P.sent,q:P.q};
+    // A temporary single-question queue; do not touch the original progress fields on disk.
+    const q=allQ[id],l=C.lessons.findIndex((x,i)=>lessonSecs(i).includes(q.sec));
+    const lesson=l>=0?l:Math.max(0,Math.min(C.lessons.length-1,cur().l||0));
+    P.queue=[{kind:"quiz",l:lesson,round:0,qs:[id],deferred:true}];P.idx=0;P.part="main";P.sent=0;P.q=0;
+    view="player";setRoute("player");
+    $("main").innerHTML=`<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`;
+    $("slot").replaceWith(stageEl);stageEl.after(lookEl);load();bar();
+  }
   let view = "home", playing = false, waiting = false, tok = 0, script = null;
 
   // ---------- mastery ----------
@@ -309,11 +360,14 @@
     }
   }
   function renderHome() {
-    view = "home"; document.body.dataset.view = "home";
+    view = "home"; setRoute("home"); updateNavigation();
     const st = cur(), les = C.lessons[st.l] || C.lessons[0];
     const flagged = SECS.filter((s) => P.flags[s]);
     $("main").innerHTML = `
       <div class="card"><div class="eyebrow">Week</div><label class="fld" style="display:grid;gap:6px"><span class="muted" style="font-size:15px">Choose the week to study. Each week keeps its own progress.</span><select id="wkSel" style="font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%">${weekList().map((w) => `<option value="${w.n}"${w.n === WK ? " selected" : ""}>Week ${w.n} · ${esc(w.title)}</option>`).join("")}</select></label>${window.REVISION_WEEK ? `<div class="muted" style="font-size:15px">Week ${window.REVISION_WEEK}: revision week, see Moodle (no lessons here).</div>` : ""}</div>
+      <div class="card later-card"><div class="eyebrow">To answer later</div><h2>${deferred.length} question${deferred.length===1?"":"s"} saved</h2>
+        <p class="muted">Skipped checks are not marked wrong. Answer them when you are ready; the week stays unfinished until they are done.</p>
+        ${deferred.length?`<div class="later-list">${deferred.map((id,i)=>`<button type="button" class="later-resume" data-later="${esc(id)}"><span>${i+1}. ${esc(allQ[id].q||id)}</span><strong>Resume →</strong></button>`).join("")}</div>`:"<p>Nothing waiting. You're up to date.</p>"}</div>
       <div class="card"><div class="eyebrow">Continue</div><h1>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</h1>
         <div class="row"><button class="primary" id="resume">▶ Continue</button><button id="restart">Start over</button></div></div>
       <div class="card"><div class="eyebrow">Look · how the lessons appear</div>
@@ -324,10 +378,11 @@
         ${flagged.length ? `<div class="muted" style="font-size:15px">Flagged for instructor review: ${flagged.map((s) => esc(A.sections[s].name)).join(", ")}</div>` : ""}</div>
       <div class="card"><div class="eyebrow">${esc(C.code)} · ${esc(C.subtitle)}</div><h2>${esc(C.title)}</h2>
         <div>${C.lessons.map((x, l) => { const r = P.lessons[x.id];
-          const pill = r ? (r.passed ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
+          const pill = r ? (r.passed && !hasDeferredForLesson(l) ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
           return `<div class="lesson"><div style="min-width:0"><b>${l + 1}. ${esc(x.title)}</b><div class="muted" style="font-size:15px">${x.sections.length} part${x.sections.length > 1 ? "s" : ""} + check</div></div>
           <div class="row">${pill}<button data-l="${l}" aria-label="Play lesson ${l + 1}">Play</button></div></div>`; }).join("")}</div></div>`;
-    $("wkSel").onchange = (e) => { location.search = "?week=" + e.target.value; };
+    $("wkSel").onchange = (e) => switchWeek(e.target.value);
+    document.querySelectorAll("[data-later]").forEach(b=>b.onclick=()=>resumeDeferred(b.dataset.later));
     probeWeeks();
     $("resume").onclick = () => openPlayer();
     $("restart").onclick = () => { P = fresh(); save(); openPlayer(); };
@@ -336,6 +391,7 @@
     // It never replaces the queue, so an unfinished check, remediation or the question history cannot be lost.
     document.querySelectorAll("[data-l]").forEach((b) => (b.onclick = () => { const l = +b.dataset.l; if (cur().kind === "report") { P.queue.push(...C.lessons[l].sections.map((_, s) => ({ kind: "sec", l, s, replay: true })), { kind: "report", l: C.lessons.length - 1 }); P.idx++; } else P.queue.splice(P.idx, 0, ...C.lessons[l].sections.map((_, s) => ({ kind: "sec", l, s, replay: true }))); P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(); }));
     bar();
+    if (!$("vPanel").contains(document.activeElement)) $("main").focus({ preventScroll: true });
   }
   // Called inside click handlers: the first utterance of the page is queued during a real user gesture.
   let primed = false;
@@ -344,19 +400,21 @@
   document.addEventListener("pointerdown", retryVoice, { capture: true }); document.addEventListener("keydown", retryVoice, { capture: true });
   function primeSpeech() { return; /* disabled: the zero-volume priming utterance + cancel wedged Chrome's speech engine */ if (primed || !synth || FAST) return; primed = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; window.__vlPrime = u; synth.speak(u); } catch (e) {} }
   document.addEventListener("pointerdown", primeSpeech, { capture: true }); document.addEventListener("keydown", primeSpeech, { capture: true });
-  function openPlayer() {
-    view = "player"; document.body.dataset.view = "player";
+  function openPlayer(autoPlay = true) {
+    view = "player"; setRoute(cur().kind === "report" ? "report" : "player");
     $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`;
     $("slot").replaceWith(stageEl);
     stageEl.after(lookEl);
     window.scrollTo(0, 0);
-    load(); play();
+    load(); updateNavigation();updateListenControls(); if(autoPlay)play();else{playing=false;bar();}
+    if (!$("vPanel").contains(document.activeElement)) $("main").focus({ preventScroll: true });
   }
   function bar() {
     $("toggle").textContent = waiting ? "↻ Repeat question" : playing ? "⏸ Pause" : "▶ Continue";
     const st = cur();
     const where = st.kind === "report" ? "Final report" : st.kind === "review" ? `Fresh explanation · ${A.sections[st.sec].name}` : st.kind === "quiz" ? (st.round ? `Practice round ${st.round}` : `Lesson ${st.l + 1} check`) : `Lesson ${st.l + 1} of ${C.lessons.length}`;
     $("status").textContent = `${where} · ${waiting ? "Your answer" : playing ? (VS.mode === "captions" ? "Captions only" : silent ? "Reading pace (no voice)" : "Playing") : "Paused"}`;
+    updateNavigation();updateSkipButton();updateListenControls();updateMediaSession();
   }
   const caption = (t) => { const cc = $("cc"); if (cc) cc.textContent = t || ""; };
   const capOf = (l) => `<b>Lesson ${l + 1}</b> · ${esc(C.lessons[l].title)}`;
@@ -364,6 +422,7 @@
   // ---------- build the current step ----------
   function load() {
     const st = cur();
+    if (view === "player") { setRoute(st.kind === "report" ? "report" : "player", true); }
     waiting = false;
     updateLookClass();
     stageEl.classList.toggle("scroll", ["quiz", "result", "report"].includes(st.kind)); stageEl.scrollTop = 0;
@@ -385,11 +444,13 @@
       while (P.q < st.qs.length && P.part === "main" && P.sent === 0 && P.hist.some((h) => h.id === st.qs[P.q])) P.q++;
       if (P.q >= st.qs.length) { P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save(); return load(); }
       if (!st.qs.length) { P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save(); return load(); } // nothing fresh left: go straight to the result
+      if(listenOnly&&!st.deferred){skipQuestion(true);return;}
       loadQuestion(st);
     }
     else if (st.kind === "result") loadResult(st);
     else if (st.kind === "report") loadReport();
     renderSend(st.kind === "report" && !!T.sendReport);
+    if(st.kind==="report"&&deferred.length){const note=document.createElement("div");note.className="card pending-report";note.setAttribute("role","status");note.textContent=`Week not complete: ${deferred.length} question(s) saved To answer later. Return Home to finish them.`;$("main").prepend(note);}
   }
 
   // ---------- questions: six auto-checked, single-response types ----------
@@ -433,6 +494,13 @@
       s.rightSay = `The right pairs are: ${q.pairs.map((p) => `${p[0]}, with ${p[1]}`).join("; ")}.`;
       beats.push({ at: n0 + 1, html: `<div class="qbox">${q.pairs.map((p, i) => `<label class="qrow"><span>${esc(p[0])}</span><select class="qsel" data-m="${i}" aria-label="Match for ${esc(p[0])}"><option value="">choose…</option>${s.rights.map((r) => `<option value="${esc(r)}">${esc(r)}</option>`).join("")}</select></label>`).join("")}<button class="qcheck" disabled>Check answer</button></div>` });
     }
+    // Universal question action: shown beside the Check answer control for
+    // selection questions, and beside the answer options for instant-answer types.
+    // Unlike Check answer, skipping never requires a selection.
+    const actionBeat=beats[beats.length-1];
+    if(actionBeat&&actionBeat.at===n0+1){
+      actionBeat.html += `<div class="qskip-actions"><button type="button" class="qskip-inline" aria-label="Skip this question and answer later">Skip for now</button><span class="qskip-hint">Saved to To answer later; not marked wrong.</span></div>`;
+    }
     beats.push({ at: 99, html: `<div class="st-kicker" id="fbk" role="status"></div><div class="st-note qwhy">${esc(q.why)}</div>` });
     script = Object.assign({ main: head.concat(say), offset: 0 }, s);
     Scenes.loadBeats(cap, `${P.q + 1}/${st.qs.length}`, beats);
@@ -441,6 +509,8 @@
 
   function wireQuestion(q) {
     const s = script, root = stageEl;
+    const skip=root.querySelector(".qskip-inline");
+    if(skip)skip.onclick=()=>skipQuestion(false);
     root.querySelectorAll(".st-opt").forEach((b) => (b.onclick = () => submit(+b.dataset.pos === s.right, { pos: +b.dataset.pos })));
     const check = root.querySelector(".qcheck");
     if (q.type === "drop" || q.type === "match") {
@@ -476,7 +546,7 @@
   function submit(ok, ui = {}) {
     const st = cur(); if (st.kind !== "quiz" || P.part === "feedback") return;
     const q = script.q;
-    P.used[q.id] = true;
+    P.used[q.id] = true;resolveDeferred(q.id);
     P.hist.push({ id: q.id, sec: q.sec, lo: q.lo, clo: q.clo, type: q.type, ok, r: rkey(st), t: Date.now() });
     (P.rounds[rkey(st)] = P.rounds[rkey(st)] || {})[q.id] = ok;
     P.part = "feedback"; P.sent = 0; waiting = false; save();
@@ -484,10 +554,11 @@
     stageEl.querySelectorAll(".st-opt").forEach((b) => { b.disabled = true; b.classList.toggle("picked", +b.dataset.pos === ui.pos && !ok); });
     stageEl.querySelectorAll(".st-opt[data-right]").forEach((b) => b.classList.add("right"));
     const chk = stageEl.querySelector(".qcheck"); if (chk) chk.disabled = true;
+    const skip=stageEl.querySelector(".qskip-inline");if(skip)skip.disabled=true;
     script.feedback = [ok ? "Correct." : `Not quite. ${script.rightSay}`].concat(sentences(q.why));
     const f = stageEl.querySelector("#fbk"); f.textContent = ok ? "✓ Correct" : "✗ Not quite"; f.style.color = ok ? "var(--st-good)" : "var(--st-bad)";
     Scenes.step(99);
-    setTimeout(() => stageEl.scrollTo({ top: stageEl.scrollHeight, behavior: "smooth" }), 400);
+    setTimeout(() => stageEl.scrollTo({ top: stageEl.scrollHeight, behavior: smooth() }), 400);
     playing = true; play();
   }
 
@@ -495,6 +566,10 @@
   function loadResult(st) {
     const r = P.rounds[rkey(st)] || {}, n = Object.keys(r).length, c = Object.values(r).filter(Boolean).length, score = n ? c / n : 0;
     const secs = lessonSecs(st.l), id = C.lessons[st.l].id;
+    if (!st.plan && hasDeferredForLesson(st.l)) {
+      st.plan=[];st.newFlags=[];st.weak=[];st.verdict="deferred";
+      const prev=P.lessons[id]||{};P.lessons[id]={...prev,passed:false,pending:true};save();
+    }
     if (!st.plan) { // decide once, then keep (resume-safe)
       const weak = secs.filter((s) => !secOk(s) && !P.flags[s]);
       const plan = [], newFlags = [];
@@ -514,9 +589,10 @@
     const names = (a) => a.map((s) => A.sections[s].name.toLowerCase());
     const join = (a) => a.length > 1 ? a.slice(0, -1).join(", ") + " and " + a[a.length - 1] : a[0] || "";
     const say = [`You answered ${c} out of ${n}. That is ${pct(score)} percent.`];
-    if (st.verdict === "pass") say.push(st.round ? "You've now reached the target on every part of this lesson. Well done." : "Every part of this lesson is at or above the target. Great work.");
+    if(st.verdict === "deferred")say.push("Some questions are saved for later. They are not counted as wrong. Return to them from Home before completing this week.");
+    else if (st.verdict === "pass") say.push(st.round ? "You've now reached the target on every part of this lesson. Well done." : "Every part of this lesson is at or above the target. Great work.");
     else if (st.verdict === "remediate") say.push(`The target is ${pct(A.target)} percent on every part.`, `Let's strengthen ${join(names(st.plan.map((p) => p.sec)))}.`, "I've prepared a fresh explanation, and new questions you haven't seen.");
-    else say.push(`You have now used every fresh question on ${join(names(secs.filter((s) => P.flags[s])))}, and that part is not yet at the target.`, "It is marked for instructor review on your report, so please show your report to your instructor. Let's move on for now.");
+    else if(st.verdict!=="deferred")say.push(`You have now used every fresh question on ${join(names(secs.filter((s) => P.flags[s])))}, and that part is not yet at the target.`, "It is marked for instructor review on your report, so please show your report to your instructor. Let's move on for now.");
     if (st.verdict === "remediate" && st.newFlags && st.newFlags.length) say.push(`There are no fresh questions left on ${join(names(st.newFlags))}, so that part is marked for instructor review.`);
     script = { main: say, offset: 0 };
     const rows = secs.map((s) => { const m = secM(s) ?? 0, cls = secOk(s) ? "good" : "bad";
@@ -584,10 +660,10 @@
   function loadReport() {
     const flagged = SECS.filter((s) => P.flags[s]), k1 = cloM(CLOS[0]);
     const said = (m) => (m == null ? "not assessed yet" : `${pct(m)} percent`);
-    const say = [flagged.length ? "You have reached the end of Week one. Here is your achievement report." : "Week one complete. Here is your achievement report."]
+    const say = [deferred.length ? `Week ${WK} is not complete yet. You have ${deferred.length} questions to answer later.` : flagged.length ? `You have reached the end of Week ${WK}. Here is your achievement report.` : `Week ${WK} complete. Here is your achievement report.`]
       .concat(CLOS.map((c) => `Course outcome ${c}: ${said(cloM(c))}.`))
       .concat(LOS.map((k) => `${A.outcomes[k].name}: ${said(loM(k))}.`))
-      .concat(flagged.length ? [`Some parts are not yet at the target, and they are marked for instructor review: ${flagged.map((s) => A.sections[s].name.toLowerCase()).join(" and ")}. Please show this report to your instructor.`] : ["You reached the target on every part of Week 1. Excellent work."]);
+      .concat(flagged.length ? [`Some parts are not yet at the target, and they are marked for instructor review: ${flagged.map((s) => A.sections[s].name.toLowerCase()).join(" and ")}. Please show this report to your instructor.`] : [`You reached the target on every part of Week ${WK}. Excellent work.`]);
     script = { main: say, offset: 0 };
     const bar = (label, m, at, small) => `<div class="st-it st-lo${small ? " sm" : ""}" data-at="${at}"><div class="st-lo-h"><b>${esc(label)}</b><span>${m == null ? "–" : pct(m) + "%"}</span></div><div class="st-lo-t"><i class="${m != null && m >= A.target - 1e-9 ? "good" : "bad"}" style="--w:${pct(m)}%"></i><em style="left:${pct(A.target)}%"></em></div></div>`;
     Scenes.loadBeats("<b>Achievement report</b>", "", [
@@ -598,7 +674,7 @@
       { at: say.length - 1, html: flagged.length ? `<div class="st-quote">Flagged for <em>instructor review</em>: ${esc(flagged.map((s) => A.sections[s].name).join(", "))}</div>` : `<div class="st-quote">Every part <em>achieved</em>.</div>` },
       ...(T.sendReport ? [{ at: say.length - 1, html: `<button class="st-card st-send"><b>✉ Send this report</b><span>By email or share</span></button>` }] : []),
     ]);
-    if (T.sendReport) stageEl.querySelector(".st-send").onclick = () => { pause(); const s = $("send"); if (s) s.scrollIntoView({ behavior: "smooth", block: "center" }); };
+    if (T.sendReport) stageEl.querySelector(".st-send").onclick = () => { pause(); const s = $("send"); if (s) s.scrollIntoView({ behavior: smooth(), block: "center" }); };
   }
 
   // ---------- playback ----------
@@ -634,6 +710,11 @@
   }
   function advance() {
     const st = cur();
+    if(st&&st.deferred&&deferredReturn){
+      const back=deferredReturn;deferredReturn=null;
+      P.queue=back.queue;P.idx=back.idx;P.part=back.part;P.sent=back.sent;P.q=back.q;
+      save();load();bar();return;
+    }
     if (st.kind === "quiz" && P.q + 1 < st.qs.length) { P.q++; P.part = "main"; P.sent = 0; save(); load(); return play(); }
     if (st.kind === "result" && !st.done) {
       st.done = true; // never splice the follow-up twice for the same result
@@ -648,10 +729,19 @@
     }
     if (st.kind === "report") { playing = false; save(); return bar(); }
     P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save();
-    load(); play();
+    load();
+    if(listenOnly&&notePending){notePending=false;const cc=$("cc");if(cc)cc.textContent="We will save the questions for later.";}
+    play();
   }
   function pause() { playing = false; stopSpeech(); hideTap(); bar(); }
 
+  mediaAction("play",()=>{if(view==="player")play(true);});mediaAction("pause",()=>{if(view==="player")pause();});mediaAction("nexttrack",handsFreeNext);
+  $("skipQuestion").onclick=()=>skipQuestion(false);
+  $("playerListen").onchange=e=>setListen(e.target.checked);
+  $("settingsListen").onchange=e=>setListen(e.target.checked);
+  $("handsPlay").onclick=()=>{if(view!=="player")openPlayer();else if(!playing)play(true);};
+  $("handsPause").onclick=()=>{if(view==="player")pause();};
+  $("handsNext").onclick=handsFreeNext;
   $("toggle").onclick = () => { if (waiting) { P.sent = 0; waiting = false; return play(); } playing ? pause() : play(); };
   $("home").onclick = () => { setFs(false); pause(); waiting = false; renderHome(); };
 
@@ -671,7 +761,7 @@
   $("fsBtn").onclick = () => setFs(!document.body.classList.contains("fs"));
   window.addEventListener("resize", () => { if (view === "player") refit(); });
   document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement) setFs(false); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setFs(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { if (!$("vPanel").hidden) $("vClose").click(); setFs(false); } });
 
   // ---------- voice & look panel ----------
   function fillVoices() {
@@ -688,7 +778,9 @@
   const showPitch = () => { $("vPitchOut").textContent = VS.pitch < 0.95 ? "deeper" : VS.pitch > 1.05 ? "higher" : "normal"; };
   $("vLook").onchange = (e) => {
     VS.look = e.target.value; saveVS();
+    if (view === "setupDesign") return setupDesign();
     if (view === "home") return renderHome();
+    if (view !== "player") return;
     const st = cur();
     updateLookClass();
     if (st.kind !== "sec" && st.kind !== "review") return;
@@ -699,10 +791,10 @@
   $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
-  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "story"; fillVoices(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; };
+  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "story"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
   $("vPitch").oninput = (e) => { VS.pitch = +e.target.value; showPitch(); };
   $("vPitch").onchange = () => { saveVS(); applyLive(); };
-  $("vClose").onclick = () => ($("vPanel").hidden = true);
+  $("vClose").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); $("vBtn").focus(); };
   $("vVoice").onchange = (e) => { VS.uri = e.target.value; saveVS(); if (synth) { silent = false; noStart = 0; avoidNetwork = false; } applyLive(); };
   $("vRate").oninput = (e) => { VS.rate = +e.target.value; showRate(); };
   $("vRate").onchange = () => { saveVS(); applyLive(); };
@@ -715,22 +807,241 @@
       window.__vlTestU = u; try { if (synth.paused) synth.resume(); } catch (e) {} synth.speak(u); };
     if (synth.speaking || synth.pending) { tok++; cancelSpeech(true); setTimeout(go, 350); } else go(); // never cancel and speak in the same tick
   };
-  if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", () => { if (!$("vPanel").hidden) fillVoices(); });
+  const refreshVoiceLists = () => { if (!$("vPanel").hidden) { fillVoices(); renderVoiceTests(); } else if (view === "setupVoice") renderVoiceTests(); };
+  if (synth && synth.addEventListener) synth.addEventListener("voiceschanged", refreshVoiceLists);
   if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = () => {}; // as in the original prototype
   if (synth) synth.getVoices(); // start loading the device voices early
   // Some engines (Chrome Android, Windows) never fire "voiceschanged": poll briefly until the list is there.
-  if (synth) { let tries = 0; const poll = setInterval(() => { if (synth.getVoices().length || ++tries > 20) { clearInterval(poll); if (!$("vPanel").hidden) fillVoices(); } }, 250); }
+  if (synth) { let tries = 0; const poll = setInterval(() => { if (synth.getVoices().length || ++tries > 20) { clearInterval(poll); refreshVoiceLists(); } }, 250); }
   // Space toggles play, except when a control (answer button, list, input) has focus.
   document.addEventListener("keydown", (e) => { if (e.code === "Space" && view === "player" && !e.target.closest("button,select,input,textarea,label")) { e.preventDefault(); $("toggle").click(); } });
 
+    // ---------- Astra onboarding and browser navigation (v9) ----------
+    const ONKEY = "voicelearn.oper621.onboard.v1";
+    let restoringRoute = false;
+    let onboardingFinishedThisVisit = false;
+    const routeState = (screen) => ({ voicelearn: true, screen, week: WK });
+    function setRoute(screen, replace = false) {
+      document.body.dataset.view = screen === "report" ? "player" : screen;
+      const nav = $("courseNav"); if (nav) nav.hidden = screen !== "player" && screen !== "report";
+      const bottom = document.querySelector(".bar"); if (bottom) bottom.hidden = !["home", "player", "report"].includes(screen);
+      if (restoringRoute) return;
+      if (!replace && history.state && history.state.voicelearn && history.state.screen === screen && history.state.week === WK) return;
+      (replace ? history.replaceState : history.pushState).call(history, routeState(screen), "", location.href);
+    }
+    function showScreen(screen, markup, replace = false) {
+      pause(); waiting = false; view = screen; setRoute(screen, replace);
+      $("main").innerHTML = markup;
+      window.scrollTo({ top: 0, behavior: "instant" });
+      $("main").focus({ preventScroll: true });
+      updateNavigation();
+    }
+    function welcome() {
+      const mins = Math.max(5, Math.round(C.lessons.reduce((n,l)=>n+l.sections.reduce((m,sec)=>m+words(sec.lines ? sec.lines.map(x=>x[0]).join(" ") : sec.script || ""),0),0)/150));
+      const returning = (()=>{try{return localStorage.getItem(ONKEY)!==null;}catch(e){return false;}})();
+      showScreen("welcome", `<section class="card onboard"><div class="eyebrow">Welcome to VoiceLearn · OPER621</div>
+        <h1>Business Process Management, explained one step at a time.</h1>
+        <p>Learn by listening and seeing ideas unfold. Each lesson is followed by a knowledge check. When a topic needs more practice, VoiceLearn offers a fresh explanation and new questions until you reach the learning outcomes or need instructor support.</p>
+        <p>The narrated material takes about ${mins} minutes at normal speed, excluding checks and personalised practice. Your total study time depends on the practice you need. Progress is saved separately for each week on this device.</p>
+        <div class="actions"><button class="primary" id="welcomeNext" type="button">Get started →</button>${returning ? `<button id="welcomeSkip" type="button">Skip to course →</button>` : ""}</div></section>`);
+      $("welcomeNext").onclick = setupDesign;
+      if (returning) $("welcomeSkip").onclick = () => { onboardingFinishedThisVisit = true; history.replaceState(routeState("home"), "", location.href); renderHome(); };
+    }
+    function mini(id) {
+      const text = { story:["An idea","One clear insight"],codex:["SIGNAL 01","Process → outcome"],notebook:["Lesson note","Observe · reflect"],journey:["Stop 1","Explore the process"] }[id];
+      return `<span class="mini ${id}" aria-hidden="true"><span class="tile"><b>${text[0]}</b><br>${text[1]}</span><span>● →</span></span>`;
+    }
+    function setupDesign() {
+      showScreen("setupDesign", `<section class="card onboard"><div class="eyebrow">Setup · Step 1 of 3</div><h1>Choose how your lessons look</h1>
+        <p>Each design shows the same learning content. Select the presentation that feels most comfortable.</p>
+        <div class="setup-looks" role="group" aria-label="Lesson designs">${LOOKS.map(([id,name,note])=>`<button type="button" class="setup-look" data-design="${id}" aria-pressed="${VS.look===id}">${mini(id)}<b>${esc(name)}</b><span class="muted">${esc(note)}</span></button>`).join("")}</div>
+        <div class="actions"><button id="designBack" type="button">← Welcome</button><button class="primary" id="designNext" type="button">Next: voice and speed →</button></div></section>`);
+      document.querySelectorAll("[data-design]").forEach(b=>b.onclick=()=>{VS.look=b.dataset.design;saveVS();$("vLook").value=VS.look;document.querySelectorAll("[data-design]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));});
+      $("designBack").onclick=welcome;$("designNext").onclick=setupVoice;
+    }
+    function setupVoice() {
+      showScreen("setupVoice", `<section class="card onboard"><div class="eyebrow">Setup · Step 2 of 3</div><h1>Choose your narrator</h1>
+        <p>Voices available on your device are shown best first. Use <b>▶ Test</b> to hear each one. You can change these choices later in Settings.</p>
+        <label class="fld">Narration mode <select id="setupMode"><option value="voice">Voice with captions</option><option value="captions">Captions only</option></select></label>
+        <label class="fld">Voice <select id="setupVoice"></select></label>
+        <div id="setupVoiceTests" class="voice-tests" aria-label="Available voices"></div>
+        <label class="fld">Speed: <output id="setupRateOut"></output><input id="setupRate" type="range" min="0.5" max="2" step="0.05"></label>
+        <div id="setupVoiceNote" role="status" class="muted"></div>
+        <label class="listen-choice"><input id="setupListen" type="checkbox"> <span><strong>Listen only (hands-free)</strong><br>Play lessons continuously and save checks to answer later. A single Play tap starts narration.</span></label>
+        <div class="actions"><button id="voiceBack" type="button">← Design</button><button class="primary" id="setupDone" type="button">Next: AI feedback →</button></div></section>`);
+      $("setupMode").value=VS.mode;$("setupMode").onchange=e=>{VS.mode=e.target.value;saveVS();};
+      $("setupRate").value=VS.rate;$("setupRateOut").textContent=VS.rate.toFixed(2)+"×";
+      $("setupRate").oninput=e=>{$("setupRateOut").textContent=Number(e.target.value).toFixed(2)+"×";};
+      $("setupRate").onchange=e=>{VS.rate=num(e.target.value,.5,2,.95);saveVS();$("vRate").value=VS.rate;};
+      renderVoiceTests();updateListenControls();$("setupListen").onchange=e=>setListen(e.target.checked);
+      $("voiceBack").onclick=setupDesign;
+      $("setupDone").onclick=setupAI;
+    }
+    // Optional personal AI keys: only these two localStorage entries are used.
+    // A key is never interpolated into HTML, URLs, logs, status messages or history.
+    const AI_PROVIDERS = Object.freeze({
+      gemini: {name:"Google Gemini", key:"voicelearn.ai.gemini", url:"https://generativelanguage.googleapis.com/v1beta/models", header:"x-goog-api-key", link:"https://aistudio.google.com/apikey"},
+      groq: {name:"Groq", key:"voicelearn.ai.groq", url:"https://api.groq.com/openai/v1/models", header:"Authorization", link:"https://console.groq.com/keys"}
+    });
+    const aiKey = id => { try { return localStorage.getItem(AI_PROVIDERS[id].key) || ""; } catch (_) { return ""; } };
+    function aiCard(id) {
+      const cfg=AI_PROVIDERS[id], stored=!!aiKey(id);
+      const steps=id==="gemini"
+        ? "1. Open Google AI Studio. 2. Sign in with your Google account. 3. Choose Create API key and copy it. 4. Paste it below."
+        : "1. Open the Groq console. 2. Create a free account or sign in. 3. Open API Keys and create a key. 4. Copy and paste it below.";
+      return `<section class="ai-provider" aria-labelledby="ai-title-${id}"><h2 id="ai-title-${id}">${cfg.name}</h2>
+        <p>${steps}</p><p><a href="${cfg.link}" target="_blank" rel="noopener noreferrer">Create a ${cfg.name} key ↗ <span class="sr-only">(opens a new tab)</span></a></p>
+        <label class="fld" for="ai-input-${id}">${cfg.name} API key</label>
+        <input id="ai-input-${id}" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${stored ? "Saved key — enter a new key to replace" : "Paste your key here"}" aria-describedby="ai-status-${id}">
+        <div class="ai-key-actions"><button type="button" data-ai-test="${id}">Test key</button><button type="button" data-ai-save="${id}">Save key</button><button type="button" data-ai-remove="${id}" ${stored ? "" : "disabled"}>Remove saved key</button></div>
+        <p id="ai-status-${id}" class="ai-key-status" role="status" aria-live="polite">${stored ? "✓ A key is saved on this device. Enter a new one to replace it." : "No key saved yet."}</p></section>`;
+    }
+    function aiEditorMarkup() {
+      return `<div class="ai-provider-grid">${aiCard("gemini")}${aiCard("groq")}</div>
+        <p class="ai-privacy"><strong>Privacy:</strong> Keys stay in this browser's localStorage, not on a VoiceLearn server. Test sends the key only to its chosen provider. Later, when you use essay feedback, your essay text will be sent to the provider you choose. Anyone with access to this browser or its developer tools may be able to read locally stored keys. Free access and limits are set by each provider.</p>`;
+    }
+    function bindAIEditor() {
+      const status=(id,text,good=false)=>{const el=$("ai-status-"+id);if(el){el.textContent=text;el.classList.toggle("ai-ok",good);}};
+      const save=id=>{
+        const input=$("ai-input-"+id), value=input.value.trim();
+        if(!value){status(id,"Enter a key before saving.");return false;}
+        try{localStorage.setItem(AI_PROVIDERS[id].key,value);input.value="";input.placeholder="Saved key — enter a new key to replace";
+          const remove=document.querySelector(`[data-ai-remove="${id}"]`);if(remove)remove.disabled=false;
+          status(id,"✓ Key saved on this device.",true);return true;
+        }catch(_){status(id,"Could not save the key. Check your browser storage settings.");return false;}
+      };
+      document.querySelectorAll("[data-ai-save]").forEach(b=>b.onclick=()=>save(b.dataset.aiSave));
+      document.querySelectorAll("[data-ai-remove]").forEach(b=>b.onclick=()=>{
+        const id=b.dataset.aiRemove;try{localStorage.removeItem(AI_PROVIDERS[id].key);$("ai-input-"+id).value="";$("ai-input-"+id).placeholder="Paste your key here";b.disabled=true;status(id,"Key removed from this browser.");}
+        catch(_){status(id,"Could not remove the key. Check browser storage settings.");}
+      });
+      document.querySelectorAll("[data-ai-test]").forEach(b=>b.onclick=async()=>{
+        const id=b.dataset.aiTest,cfg=AI_PROVIDERS[id],input=$("ai-input-"+id);
+        const entered=input.value.trim(),key=entered||aiKey(id);
+        if(!key){status(id,"Paste a key or save one before testing.");return;}
+        b.disabled=true;status(id,"Testing securely with "+cfg.name+"…");
+        const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+        try{
+          const headers=cfg.header==="Authorization"?{Authorization:"Bearer "+key}:{"x-goog-api-key":key};
+          const response=await fetch(cfg.url,{method:"GET",headers,mode:"cors",cache:"no-store",referrerPolicy:"no-referrer",signal:controller.signal});
+          if(!response.ok){status(id,response.status===401||response.status===403?"✗ Key rejected or access not permitted.":"✗ Test failed (HTTP "+response.status+"). Check your provider account.");return;}
+          const data=await response.json();
+          if(!data||!Array.isArray(id==="gemini"?data.models:data.data)){status(id,"✗ Provider returned an unexpected response.");return;}
+          // A successful test saves the entered key locally; no secret is shown.
+          if(entered){if(!save(id))return;}
+          status(id,"✓ Key works. Saved on this device.",true);
+        }catch(error){status(id,error&&error.name==="AbortError"?"✗ Test timed out. Try again.":"✗ Could not contact the provider. Check your connection or browser restrictions.");}
+        finally{clearTimeout(timeout);b.disabled=false;}
+      });
+    }
+    function finishOnboarding(){
+      try{localStorage.setItem(ONKEY,"done");}catch(_){}
+      onboardingFinishedThisVisit=true;
+      history.replaceState(routeState("home"),"",location.href);
+      renderHome();
+    }
+    function setupAI(){
+      showScreen("setupAI",`<section class="card onboard ai-setup"><div class="eyebrow">Setup · Step 3 of 3</div>
+        <h1>Get AI feedback <span class="muted">(optional, recommended)</span></h1>
+        <p>Would you like personal feedback on your case-study essays? You can bring your own free AI key from Google Gemini or Groq. VoiceLearn will remember it on this device, ready for the essay checker when that feature is available. You can use one, both, or neither.</p>
+        ${aiEditorMarkup()}
+        <div class="actions"><button id="aiBack" type="button">← Voice setup</button><button id="aiSkip" type="button">Skip for now</button><button id="aiDone" class="primary" type="button">Continue to course →</button></div></section>`);
+      bindAIEditor();$("aiBack").onclick=setupVoice;$("aiSkip").onclick=finishOnboarding;$("aiDone").onclick=finishOnboarding;
+    }
+    function openAISettings(){
+      const panel=$("vPanel"),existing=$("aiSettings");if(existing)existing.remove();
+      const section=document.createElement("section");section.id="aiSettings";section.className="ai-settings";
+      section.innerHTML='<h2>AI feedback keys</h2><p class="muted">Edit, test or remove your optional keys here.</p>'+aiEditorMarkup();
+      panel.appendChild(section);bindAIEditor();
+    }
+    function testSpecificVoice(uri) {
+      if(!synth)return;
+      if(playing)pause();
+      const voices=rankedVoices(),v=voices.find(x=>x.voiceURI===uri);
+      if(v){VS.uri=v.voiceURI;saveVS();const sel=$("setupVoice");if(sel)sel.value=VS.uri;if(!$("vPanel").hidden)fillVoices();}
+      const note=$("setupVoiceNote")||$("vNote");
+      const setTestStatus=text=>{for(const id of ["setupVoiceNote","vNote"]){const node=$(id);if(node)node.textContent=text;}};
+      setTestStatus("Starting voice sample…");
+      const speakTest=()=>{
+        const u=new SpeechSynthesisUtterance("Hello. Welcome to VoiceLearn. This is how your lessons will sound.");
+        if(v){u.voice=v;u.lang=v.lang;}else u.lang="en-US";
+        u.rate=VS.rate;u.pitch=VS.pitch;u.volume=window.__vlMute?0:1;
+        window.__vlTestU=u;
+        u.onstart=()=>setTestStatus("Playing voice sample…");
+        u.onend=()=>setTestStatus("Finished. You can test another voice.");
+        u.onerror=e=>setTestStatus("Voice test unavailable: "+e.error);
+        try{if(synth.paused)synth.resume();synth.speak(u);}catch(e){if(note)note.textContent="Voice test could not start.";}
+      };
+      if(synth.speaking||synth.pending){cancelSpeech(true);setTimeout(speakTest,Math.max(320,350-(performance.now()-lastCancel)));}
+      else {const wait=Math.max(0,320-(performance.now()-lastCancel));if(wait)setTimeout(speakTest,wait);else speakTest();}
+    }
+    function renderVoiceTests() {
+      const voices=rankedVoices();
+      for(const prefix of ["setup", "v"]){
+        const list=$(prefix==="setup"?"setupVoiceTests":"voiceTests");
+        if(!list)continue;
+        list.innerHTML=voices.length?voices.map((v,i)=>`<div class="voice-test-row"><span>${i===0?"★ ":""}${esc(v.name)} · ${esc(v.lang)}${v.localService?"":" · online"}</span><button type="button" data-voice-test="${i}" aria-label="Test ${esc(v.name)}">▶ Test</button></div>`).join(""):'<p class="muted">No English voices listed yet. You can use the device default or captions only.</p>';
+        list.querySelectorAll("[data-voice-test]").forEach(b=>b.onclick=()=>{const v=voices[+b.dataset.voiceTest];if(v)testSpecificVoice(v.voiceURI);});
+      }
+      const sel=$("setupVoice");if(sel){sel.innerHTML='<option value="">★ Automatic (recommended)</option>'+voices.map(v=>`<option value="${esc(v.voiceURI)}">${esc(v.name)} · ${esc(v.lang)}</option>`).join("");sel.value=VS.uri;sel.onchange=e=>{VS.uri=e.target.value;saveVS();};}
+    }
+    function updateNavigation(){
+      const nav=$("courseNav");if(!nav)return;
+      nav.hidden=view!=="player";
+      if(view!=="player")return;
+      const st=cur();if(!st)return;
+      const lesson=C.lessons[st.l] || C.lessons[0],title=lesson?lesson.title:"Report";
+      const part=st.kind==="sec"?`Part ${st.s+1}: ${lesson.sections[st.s].title}`:st.kind==="review"?`Review: ${A.sections[st.sec].name}`:st.kind==="quiz"?`Check · question ${P.q+1}`:st.kind==="result"?"Result":"Achievement report";
+      $("crumb").textContent=`Week ${WK} › Lesson ${st.l+1}: ${title} › ${part}`;
+      const weekSwitch=$("navWeek"); if(weekSwitch) weekSwitch.value=String(WK);
+      const total=script&&script.main?script.main.length:1;
+      const progress=st.kind==="quiz"?((P.q+1)/Math.max(1,st.qs?.length||1)):(P.sent+1)/Math.max(1,total);
+      const percent=Math.round(clamp(progress,0,1)*100);
+      $("navProgress").innerHTML=`<i style="width:${percent}%"></i>`;
+      $("navProgress").setAttribute("aria-valuenow",String(percent));
+      const progressText=$("navProgressText");if(progressText)progressText.textContent=`${percent}% of ${st.kind==="quiz"?"check":"part"}`;
+      $("navPrev").disabled=waiting||P.part==="feedback"||P.sent<=0;
+      $("navNext").disabled=waiting||P.part==="feedback"||P.sent>=total-1;
+      $("navPrevPart").disabled=!(st.kind==="sec"&&st.s>0);
+      $("navNextPart").disabled=!(st.kind==="sec"&&st.s<lesson.sections.length-1);
+    }
+    function seekSentence(delta){if(view!=="player"||waiting||P.part!=="main"||!script)return;const to=clamp(P.sent+delta,0,script.main.length-1);pause();P.sent=to;save();caption(script.main[to]);vstep(to-script.offset);updateNavigation();}
+    function seekPart(delta){if(view!=="player")return;const st=cur();if(st.kind!=="sec")return;const next=st.s+delta;if(next<0||next>=C.lessons[st.l].sections.length)return;pause();
+      // Review navigation is a replay only; do not consume questions or alter mastery.
+      const nx=P.queue[P.idx+1], rep={kind:"sec",l:st.l,s:next,replay:true};
+      if(delta>0&&nx&&nx.kind==="sec"&&nx.l===st.l&&nx.s===next)P.idx++;
+      else if(delta>0)P.queue[P.idx]=rep;
+      else P.queue.splice(P.idx,0,rep);
+      P.part="main";P.sent=0;P.q=0;save();load();updateNavigation();}
+    $("navHome").onclick=()=>{setFs(false);pause();renderHome();};
+    const weekSelect=$("navWeek"); if(weekSelect){weekSelect.innerHTML=weekList().map(w=>`<option value="${w.n}">Week ${w.n} · ${esc(w.title)}</option>`).join("");weekSelect.value=String(WK);weekSelect.onchange=e=>switchWeek(e.target.value);}
+    $("navPrev").onclick=()=>seekSentence(-1);$("navNext").onclick=()=>seekSentence(1);
+    $("navPrevPart").onclick=()=>seekPart(-1);$("navNextPart").onclick=()=>seekPart(1);
+    window.addEventListener("popstate",e=>{let target=e.state&&e.state.voicelearn?e.state.screen:"welcome";
+      if(onboardingFinishedThisVisit&&(target==="setupDesign"||target==="setupVoice"||target==="setupAI")){history.replaceState(routeState("welcome"),"",location.href);target="welcome";}
+      restoringRoute=true;try{setFs(false);pause();if(target==="player"||target==="report")openPlayer();else if(target==="home")renderHome();else if(target==="setupAI")setupAI();else if(target==="setupVoice")setupVoice();else if(target==="setupDesign")setupDesign();else welcome();}finally{restoringRoute=false;}});
+    function switchWeek(n){const next=Number(n);if(!Number.isInteger(next)||next<1||next>14||next===WK)return;pause();setFs(false);
+      try{localStorage.setItem(ONKEY,"done");}catch(e){}
+      const url=new URL(location.href);url.searchParams.set("week",String(next));location.assign(url.href);}
+    function initOnboarding(){
+      $("weekLabel").textContent=`Week ${WK}`;
+      const navEntry=performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+      const isReload=!!(navEntry&&navEntry.type==="reload");
+      const state=history.state;
+      if(isReload&&state&&state.voicelearn&&state.week===WK){restoringRoute=true;try{if(state.screen==="player"||state.screen==="report")openPlayer();else if(state.screen==="home")renderHome();else if(state.screen==="setupAI")setupAI();else if(state.screen==="setupVoice")setupVoice();else if(state.screen==="setupDesign")setupDesign();else welcome();}finally{restoringRoute=false;}return;}
+      // Every fresh navigation (including a new week) begins with Welcome.
+      // Replacing this entry prevents old routes leaking into the new visit.
+      history.replaceState(routeState("welcome"), "", location.href);
+      welcome();
+    }
   // QA hooks (not used by the page itself).
   window.__vl = { state: () => P, cur, advance, reportText, secM, loM, cloM, respond: (ok) => submit(ok), skip: () => { stopSpeech(); if (cur().kind !== "quiz" || P.part === "feedback") advance(); },
     // show sentence i of the current step, paused (for screenshots)
     at: (i) => { pause(); P.sent = i; caption(script.main[i]); vstep(i - script.offset); },
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
-    jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = s; P.part = "main"; P.sent = 0; P.q = 0; save(); if (view !== "player") { view = "player"; document.body.dataset.view = "player"; $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`; $("slot").replaceWith(stageEl); stageEl.after(lookEl); } load(); },
+    jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = s; P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(false); updateNavigation(); },
     showQ: (id) => { pause(); const st = cur(); st.qs = [id]; P.q = 0; P.part = "main"; P.sent = 0; load(); }, // QA: show one specific question (current step must be a quiz)
     setLook: (id) => { VS.look = id; saveVS(); },
     fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, ranked: rankedVoices().slice(0, 6).map((v) => v.name + " [" + vScore(v) + "]"), sayText, rate: VS.rate, log: SLOG.slice(-12) }) };
-  renderHome();
+  initOnboarding();
 })();
