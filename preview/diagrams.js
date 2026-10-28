@@ -61,14 +61,16 @@
   };
   // Org chart columns. mode "silo": each department optimises upward. mode "process": the customer's flow crosses them.
   D.org = (mode = "process", o = {}) => {
-    const d = o.depts || ["Front desk", "Revenue", "House-|keeping", "Finance"], W = 320, H = 150, cw = 66, g = 12, x0 = 10;
-    let b = `<rect x="110" y="4" width="100" height="22" rx="5" fill="${C.box}" stroke="${C.line}"/>` + txt(160, 15, o.top || "General Manager", { size: 9.5 });
-    d.forEach((n, i) => { const x = x0 + i * (cw + g); b += `<path d="M160 26V36H${x + cw / 2}V44" stroke="${C.line}" fill="none"/>` + box(x, 44, cw, 30, n, "", 9);
+    const d = o.depts || ["Front desk", "Revenue", "House-|keeping", "Finance"], W = 320, H = 150, g = 12, x0 = 10, cw = Math.min(88, (W - 2 * x0 - (Math.max(o.depts ? o.depts.length : 4, 1) - 1) * g) / Math.max(o.depts ? o.depts.length : 4, 1));
+    const lab = (s) => (String(s).includes("|") ? s : wrapTxt(s, Math.max(8, Math.floor(cw / 4.7))));
+    const topL = String(o.top || "General Manager"), topW = Math.min(200, Math.max(100, topL.length * 5.6 + 16));
+    let b = `<rect x="${160 - topW / 2}" y="4" width="${topW}" height="22" rx="5" fill="${C.box}" stroke="${C.line}"/>` + txt(160, 15, topL, { size: 9.5 });
+    d.forEach((n, i) => { const x = (W - d.length * cw - (d.length - 1) * g) / 2 + i * (cw + g); b += `<path d="M160 26V36H${x + cw / 2}V44" stroke="${C.line}" fill="none"/>` + box(x, 44, cw, 30, lab(n), "", 8.5);
       b += `<rect x="${x + cw / 2 - 9}" y="80" width="18" height="56" rx="4" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)"/>`;
       if (mode === "silo") b += `<path d="M${x + cw / 2} 132V84" stroke="${C.good}" stroke-width="2.5"/><path d="M${x + cw / 2 - 5} 90L${x + cw / 2} 82L${x + cw / 2 + 5} 90Z" fill="${C.good}"/>`; });
     if (mode === "process") {
       b += `<path d="M2 108H${W - 12}" stroke="${C.hi}" stroke-width="3" fill="none"/><path d="M${W - 14} 101L${W - 2} 108L${W - 14} 115Z" fill="${C.hi}"/>`;
-      d.slice(0, -1).forEach((_, i) => { const x = x0 + (i + 1) * (cw + g) - g / 2; b += `<circle cx="${x}" cy="108" r="5" fill="${o.bad ? C.bad : C.dark}" stroke="${C.hi}" stroke-width="2"/>`; });
+      d.slice(0, -1).forEach((_, i) => { const x = (W - d.length * cw - (d.length - 1) * g) / 2 + (i + 1) * (cw + g) - g / 2; b += `<circle cx="${x}" cy="108" r="5" fill="${o.bad ? C.bad : C.dark}" stroke="${C.hi}" stroke-width="2"/>`; });
       b += txt(8, 124, o.from || "Guest arrives", { size: 9, anchor: "start", fill: C.hi }) + txt(W - 4, 124, o.to || "Guest in room", { size: 9, anchor: "end", fill: C.hi });
     }
     return svg(W, H, b, o.alt || (mode === "silo" ? "Organisation chart: each department optimises its own column" : "Organisation chart with the customer's flow crossing every department, handoffs marked"));
