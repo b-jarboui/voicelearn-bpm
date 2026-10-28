@@ -12,6 +12,9 @@
   function box(x, y, w, h, label, k = "", size = 11) {
     const f = k === "hi" ? C.hi : k === "good" ? "rgba(61,214,140,.22)" : k === "bad" ? "rgba(255,107,107,.22)" : C.box;
     const s = k === "hi" ? C.hi : k === "good" ? C.good : k === "bad" ? C.bad : C.line;
+    /* v24: a long word never spills out of its box; the label shrinks just enough to fit */
+    const longest = Math.max(...String(label).split("|").map((l) => l.length), 1), fit = (w - 6) / (longest * 0.58);
+    if (fit < size) size = Math.max(6, fit);
     return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="7" fill="${f}" stroke="${s}" stroke-width="1.5"${k === "ghost" ? ' stroke-dasharray="4 3"' : ""}/>` + txt(x + w / 2, y + h / 2, label, { size, fill: k === "hi" ? C.dark : C.ink });
   }
   const arrowH = (x1, y, x2, col = C.line) => `<path d="M${x1} ${y}H${x2 - 5}" stroke="${col}" stroke-width="1.6" fill="none"/><path d="M${x2 - 6} ${y - 4}L${x2} ${y}L${x2 - 6} ${y + 4}Z" fill="${col}"/>`;

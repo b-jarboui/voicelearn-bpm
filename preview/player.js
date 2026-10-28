@@ -253,19 +253,19 @@
       if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "en-US";
       u.rate = VS.rate; u.pitch = VS.pitch; u.volume = window.__vlMute ? 0 : 1;
       window.__vlU = u; // keep a reference so the engine cannot lose the utterance before it starts
-      const vlEmit=(n,d)=>{try{window.dispatchEvent(new CustomEvent(n,{detail:d||{}}))}catch(_){}}; vlEmit("vl:say",{displayed:list.slice(k,k+n).map(String),spoken:parts,rate:VS.rate||1});
+     
       let started = false, ended = false, words0 = 0, second = n === 1, keep = 0; const t0 = performance.now();
       const showSecond = () => { if (second || my !== tok) return; second = true; onSentence(k + 1); log("join"); };
       const done = () => { clearInterval(keep); if (!second) showSecond(); };
       u.onstart = () => {
-        started = true; spoken = true; noStart = 0; log("start"); vlEmit("vl:speech-start");
+        started = true; spoken = true; noStart = 0; log("start");
         // Engines without boundary events: show the second sentence at its estimated start.
         if (n === 2) later(speakMs(list[k]) * 0.92, () => { if (!words0) showSecond(); });
         // Chrome desktop cuts network (Google) voices after ~15 s: a pause/resume every 10 s keeps them talking.
         if (IS_CHROME_DESKTOP && v && !v.localService) keep = setInterval(() => { if (my !== tok || ended) return clearInterval(keep); if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); } }, 10000);
       };
-      u.onboundary = (e) => { vlEmit("vl:speech-boundary",{charIndex:e.charIndex,charLength:e.charLength,name:e.name}); words0++; if (n === 2 && e.charIndex >= split) showSecond(); };
-      u.onend = () => { if (ended) return; vlEmit("vl:speech-end"); ended = true; done(); log(`end ${Math.round(performance.now() - t0)}ms ${words0}w`); if (my === tok) after(k + n - 1); };
+      u.onboundary = (e) => { words0++; if (n === 2 && e.charIndex >= split) showSecond(); };
+      u.onend = () => { if (ended) return; ended = true; done(); log(`end ${Math.round(performance.now() - t0)}ms ${words0}w`); if (my === tok) after(k + n - 1); };
       u.onerror = (e) => {
         if (ended) return;
         if (e.error === "interrupted" || e.error === "canceled") {
@@ -1027,8 +1027,9 @@ function updateNavigation() {
     location = "Achievement report";
   }
 
-  const breadcrumb =
-    `W${WK} › L${lessonNumber} › ${location}`;
+  const shortLoc = st.kind === "sec" ? `Part ${st.s + 1}` : st.kind === "review" ? "Review" : location;
+  const breadcrumb = `W${WK} · L${lessonNumber} · ${shortLoc}`;
+  const fullCrumb = `Week ${WK}, lesson ${lessonNumber}: ${lesson ? lesson.title : ""}, ${location}`;
 
   const crumb = $("crumb");
 
@@ -1037,7 +1038,7 @@ function updateNavigation() {
       crumb.textContent = breadcrumb;
     }
 
-    crumb.title = breadcrumb;
+    crumb.title = fullCrumb;
   }
 
   const weekSwitch = $("navWeek");
@@ -1229,117 +1230,58 @@ if (settingsWeek) {
     switchWeek(n);
   };
 }
-(function installCaptionKaraoke() {
-  /* Word highlight driven by the voice: speech 'boundary' events (charIndex of the SPOKEN text mapped back to the DISPLAYED words).
-     No boundary within 700 ms of start -> estimate from a per-device calibrated chars/second, never ahead of the voice;
-     low confidence (fewer than 2 measured sentences) -> highlight the whole sentence instead of single words. */
-  const CPSKEY = "voicelearn.oper621.cps.v1";
-  let cap = null, obs = null, words = [], shown = "", utt = null, startAt = 0, pausedMs = 0, pausedAt = 0, gotBoundary = false, mode = "idle", est = null, active = -1;
-  let cal = { cps: 15, n: 0 };
-  try { const s = JSON.parse(localStorage.getItem(CPSKEY) || "null"); if (s && s.cps > 3 && s.cps < 60) cal = s; } catch (e) {}
-  const norm = (s) => String(s || "").replace(/\s+/g, " ").trim();
-  const toks = (s) => [...String(s).matchAll(/\S+/g)].map((m) => ({ t: m[0], s: m.index }));
-  const spans = () => (cap ? [...cap.querySelectorAll(".vl-karaoke-word")] : []);
-  function mark(idx, sentence) {
-    const sp = spans(); active = idx;
-    cap && cap.classList.toggle("is-sentence", !!sentence);
-    sp.forEach((el, k) => { el.classList.toggle("is-active", !sentence && k === idx); el.classList.toggle("is-past", !sentence && k < idx); });
-  }
-  function stopEst() { if (est) { clearInterval(est); est = null; } }
-  function build(text) {
-    if (!cap) return;
-    stopEst(); shown = norm(text); words = toks(text); mode = "idle"; gotBoundary = false; active = -1;
-    const acc = document.createElement("span"); acc.className = "vl-caption-accessible"; acc.textContent = text;
-    const vis = document.createElement("span"); vis.className = "vl-caption-visual"; vis.setAttribute("aria-hidden", "true");
-    let cur = 0;
-    words.forEach((w, i) => {
-      if (w.s > cur) vis.appendChild(document.createTextNode(text.slice(cur, w.s)));
-      const sp = document.createElement("span"); sp.className = "vl-karaoke-word"; sp.textContent = w.t; vis.appendChild(sp); cur = w.s + w.t.length;
-    });
-    if (cur < text.length) vis.appendChild(document.createTextNode(text.slice(cur)));
-    obs && obs.disconnect(); cap.replaceChildren(acc, vis); obs && obs.observe(cap, { childList: true, characterData: true, subtree: true });
-    cap.classList.remove("is-sentence"); cap.classList.add("vl-karaoke");
-    if (utt && startAt) armFallback();
-  }
-  // Which part of the (1 or 2 sentence) utterance does the caption currently show?
-  function partIndex() { if (!utt) return -1; const k = utt.displayed.findIndex((d) => norm(d) === shown); return k < 0 ? 0 : k; }
-  function spokenToDisplayed(part, local) {
-    const sp = toks(utt.spoken[part] || ""); if (!sp.length || !words.length) return -1;
-    let w = 0; for (let i = 0; i < sp.length; i++) if (sp[i].s <= local) w = i;
-    return sp.length === words.length ? w : Math.round(w * (words.length - 1) / Math.max(1, sp.length - 1));
-  }
-  function charToWord(charPos) {
-    const part = partIndex(); if (part < 0) return -1;
-    let off = 0; for (let i = 0; i < part; i++) off += utt.spoken[i].length + 1;
-    const local = charPos - off; if (local < 0 || local > utt.spoken[part].length + 1) return -1;
-    return spokenToDisplayed(part, local);
-  }
-  let fbTok = 0;
-  function armFallback() {
-    stopEst(); if (gotBoundary || !utt) return;
-    const my = ++fbTok;
-    setTimeout(() => {
-      if (my !== fbTok || gotBoundary || !utt || !startAt) return;
-      const sentence = cal.n < 2;
-      mode = sentence ? "sentence" : "estimate";
-      if (sentence) { mark(-1, true); return; }
-      stopEst(); est = setInterval(tick, 80);
-    }, Math.max(0, 700 - (performance.now() - startAt)));
-  }
-  function elapsedMs() { return (pausedAt ? pausedAt : performance.now()) - startAt - pausedMs; }
-  function tick() {
-    if (!utt || mode !== "estimate" || pausedAt) return;
-    const cps = cal.cps * (utt.rate || 1), pos = (elapsedMs() / 1000) * cps;
-    let idx = charToWord(pos); if (idx < 0) return;
-    idx = Math.min(idx, Math.max(0, Math.floor(words.length * 0.9) - 1)); // never run ahead of the voice
-    if (idx > active) mark(idx, false);
-  }
-  window.addEventListener("vl:say", (e) => { fbTok++; utt = e.detail; startAt = 0; pausedMs = 0; pausedAt = 0; gotBoundary = false; mode = "idle"; stopEst(); if (cap) mark(-1, false); });
-  window.addEventListener("vl:speech-start", () => { startAt = performance.now(); pausedMs = 0; pausedAt = 0; armFallback(); });
-  window.addEventListener("vl:speech-boundary", (e) => {
-    if (!utt) return; const d = e.detail || {}; if (!Number.isFinite(d.charIndex)) return;
-    if (d.name && d.name !== "word") return;
-    gotBoundary = true; mode = "boundary"; stopEst();
-    const idx = charToWord(d.charIndex); if (idx >= 0) mark(idx, false);
-  });
-  window.addEventListener("vl:speech-end", () => {
-    fbTok++;
-    if (utt && startAt) {
-      const secs = elapsedMs() / 1000, chars = utt.spoken.join(" ").length;
-      if (secs > 0.8 && chars > 20) { const c = chars / secs / (utt.rate || 1); if (c > 3 && c < 60) { cal = { cps: cal.n ? cal.cps * 0.6 + c * 0.4 : c, n: Math.min(50, cal.n + 1) }; try { localStorage.setItem(CPSKEY, JSON.stringify(cal)); } catch (e) {} } }
-    }
-    stopEst(); if (mode === "boundary" || mode === "estimate") mark(words.length - 1, false); startAt = 0;
-  });
-  function syncPlaying() {
-    const t = $("toggle"), label = t ? (t.textContent || "").toLowerCase() : "";
-    if (label.includes("pause")) { if (pausedAt) { pausedMs += performance.now() - pausedAt; pausedAt = 0; } }
-    else if (!pausedAt && startAt) pausedAt = performance.now();   // Pause freezes the highlight
-  }
-  function inspect() {
-    const el = document.querySelector(".cc"); if (!el) return;
-    if (el !== cap) {
-      cap = el; obs && obs.disconnect();
-      obs = new MutationObserver(() => { const a = cap.querySelector(".vl-caption-accessible"); const cur = a ? a.textContent : cap.textContent; if (!a || cur !== a.textContent || !cap.querySelector(".vl-caption-visual")) build(cur || ""); });
-      obs.observe(cap, { childList: true, characterData: true, subtree: true });
-    }
-    const a = el.querySelector(".vl-caption-accessible"), cur = a ? a.textContent : el.textContent;
-    if (!a && cur) build(cur);
-  }
-  const tg = $("toggle"); if (tg) new MutationObserver(syncPlaying).observe(tg, { childList: true, characterData: true, subtree: true });
-  new MutationObserver(() => { if (document.querySelector(".cc") !== cap) inspect(); }).observe(document.body, { childList: true, subtree: true });
-  inspect();
-  window.VoiceLearnKaraoke = { inspect, get mode() { return mode; }, get cal() { return cal; } };
-})();
+
 (function installCaptionToggleAndCounter() {
   const KEY = "voicelearn.oper621.captions.v1", btn = $("ccBtn");
   const apply = (on) => { document.body.classList.toggle("cc-off", !on); if (btn) btn.setAttribute("aria-pressed", String(on)); };
-  let on = true; try { on = localStorage.getItem(KEY) !== "off"; } catch (e) {}
+  let on = false; try { on = localStorage.getItem(KEY) === "on"; } catch (e) {}
   apply(on);
   if (btn) btn.onclick = () => { on = !on; apply(on); try { localStorage.setItem(KEY, on ? "on" : "off"); } catch (e) {} };
   // The look's own "07/32" counter moves into the slim top bar (the look header itself is hidden by CSS).
   const sync = () => { const c = document.querySelector(".player .nb-counter,.player .cx-counter,.player .jy-counter"), t = $("lookCount"); if (t) t.textContent = c ? c.textContent.trim() : ""; };
   new MutationObserver(sync).observe($("main"), { childList: true, characterData: true, subtree: true });
   sync();
+})();
+
+(function installMoreMenu() {
+  /* Phone: one "more" menu replaces the secondary buttons. Each item forwards the click to the real control, so no logic is duplicated. */
+  const btn = $("moreBtn"), menu = $("moreMenu"); if (!btn || !menu) return;
+  const items = [
+    ["navPrevPart", "Previous part"], ["navNextPart", "Next part"], ["repBtn", "Replay this sentence"],
+    ["fsBtn", "Full screen"], ["ccBtn", "Captions on or off"], ["playerListen", "Hands-free listening (listen only)"]
+  ];
+  function build() {
+    menu.replaceChildren();
+    items.forEach(([id, label]) => {
+      const src = $(id); if (!src) return;
+      const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", id === "playerListen" || id === "ccBtn" ? "menuitemcheckbox" : "menuitem");
+      const on = id === "playerListen" ? src.checked : id === "ccBtn" ? !document.body.classList.contains("cc-off") : null;
+      if (on !== null) b.setAttribute("aria-checked", String(on));
+      b.textContent = label + (on === null ? "" : on ? ": on" : ": off");
+      b.disabled = !!src.disabled;
+      b.onclick = () => { close(); src.click(); };
+      menu.appendChild(b);
+    });
+  }
+  function open() { build(); menu.hidden = false; btn.setAttribute("aria-expanded", "true"); const f = menu.querySelector("button:not(:disabled)"); if (f) f.focus(); }
+  function close(refocus) { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); if (refocus) btn.focus(); }
+  btn.onclick = () => (menu.hidden ? open() : close(true));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { e.preventDefault(); close(true); } });
+  document.addEventListener("click", (e) => { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) close(); });
+})();
+(function installCaptionDedupe() {
+  /* If the sentence being spoken is already printed on the slide, the caption line is hidden for that moment (space is kept, so nothing jumps). */
+  const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  let timer = 0;
+  function check() {
+    const cc = document.querySelector(".cc"), look = document.querySelector(".player .look:not([hidden]),.player .stage:not([hidden])"); if (!cc || !look) return;
+    const c = norm(cc.textContent); let dup = false;
+    if (c.length >= 5) { const lt = norm(look.textContent); const c2 = c.replace(/^(diagram )?[a-d] /, ""); dup = lt.includes(c) || (c2.length >= 15 && lt.includes(c2)); }
+    cc.classList.toggle("cc-dup", dup);
+    cc.title = cc.textContent;
+  }
+  const kick = () => { clearTimeout(timer); timer = setTimeout(check, 450); };
+  new MutationObserver(kick).observe($("main"), { childList: true, characterData: true, subtree: true });
 })();
 positionSettingsButton();
     window.addEventListener("popstate",e=>{let target=e.state&&e.state.voicelearn?e.state.screen:"welcome";

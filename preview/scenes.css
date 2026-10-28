@@ -1780,7 +1780,7 @@ body[data-view="player"] .player .stage,body[data-view="player"] .player .look{h
 body[data-view="player"]{padding-bottom:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px))!important}
 /* caption: subtle line overlaid at the bottom of the lesson, never taking layout space */
 body[data-view="player"] .cc{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px) + 10px);z-index:60;width:auto;max-width:min(900px,calc(100vw - 24px));height:auto;min-height:0;max-height:26dvh;overflow:auto;display:block;margin:0;padding:8px 16px;border-radius:14px;background:rgb(12 16 24 / .78);color:#fff;font-size:clamp(15px,1.5vw,19px);line-height:1.45;text-align:center;backdrop-filter:blur(8px);pointer-events:none}
-body[data-view="player"] .cc:empty,body[data-view="player"] .cc:not(:has(.vl-karaoke-word)){display:none}
+body[data-view="player"] .cc:empty{display:none}
 body.cc-off .cc{display:none!important}
 body[data-view="player"] .cc .vl-karaoke-word.is-active{color:#FFE08A;background:rgb(255 224 138 / .18)}
 body[data-view="player"] .cc .vl-karaoke-word.is-past{opacity:.7}
@@ -1804,3 +1804,78 @@ body[data-view="player"] .hands-controls:has(#playerListen:checked) .hands-butto
 }
 /* bottom bar: one row, nothing below it */
 body[data-view="player"] .bar{height:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px)}
+/* ===== v19: Journey route as one thin line; fit-to-screen helpers ===== */
+body[data-view="player"] .player .vl-journey .jy-map{padding:4px 12px 2px}
+body[data-view="player"] .player .vl-journey .jy-map-label,body[data-view="player"] .player .vl-journey .jy-route-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body[data-view="player"] .player .vl-journey .jy-map-scroll{padding:2px 2px 4px}
+body[data-view="player"] .player .vl-journey .jy-route-stop{flex-basis:30px;gap:0}
+body[data-view="player"] .player .vl-journey .jy-route-stop:not(:last-child)::after{width:14px}
+body[data-view="player"] .player .vl-journey .jy-route-node{transform:scale(.72);transform-origin:center}
+body[data-view="player"] .player .vl-journey .jy-lesson{padding:5px 14px 4px}
+.player .nb-scroll,.player .cx-scroll,.player .jy-scroll{scrollbar-gutter:auto}
+/* v19: plain static caption (word highlight removed) */
+body[data-view="player"] .cc .vl-karaoke-word{all:unset}
+
+/* ===== v20: keep the newest content clear of the caption overlay; cap diagram size ===== */
+body[data-view="player"]:not(.cc-off) .player .nb-scroll,body[data-view="player"]:not(.cc-off) .player .cx-scroll,body[data-view="player"]:not(.cc-off) .player .jy-scroll{padding-bottom:92px;scroll-padding-bottom:110px}
+body[data-view="player"] .player svg.dg{display:block;width:100%;max-width:880px;margin-inline:auto;max-height:clamp(150px,32dvh,300px)}
+body[data-view="player"] .player .nb-diagram-svg svg{max-height:clamp(150px,32dvh,290px)}
+/* ===== v22: no duplicate controls/titles; caption band reserved (no overlap); phone "more" menu ===== */
+:root{--vl-cc-h:44px}
+@media (max-width:600px){:root{--vl-cc-h:58px}}
+body.cc-off{--vl-cc-h:0px}
+body[data-view="player"] .player .stage,body[data-view="player"] .player .look{height:calc(100dvh - var(--vl-topbar-h) - var(--vl-progress-h) - var(--vl-bottom-h) - var(--vl-cc-h) - env(safe-area-inset-bottom,0px) - 3*var(--vl-player-gap))}
+body[data-view="player"] .cc{position:static;transform:none;width:100%;max-width:900px;margin:0 auto;height:var(--vl-cc-h);max-height:none;padding:2px 12px;display:flex;align-items:center;justify-content:center;background:transparent;color:var(--ink);backdrop-filter:none;pointer-events:auto;overflow:hidden;font-size:clamp(13px,1.4vw,16px);line-height:1.35;text-align:center;border-radius:0}
+body[data-view="player"] .cc .vl-karaoke-word{all:unset}
+body[data-view="player"]:not(.cc-off) .player .nb-scroll,body[data-view="player"]:not(.cc-off) .player .cx-scroll,body[data-view="player"]:not(.cc-off) .player .jy-scroll{padding-bottom:0;scroll-padding-bottom:30px}
+body.fs .cc{position:fixed;left:0;right:0;bottom:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px));height:auto;max-width:none;background:rgb(0 0 0 / .82);color:#fff;padding:10px 16px;max-height:30dvh}
+/* the hands-free panel is gone: its switch lives in Settings and in the more menu; only the "answer later" button may appear */
+body[data-view="player"] .hands-controls .hands-toggle,body[data-view="player"] .hands-controls .hands-buttons>:not(#skipQuestion){display:none!important}
+body[data-view="player"] .hands-controls{position:static;height:0;padding:0;margin:0;overflow:visible;display:block}
+body[data-view="player"] .hands-controls #skipQuestion:not([hidden]){position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--vl-bottom-h) + var(--vl-cc-h) + env(safe-area-inset-bottom,0px) + 12px);z-index:80;box-shadow:var(--vl-shadow-lg)}
+body[data-view="player"] .hands-controls:has(#playerListen:checked) .hands-buttons{position:static;padding:0;border:0;box-shadow:none;background:transparent;display:block}
+/* repeated titles: the top bar says where you are; the slide keeps only its own title */
+body[data-view="player"] .player .nb-lesson,body[data-view="player"] .player .jy-lesson,body[data-view="player"] .player .cx-lesson{display:none!important}
+body[data-view="player"] .look-count{display:none!important}
+body[data-view="player"] #crumb{font-size:14px}
+/* more menu */
+.more-menu{position:fixed;z-index:95;right:12px;bottom:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px) + 8px);min-width:240px;max-width:calc(100vw - 24px);display:grid;gap:2px;padding:6px;border-radius:14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--vl-shadow-lg)}
+.more-menu[hidden]{display:none}
+.more-menu button{min-height:44px;text-align:left;border:0;background:transparent;border-radius:10px;padding:8px 12px;font:600 14px var(--vl-font-ui)}
+.more-menu button:hover,.more-menu button:focus-visible{background:var(--vl-surface-soft)}
+.more-menu button:disabled{opacity:.4}
+body:not([data-view="player"]) .player-more,body:not([data-view="player"]) .more-menu{display:none!important}
+@media (min-width:601px){.player-more{display:none!important}.more-menu{display:none!important}}
+@media (max-width:600px){
+  body[data-view="player"] #navPrevPart,body[data-view="player"] #navNextPart,body[data-view="player"] #repBtn,body[data-view="player"] #fsBtn,body[data-view="player"] #ccBtn{display:none!important}
+  body[data-view="player"] .player-control-row{gap:6px}
+  body[data-view="player"] .player-icon-btn{flex-basis:44px;width:44px;min-width:44px}
+  body[data-view="player"] #toggle{min-width:110px}
+}
+/* ===== v23: caption = one thin full-width line above the bar; never overlaps; hidden when it repeats on-screen text ===== */
+:root{--vl-cc-h:30px}
+@media (max-width:600px){:root{--vl-cc-h:40px}}
+body[data-view="player"] .cc{width:100%;max-width:none;margin:0;padding:0 16px;height:var(--vl-cc-h);display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--surface) 78%,transparent);border-top:1px solid var(--line);color:var(--muted);font-size:14px;line-height:1.3;text-align:center;overflow:hidden}
+body[data-view="player"] .cc{white-space:nowrap;text-overflow:ellipsis;display:block;line-height:var(--vl-cc-h)}
+@media (max-width:600px){body[data-view="player"] .cc{font-size:13px;white-space:normal;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;padding-top:3px}}
+body[data-view="player"] .cc.cc-dup{visibility:hidden}
+body.fs .cc{white-space:normal;display:block;line-height:1.4;-webkit-line-clamp:unset}
+/* ===== v24: Story look shows no chip of its own; desktop gives the lesson more of the screen ===== */
+body[data-view="player"] .player .ss-cap{display:none!important}
+@media (min-width:601px){
+  :root{--vl-topbar-h:44px;--vl-bottom-h:58px;--vl-cc-h:28px;--vl-player-gap:4px;--vl-player-inline:8px}
+}
+@media (max-width:600px){:root{--vl-topbar-h:46px;--vl-bottom-h:56px;--vl-cc-h:36px;--vl-player-gap:2px;--vl-player-inline:2px}}
+[data-jy-dup]{display:none!important}
+@media (max-width:600px){section.card.onboard h1{font-size:30px;line-height:1.1;margin-bottom:10px}section.card.onboard>p{font-size:15px;line-height:1.5;margin:0 0 10px}section.card.onboard>.onboard-eyebrow{margin-bottom:8px}}
+/* v24: selects and sliders get the app's own look (no raw browser controls) */
+html body select{appearance:none;-webkit-appearance:none;min-height:44px;width:100%;box-sizing:border-box;padding:8px 40px 8px 14px!important;border:1px solid var(--line);border-radius:12px;color:var(--ink);font:500 15px/1.3 var(--vl-font-ui,inherit);cursor:pointer;background-color:var(--surface);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7686' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 14px center!important;background-size:16px!important}
+body select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body input[type=range]{accent-color:var(--accent);width:100%;height:44px;margin:0;background:transparent}
+section.card.onboard a[href]{display:inline-block;padding:12px 0;color:var(--accent);font-weight:600}
+#vPanel a[href]{display:inline-block;padding:13px 0;color:var(--accent);font-weight:600}
+html body select{text-overflow:ellipsis;white-space:nowrap}
+body:not([data-view="player"]) #toggle{background:var(--accent);color:var(--accent-ink,#fff);border:0;min-width:140px;height:48px;border-radius:99px;font-weight:700}
+body:not([data-view="player"]) #toggle:hover{filter:brightness(1.08)}
+.st-kicker{margin-bottom:8px}
+#vTap{width:min(86vw,340px);box-sizing:border-box;font-size:18px!important;padding:16px 20px!important;white-space:nowrap;min-height:52px}
