@@ -332,3 +332,1475 @@ body[data-view=player] .hands-controls{display:grid;gap:10px}
 .later-list .later-resume{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px}
 .later-resume span{min-width:0;flex:1}.later-resume strong{flex:none;color:var(--accent);font-size:15px}
 @media(max-width:480px){.qskip-actions{flex-direction:column;align-items:stretch}.qskip-inline{width:100%}.later-list .later-resume{flex-wrap:wrap}.later-resume strong{margin-left:auto}}
+
+
+/* ============================================================
+   FILE 3a — layout.css.txt
+   VoiceLearn Premium Design System + Player
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. DESIGN TOKENS
+   ------------------------------------------------------------ */
+
+:root {
+  --vl-font-ui: "Manrope", system-ui, sans-serif;
+  --vl-font-editorial: "DM Serif Display", Georgia, serif;
+  --vl-font-reading: "Atkinson Hyperlegible",
+                     system-ui, sans-serif;
+
+  --vl-text-xs: 0.75rem;
+  --vl-text-sm: 0.875rem;
+  --vl-text-base: 1rem;
+  --vl-text-lg: 1.125rem;
+  --vl-text-xl: 1.375rem;
+  --vl-text-2xl: 1.75rem;
+  --vl-text-3xl: 2.25rem;
+  --vl-text-hero: clamp(2.5rem, 5vw, 4.5rem);
+
+  --vl-space-1: 4px;
+  --vl-space-2: 8px;
+  --vl-space-3: 12px;
+  --vl-space-4: 16px;
+  --vl-space-5: 20px;
+  --vl-space-6: 24px;
+  --vl-space-8: 32px;
+  --vl-space-10: 40px;
+  --vl-space-12: 48px;
+
+  --vl-radius-sm: 8px;
+  --vl-radius-md: 12px;
+  --vl-radius-lg: 18px;
+  --vl-radius-xl: 24px;
+  --vl-radius-2xl: 32px;
+  --vl-radius-pill: 999px;
+
+  --vl-shadow-sm:
+    0 2px 8px rgb(15 23 42 / 0.06);
+
+  --vl-shadow-md:
+    0 8px 28px rgb(15 23 42 / 0.10);
+
+  --vl-shadow-lg:
+    0 20px 60px rgb(15 23 42 / 0.14);
+
+  --vl-shadow-float:
+    0 12px 38px rgb(0 0 0 / 0.18);
+
+  --vl-motion-fast: 140ms;
+  --vl-motion-normal: 240ms;
+  --vl-motion-slow: 420ms;
+
+  --vl-ease:
+    cubic-bezier(0.22, 1, 0.36, 1);
+
+  --vl-bg: #F7F8FA;
+  --vl-surface: #FFFFFF;
+  --vl-surface-soft: #EFF2F6;
+  --vl-ink: #172033;
+  --vl-muted: #536176;
+  --vl-line: #D8DEE7;
+
+  --vl-accent: #3558D4;
+  --vl-accent-hover: #2746B6;
+  --vl-accent-ink: #FFFFFF;
+
+  --vl-topbar-h: 52px;
+  --vl-progress-h: 4px;
+  --vl-bottom-h: 64px;
+  --vl-player-gap: 6px;
+  --vl-player-inline: 12px;
+}
+
+/* ------------------------------------------------------------
+   2. DARK THEME
+   Supports common theme conventions.
+   ------------------------------------------------------------ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vl-bg: #10141D;
+    --vl-surface: #1B2230;
+    --vl-surface-soft: #252F40;
+    --vl-ink: #F4F6FA;
+    --vl-muted: #B2BED0;
+    --vl-line: #39465B;
+    --vl-accent: #91A8FF;
+    --vl-accent-hover: #B1C0FF;
+    --vl-accent-ink: #10141D;
+  }
+}
+
+:root[data-theme="light"],
+body[data-theme="light"] {
+  --vl-bg: #F7F8FA;
+  --vl-surface: #FFFFFF;
+  --vl-surface-soft: #EFF2F6;
+  --vl-ink: #172033;
+  --vl-muted: #536176;
+  --vl-line: #D8DEE7;
+  --vl-accent: #3558D4;
+  --vl-accent-hover: #2746B6;
+  --vl-accent-ink: #FFFFFF;
+}
+
+:root[data-theme="dark"],
+body[data-theme="dark"] {
+  --vl-bg: #10141D;
+  --vl-surface: #1B2230;
+  --vl-surface-soft: #252F40;
+  --vl-ink: #F4F6FA;
+  --vl-muted: #B2BED0;
+  --vl-line: #39465B;
+  --vl-accent: #91A8FF;
+  --vl-accent-hover: #B1C0FF;
+  --vl-accent-ink: #10141D;
+}
+
+/* ------------------------------------------------------------
+   3. FOUR LOOK PALETTES
+   Scoped to the look root; no JS edits required.
+   ------------------------------------------------------------ */
+
+.player .vl-story {
+  --look-bg: #17233C;
+  --look-surface: #253656;
+  --look-ink: #FFFFFF;
+  --look-muted: #D5DFF0;
+  --look-accent: #F7C978;
+}
+
+.player .vl-codex {
+  --look-bg: #142D2B;
+  --look-surface: #21413D;
+  --look-ink: #F7FAF3;
+  --look-muted: #D4E5DC;
+  --look-accent: #D7F57C;
+}
+
+.player .vl-notebook {
+  --look-bg: #FAF7EF;
+  --look-surface: #FFFFFF;
+  --look-ink: #302C27;
+  --look-muted: #665C50;
+  --look-accent: #A04432;
+}
+
+.player .vl-journey {
+  --look-bg: #F3F0E8;
+  --look-surface: #FFFFFF;
+  --look-ink: #263D38;
+  --look-muted: #526A62;
+  --look-accent: #24675B;
+}
+
+@media (prefers-color-scheme: dark) {
+  .player .vl-story {
+    --look-bg: #101827;
+    --look-surface: #20304D;
+    --look-ink: #FFFFFF;
+    --look-muted: #D5DFF0;
+    --look-accent: #F7C978;
+  }
+
+  .player .vl-codex {
+    --look-bg: #0C211F;
+    --look-surface: #193A35;
+    --look-ink: #F7FAF3;
+    --look-muted: #D4E5DC;
+    --look-accent: #D7F57C;
+  }
+
+  .player .vl-notebook {
+    --look-bg: #25231F;
+    --look-surface: #343129;
+    --look-ink: #F8F3E8;
+    --look-muted: #D5C9B6;
+    --look-accent: #F1B28E;
+  }
+
+  .player .vl-journey {
+    --look-bg: #142724;
+    --look-surface: #203B35;
+    --look-ink: #F5F8F3;
+    --look-muted: #CEDFD6;
+    --look-accent: #9FE2C5;
+  }
+}
+
+/* Explicit theme overrides for look palettes. */
+
+body[data-theme="dark"] .player .vl-notebook {
+  --look-bg: #25231F;
+  --look-surface: #343129;
+  --look-ink: #F8F3E8;
+  --look-muted: #D5C9B6;
+  --look-accent: #F1B28E;
+}
+
+body[data-theme="dark"] .player .vl-journey {
+  --look-bg: #142724;
+  --look-surface: #203B35;
+  --look-ink: #F5F8F3;
+  --look-muted: #CEDFD6;
+  --look-accent: #9FE2C5;
+}
+
+/* ------------------------------------------------------------
+   4. GLOBAL TYPOGRAPHY AND INTERACTION
+   ------------------------------------------------------------ */
+
+body {
+  font-family: var(--vl-font-reading);
+}
+
+button,
+select,
+input,
+.brand,
+.pill,
+.lookbtn {
+  font-family: var(--vl-font-ui);
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.035em;
+}
+
+button {
+  touch-action: manipulation;
+  transition:
+    background-color var(--vl-motion-fast) ease,
+    border-color var(--vl-motion-fast) ease,
+    box-shadow var(--vl-motion-normal) ease,
+    transform var(--vl-motion-fast) var(--vl-ease);
+}
+
+button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+:where(button,a,input,select,[tabindex]):focus-visible {
+  outline: 3px solid var(--vl-accent);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------
+   5. COMPACT PLAYER SHELL
+   ------------------------------------------------------------ */
+
+body[data-view="player"] {
+  padding: 0 0
+    calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px))
+    !important;
+
+  background: var(--vl-bg);
+  color: var(--vl-ink);
+  overflow-x: hidden;
+}
+
+body[data-view="player"] #siteHeader {
+  display: none !important;
+}
+
+body:not([data-view="player"]) #siteHeader {
+  display: flex;
+}
+
+body .course-nav[hidden],
+body .bar[hidden] {
+  display: none !important;
+}
+
+body[data-view="player"] #courseNav {
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 70;
+
+  display: block;
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+  padding: 0;
+
+  background: var(--vl-surface);
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.04);
+}
+
+body[data-view="player"] #courseNav[hidden] {
+  display: none !important;
+}
+
+body[data-view="player"] .player-topbar-row {
+  box-sizing: border-box;
+  display: grid;
+
+  grid-template-columns:
+    minmax(76px,auto)
+    minmax(0,1fr)
+    44px;
+
+  align-items: center;
+  gap: 8px;
+
+  height: var(--vl-topbar-h);
+  padding: 0 var(--vl-player-inline);
+}
+
+body[data-view="player"] #navHome {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-width: 76px;
+  min-height: 44px;
+
+  padding: 0 10px;
+  border-radius: var(--vl-radius-md);
+
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body[data-view="player"] #navHome svg {
+  flex: none;
+}
+
+body[data-view="player"] .player-location {
+  min-width: 0;
+  overflow: hidden;
+}
+
+body[data-view="player"] #crumb {
+  display: block;
+  width: 100%;
+  min-width: 0;
+
+  padding: 0;
+  margin: 0;
+
+  font-family: var(--vl-font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+
+  color: var(--vl-ink);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
+  text-align: center;
+}
+
+body[data-view="player"] .player-settings-slot {
+  width: 44px;
+  height: 44px;
+  justify-self: end;
+}
+
+body[data-view="player"] #vBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+
+  padding: 0;
+  border-radius: var(--vl-radius-md);
+  font-size: 0;
+}
+
+/* Compact settings icon supplied by CSS. */
+
+body[data-view="player"] #vBtn::before {
+  content: "⚙";
+  font-family: system-ui, sans-serif;
+  font-size: 22px;
+  line-height: 1;
+}
+
+body[data-view="player"] #navProgress {
+  display: block;
+  width: 100%;
+  height: var(--vl-progress-h);
+
+  padding: 0;
+  margin: 0;
+
+  background: var(--vl-line);
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+body[data-view="player"] #navProgress i {
+  display: block;
+  height: 100%;
+  background: var(--vl-accent);
+  transition: width var(--vl-motion-normal) ease;
+}
+
+/* ------------------------------------------------------------
+   6. LESSON CANVAS
+   ------------------------------------------------------------ */
+
+body[data-view="player"] main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+
+  margin: 0 auto;
+  padding:
+    var(--vl-player-gap)
+    var(--vl-player-inline)
+    0;
+
+  gap: 0;
+  align-content: start;
+}
+
+body[data-view="player"] .player {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+}
+
+body[data-view="player"] .player .stage,
+body[data-view="player"] .player .look {
+  box-sizing: border-box;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  height: calc(
+    100dvh
+    - var(--vl-topbar-h)
+    - var(--vl-progress-h)
+    - var(--vl-bottom-h)
+    - env(safe-area-inset-bottom,0px)
+    - 2 * var(--vl-player-gap)
+  );
+
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+body[data-view="player"] .player .look {
+  position: relative;
+  border-radius: var(--vl-radius-lg);
+
+  box-shadow: var(--vl-shadow-md);
+  isolation: isolate;
+}
+
+body[data-view="player"] .player .look > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------
+   7. BOTTOM NOW-PLAYING BAR
+   ------------------------------------------------------------ */
+
+body[data-view="player"] .bar {
+  box-sizing: border-box;
+  position: fixed;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 75;
+
+  height: calc(
+    var(--vl-bottom-h)
+    + env(safe-area-inset-bottom,0px)
+  );
+
+  padding:
+    0
+    var(--vl-player-inline)
+    env(safe-area-inset-bottom,0px);
+
+  margin: 0;
+
+  background: var(--vl-surface);
+  color: var(--vl-ink);
+
+  border-top: 1px solid var(--vl-line);
+  box-shadow: 0 -8px 30px rgb(0 0 0 / 0.06);
+}
+
+body[data-view="player"] .bar-in {
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 1200px;
+  height: var(--vl-bottom-h);
+
+  margin: 0 auto;
+  padding: 0;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+body[data-view="player"] .player-status-row {
+  min-width: 0;
+  flex: 1 1 120px;
+  max-width: 260px;
+  overflow: hidden;
+}
+
+body[data-view="player"] .bar .status {
+  display: block;
+  min-width: 0;
+  width: 100%;
+
+  font-family: var(--vl-font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  color: var(--vl-muted);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body[data-view="player"] .player-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: 8px;
+}
+
+body[data-view="player"] .player-icon-btn {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 44px;
+
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+
+  margin: 0;
+  padding: 0;
+
+  border-radius: 50%;
+  border: 1px solid transparent;
+
+  background: transparent;
+  color: var(--vl-muted);
+}
+
+body[data-view="player"] .player-icon-btn svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+body[data-view="player"]
+.player-icon-btn:not(:disabled):hover {
+  background: var(--vl-surface-soft);
+  color: var(--vl-ink);
+}
+
+body[data-view="player"]
+.player-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+body[data-view="player"] #toggle {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: 54px;
+  min-width: 54px;
+  max-width: 54px;
+
+  height: 54px;
+  min-height: 54px;
+
+  margin: 0;
+  padding: 0 5px;
+
+  border-radius: 50%;
+  border: 0;
+
+  background: var(--vl-accent);
+  color: var(--vl-accent-ink);
+
+  font-family: var(--vl-font-ui);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+
+  box-shadow: 0 5px 16px rgb(53 88 212 / 0.22);
+  overflow: hidden;
+}
+
+body[data-view="player"] #toggle:hover {
+  background: var(--vl-accent-hover);
+  box-shadow: 0 8px 22px rgb(53 88 212 / 0.28);
+  transform: translateY(-1px);
+}
+
+body[data-view="player"] #toggle:active {
+  transform: scale(0.95);
+}
+
+body[data-view="player"] #repBtn,
+body[data-view="player"] #fsBtn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+/* ============================================================
+   FILE 3b — layout.css.txt
+   Premium Scenes, Home, Accessibility, Responsive
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   8. LOOK SURFACE POLISH
+   ------------------------------------------------------------ */
+
+
+/* Preserve internal look layout while refining typography. */
+
+.player .vl-story,
+.player .vl-codex,
+.player .vl-notebook,
+.player .vl-journey {
+  font-family: var(--vl-font-reading);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Existing look headers: selectors supplied by prompt. */
+
+.player .vl-notebook .nb-header,
+.player .vl-journey .jy-header {
+  letter-spacing: -0.015em;
+}
+
+/* Subtle counters: progress is already in top bar. */
+
+body[data-view="player"]
+.player .vl-notebook .nb-counter,
+body[data-view="player"]
+.player .vl-codex .cx-counter,
+body[data-view="player"]
+.player .cx-signal .cx-counter,
+body[data-view="player"]
+.player .vl-journey .jy-counter {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  opacity: 0.68;
+}
+
+/* Remove known duplicate Notebook progress strip. */
+
+body[data-view="player"]
+.player .vl-notebook .nb-progress {
+  display: none !important;
+}
+
+/* Scene entrance: subtle cinematic reveal. */
+
+body[data-view="player"] .player .look {
+  animation:
+    vl-scene-enter
+    var(--vl-motion-slow)
+    var(--vl-ease)
+    both;
+}
+
+@keyframes vl-scene-enter {
+  from {
+    opacity: 0.94;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------------------
+   9. CAPTIONS + KARAOKE
+   ------------------------------------------------------------ */
+
+body[data-view="player"] .cc {
+  font-family: var(--vl-font-reading);
+  font-size: clamp(15px,1.6vw,19px);
+  font-weight: 500;
+  line-height: 1.55;
+
+  text-align: center;
+  text-wrap: balance;
+
+  color: var(--vl-ink);
+}
+
+/* Accessible original text, visually hidden. */
+
+.vl-caption-accessible {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Decorative highlighted copy. */
+
+.vl-caption-visual {
+  display: inline;
+}
+
+.vl-karaoke-word {
+  display: inline;
+  border-radius: 4px;
+
+  padding: 0 1px;
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.vl-karaoke-word.is-past {
+  opacity: 0.82;
+}
+
+.vl-karaoke-word.is-active {
+  color: var(--vl-accent);
+  background: color-mix(
+    in srgb,
+    var(--vl-accent) 12%,
+    transparent
+  );
+
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------
+   10. PREMIUM HOME AND ONBOARDING
+   ------------------------------------------------------------ */
+
+body:not([data-view="player"]) {
+  background: var(--vl-bg);
+  color: var(--vl-ink);
+}
+
+body:not([data-view="player"]) header {
+  max-width: 1100px;
+}
+
+body:not([data-view="player"]) main {
+  max-width: 1100px;
+}
+
+.brand {
+  font-family: var(--vl-font-ui);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.onboard {
+  position: relative;
+  isolation: isolate;
+
+  max-width: 920px;
+  margin: 24px auto;
+  padding: clamp(24px,5vw,56px);
+
+  border: 1px solid var(--vl-line);
+  border-radius: var(--vl-radius-2xl);
+
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      color-mix(
+        in srgb,
+        var(--vl-accent) 12%,
+        transparent
+      ),
+      transparent 42%
+    ),
+    var(--vl-surface);
+
+  box-shadow: var(--vl-shadow-lg);
+  overflow: hidden;
+}
+
+.onboard-eyebrow,
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--vl-font-ui);
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: var(--vl-accent);
+}
+
+.onboard-eyebrow-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+  background: var(--vl-accent);
+
+  box-shadow:
+    0 0 0 4px
+    color-mix(
+      in srgb,
+      var(--vl-accent) 12%,
+      transparent
+    );
+}
+
+.onboard h1 {
+  max-width: 15ch;
+
+  margin: 20px 0 16px;
+
+  font-family: var(--vl-font-editorial);
+  font-size: var(--vl-text-hero);
+  font-weight: 400;
+  line-height: 1.08;
+
+  letter-spacing: -0.04em;
+}
+
+.onboard p {
+  max-width: 64ch;
+  line-height: 1.7;
+  color: var(--vl-muted);
+}
+
+.onboard .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.onboard .actions button {
+  min-height: 48px;
+  padding: 12px 22px;
+
+  border-radius: var(--vl-radius-pill);
+
+  font-family: var(--vl-font-ui);
+  font-weight: 700;
+}
+
+.card {
+  border: 1px solid var(--vl-line);
+  border-radius: var(--vl-radius-xl);
+
+  background: var(--vl-surface);
+  color: var(--vl-ink);
+
+  box-shadow: var(--vl-shadow-sm);
+
+  transition:
+    transform var(--vl-motion-normal) var(--vl-ease),
+    box-shadow var(--vl-motion-normal) ease,
+    border-color var(--vl-motion-normal) ease;
+}
+
+.card:hover {
+  box-shadow: var(--vl-shadow-md);
+}
+
+/* Avoid moving interactive player containers. */
+
+body:not([data-view="player"])
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.lesson {
+  border-radius: var(--vl-radius-lg);
+  transition:
+    background-color var(--vl-motion-fast) ease,
+    transform var(--vl-motion-fast) var(--vl-ease);
+}
+
+.lesson:hover {
+  transform: translateY(-1px);
+}
+
+.pill {
+  border-radius: var(--vl-radius-pill);
+
+  font-family: var(--vl-font-ui);
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.01em;
+}
+
+.looks {
+  gap: 10px;
+}
+
+.lookbtn {
+  min-height: 44px;
+
+  border-radius: var(--vl-radius-md);
+  font-family: var(--vl-font-ui);
+  font-weight: 700;
+}
+
+.setup-looks {
+  gap: 14px;
+}
+
+.setup-look {
+  border-radius: var(--vl-radius-xl);
+  border: 2px solid var(--vl-line);
+
+  background: var(--vl-surface);
+  color: var(--vl-ink);
+
+  padding: 14px;
+
+  transition:
+    border-color var(--vl-motion-fast) ease,
+    transform var(--vl-motion-normal) var(--vl-ease),
+    box-shadow var(--vl-motion-normal) ease;
+}
+
+.setup-look:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--vl-shadow-md);
+}
+
+.setup-look[aria-pressed="true"] {
+  border-color: var(--vl-accent);
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--vl-accent) 16%,
+      transparent
+    );
+}
+
+.mini {
+  border-radius: var(--vl-radius-md);
+  overflow: hidden;
+}
+
+.mini .tile {
+  border-radius: var(--vl-radius-sm);
+  box-shadow: var(--vl-shadow-sm);
+}
+
+/* ------------------------------------------------------------
+   11. SETTINGS
+   ------------------------------------------------------------ */
+
+.settings-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-week-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0,1fr)
+    minmax(0,2fr);
+
+  align-items: center;
+  gap: 12px;
+
+  margin-block: 12px;
+}
+
+.settings-week-row label {
+  font-family: var(--vl-font-ui);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.settings-week-row select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+
+  padding: 8px 12px;
+
+  border: 1px solid var(--vl-line);
+  border-radius: var(--vl-radius-md);
+
+  background: var(--vl-surface);
+  color: var(--vl-ink);
+}
+
+body[data-view="player"] #vPanel,
+body[data-view="player"] .vpanel {
+  top: calc(
+    var(--vl-topbar-h)
+    + var(--vl-progress-h)
+    + env(safe-area-inset-top,0px)
+  ) !important;
+
+  max-height: calc(
+    100dvh
+    - var(--vl-topbar-h)
+    - var(--vl-progress-h)
+    - 12px
+    - env(safe-area-inset-bottom,0px)
+  );
+
+  overflow-y: auto;
+  z-index: 90;
+}
+
+/* ------------------------------------------------------------
+   12. DESKTOP >=900px
+   ------------------------------------------------------------ */
+
+@media (min-width:900px) {
+  :root {
+    --vl-topbar-h: 52px;
+    --vl-progress-h: 4px;
+    --vl-bottom-h: 64px;
+    --vl-player-gap: 6px;
+    --vl-player-inline: 16px;
+  }
+
+  body[data-view="player"] .player-topbar-row {
+    max-width: 1600px;
+    margin-inline: auto;
+  }
+
+  body[data-view="player"] #crumb {
+    font-size: 15px;
+  }
+
+  body[data-view="player"] .player .look {
+    border-radius: 20px;
+  }
+
+  body[data-view="player"] .player-control-row {
+    gap: 10px;
+  }
+}
+
+/* ------------------------------------------------------------
+   13. TABLET 481–899px
+   ------------------------------------------------------------ */
+
+@media (min-width:481px) and (max-width:899px) {
+  :root {
+    --vl-topbar-h: 50px;
+    --vl-progress-h: 4px;
+    --vl-bottom-h: 62px;
+    --vl-player-gap: 5px;
+    --vl-player-inline: 10px;
+  }
+
+  body[data-view="player"] #crumb {
+    font-size: 13px;
+  }
+
+  body[data-view="player"] .bar-in {
+    gap: 8px;
+  }
+
+  body[data-view="player"] .player-control-row {
+    gap: 5px;
+  }
+
+  body[data-view="player"] .player-status-row {
+    flex-basis: 80px;
+  }
+}
+
+/* ------------------------------------------------------------
+   14. PHONE <=480px
+   ------------------------------------------------------------ */
+
+@media (max-width:480px) {
+  :root {
+    --vl-topbar-h: 48px;
+    --vl-progress-h: 4px;
+    --vl-bottom-h: 60px;
+    --vl-player-gap: 4px;
+    --vl-player-inline: 4px;
+  }
+
+  body[data-view="player"] {
+    padding-inline: 0 !important;
+  }
+
+  body[data-view="player"] .player-topbar-row {
+    grid-template-columns:
+      74px
+      minmax(0,1fr)
+      44px;
+
+    gap: 4px;
+    padding-inline: 4px;
+  }
+
+  body[data-view="player"] #navHome {
+    min-width: 74px;
+    width: 74px;
+
+    padding-inline: 4px;
+    font-size: 12px;
+  }
+
+  body[data-view="player"] #crumb {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  body[data-view="player"] main {
+    padding-inline: 4px;
+  }
+
+  body[data-view="player"] .player .look {
+    border-radius: 10px;
+  }
+
+  body[data-view="player"] .bar {
+    padding-inline: 0;
+  }
+
+  body[data-view="player"] .bar-in {
+    width: 100%;
+    height: 60px;
+
+    padding-inline: 2px;
+    gap: 0;
+
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+
+  body[data-view="player"] .player-status-row {
+    display: none;
+  }
+
+  body[data-view="player"] .player-control-row {
+    width: 100%;
+    gap: 2px;
+    justify-content: center;
+  }
+
+  body[data-view="player"] .player-icon-btn {
+    flex: 0 0 44px;
+
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  body[data-view="player"] .player-icon-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  body[data-view="player"] #toggle {
+    flex: 0 0 52px;
+
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+
+    height: 52px;
+    min-height: 52px;
+
+    padding: 0 3px;
+    font-size: 10px;
+  }
+
+  .onboard {
+    margin: 10px auto;
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+
+  .onboard h1 {
+    font-size: clamp(34px,9vw,48px);
+  }
+
+  .setup-looks {
+    gap: 8px;
+  }
+
+  .setup-look {
+    padding: 8px;
+  }
+
+  .settings-week-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* ------------------------------------------------------------
+   15. FULLSCREEN
+   ------------------------------------------------------------ */
+
+body.fs {
+  overflow: hidden;
+  background: #000;
+}
+
+body.fs #siteHeader,
+body.fs #courseNav {
+  display: none !important;
+}
+
+body.fs .player .stage,
+body.fs .player .look {
+  position: fixed !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+
+  bottom: calc(
+    var(--vl-bottom-h)
+    + env(safe-area-inset-bottom,0px)
+  ) !important;
+
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+
+  margin: 0 !important;
+  border-radius: 0 !important;
+
+  z-index: 50;
+}
+
+body.fs .cc {
+  position: fixed;
+
+  left: 0;
+  right: 0;
+
+  bottom: calc(
+    var(--vl-bottom-h)
+    + env(safe-area-inset-bottom,0px)
+  );
+
+  z-index: 51;
+
+  box-sizing: border-box;
+
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: 30dvh;
+
+  margin: 0;
+  padding: 10px 16px;
+
+  overflow-y: auto;
+
+  background: rgb(0 0 0 / 0.82);
+  color: #FFFFFF;
+}
+
+body.fs .vl-karaoke-word.is-active {
+  color: #FFE3A3;
+  background: rgb(255 227 163 / 0.18);
+}
+
+body.fs .bar {
+  z-index: 52;
+  background: rgb(17 20 27 / 0.96);
+  color: #FFFFFF;
+
+  border-top:
+    1px solid rgb(255 255 255 / 0.16);
+}
+
+body.fs .bar .status {
+  color: #D8DFEA;
+}
+
+body.fs .player-icon-btn {
+  color: #E4EAF4;
+}
+
+body.fs .player-icon-btn:hover {
+  background: rgb(255 255 255 / 0.12);
+  color: #FFFFFF;
+}
+
+body.fs #repBtn,
+body.fs #fsBtn {
+  background: rgb(255 255 255 / 0.08);
+  color: #FFFFFF;
+
+  border-color: rgb(255 255 255 / 0.22);
+}
+
+body.fs .send,
+body.fs .vpanel,
+body.fs #vPanel {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------
+   16. ACCESSIBILITY + REDUCED MOTION
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion:reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors:active) {
+  body[data-view="player"] #toggle,
+  body[data-view="player"] .player-icon-btn,
+  .setup-look {
+    forced-color-adjust: auto;
+    border: 1px solid ButtonText;
+  }
+
+  body[data-view="player"] #navProgress {
+    border: 1px solid CanvasText;
+  }
+
+  body[data-view="player"] #navProgress i {
+    background: Highlight;
+  }
+
+  .vl-karaoke-word.is-active {
+    outline: 2px solid Highlight;
+  }
+}
+
+/* Claude integration overrides: map Astra tokens to the app's own theme variables (one source of truth for light/dark). */
+:root,:root[data-theme="light"],:root[data-theme="dark"],body[data-theme="light"],body[data-theme="dark"]{
+  --vl-bg:var(--bg);--vl-surface:var(--surface);--vl-ink:var(--ink);--vl-muted:var(--muted);--vl-line:var(--line);
+  --vl-accent:var(--accent);--vl-accent-hover:var(--accent);--vl-accent-ink:var(--accent-ink);
+}
+body[data-view="player"] #toggle{width:auto;min-width:132px;max-width:none;height:48px;min-height:48px;padding:0 20px;border-radius:99px;font-size:15px;white-space:nowrap}
+body[data-view="player"] #toggle:hover{filter:brightness(1.08)}
+@media (max-width:480px){
+  body[data-view="player"] #toggle{min-width:96px;width:auto;max-width:none;height:46px;min-height:46px;padding:0 10px;font-size:13px}
+  body[data-view="player"] .player-icon-btn{flex-basis:38px;width:38px;min-width:38px}
+  body[data-view="player"] .player-control-row{gap:0}
+}
+body[data-view="player"] .bar .status{max-width:none}
+/* Claude integration v15b: caption band inside the height budget; home bar shows only Continue. */
+:root{--vl-cc-h:56px}
+@media (max-width:480px){:root{--vl-cc-h:68px}}
+body[data-view="player"] .player .stage,body[data-view="player"] .player .look{height:calc(100dvh - var(--vl-topbar-h) - var(--vl-progress-h) - var(--vl-bottom-h) - var(--vl-cc-h) - env(safe-area-inset-bottom,0px) - 3*var(--vl-player-gap))}
+body[data-view="player"] .cc{box-sizing:border-box;height:var(--vl-cc-h);min-height:0;overflow-y:auto;display:flex;align-items:center;justify-content:center;padding:4px 12px;margin:0}
+body.fs .cc{height:auto;display:block}
+body:not([data-view="player"]) .bar .player-icon-btn{display:none}
+body:not([data-view="player"]) .bar .player-status-row{max-width:none}
+body:not([data-view="player"]) .bar-in{display:flex;align-items:center;justify-content:center;gap:16px}
+/* Claude integration v15c: hands-free panel collapses to one thin row while hands-free is off. */
+:root{--vl-hands-h:44px}
+body[data-view="player"] .player .stage,body[data-view="player"] .player .look{height:calc(100dvh - var(--vl-topbar-h) - var(--vl-progress-h) - var(--vl-bottom-h) - var(--vl-cc-h) - var(--vl-hands-h) - env(safe-area-inset-bottom,0px) - 3*var(--vl-player-gap))}
+body[data-view="player"] .hands-controls{max-width:none;margin:0;padding:0 var(--vl-player-inline);border:0;border-radius:0;box-shadow:none;background:transparent;gap:6px}
+body[data-view="player"] .hands-controls .hands-toggle{min-height:var(--vl-hands-h);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted)}
+body[data-view="player"] .hands-controls:has(#playerListen:not(:checked)) .hands-buttons{display:none}
+body[data-view="player"] .hands-controls:has(#playerListen:checked){padding-bottom:10px}
+body[data-view="player"] .hands-controls:has(#playerListen:checked) .hands-toggle{min-height:36px}
+body.fs .hands-controls{display:none!important}
+/* ===== v18: one compact bottom row, overlay captions, look header merged into the top bar, hands-free in the top bar ===== */
+:root{--vl-cc-h:0px;--vl-hands-h:0px}
+body[data-view="player"] .player .stage,body[data-view="player"] .player .look{height:calc(100dvh - var(--vl-topbar-h) - var(--vl-progress-h) - var(--vl-bottom-h) - env(safe-area-inset-bottom,0px) - 2*var(--vl-player-gap))}
+body[data-view="player"]{padding-bottom:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px))!important}
+/* caption: subtle line overlaid at the bottom of the lesson, never taking layout space */
+body[data-view="player"] .cc{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px) + 10px);z-index:60;width:auto;max-width:min(900px,calc(100vw - 24px));height:auto;min-height:0;max-height:26dvh;overflow:auto;display:block;margin:0;padding:8px 16px;border-radius:14px;background:rgb(12 16 24 / .78);color:#fff;font-size:clamp(15px,1.5vw,19px);line-height:1.45;text-align:center;backdrop-filter:blur(8px);pointer-events:none}
+body[data-view="player"] .cc:empty,body[data-view="player"] .cc:not(:has(.vl-karaoke-word)){display:none}
+body.cc-off .cc{display:none!important}
+body[data-view="player"] .cc .vl-karaoke-word.is-active{color:#FFE08A;background:rgb(255 224 138 / .18)}
+body[data-view="player"] .cc .vl-karaoke-word.is-past{opacity:.7}
+.vl-karaoke.is-sentence .vl-karaoke-word{color:#FFE08A}
+/* look header (name + counter + own progress) is merged into the top bar / progress line */
+body[data-view="player"] .player .nb-header,body[data-view="player"] .player .jy-header,body[data-view="player"] .player .cx-top,
+body[data-view="player"] .player .nb-progress,body[data-view="player"] .player .cx-progress{display:none!important}
+body[data-view="player"] .player-location{display:flex;align-items:center;justify-content:center;gap:10px}
+body[data-view="player"] #crumb{width:auto;flex:0 1 auto}
+.look-count{flex:none;font:600 12px var(--vl-font-ui);color:var(--vl-muted);font-variant-numeric:tabular-nums;padding:2px 8px;border-radius:99px;background:var(--vl-surface-soft)}
+.look-count:empty{display:none}
+/* hands-free: one small control in the top bar; its buttons open as a floating panel only while it is on */
+body[data-view="player"] .hands-controls{position:fixed;z-index:71;top:0;right:calc(var(--vl-player-inline) + 52px);height:var(--vl-topbar-h);padding:0;margin:0;background:transparent;display:flex;align-items:center}
+body[data-view="player"] .hands-controls .hands-toggle{min-height:44px;font-size:12px;gap:6px;white-space:nowrap}
+body[data-view="player"] .hands-controls:has(#playerListen:checked) .hands-buttons{display:flex;position:fixed;top:calc(var(--vl-topbar-h) + var(--vl-progress-h) + 8px);right:var(--vl-player-inline);z-index:80;padding:12px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--vl-shadow-lg)}
+@media (max-width:480px){
+  body[data-view="player"] .hands-controls{right:calc(var(--vl-player-inline) + 46px)}
+  body[data-view="player"] .hands-controls .hands-toggle #listenState{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  body[data-view="player"] .look-count{display:none}
+  body[data-view="player"] .player-icon-btn{flex-basis:34px;width:34px;min-width:34px}
+}
+/* bottom bar: one row, nothing below it */
+body[data-view="player"] .bar{height:calc(var(--vl-bottom-h) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px)}

@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>VoiceLearn OPER621</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
-<link rel="stylesheet" href="scenes.css?v=14">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="scenes.css?v=18">
 <style>
 /* Narrated presentation: the stage plays like a video; one Pause/Continue control. */
 :root{
@@ -97,16 +98,36 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 </style>
 </head>
 <body>
-<header>
-  <button class="brand" id="home" aria-label="Course home">Voice<span>Learn</span></button>
-  <span class="muted hdr-course">OPER621 · BPM <span id="weekLabel"></span></span>
-  <button id="vBtn" class="vbtn" aria-expanded="false" aria-label="Voice, speed and look settings">⚙ Settings</button>
+<header id="siteHeader">
+  <button class="brand"
+          id="home"
+          type="button"
+          aria-label="Course home">
+    Voice<span>Learn</span>
+  </button>
+
+  <span class="muted hdr-course">
+    OPER621 · BPM
+    <span id="weekLabel"></span>
+  </span>
+
+  <span id="headerSettingsSlot"
+        class="settings-slot"><button id="vBtn" class="vbtn" type="button" aria-expanded="false" aria-controls="vPanel" aria-label="Voice, speed and look settings">⚙ Settings</button></span>
 </header>
 <div class="vpanel card" id="vPanel" hidden role="dialog" aria-modal="false" aria-label="Settings">
   <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
   <div class="muted" id="vNote" role="status" style="font-size:14px"></div>
   <label class="fld">Narration<select id="vMode"><option value="voice">Voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
   <label class="fld">Look<select id="vLook"><option value="story">Story cards</option><option value="codex">Signal Studio</option><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option></select></label>
+  <div class="settings-week-row">
+  <label for="settingsWeek">
+    Course week
+  </label>
+
+  <select id="settingsWeek"
+          aria-label="Select course week">
+  </select>
+</div>
   <label class="fld">Voice<select id="vVoice"></select></label>
   <label class="fld">Speed <output id="vRateOut">1×</output><input id="vRate" type="range" min="0.5" max="2" step="0.05" value="1"></label>
   <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.5×</span><span>1×</span><span>1.5×</span><span>2×</span></div>
@@ -116,13 +137,196 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   <button id="vTest">▶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div>
   <div class="muted" style="font-size:13px">Voices come from your phone. For a male voice on Android: Settings → Text-to-speech → Speech Services by Google → ⚙️ → Install voice data → English → pick a male voice.</div>
 </div>
-<nav id="courseNav" class="course-nav" aria-label="Course navigation" hidden><button id="navHome" type="button">← Home</button><label class="nav-week-label">Switch week <select id="navWeek" aria-label="Switch course week"></select></label><div class="nav-location"><div class="nav-location-title">Your place in the course</div><div id="crumb" aria-live="polite"></div><div id="navProgressText" class="nav-progress-text"></div><div id="navProgress" class="nav-progress" role="progressbar" aria-label="Part progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div><button id="navPrevPart" type="button">← Part</button><button id="navPrev" type="button">← Sentence</button><button id="navNext" type="button">Sentence →</button><button id="navNextPart" type="button">Part →</button></nav><main id="main" tabindex="-1"></main>
-<div id="handsControls" class="hands-controls" aria-label="Hands-free playback controls"><label class="listen-choice hands-toggle"><input id="playerListen" type="checkbox"> <span id="listenState">Hands-free listening off</span></label><div class="hands-buttons"><button id="handsPlay" type="button" aria-label="Play narrated lesson">▶ Play</button><button id="handsPause" type="button" aria-label="Pause narration">Ⅱ Pause</button><button id="handsNext" type="button" aria-label="Next part or question">Next →</button><button id="skipQuestion" type="button" hidden>Skip for now · Answer later</button></div></div><div class="bar" hidden><div class="bar-in">
-  <div class="status" id="status" role="status">Ready</div>
-  <button id="repBtn" aria-label="Repeat this sentence" title="Repeat this sentence">↺</button>
-  <button id="fsBtn" aria-label="Full screen">⛶</button>
-  <button class="primary" id="toggle">▶ Continue</button>
-</div></div>
+<nav id="courseNav"
+     class="course-nav player-topbar"
+     aria-label="Course navigation"
+     hidden>
+
+  <div class="player-topbar-row">
+
+    <button id="navHome"
+            class="player-home"
+            type="button"
+            title="Return to course home"
+            aria-label="Return to course home">
+
+      <svg viewBox="0 0 24 24"
+           width="19"
+           height="19"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           aria-hidden="true">
+        <path d="m3 10 9-7 9 7"/>
+        <path d="M5 9v12h14V9"/>
+        <path d="M9 21v-7h6v7"/>
+      </svg>
+
+      <span>Home</span>
+    </button>
+
+    <div class="player-location">
+      <div id="crumb"
+           class="player-crumb"
+           aria-live="polite"
+           aria-atomic="true">
+      </div><span id="lookCount" class="look-count" aria-hidden="true"></span>
+    </div>
+
+    <span id="playerSettingsSlot"
+          class="settings-slot player-settings-slot">
+    </span>
+
+  </div>
+
+  <div id="navProgress"
+       class="nav-progress player-progress"
+       role="progressbar"
+       aria-label="Current part progress"
+       aria-valuemin="0"
+       aria-valuemax="100"
+       aria-valuenow="0">
+
+    <i style="width:0%"></i>
+  </div>
+
+</nav><main id="main" tabindex="-1"></main>
+<div id="handsControls" class="hands-controls" aria-label="Hands-free playback controls"><label class="listen-choice hands-toggle"><input id="playerListen" type="checkbox"> <span id="listenState">Hands-free listening off</span></label><div class="hands-buttons"><button id="handsPlay" type="button" aria-label="Play narrated lesson">▶ Play</button><button id="handsPause" type="button" aria-label="Pause narration">Ⅱ Pause</button><button id="handsNext" type="button" aria-label="Next part or question">Next →</button><button id="skipQuestion" type="button" hidden>Skip for now · Answer later</button></div></div><div class="bar" id="playerBar" hidden>
+
+  <div class="bar-in">
+
+    <div class="player-status-row">
+      <span id="status"
+            class="status"
+            role="status"
+            aria-live="polite">
+      </span>
+    </div>
+
+    <div class="player-control-row"
+         role="group"
+         aria-label="Lesson playback controls">
+
+      <button id="navPrevPart"
+              class="player-icon-btn"
+              type="button"
+              title="Previous part"
+              aria-label="Previous part">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M4 5v14"/>
+          <path d="m13 6-7 6 7 6V6Z"/>
+          <path d="m21 6-7 6 7 6V6Z"/>
+        </svg>
+      </button>
+
+      <button id="navPrev"
+              class="player-icon-btn"
+              type="button"
+              title="Previous sentence"
+              aria-label="Previous sentence">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2.2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="m15 5-7 7 7 7"/>
+        </svg>
+      </button>
+
+      <button id="toggle"
+              class="player-primary"
+              type="button"
+              title="Play or continue narration"
+              aria-label="Play or continue narration">
+        ▶ Continue
+      </button>
+
+      <button id="navNext"
+              class="player-icon-btn"
+              type="button"
+              title="Next sentence"
+              aria-label="Next sentence">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2.2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="m9 5 7 7-7 7"/>
+        </svg>
+      </button>
+
+      <button id="navNextPart"
+              class="player-icon-btn"
+              type="button"
+              title="Next part"
+              aria-label="Next part">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M20 5v14"/>
+          <path d="m11 6 7 6-7 6V6Z"/>
+          <path d="m3 6 7 6-7 6V6Z"/>
+        </svg>
+      </button>
+
+      <button id="repBtn"
+              class="player-icon-btn player-utility"
+              type="button"
+              title="Repeat narration"
+              aria-label="Repeat narration">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M20 7v5h-5"/>
+          <path d="M4 17v-5h5"/>
+          <path d="M5.5 9A7 7 0 0 1 18 7"/>
+          <path d="M18.5 15A7 7 0 0 1 6 17"/>
+        </svg>
+      </button>
+
+      <button id="fsBtn"
+              class="player-icon-btn player-utility"
+              type="button"
+              title="Toggle fullscreen"
+              aria-label="Toggle fullscreen">
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M8 3H3v5"/>
+          <path d="M16 3h5v5"/>
+          <path d="M3 16v5h5"/>
+          <path d="M21 16v5h-5"/>
+        </svg>
+      </button>
+      <button id="ccBtn" class="player-icon-btn player-utility" type="button" aria-pressed="true" title="Captions on or off" aria-label="Captions on or off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 10.5a2 2 0 1 0 0 3M17 10.5a2 2 0 1 0 0 3"/></svg></button>
+
+    </div>
+  </div>
+</div>
 
 <script src="diagrams.js?v=9"></script>
 <script src="weeks/manifest.js?v=9"></script>
@@ -147,7 +351,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-  if (ok) { document.write("<script src=\"player.js?v=14\"><" + "/script>"); }
+  if (ok) { document.write("<script src=\"player.js?v=15\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();
