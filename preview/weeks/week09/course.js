@@ -386,7 +386,7 @@
               ],
 
               [
-                "The slides associate this approach with indicative gains of five to fifteen percent and relatively low risk.",
+                "This approach is usually associated with indicative gains of five to fifteen percent and relatively low risk.",
                 null
               ],
 
@@ -439,7 +439,7 @@
               ],
 
               [
-                "The slides associate workflow redesign with indicative gains of twenty to fifty percent and medium risk.",
+                "Workflow redesign is usually associated with indicative gains of twenty to fifty percent and medium risk.",
                 st(
                   "Workflow redesign is appropriate when handoffs, waiting, and repeated work are major causes of poor performance."
                 )
@@ -488,7 +488,7 @@
               ],
 
               [
-                "The slides associate this level with indicative gains above fifty percent, but also with substantially higher risk.",
+                "This level is usually associated with indicative gains above fifty percent, but also with substantially higher risk.",
                 null
               ],
 
@@ -631,7 +631,7 @@
               ],
 
               [
-                "To improve this proposal, we can use five practical questions from the Week Nine slides.",
+                "To improve this proposal, we can use five practical questions.",
                 null
               ],
 

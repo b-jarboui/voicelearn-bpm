@@ -2213,7 +2213,7 @@
     "Qasr's handover includes a 22-minute target for Design B. What additional information is essential for evaluating success?",
     [
       "The current 82-minute baseline and a consistent method for measuring the complete journey",
-      "The number of slides used to present the redesign",
+      "The length of the presentation used to explain the redesign",
       "The personal preferences of the technology supplier",
       "The number of employees attending the approval meeting"
     ],
