@@ -96,7 +96,7 @@ body.fs .send{display:none}
 .lookbtn.notebook .sw{background:linear-gradient(90deg,transparent 0 17%,#A04432 17% 19%,transparent 19%),repeating-linear-gradient(0deg,#FAF7EF 0 10px,#D7DFDC 10px 11px);border:1px solid #CFC9BA}
 .lookbtn.journey .sw{background-color:#F3F0E8;background-image:radial-gradient(circle at 20% 50%,#24675B 0 6px,transparent 7px),radial-gradient(circle at 50% 50%,#963D21 0 7px,transparent 8px),radial-gradient(circle at 80% 50%,#24675B 0 6px,transparent 7px),linear-gradient(to right,transparent 20%,#24675B 20% 80%,transparent 80%);background-size:100% 100%,100% 100%,100% 100%,100% 3px;background-position:center;background-repeat:no-repeat;border:1px solid #C5CEC8}
 .lookbtn[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
-.lookbtn[aria-pressed="true"] b::after{content:" âœ“";color:var(--accent)}
+.lookbtn[aria-pressed="true"] b::after{content:" Ã¢Å“â€œ";color:var(--accent)}
 @media (max-width:600px){.looks{grid-template-columns:1fr;gap:10px}.lookbtn{grid-template-columns:70px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;row-gap:3px;align-items:center;padding:11px 12px}.lookbtn .sw{grid-column:1;grid-row:1/3;height:52px}.lookbtn b{grid-column:2;grid-row:1}.lookbtn .muted{grid-column:2;grid-row:2}}
 /* Light looks get a light frame */
 .player .look.vl-notebook{background:#FAF7EF}
@@ -116,15 +116,15 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   </button>
 
   <span class="muted hdr-course">
-    OPER621 Â· BPM
+    OPER621 Ã‚Â· BPM
     <span id="weekLabel"></span>
   </span>
 
   <span id="headerSettingsSlot"
-        class="settings-slot"><button id="vBtn" class="vbtn" type="button" aria-expanded="false" aria-controls="vPanel" aria-label="Voice, speed and look settings">âš™ Settings</button></span>
+        class="settings-slot"><button id="vBtn" class="vbtn" type="button" aria-expanded="false" aria-controls="vPanel" aria-label="Voice, speed and look settings">Ã¢Å¡â„¢ Settings</button></span>
 </header>
 <div class="vpanel card" id="vPanel" hidden role="dialog" aria-modal="false" aria-label="Settings">
-  <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">âœ•</button></div>
+  <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">Ã¢Å“â€¢</button></div>
   <div class="muted" id="vNote" role="status" style="font-size:14px"></div>
   <label class="fld">Narration<select id="vMode"><option value="voice">Voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
   <label class="fld">Look<select id="vLook"><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option><option value="board">Animated Whiteboard</option><option value="motion">Motion Explainer</option></select></label>
@@ -138,15 +138,15 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   </select>
 </div>
   <label class="fld">Voice<select id="vVoice"></select></label>
-  <label class="fld">Speed <output id="vRateOut">1Ã—</output><input id="vRate" type="range" min="0.5" max="2" step="0.05" value="1"></label>
-  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.5Ã—</span><span>1Ã—</span><span>1.5Ã—</span><span>2Ã—</span></div>
+  <label class="fld">Speed <output id="vRateOut">1Ãƒâ€”</output><input id="vRate" type="range" min="0.5" max="2" step="0.05" value="1"></label>
+  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.5Ãƒâ€”</span><span>1Ãƒâ€”</span><span>1.5Ãƒâ€”</span><span>2Ãƒâ€”</span></div>
   <label class="listen-choice"><input id="settingsListen" type="checkbox"> <span>Listen only (hands-free)</span></label>
   <label class="fld">Tone <output id="vPitchOut">normal</output><input id="vPitch" type="range" min="0.5" max="1.5" step="0.1" value="1"></label>
   <div class="row muted" style="justify-content:space-between;font-size:13px"><span>Deeper</span><span>Higher</span></div>
-  <button id="vTest">â–¶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div>
+  <button id="vTest">Ã¢â€“Â¶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div>
   <div class="row settings-help"><button id="vSetup" type="button">Run setup again</button><button id="vFeedback" type="button">Give feedback</button></div>
   <div class="muted" id="vAbout" style="font-size:13px">Privacy: this site uses Microsoft Clarity to measure usage; see <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft's privacy statement</a>.</div>
-  <div class="muted" style="font-size:13px">Voices come from your phone. For a male voice on Android: Settings â†’ Text-to-speech â†’ Speech Services by Google â†’ âš™ï¸ â†’ Install voice data â†’ English â†’ pick a male voice.</div>
+  <div class="muted" style="font-size:13px">Voices come from your phone. For a male voice on Android: Settings Ã¢â€ â€™ Text-to-speech Ã¢â€ â€™ Speech Services by Google Ã¢â€ â€™ Ã¢Å¡â„¢Ã¯Â¸Â Ã¢â€ â€™ Install voice data Ã¢â€ â€™ English Ã¢â€ â€™ pick a male voice.</div>
 </div>
 <nav id="courseNav"
      class="course-nav player-topbar"
@@ -204,7 +204,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   </div>
 
 </nav><main id="main" tabindex="-1"></main>
-<div id="handsControls" class="hands-controls" aria-label="Hands-free playback controls"><label class="listen-choice hands-toggle"><input id="playerListen" type="checkbox"> <span id="listenState">Hands-free listening off</span></label><div class="hands-buttons"><button id="handsPlay" type="button" aria-label="Play narrated lesson">â–¶ Play</button><button id="handsPause" type="button" aria-label="Pause narration">â…¡ Pause</button><button id="handsNext" type="button" aria-label="Next part or question">Next â†’</button><button id="skipQuestion" type="button" hidden>Skip for now Â· Answer later</button></div></div><div id="moreMenu" class="more-menu" role="menu" aria-label="More playback controls" hidden></div>
+<div id="handsControls" class="hands-controls" aria-label="Hands-free playback controls"><label class="listen-choice hands-toggle"><input id="playerListen" type="checkbox"> <span id="listenState">Hands-free listening off</span></label><div class="hands-buttons"><button id="handsPlay" type="button" aria-label="Play narrated lesson">Ã¢â€“Â¶ Play</button><button id="handsPause" type="button" aria-label="Pause narration">Ã¢â€¦Â¡ Pause</button><button id="handsNext" type="button" aria-label="Next part or question">Next Ã¢â€ â€™</button><button id="skipQuestion" type="button" hidden>Skip for now Ã‚Â· Answer later</button></div></div><div id="moreMenu" class="more-menu" role="menu" aria-label="More playback controls" hidden></div>
 <div class="bar" id="playerBar" hidden>
 
   <div class="bar-in">
@@ -260,7 +260,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
               type="button"
               title="Play or continue narration"
               aria-label="Play or continue narration">
-        â–¶ Continue
+        Ã¢â€“Â¶ Continue
       </button>
 
       <button id="navNext"
