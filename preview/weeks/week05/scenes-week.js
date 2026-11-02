@@ -3009,6 +3009,7 @@ function artO4c() {
 }
 
 function directO4c(ctx,i,n,initial) {
+  const P = PALETTE;
   const {apply} = ctx;
   const {p,phase,beat} = pulsePhase(i,n,8);
 
