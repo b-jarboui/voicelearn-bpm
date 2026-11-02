@@ -26,7 +26,8 @@
   // ---------- state (this device) ----------
   const WK = window.WEEK || 1; // progress and history are stored per week
   const KEY = `voicelearn.oper621.w${WK}.v1`;
-  const lessonPlan = (l) => C.lessons[l].sections.map((_, s) => ({ kind: "sec", l, s })).concat([{ kind: "quiz", l, round: 0, qs: null }, { kind: "result", l, round: 0 }]);
+  // Each part is followed by its own short check; the lesson result then judges all of them together.
+  const lessonPlan = (l) => C.lessons[l].sections.flatMap((x, s) => x.sec ? [{ kind: "sec", l, s }, { kind: "quiz", l, round: 0, qs: null, sec: x.sec }] : [{ kind: "sec", l, s }]).concat([{ kind: "result", l, round: 0 }]);
   const fresh = () => ({ seed: Math.random().toString(36).slice(2), queue: lessonPlan(0), idx: 0, part: "main", sent: 0, q: 0, used: {}, hist: [], rounds: {}, lessons: {}, flags: {}, rev: {} });
   let P;
   try { P = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
@@ -116,6 +117,11 @@
     const diffs = k >= 4 ? [1, 2, 2, 3] : k === 3 ? [1, 2, 3] : [1, 2];
     const qs = secs.flatMap((s) => pick(s, k, diffs));
     return perm(qs.length, P.seed + "first" + l).map((i) => qs[i]);
+  }
+  // The same first check, asked part by part: this section's share of questions, right after its part.
+  function partCheck(l, sec) {
+    const secs = lessonSecs(l), k = Math.max(A.firstCheckPerSection, Math.ceil(A.firstCheck / secs.length));
+    return pick(sec, k, k >= 4 ? [1, 2, 2, 3] : k === 3 ? [1, 2, 3] : [1, 2]);
   }
 
   // ---------- speech ----------
@@ -441,7 +447,7 @@
         Scenes.loadBeats(`<b>Review</b> · ${esc(A.sections[st.sec].name)}`, "", [{ at: 0, html: `<h2 class="st-h">${esc(r.title)}</h2>` }]);
     } else { look = null; showLook(false); }
     if (st.kind === "quiz") {
-      if (!st.qs) { st.qs = firstCheck(st.l); save(); }
+      if (!st.qs) { st.qs = st.sec ? partCheck(st.l, st.sec) : firstCheck(st.l); save(); }
       // never re-ask an item this learner has already answered
       while (P.q < st.qs.length && P.part === "main" && P.sent === 0 && P.hist.some((h) => h.id === st.qs[P.q])) P.q++;
       if (P.q >= st.qs.length) { P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save(); return load(); }
@@ -1317,7 +1323,7 @@ positionSettingsButton();
     // show sentence i of the current step, paused (for screenshots)
     at: (i) => { pause(); P.sent = i; caption(script.main[i]); vstep(i - script.offset); },
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
-    jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = s; P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(false); updateNavigation(); },
+    jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = Math.max(0, P.queue.findIndex((q) => q.kind === "sec" && q.s === s)); P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(false); updateNavigation(); },
     showQ: (id) => { pause(); const st = cur(); st.qs = [id]; P.q = 0; P.part = "main"; P.sent = 0; load(); }, // QA: show one specific question (current step must be a quiz)
     setLook: (id) => { VS.look = id; saveVS(); },
     fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, ranked: rankedVoices().slice(0, 6).map((v) => v.name + " [" + vScore(v) + "]"), sayText, rate: VS.rate, log: SLOG.slice(-12) }) };
