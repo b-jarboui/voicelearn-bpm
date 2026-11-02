@@ -1251,7 +1251,7 @@ MA("W10O2c-06", "W10O2c", 2,
 // REMEDIATION ROUND 2
  
 M("W10O2c-07", "W10O2c", 2,
-  "Qasr must specify the Guest Host reporting relationship, but the slides do not identify the final reporting line. What should the role designer do?",
+  "Qasr must specify the Guest Host reporting relationship, but the case does not identify the final reporting line. What should the role designer do?",
   [
     "Recommend and justify an appropriate reporting relationship while clearly identifying it as a proposed design decision",
     "State that Guest Hosts already report directly to the revenue manager because rate discrepancies involve revenue policy",
@@ -1420,7 +1420,7 @@ V("W10O3a-03", "W10O3a", 1,
       "Assume that employees acquire the necessary judgement when their redesigned job titles are issued"
     ]
   ],
-  "The Week 10 slides emphasise realistic worked examples, safe practice and capability assessment. Employees must demonstrate that they can investigate exceptions, apply decision rules and escalate appropriately. Training attendance, interface familiarity and new job titles cannot independently establish operational readiness."
+  "This week emphasises realistic worked examples, safe practice and capability assessment. Employees must demonstrate that they can investigate exceptions, apply decision rules and escalate appropriately. Training attendance, interface familiarity and new job titles cannot independently establish operational readiness."
 );
  
  
@@ -1701,7 +1701,7 @@ M("W10O3b-07", "W10O3b", 2,
 );
  
 TF("W10O3b-08", "W10O3b", 2,
-  "The sixteen-week adoption and workaround chart in the Week 10 slides represents Qasr's verified operating history.",
+  "The sixteen-week adoption and workaround chart from this week represents Qasr's verified operating history.",
   false,
   "This statement is false. The sixteen-week chart is illustrative rather than Qasr's observed operating history. Its adoption plateau near 65% and approximate 9% workaround endpoint must not be attributed to Qasr. The case establishes 65% kiosk adoption at week eleven but does not provide a verified sixteen-week workaround series."
 );
@@ -1751,7 +1751,7 @@ V("W10O3b-09", "W10O3b", 2,
 // REMEDIATION ROUND 3
  
 DR("W10O3b-10", "W10O3b", 3,
-  "The Week 10 slides recommend measuring adoption {1} from go-live and recording workarounds by {2}.",
+  "Good practice is to measure adoption {1} from go-live and to record workarounds by {2}.",
   [
     ["weekly", "only at project closure", "only after all benefits are realised"],
     ["type and frequency", "employee age and job grade", "training attendance and course duration"]
@@ -1819,7 +1819,7 @@ DR("W10O3c-02", "W10O3c", 1,
     ["decision rules", "transaction-volume targets", "job-grade assumptions"],
     ["worked exceptions", "attendance registers", "technology procurement schedules"]
   ],
-  "The Week 10 slides recommend capturing practical knowledge through explicit decision rules and worked exceptions. These methods preserve the reasoning employees use when handling unusual situations. They help the organisation transfer valuable expertise into the redesigned process rather than relying entirely on individual memory."
+  "Practical knowledge is best captured through explicit decision rules and worked exceptions. These methods preserve the reasoning employees use when handling unusual situations. They help the organisation transfer valuable expertise into the redesigned process rather than relying entirely on individual memory."
 );
  
 V("W10O3c-03", "W10O3c", 1,
@@ -2143,7 +2143,7 @@ M("W10O2d-07", "W10O2d", 2,
 TF("W10O2d-08", "W10O2d", 2,
   "Qasr should automatically increase every Guest Host's grade because the redesigned role requires more judgement than conventional front-desk transactions.",
   false,
-  "This statement is false. Materially changed responsibilities justify reviewing grade and reward arrangements, but the slides do not establish the appropriate revised grade. A justified decision requires evaluating the actual responsibilities and organisational requirements rather than assuming that a new title or greater judgement automatically warrants an increase."
+  "This statement is false. Materially changed responsibilities justify reviewing grade and reward arrangements, but the case does not establish the appropriate revised grade. A justified decision requires evaluating the actual responsibilities and organisational requirements rather than assuming that a new title or greater judgement automatically warrants an increase."
 );
  
 V("W10O2d-09", "W10O2d", 2,
@@ -2190,7 +2190,7 @@ V("W10O2d-09", "W10O2d", 2,
 // REMEDIATION ROUND 3
  
 DR("W10O2d-10", "W10O2d", 3,
-  "Because the Week 10 slides do not establish the Guest Host's final reporting line, the role designer should present a reporting relationship as {1}, while treating the existing unchanged grade as {2}.",
+  "Because the case does not establish the Guest Host's final reporting line, the role designer should present a reporting relationship as {1}, while treating the existing unchanged grade as {2}.",
   [
     ["a justified proposal", "an already implemented arrangement", "a confirmed instruction from the COO"],
     ["an observed fact requiring review", "proof that a higher grade is mandatory", "evidence that rewards have already been redesigned"]
@@ -2413,7 +2413,7 @@ DR("W10O3d-10", "W10O3d", 3,
   "A credible replacement for Qasr's attendance-only readiness report should include {1} and {2}, rather than treating induction completion as proof of successful change.",
   [
     ["demonstrated employee capability", "the number of induction invitations issued", "the date of the original training presentation"],
-    ["actual process adoption", "the number of slides shown during induction", "the number of employees assigned a new job title"]
+    ["actual process adoption", "the number of hours of presentations shown during induction", "the number of employees assigned a new job title"]
   ],
   "Demonstrated capability shows whether employees can perform the decisions required by the redesigned role. Adoption shows whether actual arrivals follow the intended process. Together, these measures provide stronger evidence of organisational change than training attendance alone."
 );
@@ -2582,7 +2582,7 @@ M("W10O3e-07", "W10O3e", 2,
 TF("W10O3e-08", "W10O3e", 2,
   "The Week 10 forum requires learners to respond substantively to at least two peers, including a reasoned disagreement that challenges or extends an argument.",
   true,
-  "This statement is true. The delivery plan requires substantive responses to at least two peers, while the slides explicitly call for disagreement with at least one peer. Constructive responses should challenge or extend reasoning using case evidence and BPM concepts rather than merely express agreement."
+  "This statement is true. The delivery plan requires substantive responses to at least two peers, and the discussion explicitly calls for disagreement with at least one peer. Constructive responses should challenge or extend reasoning using case evidence and BPM concepts rather than merely express agreement."
 );
  
 V("W10O3e-09", "W10O3e", 2,
@@ -2647,7 +2647,7 @@ OR("W10O3e-11", "W10O3e", 3,
     "Respond meaningfully to at least two peers and challenge or extend their reasoning",
     "Read the facilitator's end-of-week summary and reflect on the arguments"
   ],
-  "The delivery plan requires learners to read the case and exhibit, post a substantive response by mid-week and engage with at least two peers. The slides additionally emphasise reasoned disagreement with at least one peer. The facilitator's summary supports reflection after the discussion."
+  "The delivery plan requires learners to read the case and exhibit, post a substantive response by mid-week and engage with at least two peers. The discussion also asks for reasoned disagreement with at least one peer. The facilitator's summary supports reflection after the discussion."
 );
  
 MA("W10O3e-12", "W10O3e", 3,
