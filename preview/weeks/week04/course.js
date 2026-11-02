@@ -367,7 +367,7 @@
           )
         ],
         [
-          "Now picture the performance curve from our slides, beginning before management announces the change.",
+          "Now picture the performance curve of a change, beginning before management announces it.",
           dg(
             "The transition through change",
             D.flow([
@@ -1249,7 +1249,7 @@
           null
         ],
         [
-          "That meeting is co-design, because the people in the room are changing the process together rather than approving slides.",
+          "That meeting is co-design, because the people in the room are changing the process together rather than approving a finished plan.",
           st(
             "Manage closely means co-design: they shape the outcome, not just hear about it."
           )

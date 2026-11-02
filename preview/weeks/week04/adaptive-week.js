@@ -1692,7 +1692,7 @@ O1a: [
           )
         ],
         [
-          "That is co-design, because the people in the room are changing the process rather than approving slides.",
+          "That is co-design, because the people in the room are changing the process rather than approving a finished plan.",
           st(
             "Manage closely means co-design and frequent contact."
           )

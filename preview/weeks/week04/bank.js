@@ -283,7 +283,7 @@
   );
   V(
     "w4-O1b-08", "O1b", 2,
-    "Which sequence matches the transition curve from the Week 4 slides?",
+    "Which sequence matches the transition curve for people living through a change?",
     [
       [
         D.flow([
@@ -326,7 +326,7 @@
         "Announcement, resistance and a dip that never recovers"
       ]
     ],
-    "On the slide, performance moves from the announcement through resistance into the dip, then exploration, and finally commitment above the old baseline. Gains are not immediate, and the dip is not permanent."
+    "Along the curve, performance moves from the announcement through resistance into the dip, then exploration, and finally commitment above the old baseline. Gains are not immediate, and the dip is not permanent."
   );
   V(
     "w4-O1b-09", "O1b", 3,
@@ -1262,7 +1262,7 @@
   );
   DR(
     "w4-O3b-07", "O3b", 2,
-    "Co-design means the people in the room are {1} the process together, rather than {2} finished slides.",
+    "Co-design means the people in the room are {1} the process together, rather than {2} a finished plan.",
     [
       ["changing", "observing", "auditing"],
       ["approving", "writing", "designing"]
@@ -2253,7 +2253,7 @@
       ["before", "after", "instead of"],
       ["two", "five", "zero"]
     ],
-    "These are the forum rules from the slides. Posting first keeps your diagnosis independent, and the replies push reasoning further."
+    "These are the forum rules for this week. Posting first keeps your diagnosis independent, and the replies push reasoning further."
   );
   DR(
     "w4-O3g-08", "O3g", 2,
