@@ -403,9 +403,9 @@
     $("resume").onclick = () => openPlayer();
     $("restart").onclick = () => { P = fresh(); save(); openPlayer(); };
     document.querySelectorAll("[data-look]").forEach((b) => (b.onclick = () => { VS.look = b.dataset.look; saveVS(); document.querySelectorAll("[data-look]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("vLook").value = VS.look; }));
-    // Replaying a lesson from home only re-plays its narrated parts, then returns to where the learner was.
-    // It never replaces the queue, so an unfinished check, remediation or the question history cannot be lost.
-    document.querySelectorAll("[data-l]").forEach((b) => (b.onclick = () => { const l = +b.dataset.l; if (cur().kind === "report") { P.queue.push(...C.lessons[l].sections.map((_, s) => ({ kind: "sec", l, s, replay: true })), { kind: "report", l: C.lessons.length - 1 }); P.idx++; } else P.queue.splice(P.idx, 0, ...C.lessons[l].sections.map((_, s) => ({ kind: "sec", l, s, replay: true }))); P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(); }));
+    // Playing a lesson from home runs it in full (each part, its check, the result) and then carries on to the next lesson.
+    // Answered questions stay in the history, so a check only asks what is still fresh.
+    document.querySelectorAll("[data-l]").forEach((b) => (b.onclick = () => { const l = +b.dataset.l; P.queue = P.queue.slice(0, cur().kind === "report" ? P.idx + 1 : P.idx).concat(lessonPlan(l)); if (cur().kind === "report") P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(); }));
     bar();
     if (!$("vPanel").contains(document.activeElement)) $("main").focus({ preventScroll: true });
   }
@@ -1130,11 +1130,9 @@ function updateNavigation() {
   $("navPrevPart").disabled =
     !(st.kind === "sec" && st.s > 0);
 
+  // On the last part, "next part" moves on to that part's check and the lesson result.
   $("navNextPart").disabled =
-    !(
-      st.kind === "sec" &&
-      st.s < lesson.sections.length - 1
-    );
+    st.kind !== "sec";
 }
     function positionSettingsButton() {
   const button = $("vBtn");
@@ -1173,7 +1171,7 @@ function updateNavigation() {
   }
 }
     function seekSentence(delta){if(view!=="player"||waiting||P.part!=="main"||!script)return;const to=clamp(P.sent+delta,0,script.main.length-1);pause();P.sent=to;save();caption(script.main[to]);vstep(to-script.offset);updateNavigation();}
-    function seekPart(delta){if(view!=="player")return;const st=cur();if(st.kind!=="sec")return;const next=st.s+delta;if(next<0||next>=C.lessons[st.l].sections.length)return;pause();
+    function seekPart(delta){if(view!=="player")return;const st=cur();if(st.kind!=="sec")return;const next=st.s+delta;if(next<0)return;if(next>=C.lessons[st.l].sections.length){pause();advance();return;}pause();
       // Review navigation is a replay only; do not consume questions or alter mastery.
       const nx=P.queue[P.idx+1], rep={kind:"sec",l:st.l,s:next,replay:true};
       // A part's own check is never skipped: "next" first goes to the questions on this part.
