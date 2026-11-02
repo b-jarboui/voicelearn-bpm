@@ -1,17 +1,12 @@
 // OPER621 Business Process Management - Week 10
 // Topic: The People Phase - Framework Phase 6.
-// Sources: OPER621_Week10_Delivery_Plan.docx,
-// OPER621_Week10_Session1_Slides.pptx, Jeston Chapter 18,
-// and the Week 8 VoiceLearn structural reference.
 // Author: Prof. Bassem Jarboui
 //
 // RUNNING CASE
 // Qasr Hospitality Group - The Guest Host.
 // Four pilot properties introduce a redesigned guest arrival process.
 // Twenty-two former Front Desk Agents become Guest Hosts.
-// The new role combines guest assistance with kiosk exception resolution.
-// The case examines roles, authority, accountability, measures,
-// incentives, capability, adoption and organisational change.
+// The role combines guest assistance with kiosk exception resolution.
 //
 // OFFICIAL COURSE LEARNING OUTCOMES
 // K3 - Assess the importance of change management in relation to BPM
@@ -20,11 +15,9 @@
 //      to achieve BPM objectives.
 //
 // WEEKLY LEARNING OUTCOMES
-// O1 - Assess the contribution of the People phase to delivering
-//      process change.
+// O1 - Assess the contribution of the People phase to delivering process change.
 // O2 - Design roles, measures and incentives aligned to the new process.
-// O3 - Coordinate people through the change process to achieve
-//      BPM objectives.
+// O3 - Coordinate people through the change process to achieve BPM objectives.
 //
 // PRIMARY CLO MAPPINGS
 // O1: K3
@@ -36,1326 +29,971 @@
 // O2: K3
 // O3: K3
 //
-// Each outcome retains one primary CLO in the adaptive runtime schema.
-// O3 integrates K3 and S3, with S3 as its primary runtime mapping.
-//
-// LESSON AND SECTION PLAN
-//
+// LESSON PLAN
 // l1 - The design is not the work
 //   W10O1a - A process redesign changes people's jobs
 //   W10O1b - What the People phase must deliver
 //   W10O1c - Who does the work, and who answers for it?
-//
 // l2 - The Guest Host's impossible job
 //   W10O2a - Authority without ambiguity
 //   W10O2b - When the old measure defeats the new design
 //   W10O2c - Designing a role people can actually perform
-//
 // l3 - Capability is more than attendance
 //   W10O3a - Training for judgement, not just buttons
 //   W10O3b - One organisation, two processes
 //   W10O3c - The knowledge the redesign might lose
-//
 // l4 - Making the people design real
 //   W10O2d - Repairing the Guest Host specification
 //   W10O3d - The eleven-week decision
 //   W10O3e - The handover and the next phase
 //
-// RUNTIME SECTION KEYS
-// W10O1a, W10O1b, W10O1c,
-// W10O2a, W10O2b, W10O2c,
-// W10O3a, W10O3b, W10O3c,
-// W10O2d, W10O3d, W10O3e.
-//
-// CONTENT STRUCTURE
-// Four lessons with three parts each: twelve narrated sections.
-// Each section contains 430-570 spoken narration words.
-// Each section includes two remedial micro-lessons of 230-360 words.
-// Every spoken sentence contains 6-30 words.
-// Target average sentence length is 15-18 words.
-// Narration is warm, connected, conversational and story-led.
-// Avoid mechanical enumeration, arrows and spoken bullet lists.
-// Avoid the banned patterns first, second, and third followed by commas.
-// Every narration line uses the structure [sentence, moment].
-// Null moments retain the previous visual.
-// Introduce a meaningful visual moment every 1-3 sentences.
-// Use only existing MOMENT_KIT helpers and DIAG diagram types.
-//
-// QUESTION BANK
-// The question bank is maintained separately in bank.js.
-// Each section has twelve questions across six supported types.
-// Three questions support the initial section check.
-// Three fresh questions support each of three remediation rounds.
-// Each question has one unambiguous correct answer.
-// Question ids use the format W10O1a-01 through W10O3e-12.
-//
-// ADAPTIVE LEARNING
-// Mastery target: 0.8.
-// Evidence window: 5.
-// Minimum evidence: 3.
-// Initial check: 4.
-// Initial questions per section: 3.
-// Questions per weak section: 3.
-// Remediation round 1 uses review variant 0.
-// Remediation round 2 uses review variant 1.
-// Subsequent remediation rounds alternate between variants.
-//
-// WEEK 10 SOURCE ACCURACY
-// Qasr's observed kiosk adoption is 65% at week eleven.
-// Desk-handled arrivals account for 29%.
-// Not every desk-handled arrival is necessarily a workaround.
+// SOURCE INTEGRITY
+// Observed kiosk adoption: 65% at week eleven.
+// Desk-handled arrivals: 29%; not all are necessarily workarounds.
 // Nine of twenty-two Guest Hosts refer every rate discrepancy upward.
-// The AED 400 waiver is absent from formal delegation.
-// Updated job descriptions were issued three weeks after go-live.
-// Existing performance objectives still reward check-in volume and speed.
-// Two Guest Hosts resigned; their individual motives are unknown.
+// AED 400 waiver authority is absent from formal delegation.
+// Updated job descriptions arrived three weeks after go-live.
+// Existing objectives still reward check-in volume and speed.
+// Two Guest Hosts resigned; individual motives are unknown.
 // One pilot property reinstated a permanent desk.
 // All twenty-two Guest Hosts attended a four-hour induction.
 // No post-induction capability assessment was conducted.
-// The green people-workstream status reflects induction attendance.
-// The sixteen-week adoption chart is illustrative, not Qasr history.
-// Distinguish observed evidence from proposed corrective actions.
-// Do not invent facts from the separate Week 10 forum case.
+// Green people-workstream status reflects induction attendance.
+// Sixteen-week adoption curves are illustrative, not Qasr observations.
 //
 // FRAMEWORK CONTINUITY
-// People is framework phase 6.
-// Develop is framework phase 7.
-// Implement is framework phase 8.
-// Realize Value is framework phase 9.
-// Sustainable Performance is framework phase 10.
-// People and Develop must remain coordinated.
-// Project management, people change management and leadership
-// operate continuously across the BPM framework.
+// People: phase 6; Develop: phase 7; Implement: phase 8.
+// Realize Value: phase 9; Sustainable Performance: phase 10.
+// People and Develop remain coordinated.
+// Project management, change management and leadership are continuous.
 //
-// END OF WEEK 10 HEADER
-//
-// ============================================================
-
+// CONTENT CONTRACT
+// Four lessons, three sections each, two remedial lessons per section.
+// Every narration line is [sentence, moment].
+// Null retains the previous visual.
+// Questions, section IDs, CLO mappings and voice code remain unchanged.
+// Motion is optional and must not block narration.
+// The four looks retain their own colours, fonts and layouts.
+ 
 (() => {
   "use strict";
-
+ 
   const D = window.DIAG;
-
+ 
   const t = (kicker, text, count) =>
     ({ type: "title", kicker, text, count });
-
+ 
   const it = (n, of, icon, title, text) =>
     ({ type: "item", n, of, icon, title, text });
-
-  const q = (text) =>
+ 
+  const q = text =>
     ({ type: "question", text });
-
-  const st = (text) =>
+ 
+  const st = text =>
     ({ type: "statement", text });
-
+ 
   const iss = (text, effect) =>
     ({ type: "issue", text, effect });
-
+ 
   const cmp = (side, label, note, dir) =>
     ({ type: "compare", side, label, note, dir });
-
+ 
   const dg = (kicker, svg, caption) =>
     ({ type: "diagram", kicker, svg, caption });
-
+ 
   const fm = (label, num, den) =>
     ({ type: "formula", label, num, den });
-
-  window.MOMENT_KIT = {
-    t, it, q, st, iss, cmp, dg, fm
-  };
-
-
-
+ 
+  window.MOMENT_KIT = { t, it, q, st, iss, cmp, dg, fm };
+ 
   window.COURSE = {
     id: "oper621-w10",
     code: "OPER621",
     title: "Week 10 — The People Phase: Roles, Measures and Capability",
     subtitle: "Business Process Management \u00b7 Week 10",
     author: "Prof. Bassem Jarboui",
-    teacher: { name: "Prof. Bassem Jarboui", email: "", sendReport: false },
+    teacher: {
+      name: "Prof. Bassem Jarboui",
+      email: "",
+      sendReport: false
+    },
     lessons: [
-      { id: "l1", title: "The design is not the work", sections: [
-{
-  title: "A process redesign changes people's jobs",
-  sec: "W10O1a",
-  lines: [
-    ["Welcome to Week 10, where we'll explore why changing a process also means changing people's everyday work.", t("OPER621 · Week 10", "The People Phase: making a redesigned process work through people.")],
-    ["Let's return to Qasr Hospitality Group, where our improvement journey has reached another important turning point.", null],
-    ["You may remember the exhausted business traveller whose difficult arrival exposed weaknesses across Qasr's hotel operations.", dg("The experience that started our journey", D.flow(["Guest|arrives", "Booking|checked", "Rate|confirmed", "!Room not|ready"]), "The original guest's difficult arrival revealed problems that crossed departmental boundaries.")],
-    ["That experience encouraged Qasr to investigate its guest arrival process and consider how the service could improve.", null],
-    ["The programme has since examined current performance and developed ideas for a better way of serving guests.", null],
-    ["But imagine the redesigned process looking excellent on paper while employees continue following their familiar routines.", iss("A redesigned process exists, but employees continue performing the work according to their previous roles.", "The design is not the work")],
-    ["The organisation might have improved its process diagram without improving what guests actually experience during arrival.", null],
-    ["This happens because processes are performed by people whose responsibilities, decisions and working relationships shape daily operations.", st("A process redesign succeeds only when people can perform the new work as intended.")],
-    ["Now Qasr is introducing a different approach to guest arrival, supported by self-service kiosks and redesigned responsibilities.", null],
-    ["At four pilot properties, the traditional Front Desk Agent role has been replaced by a Guest Host.", dg("The redesigned arrival experience", D.flow(["Guest|arrives", "Self-service|kiosk", "!Exception|identified", "Guest Host|assists", "Arrival|continues"]), "The redesigned process combines self-service technology with human assistance when guests need additional support.")],
-    ["Twenty-two existing agents have moved into this new role, which changes what the organisation expects from them.", null],
-    ["Instead of concentrating on conventional desk transactions, Guest Hosts greet arrivals and resolve exceptions requiring human judgement.", cmp("The work has changed", "Front Desk Agent", "The previous role centred on conventional front-desk transactions.", "Guest Host", "The redesigned role supports arrivals and resolves exceptions that kiosks cannot handle.")],
-    ["They can also waive certain rate discrepancies up to AED 400 without referring the decision upward.", null],
-    ["That responsibility matters because resolving an exception immediately may prevent another frustrating delay in the guest's journey.", st("The new role requires employees to exercise judgement and resolve eligible exceptions without unnecessary referral.")],
-    ["But changing someone's job title doesn't automatically give that person the authority or confidence to make decisions.", null],
-    ["Imagine a Guest Host facing a disputed corporate rate while worrying whether management will support the decision.", q("Would a new job title alone give this employee the confidence and authority to resolve the discrepancy?")],
-    ["The employee might refer the guest to a manager, even though the redesigned process intended to avoid that delay.", null],
-    ["The problem would not necessarily be unwillingness to change, because the organisation may have left important arrangements unresolved.", iss("The process expects independent decisions, but the employee may lack clear organisational support for making them.", "A people-design problem")],
-    ["This brings us to the People phase, which occupies position six in the ten-phase BPM implementation framework.", null],
-    ["It follows Innovate, where the organisation develops alternatives for how its processes should operate in the future.", dg("Phase six: People", D.route([5]), "People follows Innovate and prepares the organisational arrangements required to perform the redesigned process.")],
-    ["The framework continues through Develop, Implement, Realize Value and Sustainable Performance as the improvement programme progresses.", null],
-    ["However, these phases should not be treated as isolated boxes that prevent related work from happening together.", st("The BPM framework guides coordinated improvement rather than requiring every activity to occur in a rigid sequence.")],
-    ["In particular, People must work alongside Develop because employee responsibilities and supporting technology influence each other's design.", null],
-    ["A kiosk cannot replace a transaction successfully unless someone understands what happens when that transaction encounters an exception.", dg("People and technology must fit together", D.flow(["Redesigned|process", "People|requirements", "Technology|requirements", "Coordinated|operation"]), "People and technology requirements must be developed together so the redesigned process can operate reliably.")],
-    ["Likewise, assigning employees new responsibilities without suitable system support may simply create additional work and frustration.", null],
-    ["Project management, people change management and leadership therefore remain important throughout the entire BPM improvement journey.", st("Project management, people change management and leadership support every framework phase, not only the People phase.")],
-    ["The People phase concentrates on making the organisation ready to perform work that its previous arrangements never anticipated.", null],
-    ["It asks whether employees understand their responsibilities, possess appropriate authority and can develop the capabilities they need.", null],
-    ["It also examines whether performance measures and rewards encourage the behaviour that the redesigned process actually requires.", dg("Making the redesign performable", D.flow(["New|responsibilities", "Clear|authority", "Required|capability", "Aligned|measures", "Actual|performance"]), "The redesigned process depends on responsibilities, authority, capability and measures that support the intended work.")],
-    ["These questions matter because employees naturally respond to the expectations and constraints they encounter during everyday operations.", null],
-    ["When those arrangements contradict the redesign, familiar practices can return despite everyone's stated commitment to improvement.", iss("Old organisational arrangements can recreate old process behaviour even after the process model has changed.", "The redesign can unravel")],
-    ["Our challenge this week is therefore understanding how Qasr can turn its redesigned arrival process into dependable practice.", null],
-    ["We'll examine the Guest Host's responsibilities, decision authority, performance measures and readiness to handle unfamiliar situations.", null],
-    ["Remember that successful redesign requires more than telling employees that their jobs have changed.", q("What must Qasr change around the Guest Host so the redesigned guest experience becomes everyday reality?")]
-  ],
-  review: [
-    {
-      title: "The hospital discharge that changed everyone's job",
-      lines: [
-        ["Let's explore the People phase through a hospital that wants patients to leave promptly after treatment finishes.", t("Another way to understand the People phase", "A hospital discharge redesign shows why changing a workflow also changes people's responsibilities.")],
-        ["Patients currently wait for several departments to complete separate activities before they can finally go home.", null],
-        ["The hospital redesigns discharge around one coordinated journey, supported by a shared digital information system.", dg("The redesigned discharge journey", D.flow(["Discharge|approved", "Requirements|coordinated", "Patient|prepared", "Departure|completed"]), "The redesigned process coordinates activities around the patient's complete departure rather than separate departmental tasks.")],
-        ["Managers expect the new arrangement to reduce waiting because staff can now see which activities remain unfinished.", null],
-        ["However, the process diagram doesn't establish who should act when several departments disagree about discharge readiness.", q("Who should resolve a disagreement when the redesigned process requires coordination across different professional responsibilities?")],
-        ["Imagine a discharge coordinator receiving responsibility for resolving delays that previously required several separate telephone calls.", null],
-        ["The coordinator understands the new system but cannot authorise changes to another department's established working arrangements.", iss("The coordinator is expected to resolve cross-department delays without having clear authority to coordinate the required decisions.", "Responsibility without sufficient authority")],
-        ["As a result, difficult cases still move between managers while patients continue waiting for their departure.", null],
-        ["The digital system may function correctly, yet the organisation hasn't created the conditions for using it effectively.", st("A functioning information system cannot compensate for unclear responsibilities and decision authority.")],
-        ["This is why the People phase examines jobs and working relationships alongside the redesigned process itself.", null],
-        ["The hospital must clarify what the coordinator owns and which decisions remain with clinical professionals.", cmp("Two connected responsibilities", "Discharge coordinator", "Coordinates the overall departure process and addresses operational dependencies.", "Clinical professionals", "Retain responsibility for clinical decisions within their professional authority.")],
-        ["Clear boundaries matter because coordination should improve service without removing essential clinical safeguards or professional accountability.", null],
-        ["The coordinator also needs practical training in handling exceptions rather than merely learning which system buttons to select.", null],
-        ["Realistic cases can reveal whether the employee knows when to act independently and when escalation remains necessary.", dg("Preparing the coordinator", D.flow(["Define|responsibility", "Clarify|authority", "Practise|exceptions", "Assess|capability", "Support|performance"]), "The hospital must prepare employees to make appropriate decisions within clearly defined responsibilities.")],
-        ["Performance measures should reflect the coordinator's actual contribution rather than reward only the number of records processed.", null],
-        ["Otherwise, employees may concentrate on easy administrative transactions while complicated discharge problems remain unresolved.", iss("A transaction-volume measure may reward quick administrative work rather than successful coordination of difficult departures.", "The wrong behaviour rewarded")],
-        ["Notice how the hospital's difficulty resembles Qasr's challenge when Front Desk Agents become Guest Hosts.", null],
-        ["Both organisations have changed the intended process, but employees need suitable arrangements to perform their redesigned work.", st("The People phase aligns employee responsibilities, authority, capability and measures with the process the organisation intends to operate.")],
-        ["Remember that the process diagram describes the desired journey, while organisational arrangements determine whether people can deliver it.", null],
-        ["The hospital succeeds only when its employees can coordinate the new process without compromising necessary professional controls.", q("Could you explain why a redesigned workflow needs redesigned jobs even when its technology works correctly?")]
-      ]
-    },
-    {
-      title: "The online retailer that automated the easy work",
-      lines: [
-        ["Now imagine an online retailer introducing automation to make customer returns faster and easier to manage.", t("Another way to understand redesigned work", "An automated returns service reveals how technology changes the responsibilities of employees.")],
-        ["Previously, customer service employees checked return requests, confirmed eligibility and arranged refunds through a familiar manual procedure.", null],
-        ["The redesigned process allows software to approve straightforward returns automatically when they satisfy established conditions.", dg("The redesigned returns process", D.flow(["Return|requested", "Automatic|eligibility check", "Routine|approval", "!Complex|exception", "Specialist|resolution"]), "Automation handles routine returns while employees remain responsible for exceptions requiring additional judgement.")],
-        ["Managers expect employees to spend less time on repetitive checking and more time resolving complicated customer problems.", null],
-        ["That expectation sounds sensible, but it changes the knowledge and decisions required from the remaining service employees.", st("Automation changes employee work when routine activities move into software and complex exceptions remain with people.")],
-        ["Imagine an employee receiving a disputed return involving a damaged product and conflicting information about delivery.", null],
-        ["The software cannot decide whether the circumstances justify an exception to the retailer's ordinary refund conditions.", q("What support would help this employee make a fair decision without sending every difficult case to management?")],
-        ["The employee needs clear authority, practical guidance and confidence about when an exception should be escalated.", null],
-        ["Without those arrangements, the supposedly faster process may recreate the same approval delays through repeated managerial referrals.", iss("Automation removes routine checking, but unclear employee authority causes difficult returns to wait for managerial decisions.", "The old delay returns")],
-        ["Now imagine that the retailer continues measuring employees by the number of returns processed during each shift.", null],
-        ["Automated cases no longer require employee attention, leaving staff with a greater concentration of difficult requests.", cmp("The measurement problem", "Old measure", "Rewards the number of transactions completed during a shift.", "New work", "Requires careful resolution of complicated returns that automation cannot approve.")],
-        ["Employees may appear less productive even when they provide more valuable assistance to customers with complex problems.", null],
-        ["That contradiction matters because performance measures influence which activities employees prioritise during busy working periods.", st("Measures inherited from the old process can discourage employees from performing the redesigned work as intended.")],
-        ["The retailer should therefore examine whether its measures recognise successful exception resolution and appropriate decision quality.", null],
-        ["Employees also need realistic practice with unusual cases because operating software differs from exercising sound customer-service judgement.", dg("Aligning people with automation", D.flow(["Redesigned|returns", "Defined|decisions", "Practical|training", "Relevant|measures", "Reliable|service"]), "The redesigned returns process requires aligned decision rights, capability and performance expectations.")],
-        ["The organisation must also clarify how employees obtain assistance when a difficult case exceeds their delegated authority.", null],
-        ["These arrangements allow automation and human judgement to complement each other instead of creating competing operating methods.", null],
-        ["This is the same principle behind Qasr's decision to introduce Guest Hosts alongside its self-service kiosks.", st("Technology and employee roles must be designed together because each determines how the other performs.")],
-        ["A new system changes which tasks remain for people, so their responsibilities cannot simply remain unchanged.", null],
-        ["Remember that installing automation is not equivalent to preparing employees for the work that automation leaves behind.", q("How would you redesign employee responsibilities when software handles routine cases but people must resolve the exceptions?")]
-      ]
-    }
-  ]
-},
-{
-  title: "What the People phase must deliver",
-  sec: "W10O1b",
-  lines: [
-    ["We have seen why Qasr's redesigned arrival process cannot succeed through technology and process diagrams alone.", t("Week 10 · The People Phase", "What must the organisation deliver so employees can perform the redesigned process?")],
-    ["Now imagine the programme sponsor asking a practical question about whether the organisation is genuinely ready.", null],
-    ["The sponsor wants evidence that Guest Hosts can perform their new responsibilities without recreating familiar front-desk delays.", q("What evidence would convince you that Qasr is ready to operate its redesigned arrival process?")],
-    ["A new job title would not be convincing because naming a role does not establish how it works.", null],
-    ["The People phase must produce concrete organisational arrangements that make the redesigned process possible in everyday operations.", st("The People phase turns redesigned responsibilities into roles, authority, measures, capability and adoption arrangements.")],
-    ["Consider the twenty-two employees who have moved from Front Desk Agent positions into Qasr's new Guest Host role.", null],
-    ["Their responsibilities now include greeting arrivals and resolving exceptions that the self-service kiosks cannot handle.", dg("The Guest Host's redesigned work", D.flow(["Guest|arrives", "Kiosk|processes", "!Exception|identified", "Guest Host|resolves", "Arrival|continues"]), "The Guest Host supports the redesigned arrival process by resolving exceptions requiring human assistance.")],
-    ["The organisation therefore needs a role definition describing the work, its boundaries and its expected contribution.", null],
-    ["An updated job description should translate that definition into responsibilities employees and managers can understand consistently.", cmp("A title is not a role specification", "Guest Host title", "Names the position without defining its operating arrangements.", "Complete role definition", "Explains responsibilities, boundaries, authority and expected outcomes.")],
-    ["This matters because an unclear role encourages employees to rely on the responsibilities they understood previously.", null],
-    ["Qasr must also examine whether the changed responsibilities justify reviewing the existing job grade and reward arrangements.", st("Material changes in work require the organisation to review job descriptions, grades and rewards where appropriate.")],
-    ["A redesigned job may demand more judgement or accountability even when its title sounds less administrative.", null],
-    ["Leaving reward arrangements untouched without reviewing them risks sending employees conflicting messages about their new contribution.", null],
-    ["But defining responsibilities is not enough when employees must make decisions that previously belonged to managers.", dg("Responsibility needs decision authority", D.flow(["New|responsibility", "Required|decision", "Documented|authority", "Defined|escalation"]), "Employees need clear authority for decisions within their role and an escalation route beyond that authority.")],
-    ["At Qasr, Guest Hosts may waive certain rate discrepancies up to AED 400 without seeking approval.", null],
-    ["That authority should appear in the formal delegation arrangements rather than depend entirely on an informal briefing.", iss("A decision may be expected in the redesigned process while remaining unclear in the organisation's formal authority arrangements.", "Undocumented delegation")],
-    ["Formal delegation matters because employees need to know which decisions they may make and when escalation remains necessary.", null],
-    ["The People phase must therefore deliver documented decision rights that support the judgement required by the redesign.", st("Documented delegated authority connects employee responsibility with permission to make the necessary decisions.")],
-    ["Now consider how Qasr will judge whether Guest Hosts are performing their new work successfully.", null],
-    ["The previous Front Desk Agent objectives emphasised check-ins completed per shift and average transaction time.", cmp("Measures must follow the redesigned work", "Previous objectives", "Check-ins completed per shift and average transaction time.", "New role requirements", "Support arrivals and resolve exceptions requiring human judgement.")],
-    ["Those measures may no longer represent the contribution expected from employees supporting kiosk-based arrivals and difficult exceptions.", null],
-    ["If old objectives remain influential, employees may favour familiar transactions rather than the redesigned process's intended outcomes.", iss("An inherited performance measure can reward behaviour that the redesigned process was intended to replace.", "Conflicting incentives")],
-    ["The People phase must deliver revised performance measures and consider whether reward arrangements reinforce the intended behaviour.", null],
-    ["Measures should reflect outcomes employees can influence while protecting the quality of their decisions and service.", st("Performance measures and incentives should reinforce the work the redesigned process actually requires.")],
-    ["There is another difficulty because employees cannot automatically perform unfamiliar work simply because management expects them to.", null],
-    ["Guest Hosts need practical capability to interpret exceptions, exercise judgement and recognise situations requiring managerial support.", dg("Capability must be demonstrated", D.flow(["Identify|skill gaps", "Practise|real cases", "Assess|decisions", "Support|performance"]), "A capability plan identifies gaps and assesses whether employees can perform the redesigned work.")],
-    ["The People phase therefore needs a capability plan identifying learning requirements and assessing whether employees can perform.", null],
-    ["Training attendance alone cannot establish that someone can make a sound decision during a difficult guest encounter.", st("Capability requires evidence of performance, not merely evidence that employees attended training.")],
-    ["Finally, Qasr needs to know whether actual arrivals follow the redesigned process rather than established workarounds.", null],
-    ["An adoption measure should track genuine use of the new process and have someone accountable for reporting it.", dg("From readiness to adoption", D.flow(["Role|defined", "Authority|documented", "Capability|assessed", "Adoption|measured", "Owner|accountable"]), "People-phase outputs support implementation and provide evidence that the redesigned process is being adopted.")],
-    ["These deliverables support later implementation, value realisation and sustainable performance because organisational readiness affects every stage.", null],
-    ["They also connect with Develop, where technology must support the responsibilities and decisions assigned to employees.", st("People and Develop must remain coordinated so organisational arrangements and technology support the same process design.")],
-    ["So the sponsor should ask for evidence of aligned roles, measures, authority, capability and accountable adoption tracking.", null],
-    ["Together, these outputs make the redesigned process something employees can perform rather than merely something management has approved.", q("Which missing People-phase deliverable would most seriously prevent Qasr's Guest Hosts from performing their redesigned work?")]
-  ],
-  review: [
-    {
-      title: "The airport that redesigned boarding but forgot the gate team",
-      lines: [
-        ["Let's revisit the People phase through an airport introducing a redesigned boarding process for departing passengers.", t("Remedial · Making the People phase concrete", "An airport boarding redesign reveals why organisational deliverables matter.")],
-        ["The airport wants passengers to board more smoothly, using automated checks and clearer handling of unusual travel documents.", null],
-        ["Its new process looks promising because routine passengers can move through automated gates without repeated manual checks.", dg("The redesigned boarding process", D.flow(["Passenger|arrives", "Automated|document check", "!Exception|identified", "Gate agent|assists", "Boarding|continues"]), "Automation handles routine checks while gate agents resolve cases requiring human judgement.")],
-        ["However, gate agents previously concentrated on checking documents and moving passengers through the boarding queue quickly.", null],
-        ["The redesign now expects them to investigate exceptions and decide whether certain problems can be resolved locally.", null],
-        ["Imagine the airport changing the equipment while leaving every employee's existing job description and performance objectives untouched.", iss("The technology changes, but the organisation continues defining employee work through the previous boarding procedure.", "An incomplete redesign")],
-        ["An agent encounters a passenger whose document requires clarification and cannot determine whether local approval is permitted.", null],
-        ["The employee calls a supervisor because the organisation has never documented the new decision boundary.", q("Which People-phase output would clarify whether the gate agent may resolve this exception independently?")],
-        ["The missing output is documented delegated authority, which specifies decisions employees may make within their responsibilities.", null],
-        ["A revised role definition would also explain how exception handling fits into the agent's redesigned work.", st("Role definitions explain responsibilities, while delegated authority explains which decisions employees may make.")],
-        ["Now imagine management continuing to reward agents according to the number of passengers processed every minute.", null],
-        ["An employee handling complicated documents might appear less productive than someone supervising straightforward automated boarding.", cmp("What the measure rewards", "Old objective", "Maximise passengers processed during a short period.", "Redesigned contribution", "Resolve difficult boarding exceptions accurately without unnecessary delay.")],
-        ["The airport therefore needs performance measures that recognise effective exception resolution while safeguarding decision quality.", null],
-        ["Employees also need practical training because knowing how to operate a scanner differs from interpreting an unusual document.", dg("Building the required capability", D.flow(["Identify|new decisions", "Practise|exceptions", "Test|judgement", "Provide|support"]), "Capability development prepares employees for decisions that the redesigned process now requires.")],
-        ["A capability assessment would show whether agents can apply their authority correctly rather than merely complete training.", null],
-        ["The airport should also measure how many passengers genuinely use the redesigned boarding process during actual operations.", null],
-        ["Someone must own that adoption measure because unreported workarounds can conceal problems after technical implementation finishes.", st("Adoption measurement shows whether the redesigned process is being performed, with a named owner responsible for reporting.")],
-        ["Notice how these arrangements address different problems while supporting the same intended passenger experience.", null],
-        ["Role definitions establish expectations, authority enables decisions, measures reinforce behaviour and capability supports reliable performance.", null],
-        ["Adoption evidence then reveals whether the organisation has translated those arrangements into everyday operating practice.", q("Could you identify which People-phase output is missing when a redesigned job exists but employees cannot demonstrate its required capability?")]
-      ]
-    },
-    {
-      title: "The service centre that looked ready on paper",
-      lines: [
-        ["Imagine a customer service centre preparing to launch a redesigned process for handling complex customer complaints.", t("Remedial · Evidence of organisational readiness", "A service centre shows why completing project activities does not prove readiness.")],
-        ["The programme manager proudly reports that the new software is installed and every employee has attended training.", null],
-        ["The redesigned process also appears in the operating manual, so the project dashboard displays a reassuring green status.", st("Completed project activities do not automatically demonstrate that employees can perform the redesigned process.")],
-        ["However, the new process expects frontline employees to resolve complaints that previously required specialist approval.", null],
-        ["Their existing job descriptions still describe recording complaints and transferring difficult cases to another department.", dg("The gap between design and responsibility", D.flow(["Complaint|received", "New process|expects resolution", "!Old role|requires transfer", "Customer|waits"]), "The redesigned process requires decisions that the existing role definition does not support.")],
-        ["Employees therefore continue transferring complaints because the formal role has not changed alongside the intended process.", null],
-        ["The programme needs updated role definitions that explain responsibilities and the boundaries of the new work.", null],
-        ["But those documents will not solve the problem unless employees also receive authority to make appropriate decisions.", q("What happens when management expects employees to resolve complaints but never formally authorises the necessary decisions?")],
-        ["They may escalate defensively because the consequences of making an unauthorised decision feel greater than the benefits.", null],
-        ["Documented delegation would clarify which complaints employees can resolve and which situations still require specialist approval.", st("Authority must match responsibility so employees can perform their assigned work without unnecessary escalation.")],
-        ["Now suppose the centre continues evaluating staff according to how quickly they close individual complaint records.", null],
-        ["Employees may rush complicated cases or transfer them because careful investigation reduces their apparent transaction speed.", iss("The old speed measure rewards quick record closure rather than effective resolution of complex customer problems.", "Misaligned performance objectives")],
-        ["A revised performance measure should recognise appropriate complaint resolution while checking that decisions remain accurate and fair.", null],
-        ["The organisation should also review whether existing rewards support the greater judgement expected from the redesigned role.", cmp("Two performance expectations", "Old expectation", "Close complaint records quickly and transfer difficult cases.", "New expectation", "Resolve appropriate complaints effectively while maintaining decision quality.")],
-        ["Training introduces the new process, but employees still need practice with cases requiring judgement and unfamiliar decisions.", null],
-        ["A realistic assessment can reveal whether they understand their authority and know when escalation remains appropriate.", dg("Evidence of readiness", D.flow(["Role|defined", "Authority|documented", "Measures|aligned", "Capability|tested", "Adoption|tracked"]), "Readiness requires aligned organisational arrangements and evidence that employees can perform the new work.")],
-        ["Finally, the service centre must observe whether real complaints follow the redesigned process after the launch.", null],
-        ["A named owner should track adoption because successful software installation does not establish successful behavioural change.", st("Adoption evidence connects the redesigned process with what employees actually do during operations.")],
-        ["This is why Qasr's sponsor should ask for more than job titles, induction attendance and completed project milestones.", null],
-        ["The People phase must provide evidence that employees have suitable responsibilities, authority, incentives and demonstrated capability.", null],
-        ["Those outputs prepare the organisation for implementation and help protect the value expected from the redesign.", q("Would you consider this service centre ready if every employee attended training but nobody had tested their decision-making capability?")]
-      ]
-    }
-  ]
-},
-{
-  title: "Who does the work, and who answers for it?",
-  sec: "W10O1c",
-  lines: [
-    ["We have seen that Qasr needs clear roles and authority before its redesigned arrival process can work.", t("Who does the work, and who answers for it?", "Understanding responsibility, accountability and cross-functional coordination.")],
-    ["Now imagine a Guest Host meeting a traveller whose confirmed corporate rate differs from the kiosk's calculation.", null],
-    ["The guest wants an immediate answer, but the discrepancy touches reception operations, revenue policy and managerial authority.", dg("A decision crossing departmental boundaries", D.flow(["Guest|raises discrepancy", "Guest Host|investigates", "Revenue|policy", "Decision|required"]), "One guest problem may involve several organisational functions.")],
-    ["The Guest Host can investigate the problem, but someone must own the decision when responsibilities overlap.", null],
-    ["Without that clarity, the guest may be transferred between employees who each believe someone else should decide.", iss("Several employees participate, but nobody has clearly accepted accountability for the decision.", "The accountability gap")],
-    ["This is where a RACI matrix becomes useful, because it clarifies different contributions to process activities.", null],
-    ["RACI identifies who performs work, who answers for it, who provides advice and who receives information.", st("RACI separates responsibility, accountability, consultation and information so cross-functional work can be coordinated.")],
-    ["Let's begin with responsibility, which identifies the person or role actually performing a particular activity.", null],
-    ["At Qasr, a Guest Host might investigate a discrepancy and gather the information needed for resolution.", dg("Responsible means performing the work", D.flow(["Guest|reports issue", "Guest Host|investigates", "Evidence|prepared"]), "The responsible role carries out the activity needed to move the process forward.")],
-    ["That employee performs the investigation, but performing work does not automatically confer authority over every resulting decision.", null],
-    ["Accountability identifies the role that ultimately answers for an activity's result or the decision governing it.", cmp("Responsibility and accountability", "Responsible", "Performs the activity and contributes directly to its completion.", "Accountable", "Ultimately answers for the activity's result or governing decision.")],
-    ["This distinction matters because several employees may contribute while one clearly identified role remains answerable for the outcome.", null],
-    ["The Week 10 framework therefore recommends one accountable party for each activity rather than competing accountable owners.", st("Each RACI activity should have exactly one accountable role to prevent ambiguity over final ownership.")],
-    ["Imagine two managers both claiming final approval authority while disagreeing about how a guest exception should be handled.", null],
-    ["Employees could receive conflicting instructions, leaving the guest waiting while the managers attempt to resolve their disagreement.", iss("Multiple accountable owners create competing instructions and uncertainty about who can settle the decision.", "Conflicting accountability")],
-    ["Consultation is different because a consulted role provides knowledge or advice before the activity or decision is completed.", null],
-    ["A revenue manager might advise on rate policy without personally performing every investigation involving a disputed rate.", dg("Consulted means providing input", D.flow(["Guest Host|investigates", "Revenue manager|advises", "Decision owner|decides"]), "Consultation contributes expertise without automatically transferring accountability.")],
-    ["Information is different again because an informed role receives relevant updates without necessarily participating in the decision.", null],
-    ["A senior manager might need visibility of exception patterns without approving every individual case that employees resolve.", cmp("Consulted and informed", "Consulted", "Provides input before an activity or decision is completed.", "Informed", "Receives relevant information about progress, decisions or outcomes.")],
-    ["The slide illustrates these distinctions through a RACI matrix for activities supporting the redesigned arrival process.", null],
-    ["Its roles include the process owner, front desk, IT, revenue manager and chief operating officer.", dg("Roles across the redesigned process", D.flow(["Process|owner", "Front|desk", "IT", "Revenue|manager", "COO"]), "The RACI exhibit spans operational, technical, commercial and executive roles.")],
-    ["The activities include defining standards, approving redesign, building workflows, running operations, monitoring performance and escalating exceptions.", null],
-    ["Each activity receives one accountable owner, even when several roles contribute to completing the work.", st("The RACI matrix coordinates cross-functional activities without treating every contributor as an accountable decision owner.")],
-    ["Notice that these assignments should follow the redesigned process rather than reproduce the previous departmental organisation automatically.", null],
-    ["Otherwise, the matrix may preserve the very boundaries that the process redesign was intended to overcome.", iss("Copying the old organisational chart into RACI can preserve outdated handoffs and decision bottlenecks.", "The old structure returns")],
-    ["For Qasr, the redesigned Guest Host role must therefore connect clearly with revenue management and operational leadership.", null],
-    ["The employee needs to know which exceptions can be resolved locally and which require escalation beyond delegated authority.", dg("A clear escalation boundary", D.flow(["Guest Host|investigates", "Within|authority?", "Resolve|locally", "Escalate|when required"]), "A defined escalation route supports decisions that exceed the employee's authority.")],
-    ["Remember that RACI clarifies accountability, while formal delegation specifies which decisions an employee is authorised to make.", null],
-    ["Those arrangements must agree, because assigning responsibility without usable authority can create defensive referrals and unnecessary delays.", st("RACI and delegated authority must support each other, but they answer different organisational questions.")],
-    ["Qasr's challenge is to make every important handoff and decision understandable before guests encounter another frustrating exception.", null],
-    ["When employees know their responsibilities and escalation routes, the redesigned process has a stronger chance of working consistently.", q("If a Guest Host performs an investigation, does that automatically make the employee accountable for every related policy decision?")]
-  ],
-  review: [
-    {
-      title: "The supplier payment that nobody owned",
-      lines: [
-        ["Let's explore RACI through a company struggling to pay suppliers accurately and without unnecessary delays.", t("Remedial · Understanding RACI", "A supplier payment problem reveals the difference between doing work and owning its result.")],
-        ["A supplier submits an invoice, but several departments become involved before the company can release payment.", null],
-        ["Purchasing confirms the order, warehouse employees verify delivery and finance checks whether the invoice can be paid.", dg("The supplier payment journey", D.flow(["Invoice|received", "Order|checked", "Delivery|verified", "Payment|reviewed", "Supplier|paid"]), "Several departments contribute to completing one end-to-end payment process.")],
-        ["The process becomes difficult when an invoice contains a price discrepancy that nobody knows how to resolve.", null],
-        ["Purchasing believes finance should decide, while finance expects purchasing to settle the difference with the supplier.", iss("Both departments participate, but neither accepts clear accountability for resolving the disputed invoice.", "An ownership gap")],
-        ["The invoice remains unpaid because participation in an activity does not establish who ultimately answers for its completion.", null],
-        ["A RACI matrix can clarify the situation by assigning distinct roles to the work and its decisions.", st("RACI distinguishes employees who perform activities from the role ultimately accountable for each activity.")],
-        ["Imagine a purchasing officer investigating the disputed price by comparing the invoice with the approved purchase order.", null],
-        ["That officer is responsible for the investigation because the employee performs the work needed to establish the facts.", dg("Responsibility in practice", D.flow(["Purchasing|investigates", "Documents|compared", "Difference|identified"]), "The responsible role performs the activity rather than necessarily owning every subsequent decision.")],
-        ["However, the organisation must separately identify who is accountable for approving the final treatment of the discrepancy.", null],
-        ["Exactly one accountable role should be designated for that activity so competing decision owners cannot create confusion.", q("Why would assigning two accountable managers to the same approval activity make the payment process less reliable?")],
-        ["The answer concerns conflicting authority, because employees may receive different instructions about the same disputed payment.", null],
-        ["Consulted employees provide relevant expertise before a decision, without automatically becoming accountable for the final result.", cmp("Two different contributions", "Accountable", "Ultimately answers for the activity or governing decision.", "Consulted", "Provides knowledge or advice needed to make a sound decision.")],
-        ["For example, warehouse staff might clarify whether the delivered quantity matches the information recorded on the invoice.", null],
-        ["Their advice improves the decision, but it does not necessarily make them responsible for approving payment.", null],
-        ["An informed role receives relevant updates after decisions or progress changes, without needing to approve the activity.", dg("Information without unnecessary approval", D.flow(["Decision|completed", "Relevant|update", "Stakeholder|informed"]), "Keeping stakeholders informed does not require adding another approval stage.")],
-        ["This distinction matters because unnecessary approvals can turn a straightforward process into repeated departmental referrals.", null],
-        ["The company should therefore define its RACI assignments around the redesigned payment journey rather than historical departmental boundaries.", st("Cross-functional accountability should support the redesigned process instead of preserving unnecessary old handoffs.")],
-        ["Now return to Qasr, where a Guest Host investigates a disputed rate involving operational and revenue considerations.", null],
-        ["The same principle applies because investigating an exception does not automatically establish accountability for every policy decision.", null],
-        ["Clear responsibility, accountability and escalation help employees resolve cases without sending customers through avoidable organisational loops.", q("Can you explain why the person investigating a problem and the person accountable for its resolution may differ?")]
-      ]
-    },
-    {
-      title: "The university enrolment decision",
-      lines: [
-        ["Now imagine a university redesigning student enrolment to make registration easier and reduce unnecessary administrative delays.", t("Remedial · Coordinating across departments", "A university enrolment case shows how RACI prevents competing decision owners.")],
-        ["Students previously contacted several offices separately when their enrolment involved an unusual academic or financial condition.", null],
-        ["The university introduces a coordinated service process in which one adviser helps students navigate these exceptions.", dg("The redesigned enrolment journey", D.flow(["Student|requests enrolment", "Adviser|reviews", "Exception|identified", "Decision|obtained", "Enrolment|completed"]), "A coordinated process helps students navigate decisions involving different university functions.")],
-        ["The adviser becomes responsible for gathering information and ensuring that each student's case moves toward resolution.", null],
-        ["However, some cases require academic approval while others involve decisions about outstanding financial obligations.", null],
-        ["The adviser cannot simply assume authority over decisions belonging to different university functions or established policies.", iss("The adviser coordinates the student's case but does not automatically own every academic or financial decision.", "Coordination is not unlimited authority")],
-        ["Imagine a student requesting registration despite not satisfying a prerequisite for a particular course.", null],
-        ["The adviser investigates the record and identifies the requirement that prevents ordinary registration from proceeding.", dg("The adviser's responsibility", D.flow(["Student|requests help", "Adviser|checks record", "Prerequisite|issue identified"]), "The adviser performs the investigation needed to identify the enrolment exception.")],
-        ["An authorised academic role must then decide whether the applicable rules permit an exception to that prerequisite.", null],
-        ["The university should identify one accountable role for that decision rather than leave competing offices claiming ownership.", st("Each decision activity needs one accountable role, even when several people contribute information or advice.")],
-        ["A programme coordinator might be consulted because that person understands the academic consequences of the proposed exception.", null],
-        ["Consultation provides useful knowledge, but it does not necessarily transfer accountability from the authorised decision owner.", cmp("Accountable versus consulted", "Accountable role", "Answers for the academic exception decision under the applicable rules.", "Consulted role", "Provides relevant academic advice before the decision is completed.")],
-        ["The adviser may then be informed of the decision so the student receives an accurate explanation.", null],
-        ["Receiving that information does not make the adviser accountable for the academic judgement that produced the decision.", null],
-        ["The distinction prevents employees from confusing communication, advice, operational work and ultimate ownership of a decision.", dg("RACI contributions", D.flow(["Responsible|performs", "Accountable|answers", "Consulted|advises", "Informed|receives updates"]), "RACI distinguishes four contributions that should not be treated as interchangeable.")],
-        ["Now suppose two university managers both claim final authority over the same prerequisite exception and disagree.", null],
-        ["The adviser may wait for their agreement, leaving the student uncertain about whether registration can proceed.", iss("Competing accountable roles can delay decisions even when every employee understands the underlying student problem.", "Two owners, no resolution")],
-        ["A clear RACI assignment prevents that ambiguity by identifying the accountable decision owner for the activity.", null],
-        ["The university also needs an escalation route when an unusual case exceeds the authority assigned to employees.", st("RACI clarifies ownership, while documented decision rights and escalation rules make that ownership operationally usable.")],
-        ["This brings us back to Qasr, where Guest Hosts must coordinate exceptions without inheriting unlimited revenue authority.", null],
-        ["Their investigations may involve several departments, but each activity still needs clear responsibility and accountability.", null],
-        ["The redesigned process becomes more dependable when employees understand who acts, who decides and who must be informed.", q("Would assigning every participating department accountability for the same exception make coordination clearer or more confusing?")]
-      ]
-    }
-  ]
-},
-      ] },
-      { id: "l2", title: "The Guest Host's impossible job", sections: [
-{
-  title: "Authority without ambiguity",
-  sec: "W10O2a",
-  lines: [
-    ["We have clarified who performs Qasr's redesigned work and who remains accountable for important process decisions.", t("Authority without ambiguity", "The Guest Host's decision rights must match the responsibilities of the redesigned role.")],
-    ["Now let's examine what happens when employees understand their responsibilities but remain uncertain about their decision-making authority.", null],
-    ["Imagine a Guest Host welcoming a traveller whose confirmed corporate rate differs from the kiosk's displayed amount.", dg("A rate discrepancy at Qasr", D.flow(["Guest|arrives", "Kiosk|shows discrepancy", "Guest Host|investigates", "Decision|required"]), "The redesigned process expects the Guest Host to help resolve exceptions that the kiosk cannot handle.")],
-    ["The traveller wants the discrepancy resolved quickly, because another referral would reproduce the frustrating experience Qasr redesigned.", null],
-    ["The Guest Host has been told that certain rate discrepancies can be waived without obtaining managerial approval.", st("Guest Hosts may waive rate discrepancies up to AED 400 without referral.")],
-    ["However, this authority was communicated through a briefing email rather than incorporated into the formal delegation schedule.", null],
-    ["The waiver is also missing from the job description and the employee's existing performance objectives.", iss("The process expects independent decisions, but formal organisational documents do not clearly establish the Guest Host's authority.", "An authority gap")],
-    ["Imagine being that employee while a dissatisfied guest waits for your decision at the lobby kiosk.", null],
-    ["Would you confidently exercise the waiver, knowing that the formal documents do not confirm your permission?", q("Why might an employee hesitate to exercise authority communicated informally but absent from formal delegation?")],
-    ["The hesitation could reflect uncertainty about consequences rather than opposition to the redesigned guest experience.", null],
-    ["Qasr's evidence makes this concern important because nine of twenty-two Guest Hosts refer every rate discrepancy upward.", dg("Observed escalation at Qasr", D.flow(["22 Guest|Hosts", "9 always|refer discrepancies", "Manager|decides", "Guest|waits"]), "Nine Guest Hosts refer every rate discrepancy upward, although the redesigned role includes limited waiver authority.")],
-    ["We cannot establish each employee's motive from that observation, but the organisational mismatch deserves careful investigation.", null],
-    ["The People phase offers a useful way to understand this problem through authority and accountability.", st("Authority concerns permission to decide, while accountability concerns responsibility for the result.")],
-    ["Authority means having recognised permission to make decisions within defined limits while performing assigned responsibilities.", null],
-    ["Accountability means being answerable for the outcome, including whether the employee's decisions meet expected standards.", cmp("Two different organisational requirements", "Authority", "Permission to make specified decisions within defined limits.", "Accountability", "Responsibility for the result and the quality of decisions.")],
-    ["The Week 10 slide combines these dimensions into a matrix showing four possible organisational arrangements.", null],
-    ["When authority and accountability are both high, employees can take ownership of decisions and their consequences.", dg("Authority and accountability", D.matrix2x2(["Low authority", "High authority"], ["High accountability", "Low accountability"], ["Defensive escalation", "Ownership", "Compliance without engagement", "Inconsistent local practice"]), "The matrix contrasts the behavioural consequences of different combinations of authority and accountability.")],
-    ["That combination supports the redesign because employees can act independently while remaining answerable for appropriate decisions.", null],
-    ["High accountability with low authority creates a different situation, where employees face consequences without sufficient decision rights.", iss("Employees are expected to deliver results but lack clear permission to make the decisions those results require.", "High accountability, low authority")],
-    ["Defensive escalation becomes understandable because referring decisions upward may feel safer than exercising uncertain authority.", null],
-    ["High authority with low accountability creates another risk because employees may develop inconsistent local practices.", st("Authority without sufficient accountability can produce inconsistent decisions across employees or operating locations.")],
-    ["When both authority and accountability are low, compliance without engagement and quiet workarounds can become more likely.", null],
-    ["The matrix therefore highlights why assigning responsibility alone cannot guarantee that employees will perform redesigned work.", cmp("The design principle", "Responsibility without authority", "Employees may avoid decisions and refer cases unnecessarily.", "Authority with accountability", "Employees can exercise judgement within defined limits and answer for their decisions.")],
-    ["For Qasr, the immediate design issue is making the Guest Host's waiver authority formally usable.", null],
-    ["The delegation schedule should specify the AED 400 boundary and identify how cases beyond that authority are escalated.", dg("A documented decision boundary", D.flow(["Rate|discrepancy", "Within AED 400|authority?", "Guest Host|may resolve", "Escalate|outside authority"]), "Formal delegation should clarify the permitted decision boundary and the escalation route beyond it.")],
-    ["The job description and accountability arrangements should reinforce the same decision rights rather than contradict them.", null],
-    ["Employees also need realistic guidance about applying the waiver appropriately, because authority does not eliminate judgement.", st("Clear delegation must be supported by consistent responsibilities, decision guidance and accountability for quality.")],
-    ["Remember that formalising authority does not mean encouraging employees to waive every discrepancy automatically.", null],
-    ["It means enabling appropriate decisions within agreed limits while preserving escalation when a case exceeds those limits.", null],
-    ["Qasr's challenge is to replace uncertainty with a dependable decision arrangement that supports the redesigned arrival experience.", q("If Qasr expects Guest Hosts to resolve eligible discrepancies, what must change beyond simply repeating the briefing email?")]
-  ],
-  review: [
-    {
-      title: "The delivery driver who could not solve a simple problem",
-      lines: [
-        ["Let's explore authority and accountability through a delivery company trying to resolve customer problems during the final delivery.", t("Remedial · Authority and accountability", "A delivery exception reveals why responsibility must be supported by usable decision rights.")],
-        ["The company redesigns its service so drivers can address straightforward delivery exceptions without contacting the central office.", null],
-        ["Previously, customers waited while drivers requested approval for minor changes to delivery arrangements or service recovery.", dg("The redesigned delivery process", D.flow(["Driver|arrives", "Customer|reports problem", "Driver|assesses", "Local|resolution"]), "The redesigned process expects drivers to resolve appropriate delivery exceptions without unnecessary referral.")],
-        ["Management now expects drivers to protect customer satisfaction by making reasonable decisions within approved operational boundaries.", null],
-        ["However, the company announces this expectation during a briefing without updating the formal delegation policy.", iss("Drivers are expected to make local decisions, but their formal authority remains unclear.", "Responsibility without documented authority")],
-        ["Imagine a driver discovering that a customer's parcel was delivered with damaged packaging but the contents remain intact.", null],
-        ["The customer requests an immediate service adjustment, while the driver worries about exceeding an undocumented approval limit.", q("Why might the driver contact a supervisor even when management encourages employees to resolve problems locally?")],
-        ["The driver may fear being held accountable for a decision that the organisation has not formally authorised.", null],
-        ["This situation illustrates high accountability combined with low authority, which can encourage defensive escalation.", st("High accountability with insufficient authority can encourage employees to refer decisions upward for protection.")],
-        ["The driver might understand the customer's problem perfectly while still lacking confidence about making the required decision.", null],
-        ["That distinction matters because additional technical training alone cannot correct a missing organisational decision right.", cmp("Two different problems", "Capability gap", "The employee does not know how to assess or resolve the situation.", "Authority gap", "The employee understands the situation but lacks clear permission to decide.")],
-        ["The company should document which service adjustments drivers may approve and when supervisory escalation remains necessary.", null],
-        ["A clear delegation boundary allows employees to act confidently without assuming unlimited authority over customer compensation.", dg("Making delegation usable", D.flow(["Exception|identified", "Within|delegation?", "Driver|resolves", "Supervisor|handles excess"]), "Defined decision rights distinguish local resolution from cases requiring supervisory approval.")],
-        ["Accountability must accompany that authority because employees should remain answerable for decisions made within approved limits.", null],
-        ["Without accountability, different drivers might grant inconsistent adjustments that undermine fairness and operational control.", st("High authority without appropriate accountability can produce inconsistent local decisions.")],
-        ["When both authority and accountability are low, employees may simply follow routines without engaging with improvement objectives.", null],
-        ["The strongest arrangement combines meaningful authority with clear accountability and practical guidance for exercising judgement.", null],
-        ["This is the same challenge facing Qasr's Guest Hosts when they encounter eligible rate discrepancies.", dg("The shared design problem", D.flow(["New|responsibility", "Formal|authority", "Clear|accountability", "Appropriate|decision"]), "Employees need authority and accountability that support the responsibilities of the redesigned process.")],
-        ["A briefing may communicate management's intention, but formal delegation makes the decision boundary organisationally dependable.", null],
-        ["The objective is not unrestricted independence, because some exceptions still require decisions beyond the employee's authority.", null],
-        ["The objective is appropriate local resolution supported by clear limits and a reliable escalation route.", q("How would documenting the driver's decision rights change the behaviour encouraged by the redesigned delivery process?")]
-      ]
-    },
-    {
-      title: "The insurance adviser who always asked the manager",
-      lines: [
-        ["Now imagine an insurance company redesigning how advisers resolve straightforward customer claims and policy discrepancies.", t("Remedial · Diagnosing defensive escalation", "An insurance claims example shows how unclear authority can recreate unnecessary managerial referrals.")],
-        ["The company wants advisers to resolve eligible cases during customer conversations rather than transferring every decision to supervisors.", null],
-        ["The redesigned process therefore gives advisers responsibility for investigating claims and applying specified decision rules.", dg("The intended claims journey", D.flow(["Customer|raises claim", "Adviser|investigates", "Eligibility|assessed", "Decision|communicated"]), "The redesigned process expects advisers to resolve eligible claims through clearly defined decision rules.")],
-        ["However, the formal job description still describes advisers as employees who collect information and recommend managerial decisions.", null],
-        ["Their performance objectives emphasise timely handling, but the revised approval authority has not been formally documented.", iss("The adviser is expected to resolve claims while formal documents continue describing a referral-based role.", "Conflicting organisational expectations")],
-        ["Imagine an adviser reviewing a claim that appears to satisfy the conditions for a straightforward approval.", null],
-        ["The employee understands the policy but hesitates because approving the claim might later be questioned by management.", q("Does this hesitation necessarily demonstrate resistance to change, or could it reveal a weakness in the role design?")],
-        ["The behaviour could reflect uncertainty about authority rather than unwillingness to serve the customer effectively.", null],
-        ["The authority-accountability matrix helps explain why employees may protect themselves by escalating decisions they could otherwise resolve.", st("Defensive escalation can be a predictable response when employees face accountability without dependable decision authority.")],
-        ["Suppose management responds by reminding advisers that the redesigned process requires greater independence and faster decisions.", null],
-        ["That message might increase pressure without resolving the formal contradiction that makes independent decisions feel risky.", cmp("Two management responses", "Repeat the instruction", "Tell employees to make more decisions without changing their formal authority.", "Repair the role design", "Document decision rights, clarify accountability and establish escalation boundaries.")],
-        ["A stronger response would identify the decisions advisers should make and record those rights in formal delegation arrangements.", null],
-        ["The organisation should also specify when complex claims exceed local authority and require specialist or managerial review.", dg("The decision boundary", D.flow(["Claim|assessed", "Within|authority?", "Adviser|decides", "Specialist|reviews excess"]), "The adviser resolves eligible claims while cases outside delegated authority follow a defined escalation route.")],
-        ["This arrangement protects customers because routine decisions can proceed without unnecessary waiting or repeated transfers.", null],
-        ["It also protects the organisation because decisions remain subject to clear accountability and consistent operating standards.", st("Useful delegation combines local decision authority with accountability for appropriate and consistent outcomes.")],
-        ["Now consider the opposite problem, where advisers receive broad approval authority but nobody reviews their decision quality.", null],
-        ["Different employees might interpret similar claims inconsistently, creating unfair outcomes and avoidable operational risks.", iss("High authority without meaningful accountability can encourage inconsistent local practices.", "The opposite imbalance")],
-        ["The solution is therefore not simply increasing authority, because authority must fit responsibilities and accountability together.", null],
-        ["Qasr faces the same design challenge with Guest Hosts authorised to waive eligible discrepancies up to AED 400.", null],
-        ["The organisation should formalise that boundary while clarifying how employees exercise judgement and escalate exceptional cases.", dg("A coherent role arrangement", D.flow(["Defined|responsibility", "Documented|authority", "Clear|accountability", "Appropriate|escalation"]), "Responsibilities, authority, accountability and escalation must support the same redesigned process.")],
-        ["Remember that an employee's repeated referrals are evidence worth investigating rather than automatic proof of personal resistance.", null],
-        ["A sound diagnosis examines whether the organisation has made the expected decision both possible and defensible.", q("Why might changing formal delegation be more effective than repeatedly instructing advisers to show greater confidence?")]
-      ]
-    }
-  ]
-},
-{
-  title: "When the old measure defeats the new design",
-  sec: "W10O2b",
-  lines: [
-    ["We have seen how unclear authority can make Qasr's Guest Hosts hesitate when guests need immediate decisions.", t("When the old measure defeats the new design", "How performance measures and incentives can recreate the behaviour a process redesign was meant to replace.")],
-    ["Now let's examine another problem, one that can undermine the redesign even when employees understand their responsibilities.", null],
-    ["Imagine a Guest Host spending fifteen minutes resolving a complicated rate discrepancy for a tired business traveller.", dg("The difficult arrival", D.flow(["Guest|arrives", "Kiosk|rejects case", "Guest Host|investigates", "Exception|resolved"]), "The redesigned role requires careful attention to exceptions that automated check-in cannot resolve.")],
-    ["The employee investigates the booking, explains the discrepancy and helps the guest continue the arrival process.", null],
-    ["From the guest's perspective, that careful intervention may be exactly what the redesigned service should provide.", st("Successful exception resolution can create value even when it takes longer than a routine transaction.")],
-    ["But imagine the employee's performance review still rewarding the number of check-ins completed during each shift.", null],
-    ["A complicated exception consumes time while contributing little to the transaction volume recognised by that measure.", iss("The employee performs valuable redesigned work, but the existing performance measure may treat that work as unproductive.", "The measurement contradiction")],
-    ["This is the problem Qasr faces because its Guest Hosts inherited performance objectives established earlier in January.", null],
-    ["Those objectives still measure check-ins completed per shift and the average time taken for each transaction.", cmp("Qasr's inherited objectives", "Check-ins per shift", "Rewards the volume of conventional front-desk transactions.", "Average transaction time", "Rewards completing individual transactions quickly.")],
-    ["Neither measure was designed specifically around the Guest Host's new responsibility for resolving difficult kiosk exceptions.", null],
-    ["Kiosk check-ins are also not attributed to individual employees, making the old volume measure particularly problematic.", st("The old scorecard no longer corresponds reliably to the work assigned to Guest Hosts.")],
-    ["The organisation has changed what employees should accomplish without changing how their contribution is formally evaluated.", null],
-    ["That mismatch matters because employees naturally pay attention to activities that influence their performance assessments and rewards.", dg("How measures influence behaviour", D.flow(["Performance|measure", "Employee|priorities", "Daily|behaviour", "Process|outcome"]), "Performance measures influence which activities employees prioritise during everyday work.")],
-    ["Even committed employees can experience pressure when the activities management praises differ from the redesigned process's requirements.", null],
-    ["The Week 10 slides illustrate this danger through an exception handler whose previous objective rewarded transaction throughput.", iss("An employee expected to resolve complex exceptions remains evaluated according to the number of transactions completed.", "Old objectives survive")],
-    ["Once automation handles straightforward cases, the employee receives more difficult work that naturally takes longer to resolve.", null],
-    ["If throughput remains the dominant measure, avoiding complicated exceptions can appear more attractive than investigating them thoroughly.", dg("The unintended incentive", D.flow(["Complex|exception", "Longer|handling time", "Lower|throughput", "Pressure|to avoid"]), "A transaction-volume target can discourage employees from accepting complicated cases.")],
-    ["The resulting behaviour may resemble resistance, although the organisation itself has created incentives favouring the old process.", null],
-    ["This is why performance measurement belongs inside the People phase rather than being treated as an administrative detail.", st("A redesigned process needs measures that reinforce its intended behaviour rather than reward displaced activities.")],
-    ["For the exception handler, the slides recommend measuring exceptions resolved without unnecessary escalation instead of transaction volume.", null],
-    ["That measure recognises the employee's contribution to resolving cases that the automated process cannot complete independently.", cmp("Replacing the conflicting measure", "Old objective", "Transactions completed per shift.", "Redesigned objective", "Exceptions resolved without escalation, supported by a quality sample.")],
-    ["However, counting locally resolved exceptions alone could encourage employees to make decisions beyond their authority.", null],
-    ["The recommended quality sample therefore checks whether resolutions are appropriate rather than merely quick or independent.", st("Outcome measures need quality safeguards so employees are not rewarded for making inappropriate decisions.")],
-    ["The old objective must also be removed explicitly because retaining contradictory targets can preserve conflicting behavioural instructions.", null],
-    ["Adding a new measure without removing the old one may leave employees uncertain about which expectations matter most.", dg("A coherent performance redesign", D.flow(["Remove|old target", "Measure|new outcome", "Check|decision quality", "Align|behaviour"]), "The replacement measure should reinforce exception resolution while protecting decision quality.")],
-    ["Now return to Qasr, where Guest Hosts are expected to support arrivals rather than maximise conventional desk transactions.", null],
-    ["Their measures should reflect contributions they can reasonably influence within the redesigned guest arrival process.", null],
-    ["Exception-resolution effectiveness could be useful, provided the organisation also checks appropriate decisions and service quality.", cmp("A possible Guest Host scorecard", "Useful outcome", "Appropriate resolution of eligible guest exceptions.", "Necessary safeguard", "Decision quality and compliance with delegated authority.")],
-    ["The precise revised scorecard remains a design decision because the slides do not establish one already implemented.", null],
-    ["Qasr should also review grade and reward arrangements because materially changed responsibilities may justify different organisational treatment.", st("Roles, measures and rewards must be reviewed together so the organisation communicates consistent expectations.")],
-    ["Otherwise, employees may hear enthusiastic messages about the redesign while their formal objectives continue favouring familiar transactions.", null],
-    ["Remember that a measure can be calculated accurately while still encouraging behaviour that damages the intended process.", iss("Accurate measurement is not enough when the chosen indicator rewards the wrong behaviour.", "Measuring the wrong success")],
-    ["The central question is whether employees improve their assessed performance by doing the work the redesign actually requires.", null],
-    ["If the answer is no, the organisation must repair the measure rather than simply demand greater employee commitment.", q("Why might retaining check-ins per shift encourage Guest Hosts to avoid the very exceptions they were hired to resolve?")]
-  ],
-  review: [
-    {
-      title: "The hospital that rewarded speed instead of safe discharge",
-      lines: [
-        ["Let's explore performance alignment through a hospital redesigning how patients leave after completing their treatment.", t("Remedial · When measures contradict the process", "A hospital discharge example shows how an inherited target can undermine redesigned work.")],
-        ["The hospital wants discharge coordinators to resolve complicated departure problems before patients experience unnecessary waiting.", null],
-        ["Previously, administrative employees were evaluated mainly by how many discharge records they completed during each shift.", dg("The redesigned discharge journey", D.flow(["Discharge|approved", "Exception|identified", "Coordinator|resolves", "Patient|leaves"]), "The redesigned process requires employees to resolve problems that prevent patients from leaving safely and promptly.")],
-        ["The new role involves contacting departments, clarifying missing information and coordinating decisions when ordinary arrangements fail.", null],
-        ["These activities can take longer than processing a straightforward discharge record through the existing information system.", null],
-        ["Imagine a coordinator spending twenty minutes resolving a medication documentation problem that prevents a patient's safe departure.", iss("The coordinator protects the patient's discharge, but the inherited throughput target rewards completing more routine records.", "Valuable work, poor score")],
-        ["The employee has improved the patient's experience while appearing less productive under the previous transaction-volume measure.", null],
-        ["This creates a contradiction because the hospital wants careful exception resolution but continues rewarding administrative speed.", q("What behaviour might employees prioritise if their performance assessment still depends mainly on completed discharge records?")],
-        ["Some employees might favour simpler cases because those activities improve their measured performance more quickly.", null],
-        ["That behaviour would not necessarily demonstrate unwillingness to help patients or support the redesigned discharge process.", st("Employees may respond rationally to performance incentives that contradict the organisation's stated improvement objectives.")],
-        ["The hospital should therefore replace the conflicting target with a measure reflecting successful resolution of discharge exceptions.", null],
-        ["However, rewarding resolved exceptions without safeguards could encourage employees to rush decisions involving important clinical requirements.", cmp("A balanced measure", "Outcome", "Discharge exceptions resolved appropriately without unnecessary escalation.", "Safeguard", "Review decision quality and compliance with relevant clinical requirements.")],
-        ["A quality review should establish whether the coordinator followed appropriate procedures and involved authorised professionals when necessary.", null],
-        ["This protects patients because faster discharge is not valuable when it compromises essential safety requirements.", dg("Outcome with quality protection", D.flow(["Exception|identified", "Appropriate|resolution", "Quality|review", "Safe|departure"]), "Performance measures should reward useful outcomes without encouraging employees to bypass necessary safeguards.")],
-        ["The old transaction-volume objective must also be removed rather than retained beside the replacement measure.", null],
-        ["Otherwise, employees receive competing instructions about whether they should prioritise difficult cases or routine administrative throughput.", iss("Keeping both objectives can preserve the incentive to avoid complicated discharge cases.", "Conflicting targets remain")],
-        ["The hospital should also consider whether its reward arrangements recognise the judgement required by the redesigned role.", null],
-        ["This connects performance measurement with the broader People-phase responsibility for aligning jobs, incentives and capability.", st("Measures and rewards should reinforce the responsibilities employees must perform under the redesigned process.")],
-        ["Qasr faces the same problem because its Guest Hosts inherited objectives designed for conventional front-desk transactions.", null],
-        ["Their redesigned contribution concerns assisting arrivals and resolving exceptions that kiosks cannot handle independently.", null],
-        ["The lesson is to measure the contribution the new process needs while protecting the quality of employee decisions.", q("Why would adding an exception-resolution target without removing the old throughput target leave the hospital's problem unresolved?")]
-      ]
-    },
-    {
-      title: "The customer service team that avoided difficult complaints",
-      lines: [
-        ["Now imagine a telecommunications company redesigning its customer complaint process to reduce repeated transfers between departments.", t("Remedial · Designing the right incentive", "A complaint-handling example reveals why measures must match the work employees now perform.")],
-        ["The previous process rewarded agents for completing many customer interactions while keeping average handling time low.", null],
-        ["Management introduces a redesigned process allowing trained agents to resolve more complicated complaints during the initial conversation.", dg("The intended complaint process", D.flow(["Customer|contacts", "Agent|investigates", "Decision|made", "Complaint|resolved"]), "The redesigned process aims to resolve eligible complaints without repeated transfers.")],
-        ["The new responsibility requires employees to investigate service histories and apply judgement when customers describe unusual circumstances.", null],
-        ["However, the organisation continues evaluating agents according to call volume and average handling time.", iss("The redesigned role requires deeper investigation, but the inherited measures reward short conversations and high transaction volume.", "A contradictory scorecard")],
-        ["Imagine an agent receiving a complicated billing complaint that requires careful examination of several previous charges.", null],
-        ["Resolving the complaint properly could take longer than handling several simple requests that involve no investigation.", q("Which activity improves the employee's old performance score, and which activity better supports the redesigned process?")],
-        ["The old score favours quick interactions, while the redesigned process values appropriate resolution of difficult complaints.", null],
-        ["An employee might therefore transfer the complicated case instead of completing the investigation during the conversation.", st("Misaligned measures can recreate the handoffs that a redesigned process was intended to eliminate.")],
-        ["The problem is not necessarily poor employee motivation because the organisation continues rewarding behaviour associated with its previous process.", null],
-        ["A better measure could recognise eligible complaints resolved without unnecessary escalation, provided decisions remain appropriate.", cmp("Redesigning the objective", "Inherited measure", "Calls completed and average handling time.", "Replacement measure", "Eligible complaints resolved appropriately without unnecessary escalation.")],
-        ["However, the company should not reward agents simply for claiming that every complaint has been resolved.", null],
-        ["A quality sample should examine whether the resolution followed policy and genuinely addressed the customer's problem.", dg("Checking the quality of resolution", D.flow(["Complaint|investigated", "Resolution|recorded", "Quality|sampled", "Outcome|verified"]), "Quality review protects against superficial closure and inappropriate decisions.")],
-        ["The organisation must also distinguish cases employees can resolve from those requiring specialist or managerial authority.", null],
-        ["Otherwise, a poorly designed target might encourage agents to make decisions beyond their delegated limits.", st("Performance incentives must respect decision authority while encouraging appropriate resolution of eligible cases.")],
-        ["The previous call-volume objective should be removed when it conflicts with the work required by the redesign.", null],
-        ["Keeping both targets may create pressure to close conversations quickly while simultaneously demanding deeper complaint investigation.", iss("Contradictory objectives can leave employees uncertain about which behaviour management genuinely expects.", "Two competing instructions")],
-        ["Managers should also review whether reward arrangements recognise the greater judgement and responsibility involved in the redesigned role.", null],
-        ["This matters because employees interpret formal measures and rewards as evidence of what the organisation truly values.", null],
-        ["Qasr's Guest Hosts face a comparable contradiction when conventional check-in targets remain attached to exception-handling responsibilities.", dg("The shared design principle", D.flow(["Redesigned|responsibility", "Relevant|outcome measure", "Quality|safeguard", "Aligned|incentive"]), "The measure should recognise the new contribution while protecting appropriate decisions.")],
-        ["The central principle is that performance measures should make desirable process behaviour worthwhile rather than accidentally penalise it.", null],
-        ["When employees succeed by performing the redesigned work properly, measurement becomes a practical support for organisational change.", q("How could an exception-resolution measure improve behaviour while still creating problems if decision quality were ignored?")]
-      ]
-    }
-  ]
-},
-{
-  title: "Designing a role people can actually perform",
-  sec: "W10O2c",
-  lines: [
-    ["We have discovered two problems at Qasr: uncertain decision authority and performance measures inherited from the old process.", t("Designing a role people can actually perform", "Bringing responsibilities, authority, accountability, measures and capability into one coherent role.")],
-    ["Now imagine the programme sponsor asking you to repair the Guest Host role rather than explain its weaknesses.", null],
-    ["The challenge is to create a specification that employees can understand and managers can support during operations.", q("What would make the Guest Host a genuinely workable role rather than simply a new job title?")],
-    ["Let's return to the four pilot properties, where twenty-two former Front Desk Agents now work as Guest Hosts.", null],
-    ["Their redesigned responsibilities include greeting arriving guests and resolving exceptions that self-service kiosks cannot handle.", dg("The Guest Host's operating purpose", D.flow(["Guest|arrives", "Kiosk|handles routine case", "!Exception|requires help", "Guest Host|supports resolution"]), "The redesigned role supports arrivals and handles exceptions requiring human assistance.")],
-    ["That gives us the role's purpose, but a purpose alone does not establish everything employees need.", null],
-    ["A usable specification must translate the process design into responsibilities that can be performed and evaluated consistently.", st("A complete role specification connects the redesigned process with the employee's actual work.")],
-    ["At Qasr, updated job descriptions were issued three weeks after go-live rather than before employees began operating.", null],
-    ["That timing matters because employees needed clear expectations from the moment their responsibilities changed.", iss("Employees began performing redesigned work before updated job descriptions were available.", "Role definition arrived late")],
-    ["The specification should explain which arrival problems Guest Hosts investigate and what successful resolution means.", null],
-    ["It should also clarify their relationship with other roles involved in guest service and revenue decisions.", dg("Connecting the role to the process", D.flow(["Guest Host|investigates", "Relevant role|provides input", "Authorised role|decides", "Guest|receives outcome"]), "Responsibilities and decision ownership must support the redesigned arrival journey.")],
-    ["Remember our RACI discussion, where responsibility identifies who performs an activity and accountability identifies who answers for it.", null],
-    ["Those assignments should reflect the redesigned process rather than simply reproduce Qasr's former departmental arrangements.", st("The role specification should agree with the redesigned RACI responsibilities and accountability arrangements.")],
-    ["Now consider the Guest Host's authority to waive eligible rate discrepancies up to AED 400.", null],
-    ["The organisation communicated that permission through a briefing email without updating its formal delegation schedule.", cmp("Expected authority and documented authority", "Redesigned expectation", "Guest Hosts may waive eligible discrepancies up to AED 400.", "Formal arrangements", "The waiver remains absent from the delegation schedule and job description.")],
-    ["A workable specification should identify this decision boundary and explain when employees must seek additional approval.", null],
-    ["Formal delegation matters because employees should not have to guess whether management will support an appropriate decision.", dg("The Guest Host's decision boundary", D.flow(["Rate|discrepancy", "Within|delegation?", "Resolve|when appropriate", "Escalate|outside authority"]), "The formal role should distinguish permitted local decisions from cases requiring escalation.")],
-    ["The specification also needs a clear reporting relationship so employees know where operational support and escalation belong.", null],
-    ["The slides do not establish Qasr's final Guest Host reporting line, so choosing one remains a design decision.", st("A proposed reporting line must be justified and documented rather than presented as an existing Qasr arrangement.")],
-    ["Now imagine the employee resolving a difficult exception carefully while the performance system continues rewarding quick check-ins.", null],
-    ["That contradiction would make the redesigned responsibility less attractive despite the employee's contribution to guest service.", iss("The role requires exception resolution, but inherited objectives still reward conventional transaction volume and speed.", "The incentive mismatch")],
-    ["Qasr therefore needs measures reflecting outcomes Guest Hosts can influence within their actual responsibilities and authority.", null],
-    ["Appropriate exceptions resolved without unnecessary escalation could provide useful evidence of the role's intended contribution.", cmp("A proposed performance approach", "Relevant outcome", "Eligible guest exceptions resolved appropriately without unnecessary escalation.", "Quality safeguard", "Check decision accuracy and compliance with delegated authority.")],
-    ["However, resolution counts need quality safeguards because employees must not be rewarded for making inappropriate waiver decisions.", null],
-    ["The old transaction measures should be removed where they contradict the redesigned role's intended contribution.", st("Performance measures should reward the new work while protecting decision quality and appropriate escalation.")],
-    ["The organisation must also review whether changed responsibilities justify adjustments to job grade and reward arrangements.", null],
-    ["Qasr's existing grade remains unchanged, but the evidence does not establish what revised grade would be appropriate.", dg("Reviewing the employment arrangements", D.flow(["Changed|responsibilities", "Review|job grade", "Review|reward", "Align|expectations"]), "Materially changed work should trigger a justified review of grade and reward arrangements.")],
-    ["A review is necessary because greater judgement and accountability should be considered within the organisation's employment arrangements.", null],
-    ["But raising the grade automatically would be another unsupported decision without evaluating the role's actual requirements.", st("Grade and reward changes require assessment rather than assumptions based only on a new role title.")],
-    ["Finally, the specification should identify the capabilities employees need to handle unfamiliar exceptions and exercise sound judgement.", null],
-    ["Practical training and assessment should demonstrate those capabilities rather than merely record attendance at an induction session.", dg("From role design to capability", D.flow(["Required|decisions", "Identify|capability gaps", "Practise|exceptions", "Assess|performance"]), "The capability plan prepares employees to perform the responsibilities and decisions defined in their role.")],
-    ["Qasr can then assign ownership for monitoring whether employees actually perform the redesigned arrival process consistently.", null],
-    ["Together, these arrangements turn the Guest Host into a role supported by the organisation rather than an isolated instruction.", st("A workable role aligns responsibilities, accountability, authority, reporting, measures, reward and demonstrated capability.")],
-    ["Notice how each element reinforces the others, because changing one without the rest can recreate old operating behaviour.", null],
-    ["Our next challenge is determining whether employees have developed the judgement required to perform this coherent role.", q("Which elements would you insist on documenting before declaring Qasr's redesigned Guest Host role operationally ready?")]
-  ],
-  review: [
-    {
-      title: "Designing the hospital discharge coordinator",
-      lines: [
-        ["Let's practise designing a complete role through a hospital introducing a discharge coordinator for patients leaving after treatment.", t("Remedial · Building a complete role", "A hospital discharge coordinator illustrates how role specifications connect process responsibilities with organisational support.")],
-        ["The hospital has redesigned discharge so patients no longer wait while departments complete disconnected administrative activities.", null],
-        ["A coordinator now helps manage the journey from discharge approval until the patient can leave safely.", dg("The redesigned discharge journey", D.flow(["Discharge|approved", "Requirements|checked", "Exceptions|resolved", "Patient|leaves"]), "The coordinator supports the complete departure journey rather than one isolated administrative transaction.")],
-        ["However, simply creating the coordinator title does not explain what the employee should do during difficult cases.", null],
-        ["Imagine a patient whose departure is delayed because medication information and transport arrangements remain incomplete.", q("What responsibilities should the coordinator perform, and which decisions must remain with authorised clinical professionals?")],
-        ["The coordinator might investigate outstanding requirements, contact relevant departments and maintain communication with the patient.", null],
-        ["Those responsibilities should appear explicitly in the role specification because they define the employee's actual contribution.", st("A role specification translates the redesigned process into clear responsibilities employees can perform.")],
-        ["The hospital must also distinguish coordinating an activity from being accountable for every professional decision involved.", null],
-        ["Clinical approval should remain with the authorised professional, while operational coordination follows its own accountability arrangements.", cmp("Different responsibilities", "Discharge coordinator", "Coordinates operational requirements and resolves appropriate administrative dependencies.", "Clinical decision owner", "Retains accountability for clinical decisions within professional authority.")],
-        ["The specification should identify which operational adjustments the coordinator may authorise without requesting additional managerial approval.", null],
-        ["It should also define escalation when an issue exceeds that authority or requires specialist clinical judgement.", dg("Documented decision rights", D.flow(["Issue|identified", "Within|authority?", "Coordinator|resolves", "Specialist|decides"]), "Clear authority boundaries enable local action while protecting decisions requiring specialist approval.")],
-        ["Without those boundaries, the coordinator may spend time seeking permission for decisions the redesigned process intended to simplify.", null],
-        ["The hospital must then consider how the coordinator's performance will be evaluated under the new arrangements.", null],
-        ["Counting completed discharge records alone would overlook the employee's contribution to resolving complicated departure problems.", iss("The role requires coordination and exception resolution, but an inherited transaction measure may reward only administrative throughput.", "The wrong measure")],
-        ["A better measure could recognise appropriately resolved discharge obstacles while checking that essential clinical safeguards remain intact.", null],
-        ["The hospital should also review whether the changed responsibilities justify different grade or reward arrangements.", st("Measures and rewards should reflect the role's actual contribution without encouraging unsafe shortcuts.")],
-        ["The employee needs practical capability in communication, coordination and recognising situations requiring escalation to clinical professionals.", null],
-        ["Training should therefore include realistic discharge cases followed by assessment of how the coordinator handles them.", dg("Preparing the employee", D.flow(["Define|role", "Clarify|authority", "Align|measures", "Practise|cases", "Assess|capability"]), "A complete role design connects responsibilities, authority, incentives and demonstrated capability.")],
-        ["Finally, the reporting relationship must clarify where the coordinator obtains support when departmental requirements conflict.", null],
-        ["This is precisely the challenge Qasr faces when defining the Guest Host's responsibilities across operational and revenue boundaries.", null],
-        ["A role becomes workable when its organisational arrangements support the decisions and activities required by the redesigned process.", q("Why would a detailed job description still be insufficient if the coordinator lacked authority and appropriate performance measures?")]
-      ]
-    },
-    {
-      title: "The returns specialist whose job existed only on paper",
-      lines: [
-        ["Now imagine an online retailer creating a returns specialist role after automating straightforward customer refund requests.", t("Remedial · Repairing an incomplete role", "An automated returns process demonstrates how missing role elements undermine otherwise sensible redesigns.")],
-        ["The new software approves routine returns automatically, leaving employees responsible for cases involving unusual circumstances or disputed information.", null],
-        ["Management renames several customer service positions as returns specialists and announces that employees should resolve more exceptions.", dg("The redesigned returns process", D.flow(["Return|requested", "Automatic|check", "!Complex|exception", "Specialist|investigates", "Resolution|communicated"]), "Automation handles routine cases while employees investigate exceptions requiring judgement.")],
-        ["However, the organisation has not revised the existing job descriptions or documented which refund decisions specialists may approve.", null],
-        ["Employees therefore understand the general ambition but remain uncertain about their responsibilities and decision boundaries.", iss("The new title exists, but responsibilities and delegated decision rights remain incomplete.", "A role without operational support")],
-        ["Imagine a specialist investigating a damaged product return that appears to justify an exception to ordinary policy.", null],
-        ["The employee knows how to assess the evidence but cannot establish whether local approval is formally permitted.", q("Which missing role element prevents the specialist from completing a decision that the redesigned process expects?")],
-        ["The immediate problem is unclear delegated authority, which should specify permitted decisions and appropriate escalation limits.", null],
-        ["A complete role specification would also describe the investigation responsibilities and identify accountability for relevant decisions.", st("Responsibilities explain the work, while documented authority establishes which decisions employees may make.")],
-        ["Now suppose the specialist's manager continues measuring performance through the number of returns processed each hour.", null],
-        ["Complex investigations reduce that count, making employees appear less productive when they perform their redesigned responsibilities.", cmp("The inherited measurement problem", "Old measure", "Returns processed per hour.", "Redesigned contribution", "Appropriate resolution of complicated returns that automation cannot approve.")],
-        ["The retailer should replace contradictory measures with indicators reflecting the outcomes specialists can reasonably influence.", null],
-        ["A measure of appropriate exception resolution could help, provided the organisation also reviews decision quality.", dg("Measuring the redesigned contribution", D.flow(["Exception|investigated", "Appropriate|decision", "Quality|checked", "Outcome|recorded"]), "Performance measures should recognise useful resolutions without encouraging inappropriate approvals.")],
-        ["Without a quality safeguard, employees might approve questionable refunds simply to increase their recorded resolution rate.", null],
-        ["The company must also review whether greater judgement and responsibility justify changes to grade or reward.", null],
-        ["Such changes require evaluation because a new title alone does not establish the appropriate employment arrangements.", st("Grade and reward reviews should reflect actual changes in responsibility rather than assumptions about job titles.")],
-        ["Employees also need training that goes beyond navigating the returns software and explains how to handle unusual cases.", null],
-        ["Realistic practice should test whether specialists understand policy, apply delegated authority and recognise necessary escalation.", dg("Demonstrating capability", D.flow(["Identify|skills", "Practise|exceptions", "Test|decisions", "Provide|support"]), "Capability assessment establishes whether employees can perform the redesigned role in realistic situations.")],
-        ["Finally, the organisation should clarify the specialist's reporting relationship and the support available when decisions become difficult.", null],
-        ["That arrangement prevents employees from inventing informal approval routes when the redesigned process encounters unfamiliar situations.", null],
-        ["Notice how these elements form one coherent design rather than separate administrative documents with unrelated purposes.", st("A complete role aligns work, accountability, authority, reporting, measures, rewards and capability.")],
-        ["Qasr must apply the same reasoning when repairing the Guest Host role across its four pilot properties.", null],
-        ["The goal is not to produce more paperwork but to make the redesigned work understandable and practically achievable.", q("Which role elements would you check before concluding that the returns specialist can operate independently and responsibly?")]
-      ]
-    }
-  ]
-},
-      ] },
-      { id: "l3", title: "Capability is more than attendance", sections: [
-{
-  title: "Training for judgement, not just buttons",
-  sec: "W10O3a",
-  lines: [
-    ["We have designed a more coherent Guest Host role, but another question now deserves our attention.", t("Training for judgement, not just buttons", "Why completing induction does not demonstrate readiness to perform redesigned work.")],
-    ["Can Qasr's employees actually perform the decisions and responsibilities that the redesigned arrival process requires?", null],
-    ["Imagine the programme sponsor opening the latest progress report and noticing that the people workstream is green.", dg("The people workstream report", D.flow(["22 Guest|Hosts", "Four-hour|induction", "Attendance|complete", "Status|green"]), "The programme reports successful induction attendance, but attendance alone does not demonstrate operational capability.")],
-    ["The explanation sounds reassuring because all twenty-two Guest Hosts attended the required four-hour induction.", null],
-    ["Every employee participated, so the programme can legitimately report that its scheduled induction activity was completed.", st("All twenty-two Guest Hosts attended the four-hour induction, but their capability was not tested afterwards.")],
-    ["However, the sponsor should ask whether attendance establishes that employees can handle unfamiliar guest exceptions independently.", null],
-    ["A completed training session tells us who participated, not whether participants can perform the required work.", cmp("Two different kinds of evidence", "Training attendance", "Shows that employees participated in a scheduled learning activity.", "Demonstrated capability", "Shows that employees can perform required decisions and activities appropriately.")],
-    ["This distinction matters because the Guest Host role involves more than operating a kiosk or following instructions.", null],
-    ["Employees must interpret unusual situations, exercise judgement and recognise when an exception exceeds their delegated authority.", dg("The Guest Host's capability challenge", D.flow(["Guest|raises exception", "Host|investigates", "Judgement|required", "Appropriate|decision"]), "The redesigned role requires practical judgement when automated check-in cannot complete an arrival.")],
-    ["Imagine a traveller presenting a corporate booking whose confirmed rate differs from the amount displayed during check-in.", null],
-    ["The Guest Host must understand the discrepancy before deciding whether the permitted waiver can resolve it.", null],
-    ["Simply knowing where the waiver button appears cannot establish whether using that button would be appropriate.", iss("An employee may operate the software correctly while making an inappropriate decision about the guest's rate discrepancy.", "System knowledge is not process judgement")],
-    ["This is why the slides distinguish system training from process training when preparing employees for redesigned responsibilities.", null],
-    ["System training explains how to operate an interface, including where information appears and how actions are recorded.", cmp("Two complementary learning needs", "System training", "Explains how to operate the interface and complete technical actions.", "Process training", "Explains why actions matter, what should happen next and when judgement is required.")],
-    ["Process training explains why an action is needed, what should happen next and how decisions affect others.", null],
-    ["Both matter because technical competence without process understanding can create errors that travel through the guest journey.", st("Employees need to understand both how the system works and why the redesigned process requires particular actions.")],
-    ["Consider a Guest Host who correctly records a waiver but fails to recognise that the case exceeds delegated authority.", null],
-    ["The interface may accept the entry, yet the employee's decision could still violate the intended operating arrangements.", iss("Successful system operation does not guarantee that an employee has exercised appropriate decision-making authority.", "A capability gap")],
-    ["The People phase therefore requires training that develops judgement through realistic situations rather than presentation slides alone.", null],
-    ["A useful exercise might present several rate discrepancies with different causes, amounts and escalation requirements.", dg("Learning through realistic exceptions", D.flow(["Case|presented", "Evidence|examined", "Decision|explained", "Feedback|provided"]), "Worked cases help employees practise applying the redesigned process to unfamiliar situations.")],
-    ["Employees should explain their reasoning because choosing an answer without understanding its consequences does not demonstrate dependable capability.", null],
-    ["They also need opportunities to make mistakes safely before facing dissatisfied guests during live operations.", st("Realistic practice allows employees to develop judgement and receive feedback without exposing actual guests to avoidable errors.")],
-    ["Imagine an employee initially approving a case that should have been escalated under the formal delegation arrangements.", null],
-    ["A trainer can use that mistake to explain the decision boundary and help the employee practise again.", dg("Safe practice and feedback", D.flow(["Attempt|decision", "Review|reasoning", "Correct|misunderstanding", "Practise|again"]), "Safe mistakes during training provide evidence about learning needs before employees handle real exceptions.")],
-    ["That approach builds confidence through understanding rather than simply encouraging employees to act more independently.", null],
-    ["However, practice alone is insufficient unless the organisation assesses whether employees can perform the required decisions.", st("Capability assessment tests whether employees can apply the redesigned process appropriately in realistic situations.")],
-    ["A practical assessment should examine exception investigation, appropriate waiver decisions and escalation beyond delegated authority.", null],
-    ["It should also consider decision quality because resolving cases quickly is not useful when the resolution is inappropriate.", cmp("A meaningful capability assessment", "Decision effectiveness", "Can the employee resolve an eligible exception appropriately?", "Decision quality", "Does the employee respect policy, authority and necessary escalation?")],
-    ["Qasr has not conducted such an assessment, so the actual capability of individual Guest Hosts remains unknown.", null],
-    ["The nine employees who refer every rate discrepancy may face authority uncertainty, capability gaps or other difficulties.", iss("Repeated escalation is observable, but its precise causes cannot be established without investigating the employees' circumstances.", "Evidence requires diagnosis")],
-    ["We should not assume that additional training alone will correct behaviour caused by missing formal decision rights.", null],
-    ["The organisation must distinguish what employees cannot do from what they are not clearly authorised to do.", st("Capability gaps and authority gaps require different remedies, even when both produce repeated escalation.")],
-    ["The people workstream should therefore report assessed readiness and unresolved capability risks alongside completed training activities.", null],
-    ["That evidence would help the sponsor decide whether employees need further practice, clearer authority or additional support.", dg("From attendance to readiness", D.flow(["Induction|completed", "Capability|assessed", "Gaps|identified", "Support|provided", "Readiness|reviewed"]), "A credible people-readiness report connects training participation with demonstrated capability and unresolved risks.")],
-    ["Remember that capability development is part of delivering process change, not merely an administrative training requirement.", null],
-    ["Qasr needs evidence that Guest Hosts can exercise sound judgement before declaring its redesigned roles operationally ready.", q("What evidence would convince you that a Guest Host can resolve appropriate exceptions rather than merely operate the kiosk?")]
-  ],
-  review: [
-    {
-      title: "The pharmacy technician who knew the screen",
-      lines: [
-        ["Let's examine capability through a pharmacy introducing a redesigned process for handling prescription collection and unusual requests.", t("Remedial · System training versus process capability", "A pharmacy example shows why knowing the interface does not establish sound judgement.")],
-        ["The pharmacy installs a new system that displays prescriptions, confirms collection details and identifies cases requiring professional review.", null],
-        ["Technicians attend a training session where they learn how to search records and record completed collections.", dg("The redesigned collection process", D.flow(["Patient|arrives", "Record|checked", "!Exception|identified", "Professional|reviews", "Collection|completed"]), "The system supports routine collections while unusual cases require appropriate professional decisions.")],
-        ["Every technician completes the session, so the manager reports that the training programme has been successfully delivered.", null],
-        ["However, the redesigned process also requires technicians to recognise when a pharmacist must review an unusual situation.", iss("Employees can operate the collection system but may not recognise when professional review is required.", "The difference between operation and judgement")],
-        ["Imagine a patient arriving with information that conflicts with the prescription record displayed on the screen.", null],
-        ["The technician knows how to open the record but is uncertain about the appropriate response to the discrepancy.", q("Does knowing how to navigate the system establish that the technician can handle this exception safely?")],
-        ["The answer is no, because technical operation and process judgement are different capabilities requiring different learning activities.", null],
-        ["System training teaches employees where information appears and how routine actions are recorded within the interface.", cmp("Two different training purposes", "System training", "Develops the ability to navigate records and operate the interface.", "Process training", "Develops understanding of decisions, professional boundaries and appropriate escalation.")],
-        ["Process training explains why certain situations require further investigation and when responsibility passes to an authorised professional.", null],
-        ["The pharmacy should therefore provide realistic cases involving discrepancies, incomplete information and situations requiring pharmacist intervention.", st("Realistic examples develop the judgement needed to recognise exceptions and follow the appropriate process.")],
-        ["During practice, a technician might incorrectly attempt to complete a collection that should have been referred.", null],
-        ["The trainer can explain the error while the exercise remains safely separated from actual patient care.", dg("Safe practice", D.flow(["Example|presented", "Technician|responds", "Trainer|reviews", "Understanding|improves"]), "Safe practice helps employees learn from mistakes before encountering real operational consequences.")],
-        ["That feedback matters because employees need to understand the reasoning behind correct actions rather than memorise responses.", null],
-        ["The manager should then assess whether technicians can recognise exceptions and apply the appropriate escalation arrangements.", null],
-        ["Attendance records alone cannot establish that these capabilities have developed to the required standard.", st("Demonstrated capability requires assessment of performance, not simply confirmation that employees attended training.")],
-        ["The assessment should also respect professional boundaries because technicians must not be encouraged to make unauthorised clinical decisions.", null],
-        ["Clear authority and appropriate training must therefore reinforce each other within the redesigned collection process.", dg("Capability within authority", D.flow(["Recognise|exception", "Understand|boundary", "Escalate|appropriately", "Protect|service quality"]), "Employees need the capability to act appropriately within their authorised responsibilities.")],
-        ["Now return to Qasr, where Guest Hosts must recognise when an eligible rate discrepancy can be resolved locally.", null],
-        ["They also need to identify situations that exceed their authority and require further managerial consideration.", null],
-        ["The shared lesson is that completing technical training does not prove readiness for unfamiliar decisions.", q("How could the pharmacy manager test whether technicians understand the redesigned process rather than merely remember the interface?")]
-      ]
-    },
-    {
-      title: "The insurance adviser who passed induction",
-      lines: [
-        ["Now imagine an insurance company introducing a redesigned claims process that gives advisers greater responsibility for resolving straightforward cases.", t("Remedial · Demonstrating readiness", "An insurance example distinguishes training attendance, decision capability and formal authority.")],
-        ["The company wants customers to receive appropriate decisions without waiting for repeated referrals between advisers and managers.", null],
-        ["Advisers attend a scheduled induction explaining the new claims system and the intended operating arrangements.", dg("The redesigned claims journey", D.flow(["Customer|submits claim", "Adviser|investigates", "Eligibility|assessed", "Decision|communicated"]), "The redesigned process expects advisers to handle eligible cases while escalating decisions outside their authority.")],
-        ["After everyone attends, the programme manager records training completion and describes the workforce as ready.", null],
-        ["However, no assessment has established whether advisers can distinguish straightforward claims from cases requiring specialist review.", iss("The organisation has evidence of attendance but no evidence that advisers can make the required decisions appropriately.", "Readiness remains untested")],
-        ["Imagine an adviser encountering a claim with conflicting information about the customer's policy coverage.", null],
-        ["The employee understands the software but cannot confidently determine whether the discrepancy permits local resolution.", q("What additional evidence would establish whether the adviser can handle this situation under the redesigned process?")],
-        ["A realistic assessment could require the adviser to investigate the evidence and explain the appropriate decision.", null],
-        ["The assessor should examine whether the employee understands the policy and recognises the limits of delegated authority.", cmp("Attendance versus capability", "Attendance evidence", "Confirms participation in the scheduled induction.", "Capability evidence", "Demonstrates appropriate investigation, judgement and escalation in realistic cases.")],
-        ["This distinction matters because an employee can remember instructions without understanding how to apply them when circumstances change.", null],
-        ["Worked examples allow advisers to practise unusual situations and receive feedback before handling real customer claims.", st("Judgement develops through realistic practice, explanation and feedback rather than interface demonstrations alone.")],
-        ["Suppose an adviser incorrectly approves a claim that should have been referred for specialist consideration.", null],
-        ["A safe training exercise can expose that misunderstanding without creating an inappropriate real-world approval.", dg("Learning from a safe mistake", D.flow(["Case|presented", "Decision|attempted", "Error|explained", "Case|revisited"]), "Practice helps employees correct misunderstandings before they affect customers.")],
-        ["The organisation should then assess whether the adviser can apply the corrected reasoning to a different example.", null],
-        ["That assessment provides stronger evidence than simply asking whether the employee understood the training presentation.", null],
-        ["However, capability is not the only possible reason employees might continue referring eligible claims upward.", iss("Repeated escalation could reflect uncertain authority, insufficient capability or other operational concerns.", "Do not assume the cause")],
-        ["Imagine an adviser who understands the correct decision but cannot find that authority in the formal delegation policy.", null],
-        ["Additional training would not resolve the contradiction because the employee still lacks dependable organisational permission to decide.", st("An authority gap requires formal clarification, while a capability gap requires appropriate learning and assessment.")],
-        ["The programme should therefore investigate whether each difficulty concerns knowledge, decision rights or practical operating support.", null],
-        ["Managers can then provide targeted remedies instead of repeating the same induction for every employee.", dg("Diagnosing the readiness problem", D.flow(["Observe|difficulty", "Identify|cause", "Choose|support", "Assess|improvement"]), "Different causes of poor performance require different corrective actions.")],
-        ["This reasoning applies directly to Qasr's nine Guest Hosts who refer every rate discrepancy to a manager.", null],
-        ["Their behaviour is observable, but the organisation has not established each employee's reason for escalating.", null],
-        ["Qasr should therefore test judgement while correcting unclear delegation and examining the working conditions employees encounter.", q("Why would repeating induction be an incomplete response when employees already understand the process but lack documented authority?")]
-      ]
-    }
-  ]
-},
-{
-  title: "One organisation, two processes",
-  sec: "W10O3b",
-  lines: [
-    ["We have seen why Qasr must test employee capability rather than assume induction attendance proves operational readiness.", t("One organisation, two processes", "Understanding adoption, workarounds and the difference between technical implementation and real process change.")],
-    ["Now let's examine what happens after the redesigned arrival process begins operating across Qasr's pilot properties.", null],
-    ["Eleven weeks after go-live, the programme sponsor receives evidence about how guests are actually checking in.", dg("Qasr at week eleven", D.flow(["Redesigned|arrival process", "Four pilot|properties", "Eleven weeks|after go-live", "Adoption|review"]), "The programme must examine actual process adoption rather than rely only on implementation milestones.")],
-    ["The kiosks are operating, and Guest Hosts have been assigned to support arrivals and resolve exceptions.", null],
-    ["However, installing the technology and assigning employees do not establish that the redesigned process is consistently followed.", st("Technical implementation and actual process adoption are different measures of BPM success.")],
-    ["Adoption means the proportion of relevant cases genuinely following the redesigned process rather than alternative operating arrangements.", null],
-    ["This distinction matters because a process can be available without becoming the normal way employees perform their work.", cmp("Two different questions", "Implementation", "Has the redesigned process been introduced and made operational?", "Adoption", "Are actual cases following the redesigned process as intended?")],
-    ["At Qasr, the observed kiosk adoption figure is sixty-five percent eleven weeks after the new process launched.", null],
-    ["That result shows substantial use of the kiosks, but it also raises questions about arrivals following other paths.", dg("Observed kiosk adoption", D.progress("Kiosk adoption at week eleven", 65, 100, "%"), "Qasr reports 65% kiosk adoption eleven weeks after go-live.")],
-    ["The case also reports that twenty-nine percent of arrivals are handled at the desk.", null],
-    ["We should not automatically classify every desk-handled arrival as resistance, failure or an inappropriate workaround.", st("A desk-handled arrival is an observed operating path, not automatic proof that someone bypassed the intended process.")],
-    ["Property managers report that most desk-handled arrivals involve guests whose cases were rejected by the kiosk.", null],
-    ["Those cases may require legitimate human assistance, making the distinction between necessary exceptions and avoidable workarounds important.", dg("Different reasons for desk handling", D.branch("Desk-handled arrival", ["Kiosk-rejected exception", "Possible workaround", "Reason requires investigation"]), "Desk activity must be classified before managers can distinguish necessary exception handling from avoidable departures from the design.")],
-    ["A workaround occurs when people use an alternative method instead of the intended process to complete their work.", null],
-    ["Some workarounds expose design weaknesses, while others reveal missing support or unresolved operational requirements.", st("Workarounds are diagnostic evidence because their causes can reveal weaknesses in the redesigned process.")],
-    ["Imagine a Guest Host repeatedly referring an eligible rate discrepancy upward because the formal delegation schedule remains unclear.", null],
-    ["The guest may eventually receive a resolution, but the unnecessary referral could undermine the intended improvement.", iss("The redesigned process expects local resolution, but uncertain authority may recreate an avoidable managerial referral.", "A possible workaround")],
-    ["The organisation should investigate such patterns rather than assume employees are deliberately resisting the change.", null],
-    ["This is why the slides recommend recording workarounds by type and frequency throughout the adoption period.", dg("Learning from workarounds", D.flow(["Observe|alternative path", "Record|type", "Measure|frequency", "Investigate|cause", "Correct|problem"]), "Classifying and measuring workarounds helps the programme identify which operating problems require correction.")],
-    ["The programme also needs weekly adoption measurement from go-live rather than waiting until implementation appears complete.", null],
-    ["Weekly evidence can reveal whether adoption improves, stalls or deteriorates as employees encounter practical difficulties.", st("Adoption should be measured weekly from go-live and reported alongside programme delivery milestones.")],
-    ["The Week 10 slides illustrate this principle using a sixteen-week chart of adoption and workaround use.", null],
-    ["Its adoption curve rises before levelling near sixty-five percent, while the workaround curve changes over time.", dg("Illustrative adoption and workaround trends", D.lines(["Week 1", "Week 4", "Week 8", "Week 12", "Week 16"], [{ name: "Illustrative adoption", values: [18, 42, 59, 65, 65] }, { name: "Illustrative workaround use", values: [12, 24, 18, 12, 9] }]), "Conceptual illustration of adoption plateauing and workaround use declining. These plotted values are illustrative, not Qasr observations.")],
-    ["Remember that this chart illustrates a possible pattern rather than documenting Qasr's actual sixteen-week operating history.", null],
-    ["Qasr's verified adoption observation concerns sixty-five percent at week eleven, not the chart's later periods.", st("Do not confuse illustrative adoption curves with the observed evidence from Qasr's eleven-week pilot.")],
-    ["The slides warn that a process operating around sixty percent adoption effectively leaves two processes running together.", null],
-    ["Employees must then manage the intended process alongside alternative arrangements, potentially increasing complexity and operational inconsistency.", cmp("Two operating realities", "Redesigned process", "Arrivals follow the intended kiosk-supported process and defined exception arrangements.", "Alternative arrangements", "Arrivals follow other paths that may include legitimate exceptions or avoidable workarounds.")],
-    ["Qasr provides another warning because one pilot property has reinstated a permanent desk position removed by the redesign.", null],
-    ["That decision might protect guests who cannot complete kiosk check-in, but it might also preserve unnecessary old practices.", iss("Restoring the permanent desk could protect service continuity or undermine the redesign, depending on how it operates.", "A decision requiring evidence")],
-    ["We cannot determine which interpretation is correct without examining the desk's actual cases and operating responsibilities.", null],
-    ["The sponsor should therefore request adoption evidence alongside information about exception types, referrals and alternative operating paths.", dg("A more informative sponsor review", D.flow(["Adoption|measured", "Exceptions|classified", "Workarounds|investigated", "Corrective|action"]), "The sponsor needs operating evidence to distinguish legitimate service support from avoidable departures from the redesigned process.")],
-    ["An adoption measure also needs a named owner who can explain changes and coordinate necessary corrective action.", null],
-    ["Otherwise, the programme may celebrate completed milestones while the organisation continues performing substantial parts of its previous process.", st("Delivery milestones show implementation progress, while adoption evidence shows whether the organisation is changing its behaviour.")],
-    ["The challenge is not forcing every guest through a kiosk when human intervention is genuinely necessary.", null],
-    ["It is ensuring that actual operating paths support the intended service design rather than silently recreate avoidable delays.", q("What evidence would help you decide whether Qasr's reinstated desk protects guests or undermines the redesigned process?")]
-  ],
-  review: [
-    {
-      title: "The hospital that launched a digital discharge process",
-      lines: [
-        ["Let's explore adoption through a hospital that introduces a digital process for coordinating patients' departure after treatment.", t("Remedial · Implementation versus adoption", "A hospital discharge redesign shows why a live system does not guarantee changed working practices.")],
-        ["The hospital installs a shared discharge system and trains employees to record outstanding requirements in one place.", null],
-        ["Managers celebrate the launch because the technology works and every department can access the new information.", dg("The intended discharge process", D.flow(["Discharge|approved", "Requirements|recorded", "Departments|coordinate", "Patient|leaves"]), "The redesigned process uses shared information to coordinate activities across departments.")],
-        ["However, several employees continue relying on telephone calls and separate spreadsheets when difficult discharge cases arise.", null],
-        ["The hospital now operates its new digital process alongside familiar arrangements that survived the implementation.", iss("The system is operational, but employees continue using alternative methods for some discharge cases.", "Implementation without full adoption")],
-        ["This distinction matters because launching a process does not establish that employees consistently perform work through it.", null],
-        ["Adoption concerns actual cases following the redesigned process rather than merely the availability of its technology.", st("Adoption measures whether the redesigned process is genuinely used during everyday operations.")],
-        ["Imagine a discharge coordinator discovering that a patient cannot leave because transport arrangements remain unresolved.", null],
-        ["The coordinator might use the shared system appropriately or return to informal telephone arrangements for assistance.", q("How could the hospital distinguish necessary human coordination from an avoidable workaround that bypasses the new process?")],
-        ["The answer requires examining why employees choose each operating path and whether it supports the intended design.", null],
-        ["A telephone call might be entirely appropriate when the redesigned process explicitly requires direct coordination.", cmp("Two possible interpretations", "Legitimate exception handling", "The alternative action supports a defined need within the redesigned process.", "Avoidable workaround", "The alternative action bypasses an intended arrangement because an unresolved problem remains.")],
-        ["However, maintaining separate spreadsheets could create conflicting records when employees fail to update the shared system.", null],
-        ["The hospital should therefore record alternative practices by type and frequency before deciding which require correction.", dg("Investigating alternative practices", D.flow(["Observe|practice", "Classify|reason", "Measure|frequency", "Correct|weakness"]), "Workaround evidence helps managers distinguish necessary exceptions from process weaknesses.")],
-        ["Weekly adoption tracking would show whether employees increasingly use the redesigned discharge process during actual operations.", null],
-        ["A stable adoption rate below the intended level would signal that important barriers may remain unresolved.", st("Weekly adoption measurement helps reveal whether implementation is producing sustained changes in working practices.")],
-        ["The hospital should also assign someone responsibility for interpreting adoption evidence and coordinating improvements across departments.", null],
-        ["Otherwise, the project may remain green while employees continue maintaining two competing operating arrangements.", iss("Completed delivery milestones can conceal persistent reliance on the previous process.", "A misleading green status")],
-        ["This resembles Qasr, where kiosk adoption reaches sixty-five percent while substantial desk-handled activity remains.", null],
-        ["Not every desk interaction is inappropriate because kiosk-rejected cases may legitimately require Guest Host assistance.", null],
-        ["The important task is identifying which activities support the redesign and which recreate unnecessary old behaviour.", st("Adoption analysis must distinguish legitimate exception handling from avoidable departures from the intended process.")],
-        ["A successful programme therefore examines actual work rather than assuming that technology installation proves organisational change.", q("Why should the hospital measure adoption after launch instead of relying entirely on completed implementation milestones?")]
-      ]
-    },
-    {
-      title: "The retailer running two returns processes",
-      lines: [
-        ["Now imagine an online retailer introducing a redesigned returns process that automatically approves straightforward customer requests.", t("Remedial · Understanding workarounds", "A retail returns example shows how alternative operating paths can reveal unresolved design problems.")],
-        ["The new system allows customers to submit requests online while specialists investigate returns requiring additional judgement.", null],
-        ["Management expects the arrangement to reduce unnecessary manual handling and improve the consistency of customer decisions.", dg("The intended returns process", D.flow(["Customer|submits return", "System|checks eligibility", "Routine|approval", "!Exception|to specialist"]), "Automation handles routine requests while specialists investigate exceptions requiring human judgement.")],
-        ["After launch, managers notice that employees still accept some returns through the previous manual procedure.", null],
-        ["The programme initially interprets this activity as evidence that employees are unwilling to use the redesigned process.", iss("Employees continue using the previous procedure, but management has not investigated why those cases follow another path.", "An untested explanation")],
-        ["However, a closer examination might reveal that some customers cannot complete the online process because required information is unavailable.", null],
-        ["Other manual cases might reflect employees choosing familiar methods even when the new system could handle them.", cmp("Different causes of manual handling", "Necessary assistance", "The customer encounters a genuine limitation requiring human support.", "Avoidable workaround", "The employee bypasses an available redesigned path without an operational need.")],
-        ["These situations require different responses because the same visible behaviour can arise from different underlying causes.", null],
-        ["Managers should therefore classify manual returns before deciding whether training, system changes or clearer responsibilities are needed.", q("Why would treating every manually handled return as employee resistance produce an unreliable diagnosis?")],
-        ["A legitimate exception may reveal a missing system capability rather than a problem with employee commitment.", null],
-        ["An avoidable workaround might instead indicate unclear instructions, contradictory incentives or confidence in familiar procedures.", st("Workarounds provide useful diagnostic evidence when their causes are investigated rather than assumed.")],
-        ["The retailer should record each alternative operating path and examine how frequently different types occur.", null],
-        ["This information allows managers to identify recurring weaknesses instead of responding to isolated examples without context.", dg("Classifying workarounds", D.flow(["Manual|case observed", "Reason|identified", "Type|recorded", "Pattern|reviewed"]), "Recording workaround types and frequency supports evidence-based corrective action.")],
-        ["Weekly adoption measurement would also reveal whether the redesigned returns process becomes more widely used over time.", null],
-        ["A plateau could indicate that the organisation has reached a persistent barrier requiring attention from the programme.", st("Adoption trends help distinguish temporary transition difficulties from continuing weaknesses in the operating design.")],
-        ["Imagine one store reinstating a permanent manual returns counter after employees report difficulties with the online process.", null],
-        ["That decision could protect customers who genuinely need assistance, but it might also preserve avoidable manual transactions.", iss("Restoring the old service channel can support continuity or undermine redesign, depending on the cases it handles.", "A competing interpretation")],
-        ["The retailer should investigate the counter's cases before deciding whether its reinstatement represents success or failure.", null],
-        ["This is precisely the judgement required when Qasr restores a permanent desk at one pilot property.", cmp("The Qasr parallel", "Service protection", "The desk may support guests whose cases genuinely require human intervention.", "Redesign erosion", "The desk may encourage unnecessary return to conventional check-in practices.")],
-        ["Neither interpretation can be established simply by observing that the desk or counter has been reinstated.", null],
-        ["Managers need evidence about actual cases, exception causes and whether alternative arrangements follow the intended design.", null],
-        ["The broader lesson is that adoption measures behaviour while workaround analysis explains why behaviour differs from expectations.", st("Implementation establishes availability, adoption measures use, and workaround analysis helps diagnose departures from the design.")],
-        ["Qasr's sponsor should therefore examine operating evidence before deciding how to respond to the eleven-week adoption results.", q("What information would help the retailer decide whether its manual returns counter should remain, change or disappear?")]
-      ]
-    }
-  ]
-},
-{
-  title: "The knowledge the redesign might lose",
-  sec: "W10O3c",
-  lines: [
-    ["We have seen how Qasr's redesigned arrival process can coexist with familiar practices when adoption remains incomplete.", t("The knowledge the redesign might lose", "Protecting practical expertise and managing retention risks during process change.")],
-    ["Now let's consider something less visible than kiosk adoption, but potentially just as important to successful change.", null],
-    ["What happens to valuable employee knowledge when an organisation changes jobs without understanding everything those employees know?", q("Could Qasr lose important process knowledge while replacing its traditional Front Desk Agent role?")],
-    ["Imagine an experienced Front Desk Agent who has spent years helping guests through difficult arrival situations.", null],
-    ["This employee knows which booking discrepancies require investigation and which unusual circumstances deserve immediate managerial attention.", dg("Experience behind the old process", D.flow(["Unusual|guest problem", "Experienced|employee", "Practical|judgement", "Appropriate|resolution"]), "Experienced employees may possess practical knowledge that formal process documentation does not capture.")],
-    ["Some of that knowledge may appear in procedures, but much of it develops through repeated operational experience.", null],
-    ["Employees learn how departments interact, where information becomes unreliable and which exceptions require particular care.", st("Long-serving employees often hold practical process knowledge that is not fully documented in systems or procedures.")],
-    ["This matters because a process diagram usually describes intended activities without capturing every judgement employees make.", null],
-    ["A system record may show that a discrepancy was resolved without explaining how the employee recognised its cause.", cmp("Two kinds of process knowledge", "Documented knowledge", "Formal procedures, system records and written decision rules.", "Practical knowledge", "Experience-based judgement about unusual situations, dependencies and exceptions.")],
-    ["The People phase must therefore consider what useful expertise could disappear when existing responsibilities are redesigned.", null],
-    ["At Qasr, twenty-two former Front Desk Agents have moved into the Guest Host role across four properties.", dg("The role transition", D.flow(["Front Desk|Agent", "Existing|experience", "Guest Host|role", "New|responsibilities"]), "The transition should preserve useful operational knowledge while changing how employees perform their work.")],
-    ["The organisation should not assume that everything valuable about the previous role belongs to an outdated process.", null],
-    ["Some established practices may be inefficient, while the knowledge behind them remains essential for handling exceptional cases.", st("Redesigning old work does not mean discarding every insight developed by employees who performed that work.")],
-    ["Imagine an agent recognising that a particular booking discrepancy usually originates in an earlier reservation adjustment.", null],
-    ["That insight could help the redesigned process resolve similar exceptions without repeated investigation or unnecessary referrals.", dg("Turning experience into reusable knowledge", D.flow(["Experienced|observation", "Cause|explained", "Decision rule|documented", "Guest Host|supported"]), "Practical knowledge can be translated into guidance that supports the redesigned process.")],
-    ["However, the organisation cannot preserve such knowledge merely by copying the old job description into a new document.", null],
-    ["It needs employees to explain how they recognise exceptions and why particular responses are appropriate.", iss("Important judgement may disappear when organisations document activities without capturing the reasoning behind them.", "Knowledge at risk")],
-    ["The slides recommend capturing this expertise before roles change materially, while experienced employees remain available.", null],
-    ["Useful methods include documenting explicit decision rules and developing worked examples of difficult operational exceptions.", dg("Capturing practical expertise", D.flow(["Employee|explains case", "Decision|reasoning", "Worked|example", "Reusable|guidance"]), "Worked exceptions preserve the reasoning employees use when handling unusual situations.")],
-    ["A worked example should explain the situation, relevant evidence, decision boundary and reasons for the chosen response.", null],
-    ["That approach supports training because new Guest Hosts can practise applying knowledge previously held by experienced colleagues.", st("Worked exceptions turn individual experience into shared organisational capability.")],
-    ["Now consider the personal uncertainty employees may experience when their familiar roles are replaced by redesigned responsibilities.", null],
-    ["An employee might wonder whether previous expertise remains valued or whether the new position offers a meaningful future.", cmp("Two possible employee experiences", "Unclear transition", "Employees cannot see how their experience fits the redesigned organisation.", "Supported transition", "Employees understand their future responsibilities and how their expertise remains useful.")],
-    ["Those concerns matter because uncertainty about future roles can create retention risks during organisational change.", null],
-    ["The People phase should therefore help employees understand their place in the redesigned process and its future.", st("Employees need clarity about their future roles, not merely instructions about their immediate new tasks.")],
-    ["Qasr's case reports that two of its twenty-two Guest Hosts have resigned since the redesigned process began.", null],
-    ["The evidence does not establish why those employees resigned, so attributing their departures to resistance would be unjustified.", iss("Two resignations are observed, but the individual reasons for leaving have not been established.", "Do not invent motives")],
-    ["Nevertheless, the departures justify investigating whether the transition creates risks to employee retention and operational knowledge.", null],
-    ["Such risks belong in the programme risk register because losing experienced employees can affect implementation and service continuity.", dg("Managing retention risk", D.flow(["Role|uncertainty", "Retention|risk", "Programme|register", "Mitigation|planned"]), "Retention risks should be identified and managed before valuable experience is lost.")],
-    ["The organisation should investigate concerns rather than wait until more employees leave and their practical expertise disappears.", null],
-    ["Managers can involve experienced Guest Hosts in developing exception examples and clarifying the redesigned role's responsibilities.", st("Employee involvement can support knowledge transfer while helping the organisation understand practical transition concerns.")],
-    ["This does not mean preserving every old practice, because some practices may contradict the intended redesign.", null],
-    ["It means separating useful expertise from outdated routines so the new process benefits from operational experience.", cmp("What should change and what should remain", "Outdated practice", "Unnecessary handoffs and activities that undermine the redesigned process.", "Valuable expertise", "Practical judgement that improves appropriate exception handling and guest service.")],
-    ["Qasr must therefore manage employee capability, knowledge transfer and retention as connected parts of the People phase.", null],
-    ["The redesigned process becomes stronger when employees understand their future and contribute knowledge that technology cannot supply.", q("How could Qasr preserve experienced employees' judgement without preserving the inefficient front-desk practices it redesigned?")]
-  ],
-  review: [
-    {
-      title: "The maintenance technician who knew the machine",
-      lines: [
-        ["Let's explore knowledge retention through a manufacturing company introducing automated equipment monitoring across its production facilities.", t("Remedial · Preserving practical knowledge", "A manufacturing example shows why experienced employees' judgement matters during process redesign.")],
-        ["The company installs sensors that monitor machine conditions and automatically alert employees when unusual readings appear.", null],
-        ["Managers expect the redesigned maintenance process to replace routine inspections with targeted responses to detected problems.", dg("The redesigned maintenance process", D.flow(["Sensors|monitor", "Alert|generated", "Technician|investigates", "Action|taken"]), "Automation changes how maintenance employees identify and respond to equipment problems.")],
-        ["However, an experienced technician has spent years recognising subtle machine behaviour that the new system cannot fully explain.", null],
-        ["The technician understands which combinations of vibration, temperature and operating conditions usually indicate developing mechanical problems.", st("Experienced employees may hold practical knowledge that automated records and formal procedures do not fully capture.")],
-        ["Imagine the technician recognising that a particular sensor warning becomes serious only under certain production conditions.", null],
-        ["The system records the warning, but it does not necessarily explain the employee's reasoning about its significance.", cmp("Recorded information and practical judgement", "System record", "Captures the warning and the equipment conditions recorded by sensors.", "Experienced judgement", "Explains how operating context influences the appropriate response.")],
-        ["If the company changes maintenance roles without capturing that reasoning, useful knowledge could disappear from daily operations.", null],
-        ["The problem becomes especially important when experienced employees retire, transfer or leave during the transition.", iss("The organisation may lose the reasoning behind effective maintenance decisions when experienced employees depart.", "Knowledge loss")],
-        ["The company should therefore invite technicians to explain difficult cases while their practical expertise remains available.", null],
-        ["Those discussions can produce worked examples describing the warning, relevant conditions and appropriate maintenance response.", dg("Capturing a worked exception", D.flow(["Warning|observed", "Context|explained", "Decision|documented", "Example|shared"]), "Worked examples preserve the reasoning behind practical decisions for other employees.")],
-        ["The resulting guidance can support training because employees learn why a response is appropriate rather than memorising instructions.", null],
-        ["However, knowledge capture should not become an excuse for preserving every inefficient feature of the previous maintenance process.", st("The redesign should preserve valuable expertise while replacing unnecessary or outdated working practices.")],
-        ["The company must also consider how technicians understand their future roles within the redesigned maintenance organisation.", null],
-        ["Employees may worry that automation makes their experience less valuable even when their judgement remains essential.", q("How could involving experienced technicians in the redesign help preserve knowledge and address uncertainty about their future roles?")],
-        ["Managers should explain the new responsibilities and identify how experienced employees can contribute to improved maintenance decisions.", null],
-        ["Uncertainty about future roles can create retention risks that deserve attention before valuable employees leave.", dg("Supporting the transition", D.flow(["Explain|future role", "Recognise|expertise", "Transfer|knowledge", "Manage|retention risk"]), "A supported transition connects future responsibilities with the preservation of valuable operational knowledge.")],
-        ["The programme should record significant retention risks and identify actions that reduce avoidable loss of expertise.", null],
-        ["This resembles Qasr, where experienced Front Desk Agents have moved into the redesigned Guest Host role.", null],
-        ["Their knowledge of unusual guest situations may remain valuable even when conventional desk transactions become less important.", st("A successful People phase changes work while retaining the knowledge needed to perform the redesigned process reliably.")],
-        ["The central lesson is that employees are not merely resources to be reassigned when process diagrams change.", null],
-        ["They are also sources of knowledge that can make the redesigned process more dependable and effective.", q("Why should the manufacturer capture experienced technicians' reasoning before their roles change materially?")]
-      ]
-    },
-    {
-      title: "The university adviser whose experience was disappearing",
-      lines: [
-        ["Now imagine a university redesigning student advising so learners receive coordinated support through a new digital service.", t("Remedial · Knowledge and retention during change", "A university advising example shows how role transitions can threaten valuable organisational knowledge.")],
-        ["The redesigned process allows students to submit requests online while advisers concentrate on complex academic circumstances.", null],
-        ["Routine questions are answered automatically, leaving advisers responsible for situations requiring interpretation and individual judgement.", dg("The redesigned advising process", D.flow(["Student|submits request", "System|handles routine issue", "!Complex|case", "Adviser|supports decision"]), "Automation handles routine requests while advisers concentrate on complex student needs.")],
-        ["An experienced adviser has spent years helping students whose circumstances do not fit ordinary academic procedures.", null],
-        ["The adviser understands how programme requirements interact and which unusual cases need additional academic consideration.", st("Experienced advisers may possess practical knowledge about exceptional student circumstances that formal records do not fully explain.")],
-        ["However, the university prepares new role descriptions without consulting advisers about the difficult cases they routinely resolve.", null],
-        ["The redesigned documents describe standard activities but overlook the reasoning employees use when circumstances become complicated.", iss("The university documents the new workflow without capturing important judgement developed through years of advising experience.", "An incomplete knowledge transfer")],
-        ["Imagine a student whose previous study creates an unusual question about eligibility for a particular academic pathway.", null],
-        ["The experienced adviser knows which evidence matters and which authorised academic role should review the exception.", q("What knowledge might disappear if the university replaces the old advising arrangements without consulting experienced employees?")],
-        ["The university could lose practical understanding of recurring exceptions, relevant evidence and appropriate escalation relationships.", null],
-        ["A useful response would involve experienced advisers in developing worked cases that explain their decision-making reasoning.", dg("Turning experience into guidance", D.flow(["Unusual|student case", "Adviser|explains reasoning", "Worked|example", "Guidance|shared"]), "Worked cases make experienced employees' practical knowledge available to the redesigned service.")],
-        ["These examples could help other advisers recognise complex situations without relying entirely on informal personal contacts.", null],
-        ["They would also clarify which decisions remain with authorised academic staff rather than the advising function.", st("Knowledge transfer should preserve useful judgement while respecting the redesigned process's formal decision boundaries.")],
-        ["Now imagine experienced advisers worrying that automation will remove the parts of their work they previously valued.", null],
-        ["Some might question whether the university recognises their expertise or offers a meaningful role in the future.", cmp("Two approaches to transition", "Unclear transition", "Employees receive new instructions without understanding how their expertise remains valuable.", "Supported transition", "Employees understand their responsibilities and contribute knowledge to the redesigned service.")],
-        ["The university should address those concerns through clear communication and meaningful involvement in developing the new arrangements.", null],
-        ["Uncertainty about future roles may create retention risks even when the redesigned process appears technically successful.", iss("A technically successful redesign can still face retention risks when employees cannot see their future contribution.", "The human transition matters")],
-        ["Managers should investigate emerging concerns and record significant retention risks within the programme's risk arrangements.", null],
-        ["Waiting until experienced advisers leave could make valuable knowledge harder to recover or transfer to colleagues.", dg("Managing knowledge and retention", D.flow(["Identify|concerns", "Capture|expertise", "Clarify|future roles", "Manage|risks"]), "The People phase should address knowledge preservation and retention before important expertise disappears.")],
-        ["This reasoning applies directly to Qasr's transition from Front Desk Agents to Guest Hosts across four properties.", null],
-        ["Two Guest Hosts have resigned, although the available evidence does not establish the reasons for their departures.", st("Observed resignations justify investigating retention risks, but they do not prove that employees resisted the redesign.")],
-        ["Qasr should preserve useful exception-handling knowledge while helping employees understand their place in the redesigned arrival process.", null],
-        ["The objective is not protecting outdated routines but ensuring that valuable experience strengthens the organisation's future performance.", q("How could involving experienced Guest Hosts in developing worked exception cases support both knowledge transfer and organisational change?")]
-      ]
-    }
-  ]
-},
-      ] },
-      { id: "l4", title: "Making the people design real", sections: [
-{
-  title: "Repairing the Guest Host specification",
-  sec: "W10O2d",
-  lines: [
-    ["We have examined Qasr's authority gaps, conflicting measures, untested capability and the practical knowledge employees might lose.", t("Repairing the Guest Host specification", "Turning the People-phase diagnosis into a coherent and workable role design.")],
-    ["Now the programme sponsor wants something more useful than another explanation of why the redesigned arrival process struggles.", null],
-    ["The sponsor asks you to recommend changes that would make the Guest Host role genuinely workable.", q("What would you change so Guest Hosts can perform the redesigned work confidently and consistently?")],
-    ["Let's begin with what Qasr actually knows about the role across its four pilot properties.", null],
-    ["Twenty-two former Front Desk Agents now greet arriving guests and handle exceptions that self-service kiosks cannot resolve.", dg("The redesigned Guest Host role", D.flow(["Guest|arrives", "Kiosk|handles routine case", "!Exception|requires help", "Guest Host|investigates"]), "The role combines guest assistance with resolution of exceptions that automated check-in cannot handle.")],
-    ["However, their updated job descriptions arrived three weeks after go-live, leaving an important transition period without revised documentation.", null],
-    ["The repair should begin by aligning the formal role description with the responsibilities already established in the redesign.", st("The role specification must describe the work employees are actually expected to perform.")],
-    ["That description should explain how Guest Hosts investigate exceptions, support arrivals and coordinate decisions involving other functions.", null],
-    ["It should also distinguish activities employees perform from decisions for which another role remains accountable.", cmp("Two connected role requirements", "Operational responsibility", "Investigate guest exceptions and support their appropriate resolution.", "Decision accountability", "Identify the authorised role answerable for each relevant decision.")],
-    ["Remember our RACI discussion, because cross-functional work becomes unreliable when nobody knows who owns an important decision.", null],
-    ["Qasr should therefore align the Guest Host specification with its redesigned accountability and escalation arrangements.", st("Role responsibilities, RACI assignments and escalation routes must describe the same operating process.")],
-    ["Now consider the AED 400 waiver, which allows Guest Hosts to resolve eligible rate discrepancies without referral.", null],
-    ["That authority was communicated through a briefing email but remains absent from the formal delegation schedule.", iss("The redesigned role expects local decisions, but formal delegation does not document the AED 400 waiver.", "The authority gap")],
-    ["The proposed correction is to document the decision boundary and explain when managerial approval becomes necessary.", null],
-    ["Employees should understand that eligible cases may be resolved locally while decisions beyond their authority require escalation.", dg("A formal decision boundary", D.flow(["Rate|discrepancy", "Check|delegation", "Eligible|local resolution", "Outside limit|escalation"]), "The proposed delegation arrangement distinguishes appropriate local decisions from cases requiring further authority.")],
-    ["This would make the expected judgement organisationally defensible rather than dependent on employees interpreting an informal message.", null],
-    ["The specification should also identify the reporting relationship through which Guest Hosts obtain operational support.", st("A workable role needs a documented reporting relationship and a clear route for decisions requiring additional authority.")],
-    ["The slides do not establish Qasr's final reporting line, so selecting one requires a justified management decision.", null],
-    ["We should not invent an existing arrangement simply because a particular reporting structure appears convenient.", null],
-    ["Next, the sponsor must confront the performance objectives that still reward conventional front-desk transactions.", cmp("The inherited scorecard", "Existing objectives", "Check-ins completed per shift and average transaction time.", "Redesigned responsibilities", "Support arrivals and resolve exceptions requiring human judgement.")],
-    ["Those objectives were established in January and do not reflect the Guest Host's changed contribution to arrivals.", null],
-    ["Kiosk check-ins are not attributed to individual employees, making the inherited transaction-volume measure especially unsuitable.", iss("Employees are expected to support kiosk-based arrivals while their objectives continue rewarding individual transaction throughput.", "The incentive contradiction")],
-    ["The slides recommend replacing conflicting throughput measures with appropriate exception resolution supported by quality sampling.", null],
-    ["For Qasr, a proposed measure could examine eligible exceptions resolved appropriately without unnecessary managerial escalation.", dg("A proposed performance measure", D.flow(["Eligible|exception", "Appropriate|resolution", "Quality|sample", "Outcome|reviewed"]), "A revised measure should recognise effective exception handling while protecting decision quality.")],
-    ["Quality matters because employees should never receive rewards for approving discrepancies that exceed their delegated authority.", null],
-    ["The conflicting old objectives should be removed explicitly rather than retained alongside measures that encourage different behaviour.", st("A revised scorecard should reward intended outcomes without preserving contradictory incentives from the previous process.")],
-    ["Qasr must also review the unchanged job grade and reward arrangements against the role's revised responsibilities.", null],
-    ["That review does not automatically justify a higher grade, because the appropriate outcome requires evaluation of the work.", cmp("A justified employment review", "What is known", "The Guest Host grade remains unchanged despite materially different responsibilities.", "What must be decided", "Whether the revised work justifies changes to grade or reward arrangements.")],
-    ["Now imagine the sponsor approving these documents while employees still struggle with unfamiliar kiosk exceptions.", null],
-    ["The role would remain incomplete because formal authority and incentives cannot substitute for demonstrated practical capability.", iss("A formally coherent role can still fail when employees cannot perform the required decisions reliably.", "Capability remains essential")],
-    ["Qasr should therefore assess judgement through realistic cases involving rate discrepancies, waiver boundaries and appropriate escalation.", null],
-    ["The assessment should reveal capability gaps that require practice, guidance or additional operational support.", dg("Demonstrating readiness", D.flow(["Realistic|case", "Employee|decision", "Quality|assessment", "Targeted|support"]), "Capability assessment should test how employees handle the actual decisions required by the redesigned role.")],
-    ["Finally, someone must own adoption measurement and explain whether Guest Hosts are following the intended operating arrangements.", null],
-    ["These proposed corrections connect responsibilities, authority, accountability, measures, reward and capability into one coherent design.", st("A complete role repair aligns the organisational arrangements that determine whether redesigned work can be performed.")],
-    ["None of these corrections should be reported as completed, because Qasr's case establishes the problems rather than their resolution.", null],
-    ["The sponsor now has a defensible repair proposal, but its effectiveness must still be tested through operating evidence.", q("Which proposed correction would you prioritise, and what evidence would show that it improved Guest Host performance?")]
-  ],
-  review: [
-    {
-      title: "Repairing the university student success adviser role",
-      lines: [
-        ["Let's practise repairing a role through a university that has redesigned how students receive academic and administrative support.", t("Remedial · Repairing a redesigned role", "A student success adviser illustrates how responsibilities, authority and measures must fit together.")],
-        ["The university introduces a Student Success Adviser who coordinates complex requests previously handled by several separate offices.", null],
-        ["The redesigned process expects advisers to investigate problems and help students obtain appropriate decisions without repeated transfers.", dg("The redesigned student support process", D.flow(["Student|requests help", "Adviser|investigates", "Relevant|decision", "Student|receives outcome"]), "The adviser coordinates the student's journey across organisational functions.")],
-        ["However, the existing job description still concentrates on recording enquiries and directing students to other departments.", null],
-        ["Advisers are expected to coordinate resolutions without clear documentation of their new responsibilities or decision boundaries.", iss("The redesigned process expects coordination, but the formal role continues describing a referral-based service.", "An incomplete role")],
-        ["Imagine an adviser encountering a student whose enrolment requires an exception to an ordinary administrative requirement.", null],
-        ["The employee understands the problem but cannot determine whether local approval is permitted under university rules.", q("What must the university clarify before expecting the adviser to resolve this case independently?")],
-        ["The role specification should identify responsibilities while distinguishing administrative decisions from approvals reserved for authorised academic staff.", null],
-        ["A formal delegation arrangement should clarify which decisions advisers may make and when escalation remains necessary.", st("Responsibilities and delegated authority must agree so employees can act appropriately within their role.")],
-        ["The university should also identify who is accountable for decisions involving different organisational functions.", null],
-        ["A RACI arrangement can prevent advisers from becoming responsible for outcomes they lack authority to approve.", cmp("Two different contributions", "Student Success Adviser", "Coordinates the case and performs the assigned investigation.", "Authorised decision owner", "Answers for decisions within the relevant academic or administrative authority.")],
-        ["Now imagine management continuing to measure advisers by the number of enquiries closed during each shift.", null],
-        ["Complex cases take longer, so employees may appear less productive when they provide the support students actually need.", iss("The inherited transaction measure can discourage the careful coordination required by the redesigned process.", "The wrong incentive")],
-        ["The university could instead assess appropriate case resolution while checking accuracy and compliance with relevant requirements.", null],
-        ["The previous measure should be removed when it contradicts the contribution expected from the redesigned role.", dg("Aligning performance", D.flow(["Redesigned|responsibility", "Relevant|outcome", "Quality|review", "Aligned|measure"]), "Performance measures should recognise the new contribution while protecting decision quality.")],
-        ["The university should also review whether changed responsibilities justify different grade or reward arrangements.", null],
-        ["However, any change should follow evaluation rather than assumptions about the importance of a new job title.", st("Grade and reward decisions should reflect the actual responsibilities and judgement required by the redesigned role.")],
-        ["Advisers then need realistic practice handling unusual cases and recognising when decisions exceed their authority.", null],
-        ["A capability assessment would establish whether employees can perform those responsibilities rather than merely attend training.", dg("Completing the role repair", D.flow(["Define|work", "Document|authority", "Align|measures", "Assess|capability", "Monitor|adoption"]), "A coherent role combines formal arrangements with evidence that employees can perform the redesigned work.")],
-        ["Finally, a named owner should monitor whether students genuinely receive support through the intended process.", null],
-        ["This resembles Qasr, where the Guest Host role needs organisational support beyond a revised title.", null],
-        ["The central lesson is that role repair requires connected changes rather than isolated amendments to administrative documents.", q("Why would updating the adviser's job description alone leave the redesigned student support process vulnerable to failure?")]
-      ]
-    },
-    {
-      title: "The insurance claims specialist's missing specification",
-      lines: [
-        ["Now imagine an insurance company creating a claims specialist role after automating straightforward customer claims.", t("Remedial · A complete role-repair decision", "An insurance example shows how to diagnose and correct several connected role-design weaknesses.")],
-        ["The redesigned process allows software to handle routine claims while employees investigate cases requiring additional judgement.", null],
-        ["Management expects specialists to resolve eligible exceptions without sending every decision to a senior claims manager.", dg("The redesigned claims process", D.flow(["Claim|submitted", "Automatic|assessment", "!Complex|exception", "Specialist|investigates", "Decision|communicated"]), "Automation handles routine claims while specialists address cases requiring human judgement.")],
-        ["However, the formal role still describes collecting information and recommending decisions rather than approving eligible claims.", null],
-        ["The company's delegation schedule also omits the approval authority that managers announced during a team briefing.", iss("The specialist is expected to decide, but formal responsibilities and delegation continue supporting the previous process.", "A contradictory role")],
-        ["Imagine a specialist investigating a valid claim while worrying that independent approval might later be challenged.", null],
-        ["The employee refers the case upward because the organisation has not made the intended authority dependable.", q("Would repeating the instruction to act independently resolve the missing formal delegation?")],
-        ["The stronger correction is to document permitted decisions and define escalation when claims exceed those limits.", null],
-        ["The role description should then identify the investigations employees perform and the outcomes for which they are accountable.", st("A workable specification connects assigned responsibilities with clear decision rights and accountability.")],
-        ["Now consider the specialist's performance objectives, which still reward the number of claims processed each hour.", null],
-        ["Complicated investigations reduce throughput, creating pressure to avoid cases the redesigned role was created to resolve.", cmp("Conflicting performance expectations", "Inherited objective", "Maximise claims processed during each hour.", "Redesigned contribution", "Resolve eligible complex claims appropriately without unnecessary escalation.")],
-        ["The company should replace contradictory throughput targets with measures reflecting appropriate resolution of eligible claims.", null],
-        ["A quality sample should protect against inappropriate approvals and ensure employees respect their delegated decision boundaries.", dg("A balanced claims measure", D.flow(["Eligible|claim", "Appropriate|decision", "Quality|checked", "Outcome|recorded"]), "The proposed measure recognises resolution while protecting decision accuracy and compliance.")],
-        ["The organisation should also review whether greater judgement and responsibility justify changes to grade or reward.", null],
-        ["That review requires evidence about the role rather than automatically increasing rewards whenever a position is redesigned.", st("Reward arrangements should reinforce the redesigned contribution while remaining justified by the role's actual requirements.")],
-        ["However, the repair would remain incomplete if employees lacked the capability to investigate unfamiliar claims correctly.", null],
-        ["Specialists need realistic practice involving ambiguous evidence, approval limits and situations requiring escalation.", iss("Clear authority cannot compensate for insufficient capability when employees must exercise unfamiliar judgement.", "A remaining readiness gap")],
-        ["A practical assessment should establish whether employees understand the rules and apply them appropriately in different cases.", null],
-        ["Managers should then provide targeted support where the assessment reveals gaps in decision-making capability.", dg("From role repair to readiness", D.flow(["Role|clarified", "Authority|documented", "Measures|aligned", "Capability|tested", "Support|provided"]), "The redesigned role becomes more dependable when formal arrangements and demonstrated capability reinforce each other.")],
-        ["The company also needs a clear reporting relationship and a named owner for monitoring process adoption.", null],
-        ["Those arrangements help identify whether employees are performing the redesigned process or returning to familiar referrals.", null],
-        ["This is exactly the reasoning required when Qasr repairs its Guest Host specification across four pilot properties.", st("A coherent role repair addresses responsibilities, authority, measures, reward, capability and adoption together.")],
-        ["The proposed changes should be evaluated through operating evidence rather than reported as successful before implementation.", null],
-        ["The objective is not simply completing documents but making the redesigned work practically achievable and consistently performed.", q("Which correction would you prioritise if specialists understood the claims rules but still lacked formally documented approval authority?")]
-      ]
-    }
-  ]
-},
-{
-  title: "The eleven-week decision",
-  sec: "W10O3d",
-  lines: [
-    ["We have developed a proposal to repair Qasr's Guest Host role, but the sponsor now needs a decision.", t("The eleven-week decision", "Using operating evidence to diagnose the People phase and choose defensible corrective action.")],
-    ["Imagine joining the programme review eleven weeks after the redesigned arrival process began operating at four pilot properties.", null],
-    ["The project dashboard looks reassuring because the people workstream carries a green status against its planned activities.", dg("The sponsor's opening dashboard", D.flow(["People|workstream", "Induction|completed", "Status|green", "Operating|evidence?"]), "The green status reflects completed induction attendance rather than demonstrated capability or adoption.")],
-    ["All twenty-two Guest Hosts attended a four-hour induction, so the programme can legitimately report completed training attendance.", null],
-    ["However, nobody tested their capability afterwards, leaving an important question about operational readiness unanswered.", st("Training attendance is confirmed, but the capability of individual Guest Hosts remains untested.")],
-    ["The sponsor should therefore distinguish evidence that an activity happened from evidence that the intended change succeeded.", null],
-    ["This distinction matters because completing training cannot establish whether employees make appropriate decisions during difficult guest encounters.", cmp("Two different conclusions", "Supported conclusion", "All twenty-two Guest Hosts attended the scheduled induction.", "Unsupported conclusion", "All Guest Hosts can independently perform the redesigned role.")],
-    ["Now consider the operating results, which provide a different perspective on the programme's progress.", null],
-    ["Kiosk adoption stands at sixty-five percent, eleven weeks after the redesigned process went live.", dg("Observed kiosk adoption", D.progress("Week-eleven kiosk adoption", 65, 100, "%"), "Qasr reports 65% kiosk adoption eleven weeks after go-live.")],
-    ["This indicates substantial use of the redesigned arrangement, but it does not establish complete adoption across arrivals.", null],
-    ["Another twenty-nine percent of arrivals are handled at the desk, which requires careful interpretation rather than immediate condemnation.", st("Desk-handled arrivals must be investigated before being classified as legitimate exceptions or avoidable workarounds.")],
-    ["Property managers report that most desk-handled arrivals involve guests whose cases were rejected by the kiosk.", null],
-    ["Those observations suggest that some desk activity may provide necessary assistance rather than undermine the intended process.", dg("Interpreting desk activity", D.branch("Desk-handled arrival", ["Kiosk-rejected case", "Possible workaround", "Reason requires evidence"]), "The observed desk share does not establish how many cases represent inappropriate workarounds.")],
-    ["However, the evidence does not establish the precise frequency of avoidable workarounds or their underlying causes.", null],
-    ["The sponsor should request classified exception records before deciding whether desk activity represents a persistent design weakness.", st("Workaround diagnosis requires evidence about case types, frequency and reasons for using alternative operating paths.")],
-    ["Now examine another result that directly concerns the Guest Host's redesigned responsibility for handling rate discrepancies.", null],
-    ["Nine of the twenty-two Guest Hosts refer every rate discrepancy to a duty manager.", dg("Observed escalation behaviour", D.flow(["22 Guest|Hosts", "9 always|refer discrepancies", "Duty manager|decides", "Guest|waits"]), "Nine Guest Hosts consistently refer rate discrepancies upward rather than exercising local waiver authority.")],
-    ["This pattern matters because the redesigned role permits eligible rate discrepancies to be waived up to AED 400.", null],
-    ["Yet that authority appears only in a briefing email and remains absent from the formal delegation schedule.", iss("The role expects local decisions, but formal authority documentation does not support the expected behaviour.", "A documented design weakness")],
-    ["The authority-accountability matrix suggests that employees facing responsibility without clear authority may escalate defensively.", null],
-    ["That explanation is plausible, but the available evidence does not establish why each of the nine employees escalates.", st("Observed escalation supports investigating authority and capability gaps, but individual employee motives remain unverified.")],
-    ["The sponsor must therefore decide which correction deserves priority without pretending that every uncertainty has already been resolved.", null],
-    ["Formalising the waiver is a defensible priority because the missing delegation directly contradicts an essential role responsibility.", cmp("A defensible priority", "Observed weakness", "The AED 400 waiver is absent from formal delegation.", "Proposed correction", "Document the decision boundary and clarify escalation beyond authorised limits.")],
-    ["However, documenting authority should accompany capability assessment because employees must also understand how to exercise judgement appropriately.", null],
-    ["The programme should test realistic exception decisions rather than assume that clearer documents automatically produce competent performance.", dg("Linking correction to evidence", D.flow(["Document|authority", "Assess|judgement", "Observe|decisions", "Review|outcomes"]), "The proposed correction should be tested through appropriate decision-making and observed operating behaviour.")],
-    ["The sponsor also learns that two Guest Hosts have resigned since the redesigned process began operating.", null],
-    ["Their reasons remain unknown, so the departures cannot automatically be attributed to resistance or dissatisfaction with redesign.", iss("Two resignations are observed, but their individual causes have not been established.", "Retention evidence needs investigation")],
-    ["Nevertheless, the departures justify reviewing retention risks and protecting practical knowledge held by experienced employees.", null],
-    ["One pilot property has also reinstated a permanent desk position that the redesigned arrival process removed.", dg("The reinstated desk", D.branch("Permanent desk restored", ["Protects necessary service?", "Recreates old process?", "Investigate actual cases"]), "The desk may protect service continuity or undermine redesign, depending on the work it performs.")],
-    ["The sponsor should consider whether that decision protects guests whose kiosk exceptions genuinely require human assistance.", null],
-    ["The competing interpretation is that a permanent desk encourages unnecessary returns to conventional check-in practices.", cmp("Two competing interpretations", "Service protection", "The desk supports guests whose exceptions genuinely require assistance.", "Redesign erosion", "The desk preserves avoidable conventional check-in activity.")],
-    ["Neither conclusion follows automatically from reinstatement, so the programme must examine the desk's actual operating cases.", null],
-    ["A credible sponsor report should therefore combine adoption, classified workarounds, decision quality and demonstrated employee capability.", st("A meaningful people-readiness report connects operating outcomes with the organisational arrangements producing them.")],
-    ["The green workstream status should be reconsidered because induction attendance alone cannot demonstrate readiness for the redesigned process.", null],
-    ["The sponsor now needs corrective priorities, named owners and evidence showing whether the organisation's behaviour actually improves.", dg("A more credible sponsor decision", D.flow(["Diagnose|evidence", "Prioritise|corrections", "Assign|owners", "Measure|improvement"]), "The decision should connect observed weaknesses with accountable corrective action and measurable results.")],
-    ["Remember that good change management neither dismisses employee behaviour nor assumes every deviation reflects resistance.", null],
-    ["It investigates how responsibilities, authority, incentives and capability shape the work people perform under real conditions.", q("What would you tell Qasr's sponsor about the green status, and which correction would you defend as the priority?")]
-  ],
-  review: [
-    {
-      title: "The hospital discharge programme that reported green",
-      lines: [
-        ["Let's practise interpreting a programme dashboard through a hospital that has redesigned its patient discharge process.", t("Remedial · Reading beyond the green status", "A hospital discharge case distinguishes completed training activities from genuine operational readiness.")],
-        ["The hospital introduces a shared digital system intended to coordinate discharge requirements across several clinical and administrative departments.", null],
-        ["Managers report that the system is operational and all discharge coordinators have attended the scheduled training.", dg("The hospital's progress report", D.flow(["System|launched", "Training|attended", "Status|green", "Readiness|unverified"]), "Completed implementation activities do not establish that employees can perform the redesigned process.")],
-        ["The programme therefore receives a green status, even though nobody has assessed coordinators using realistic discharge exceptions.", null],
-        ["Imagine the sponsor discovering that difficult cases still require repeated telephone calls between departments before patients leave.", iss("The project reports completed activities while the operating process continues experiencing avoidable coordination difficulties.", "The evidence gap")],
-        ["The sponsor should not immediately conclude that employees are resisting the redesigned process or refusing to cooperate.", null],
-        ["Instead, the programme needs evidence explaining why cases continue moving through the previous arrangements.", q("What would distinguish a training problem from unclear authority or an unavoidable clinical requirement?")],
-        ["A coordinator might understand the new system but lack permission to resolve an operational dependency independently.", null],
-        ["Another employee might possess the necessary authority but struggle to recognise when specialist clinical input is required.", cmp("Different possible causes", "Authority gap", "The employee lacks clear permission to make an expected decision.", "Capability gap", "The employee cannot yet apply the required judgement reliably.")],
-        ["These problems require different corrective actions because repeating system training cannot establish missing decision authority.", null],
-        ["The hospital should examine actual discharge cases and assess how coordinators make decisions under realistic conditions.", st("A credible readiness assessment investigates both organisational authority and demonstrated employee capability.")],
-        ["The sponsor should also request adoption evidence showing how often departures follow the redesigned coordination process.", null],
-        ["Alternative arrangements should be classified because some may protect patients while others recreate unnecessary departmental delays.", dg("Investigating operating paths", D.flow(["Case|observed", "Reason|classified", "Cause|investigated", "Action|selected"]), "The programme must distinguish legitimate exceptions from avoidable workarounds before selecting corrective action.")],
-        ["Imagine one ward restoring a dedicated administrative desk because staff believe the new system cannot handle complicated departures.", null],
-        ["That decision might preserve essential support, but it might also encourage continued reliance on outdated arrangements.", iss("Restoring an old operating arrangement can protect service or undermine redesign, depending on the cases it handles.", "Two plausible interpretations")],
-        ["The sponsor needs case evidence before deciding whether the desk should remain, change or disappear.", null],
-        ["A defensible report would separate established observations from interpretations that still require investigation.", st("Management decisions should distinguish observed facts, plausible explanations and proposed corrective actions.")],
-        ["This is exactly the challenge facing Qasr when its people workstream remains green despite untested capability.", null],
-        ["The Guest Host evidence also includes repeated escalation, incomplete adoption and a reinstated permanent desk.", null],
-        ["Those observations justify investigation and correction without establishing every employee's motives or every workaround's cause.", dg("A defensible management response", D.flow(["Evidence|reviewed", "Weakness|identified", "Correction|proposed", "Result|measured"]), "The sponsor should connect operating evidence with targeted action and subsequent assessment.")],
-        ["The important lesson is that completed project activities are not equivalent to successful organisational change.", null],
-        ["A green dashboard becomes meaningful only when its evidence reflects the capabilities and behaviours required by the redesign.", q("Why would the hospital sponsor need capability and adoption evidence before accepting the programme's green readiness status?")]
-      ]
-    },
-    {
-      title: "The retailer deciding whether to keep its manual counter",
-      lines: [
-        ["Now imagine an online retailer reviewing a redesigned returns process several weeks after its new service launched.", t("Remedial · Defending a corrective decision", "A retail returns case shows how to compare competing explanations before choosing a response.")],
-        ["The retailer expects straightforward returns to proceed automatically while employees investigate exceptions requiring additional judgement.", null],
-        ["However, one store has reinstated a permanent manual returns counter that the redesigned process originally removed.", dg("The operating decision", D.branch("Manual counter restored", ["Necessary customer support?", "Avoidable old practice?", "Evidence required"]), "The reinstated counter has competing interpretations that must be tested against actual operating evidence.")],
-        ["The store manager argues that the counter protects customers who cannot complete the digital returns process.", null],
-        ["The programme manager worries that employees are directing ordinary requests back toward the familiar manual procedure.", cmp("Two management interpretations", "Service continuity", "The counter supports customers with genuine exceptions or access difficulties.", "Redesign erosion", "The counter encourages unnecessary manual handling of routine returns.")],
-        ["Both explanations are plausible, but the counter's existence alone cannot establish which interpretation is correct.", null],
-        ["The sponsor should therefore examine the types of returns handled and why customers use the manual arrangement.", q("What evidence would help determine whether the reinstated counter protects service or undermines the redesigned process?")],
-        ["A useful review would classify cases according to whether the digital process could reasonably have handled them.", null],
-        ["The programme should also investigate whether employees have appropriate authority to resolve exceptions without unnecessary managerial referrals.", dg("Investigating the counter", D.flow(["Manual|case recorded", "Reason|classified", "Authority|checked", "Corrective|decision"]), "Case evidence and decision rights help explain whether manual handling is necessary or avoidable.")],
-        ["Imagine specialists referring every disputed refund upward because their formal delegation remains unchanged after the redesign.", null],
-        ["That behaviour could reflect uncertainty about authority rather than deliberate rejection of the new process.", iss("Repeated referral may arise from an organisational design weakness rather than employee unwillingness to change.", "Avoid assuming resistance")],
-        ["The programme should document appropriate decision rights and test whether employees understand how to exercise them.", null],
-        ["It should also review performance measures that might still reward manual transaction volume over appropriate exception resolution.", st("Authority, capability and incentives must be investigated together when redesigned work does not operate as intended.")],
-        ["Suppose the sponsor asks which correction deserves priority before every cause has been fully established.", null],
-        ["The programme should select a correction supported by a clear observed weakness and explain the reasoning.", cmp("A defensible priority decision", "Weak reasoning", "Assume employees resist change and demand immediate compliance.", "Stronger reasoning", "Identify documented contradictions, propose targeted repairs and test their effects.")],
-        ["If formal delegation is missing, clarifying it provides a defensible response to an established organisational problem.", null],
-        ["However, the programme must still assess whether employees can apply the revised authority correctly during difficult cases.", dg("Testing the correction", D.flow(["Delegation|clarified", "Capability|assessed", "Behaviour|observed", "Outcome|reviewed"]), "A proposed correction should be evaluated through observed decisions and process performance.")],
-        ["The sponsor should monitor adoption alongside the frequency and causes of alternative operating paths.", null],
-        ["This evidence would show whether the retailer increasingly follows its intended process without neglecting customers needing assistance.", st("Successful change requires genuine adoption while preserving appropriate support for legitimate exceptions.")],
-        ["Qasr faces the same decision when one pilot property restores a permanent desk after the arrival redesign.", null],
-        ["Its sponsor must distinguish observed operating evidence from assumptions about employee motivation and service requirements.", null],
-        ["The objective is not eliminating every alternative path but removing unnecessary departures from the intended process.", q("How would you defend a decision about the manual counter without claiming that every customer's reason for using it is known?")]
-      ]
-    }
-  ]
-},
-{
-  title: "The handover and the next phase",
-  sec: "W10O3e",
-  lines: [
-    ["We have reached the end of Qasr's People-phase investigation, and the sponsor now understands what must change.", t("The handover and the next phase", "Turning the People-phase findings into organisational readiness and preparing for Develop.")],
-    ["The redesigned arrival process needs more than functioning kiosks and employees carrying the new Guest Host title.", null],
-    ["It needs organisational arrangements that allow people to perform the intended work consistently and with appropriate judgement.", st("The People phase prepares the organisation to perform the redesigned process, not merely to acknowledge its existence.")],
-    ["Imagine the sponsor asking what Qasr should carry forward before the programme moves deeper into development and implementation.", null],
-    ["The answer begins with role definitions that accurately describe the responsibilities created by the redesigned arrival process.", dg("The People-phase handover", D.flow(["Redesigned|process", "Defined|roles", "Documented|authority", "Aligned|measures", "Assessed|capability"]), "The People phase produces organisational arrangements that support the redesigned process.")],
-    ["For Guest Hosts, those definitions must explain how employees support arrivals and resolve exceptions that kiosks cannot handle.", null],
-    ["They must also clarify accountability because cross-functional decisions become unreliable when responsibility and ownership remain confused.", st("Updated role definitions and job descriptions should reflect the redesigned process and its accountability arrangements.")],
-    ["The handover also needs documented delegated authority, including the permitted AED 400 waiver for eligible rate discrepancies.", null],
-    ["That authority should be supported by an escalation route for situations exceeding the employee's approved decision boundary.", dg("From responsibility to usable authority", D.flow(["Guest Host|responsibility", "Formal|delegation", "Appropriate|decision", "Defined|escalation"]), "Documented authority allows employees to act within agreed limits while preserving appropriate escalation.")],
-    ["Without this arrangement, Qasr risks continuing the defensive referrals that undermine the intended guest experience.", null],
-    ["Performance measures and reward arrangements must also support the redesigned responsibilities rather than conventional front-desk transactions.", cmp("The required measurement change", "Inherited objectives", "Check-ins completed per shift and average transaction time.", "Redesigned contribution", "Appropriate exception resolution supported by decision-quality safeguards.")],
-    ["The People phase should therefore provide revised measures that recognise outcomes employees can reasonably influence.", null],
-    ["Conflicting old objectives must be removed because they can continue rewarding behaviour the redesign intended to replace.", st("Revised measures and reward arrangements should reinforce the intended process rather than preserve contradictory incentives.")],
-    ["Qasr also needs a capability plan that identifies learning requirements and tests employees through realistic guest exceptions.", null],
-    ["All twenty-two Guest Hosts attended induction, but that attendance does not establish their ability to exercise judgement.", dg("From training to demonstrated readiness", D.flow(["Induction|attended", "Realistic|practice", "Capability|assessed", "Gaps|addressed"]), "The capability plan must provide evidence of performance rather than relying solely on training attendance.")],
-    ["The programme should assess decisions within delegated authority and recognise when additional managerial support is necessary.", null],
-    ["That evidence matters because untested capability can remain hidden behind reassuring project milestones and green status reports.", iss("Completed training activities do not demonstrate that employees can perform the redesigned process reliably.", "Readiness must be evidenced")],
-    ["The handover also requires an adoption measure with a named owner responsible for reporting actual operating behaviour.", null],
-    ["Qasr's observed kiosk adoption is sixty-five percent at week eleven, leaving important questions about alternative operating paths.", dg("Adoption requires ownership", D.flow(["Weekly|adoption", "Exceptions|classified", "Owner|reports", "Sponsor|reviews"]), "A named owner should monitor adoption and help coordinate responses to persistent operating problems.")],
-    ["The twenty-nine percent desk-handled share needs investigation because kiosk-rejected guests may legitimately require human assistance.", null],
-    ["A reinstated permanent desk could protect service continuity or preserve unnecessary old practices, depending on actual cases.", st("Adoption analysis must distinguish necessary exception handling from avoidable departures from the redesigned process.")],
-    ["These outputs support later implementation, value realisation and sustainable performance because organisational readiness shapes operational results.", null],
-    ["They must also remain coordinated with technology development so systems support the decisions employees are expected to make.", dg("People and Develop working together", D.flow(["People|requirements", "Technology|requirements", "Coordinated|design", "Operational|readiness"]), "Roles and technology must be developed together rather than treated as unrelated programme activities.")],
-    ["This brings us to the next framework phase, Develop, which occupies position seven after People.", null],
-    ["Develop concerns building what has been designed and deciding how much technology to buy, configure or build.", st("The next phase is Develop, where the programme turns its approved design into supporting technical and operational components.")],
-    ["The phases remain connected because changing technology requirements can reveal additional responsibilities or capability needs.", null],
-    ["Likewise, unclear employee authority can expose decisions that the supporting systems must recognise and control.", cmp("Two connected design questions", "People", "Who performs the work, with what authority, capability and incentives?", "Develop", "What supporting components must be built, configured or acquired?")],
-    ["Before leaving Week 10, you will apply this reasoning to an unfamiliar organisation through the discussion forum.", null],
-    ["The forum case is called The Role That Was Never Designed, and it includes an accompanying exhibit.", dg("The Week 10 forum challenge", D.flow(["Read|case and exhibit", "Develop|reasoning", "Post|response", "Challenge|peers"]), "The forum asks learners to transfer People-phase reasoning to an organisation outside the Qasr case.")],
-    ["Your task is to design an appropriate role and explain how its performance measures could influence employee behaviour.", null],
-    ["Use the actual forum case and exhibit rather than assuming its circumstances resemble Qasr in every detail.", st("A defensible forum response must apply the People-phase concepts to the evidence supplied in the unfamiliar case.")],
-    ["The delivery plan asks for a substantive initial contribution by mid-week before engaging with classmates' reasoning.", null],
-    ["You should respond meaningfully to at least two peers, including a reasoned disagreement that challenges or extends an argument.", dg("Constructive academic discussion", D.flow(["Your|analysis", "Peer|argument", "Evidence-based|challenge", "Stronger|reasoning"]), "Constructive disagreement should use case evidence and BPM concepts rather than merely express approval or opposition.")],
-    ["Support your reasoning with Jeston's Chapter 18 and read the facilitator's summary at the end of the week.", null],
-    ["The activity is formative and contributes to the participation assessment scheduled for Week 14.", st("The forum develops applied judgement and contributes to Assessment 4, Participation, in Week 14.")],
-    ["As we close, remember that Qasr's proposed corrections remain recommendations until implementation and operating evidence demonstrate improvement.", null],
-    ["The People phase succeeds when responsibilities, authority, incentives and capability make the redesigned process genuinely performable.", q("When Qasr enters Develop, what evidence would convince you that its people arrangements are ready to support the new process?")]
-  ],
-  review: [
-    {
-      title: "The hospital preparing its digital discharge handover",
-      lines: [
-        ["Let's revisit the People-phase handover through a hospital preparing to develop a redesigned digital discharge service.", t("Remedial · Preparing a credible handover", "A hospital discharge example shows how organisational requirements must accompany technology development.")],
-        ["The hospital wants patients to leave safely without waiting for disconnected administrative activities across several departments.", null],
-        ["Its redesigned process uses shared information and a discharge coordinator to manage outstanding requirements before departure.", dg("The redesigned discharge journey", D.flow(["Discharge|approved", "Requirements|coordinated", "Exceptions|resolved", "Patient|leaves"]), "The new process combines digital coordination with human judgement when exceptions arise.")],
-        ["The technology team is ready to develop the supporting system, but the programme sponsor questions organisational readiness.", null],
-        ["A working application cannot guarantee success if employees lack clear responsibilities or authority to resolve operational problems.", iss("The system may support the redesigned workflow while organisational arrangements still prevent employees from performing it.", "An incomplete handover")],
-        ["The hospital therefore needs role definitions describing what discharge coordinators do and which decisions remain with clinical professionals.", null],
-        ["Those definitions should connect with accountability arrangements so employees understand how responsibilities cross departmental boundaries.", st("Role definitions and accountability must reflect the redesigned process rather than preserve outdated departmental assumptions.")],
-        ["The organisation must also document which operational adjustments coordinators may authorise and when specialist approval remains necessary.", null],
-        ["Otherwise, employees might repeatedly refer straightforward issues upward despite the redesigned process's intention to reduce delays.", dg("Documented decision boundaries", D.flow(["Issue|identified", "Authority|checked", "Local|resolution", "Specialist|escalation"]), "Clear delegation distinguishes appropriate local decisions from situations requiring further approval.")],
-        ["Now imagine coordinators remaining evaluated according to the number of administrative records they complete each shift.", null],
-        ["That measure could discourage them from spending time resolving complicated problems that delay patients' departure.", cmp("The measurement handover", "Old objective", "Administrative records completed during a shift.", "Redesigned contribution", "Appropriate resolution of discharge obstacles with necessary quality safeguards.")],
-        ["The hospital should replace contradictory measures and review whether rewards reflect the redesigned responsibilities.", null],
-        ["Employees also need realistic training that develops coordination and judgement rather than merely demonstrating the system interface.", st("Capability must be demonstrated through appropriate decisions, not inferred from attendance at software training.")],
-        ["A practical assessment could examine how coordinators handle missing information while respecting clinical decision boundaries.", null],
-        ["The programme should then assign someone responsibility for measuring whether actual discharges follow the redesigned process.", dg("The complete people handover", D.flow(["Roles|defined", "Authority|documented", "Measures|aligned", "Capability|assessed", "Adoption|owned"]), "The People phase provides organisational requirements and readiness evidence for later implementation.")],
-        ["This adoption evidence would reveal whether departments continue relying on disconnected records or unnecessary informal arrangements.", null],
-        ["The technology team can then develop supporting components around clearly defined responsibilities and decision requirements.", st("People and technology development must remain coordinated because the redesigned process depends on both.")],
-        ["Notice that the handover does not mean people-related work ends when technical development begins.", null],
-        ["New technical discoveries may require additional training, revised responsibilities or changes to operational support arrangements.", null],
-        ["This is the same principle guiding Qasr as its People phase connects with Develop.", q("Why should the hospital clarify responsibilities and decision authority before treating its digital discharge design as ready for development?")]
-      ]
-    },
-    {
-      title: "The retailer taking its redesigned returns process into development",
-      lines: [
-        ["Now imagine an online retailer preparing to develop the technology supporting its redesigned customer returns process.", t("Remedial · Connecting People with Develop", "A returns redesign illustrates why role requirements must guide technology development and later adoption.")],
-        ["The proposed process allows routine returns to receive automatic decisions while specialists handle unusual customer circumstances.", null],
-        ["Management wants the technology team to begin building the workflow, but several employee responsibilities remain unclear.", dg("The intended returns process", D.flow(["Return|requested", "Automatic|assessment", "!Exception|identified", "Specialist|resolves"]), "Automation handles routine returns while employees investigate exceptions requiring judgement.")],
-        ["The specialists are expected to approve certain exceptions, yet the organisation has not documented their decision authority.", null],
-        ["Their performance measures also continue rewarding transaction volume rather than appropriate resolution of complicated cases.", iss("The redesigned process requires new decisions, but authority and performance expectations still reflect the previous work.", "People requirements remain incomplete")],
-        ["Imagine developers asking which refund amounts specialists may approve without requesting additional managerial permission.", null],
-        ["Without a documented decision boundary, the team cannot confidently configure approval controls around the intended responsibilities.", q("Why does unclear employee authority create a technology-development problem rather than only a human-resources problem?")],
-        ["The answer is that software must support the decisions employees are authorised to make during the redesigned process.", null],
-        ["The retailer should therefore clarify delegation before finalising the workflow's approval and escalation arrangements.", st("People requirements and technology requirements must be designed together because each constrains the other.")],
-        ["The role specification should also describe how specialists investigate exceptions and communicate outcomes to customers.", null],
-        ["Those responsibilities help developers understand which information employees need when making appropriate decisions.", dg("From role requirements to system support", D.flow(["Defined|responsibility", "Required|information", "Decision|controls", "Supported|workflow"]), "The supporting technology should reflect the work and decision boundaries defined by the redesigned role.")],
-        ["The organisation must then revise performance measures so specialists are not penalised for handling difficult returns.", null],
-        ["A useful measure could recognise eligible exceptions resolved appropriately while including a quality review of decisions.", cmp("Aligning the new role", "Conflicting old objective", "Maximise the number of returns processed each hour.", "Relevant new objective", "Resolve eligible exceptions appropriately while protecting decision quality.")],
-        ["The old objective should be removed where it contradicts the work expected under the redesigned process.", null],
-        ["Specialists also need realistic practice applying refund rules and recognising cases that exceed their delegated authority.", st("Capability assessment should demonstrate that employees can exercise the judgement required by the redesigned workflow.")],
-        ["Training attendance alone cannot establish readiness because employees may operate the interface without understanding appropriate decisions.", null],
-        ["The programme should therefore test realistic cases and provide targeted support when capability gaps become visible.", dg("Preparing employees for implementation", D.flow(["Practise|cases", "Assess|judgement", "Address|gaps", "Support|operation"]), "Readiness depends on demonstrated capability rather than completion of scheduled training activities.")],
-        ["After launch, the retailer must measure whether actual returns follow the intended automated and specialist-supported paths.", null],
-        ["Alternative manual handling should be classified because some cases may genuinely require assistance while others reveal workarounds.", iss("Manual activity cannot automatically be classified as resistance without investigating why customers and employees use that path.", "Adoption requires interpretation")],
-        ["A named adoption owner should report these patterns so the programme can coordinate necessary corrective action.", null],
-        ["This creates a practical connection between the People phase, implementation and the eventual realisation of process benefits.", st("The People phase supplies roles, authority, measures, capability and adoption ownership needed for sustainable process performance.")],
-        ["The same reasoning applies to Qasr as its programme moves from People into the Develop phase.", null],
-        ["Develop will address what supporting components should be built, configured or acquired for the approved process design.", null],
-        ["Those decisions must remain consistent with the organisational arrangements employees need to perform their redesigned responsibilities.", q("What would go wrong if the retailer developed its approval workflow before deciding which exceptions specialists may authorise?")]
-      ]
-    }
-  ]
-},
-      ] },
+      {
+        id: "l1",
+        title: "The design is not the work",
+        sections: [
+          {
+            title: "A process redesign changes people's jobs",
+            sec: "W10O1a",
+            lines: [
+              ["Welcome to Week 10. At Qasr Hospitality Group, the redesigned arrival process looks promising, but a diagram cannot welcome a guest.", t("OPER621 - Week 10", "The People Phase: making redesigned work real.")],
+              ["Remember the exhausted traveller whose arrival exposed problems across several departments? That experience started our improvement journey.", dg("The arrival that exposed the problem", D.flow(["Guest|arrives", "Booking|checked", "Rate|disputed", "!Room not|ready"]), "One difficult arrival revealed failures across departmental boundaries.")],
+              ["Qasr now has a better process design. The question is whether its employees can actually deliver it.", st("A better process diagram does not automatically create better work.")],
+              ["Imagine the new kiosks operating perfectly while employees continue sending difficult cases through the old approval chain.", iss("Technology changes, but familiar handoffs remain.", "The design is not the work")],
+              ["The guest would still experience delays, because the organisation has changed its technology without changing the decisions people make.", null],
+              ["At four pilot properties, twenty-two former Front Desk Agents have become Guest Hosts, supporting arrivals and handling kiosk exceptions.", dg("The redesigned guest arrival", D.flow(["Guest|arrives", "Self-service|kiosk", "!Exception|identified", "Guest Host|assists", "Arrival|continues"]), "The new process combines automated check-in with human judgement.")],
+              ["Watch how the work changes. Routine transactions move towards the kiosk, while complex exceptions move towards the employee.", cmp("a", "Front Desk Agent", "Conventional desk transactions and routine check-ins.", "down")],
+              ["The Guest Host now needs judgement, coordination and clear authority rather than simply greater transaction speed.", cmp("b", "Guest Host", "Guest assistance, exception investigation and appropriate resolution.", "up")],
+              ["Consider a traveller whose confirmed corporate rate differs from the kiosk's displayed amount.", dg("A rate discrepancy", D.flow(["Corporate|booking", "!Rate|discrepancy", "Guest Host|investigates", "Decision|required"]), "The redesigned role must handle exceptions that automation cannot resolve.")],
+              ["The Guest Host has been told that eligible discrepancies up to AED 400 may be waived without managerial referral.", dg("The local decision boundary", D.flow(["Rate|discrepancy", "Check|eligibility", "Within|AED 400?", "Appropriate|decision"]), "The case describes limited waiver authority, not unrestricted discretion.")],
+              ["Yet a new title does not guarantee that employees understand their authority or feel organisationally supported when exercising it.", q("Would you make the waiver decision confidently if your formal authority remained unclear?")],
+              ["An employee might refer the case upward, not because they reject change, but because the organisation has left uncertainty unresolved.", iss("Expected independence conflicts with unclear organisational support.", "A people-design problem")],
+              ["That brings us to phase six of the BPM framework: People, which follows Innovate and prepares the redesigned work for implementation.", dg("The People phase", D.route([5]), "People is framework phase six, following Innovate.")],
+              ["The framework then continues through Develop, Implement, Realize Value and Sustainable Performance, but these activities must remain coordinated.", st("BPM phases guide connected work rather than isolated departmental projects.")],
+              ["People and Develop are especially connected, because technology must support the decisions employees are expected to make.", dg("People and technology develop together", D.flow(["Redesigned|process", "People|requirements", "Technology|support", "Reliable|operation"]), "Organisational responsibilities and supporting systems must fit together.")],
+              ["For example, a kiosk cannot resolve an exception successfully if nobody knows who owns the decision when the kiosk stops.", null],
+              ["The People phase therefore examines responsibilities, accountability, authority, capability, performance measures and the incentives shaping daily behaviour.", dg("Making the redesign performable", D.flow(["Clear|roles", "Decision|authority", "Practical|capability", "Aligned|measures", "Reliable|performance"]), "The People phase aligns organisational arrangements with the redesigned process.")],
+              ["These elements reinforce each other. Employees need permission to decide, the ability to decide well, and measures that reward appropriate decisions.", st("Roles, authority, capability and incentives must support the same process.")],
+              ["Project management, people change management and leadership also continue throughout the framework, because organisational change cannot be confined to one phase.", null],
+              ["When these arrangements remain unchanged, the old process can quietly return even after management approves a new design.", iss("Old organisational arrangements recreate old operating behaviour.", "The redesign unravels")],
+              ["This week, we will investigate Qasr's Guest Host role and discover why apparently sensible changes can produce disappointing results.", null],
+              ["Our challenge is to make the redesigned guest experience dependable, not merely attractive on a process diagram.", q("What must change around the Guest Host so the redesigned process becomes everyday reality?")]
+            ],
+            review: [
+              {
+                title: "The hospital discharge that changed everyone's job",
+                lines: [
+                  ["Imagine a hospital redesigning discharge so patients can leave promptly after treatment finishes.", t("Another way to understand the People phase", "A hospital discharge redesign changes more than the workflow.")],
+                  ["Its new digital system coordinates outstanding requirements instead of leaving departments to work through disconnected procedures.", dg("The redesigned discharge", D.flow(["Discharge|approved", "Requirements|coordinated", "Patient|prepared", "Departure|completed"]), "A coordinated discharge process replaces fragmented departmental activity.")],
+                  ["Managers expect shorter waits, but the new diagram does not explain who resolves disagreements between departments.", q("Who should coordinate a discharge when several departments disagree about readiness?")],
+                  ["A discharge coordinator receives responsibility for resolving delays, yet cannot authorise changes belonging to other professional roles.", iss("The coordinator owns the delay but lacks some necessary decision rights.", "Responsibility without authority")],
+                  ["Patients continue waiting while managers exchange calls, even though the digital system works correctly.", null],
+                  ["The problem is organisational: technology cannot compensate for unclear responsibilities and decision boundaries.", st("A functioning system does not guarantee a functioning process.")],
+                  ["The hospital must define the coordinator's work while preserving clinical decisions for appropriately authorised professionals.", cmp("a", "Discharge coordinator", "Coordinates departure requirements and operational dependencies.", "up")],
+                  ["Clinical professionals remain accountable for decisions requiring their professional authority and judgement.", cmp("b", "Clinical professionals", "Retain responsibility for clinical decisions and safeguards.", "up")],
+                  ["Clear boundaries protect patients because faster coordination must never bypass essential clinical controls.", null],
+                  ["The coordinator also needs realistic practice handling exceptions rather than simply learning the digital system.", dg("Preparing the coordinator", D.flow(["Define|responsibility", "Clarify|authority", "Practise|exceptions", "Assess|capability"]), "Role clarity and demonstrated capability support dependable discharge.")],
+                  ["Performance measures should recognise successful coordination, not merely count the records processed during a shift.", st("Measures must reflect the redesigned contribution.")],
+                  ["Otherwise, complicated discharges may appear unproductive even when the coordinator prevents a long patient delay.", iss("Transaction volume rewards easy records over difficult coordination.", "The wrong incentive")],
+                  ["This resembles Qasr, where technology changes the work remaining for employees.", null],
+                  ["Both organisations need roles, authority, capability and measures that support the intended process.", st("The People phase makes redesigned responsibilities practically achievable.")],
+                  ["The lesson is simple: a process describes the desired journey, but organisational arrangements determine whether employees can deliver it.", q("Why must jobs change when a workflow changes, even if the technology works perfectly?")]
+                ]
+              },
+              {
+                title: "The online retailer that automated the easy work",
+                lines: [
+                  ["Imagine an online retailer automating straightforward customer returns to make refunds faster.", t("Another way to understand redesigned work", "Automation changes the work that remains for people.")],
+                  ["Software now approves routine returns, while employees investigate damaged products, disputed information and unusual circumstances.", dg("The redesigned returns process", D.flow(["Return|requested", "Automatic|check", "Routine|approval", "!Complex|exception", "Specialist|resolution"]), "Automation handles routine work while employees handle exceptions.")],
+                  ["The employee's job becomes more demanding because easy cases disappear from the manual workload.", st("Automation can increase the judgement required from remaining employees.")],
+                  ["Imagine a customer disputing a refund after receiving a damaged product with conflicting delivery information.", null],
+                  ["The software cannot decide whether the circumstances justify an exception, so an employee must investigate.", q("What would help this employee decide fairly without referring every difficult case to management?")],
+                  ["The employee needs clear authority, practical guidance and an escalation route for cases beyond delegated limits.", dg("Supporting human judgement", D.flow(["Complex|case", "Evidence|reviewed", "Authority|checked", "Decision|made"]), "Clear decision rights support the work automation leaves behind.")],
+                  ["Without these arrangements, the new system may reproduce the same approval delays it was intended to remove.", iss("Automation removes routine checking, but unclear authority preserves referrals.", "The old delay returns")],
+                  ["Now imagine management continuing to measure employees by the number of returns processed per hour.", null],
+                  ["Complex investigations take longer, so employees may appear less productive precisely when they provide more valuable service.", cmp("a", "Old measure", "Returns processed per hour.", "down")],
+                  ["The redesigned contribution requires appropriate resolution of difficult returns, supported by decision-quality checks.", cmp("b", "New contribution", "Resolve complex returns fairly and within authority.", "up")],
+                  ["The retailer should replace conflicting measures and provide realistic practice with unusual cases.", dg("Aligning people with automation", D.flow(["Defined|decisions", "Practical|training", "Relevant|measures", "Reliable|service"]), "Human judgement requires organisational support.")],
+                  ["It must also clarify when specialists need assistance, because independence does not mean unlimited authority.", null],
+                  ["Qasr faces the same challenge when kiosks handle routine arrivals and Guest Hosts inherit difficult exceptions.", st("Technology and employee roles must be designed together.")],
+                  ["Installing automation changes which activities remain for people, so existing responsibilities cannot simply stay unchanged.", null],
+                  ["The real redesign succeeds when employees can perform the work that automation leaves behind.", q("How should employee responsibilities change when software handles routine cases but people resolve exceptions?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "What the People phase must deliver",
+            sec: "W10O1b",
+            lines: [
+              ["Qasr's sponsor now asks a practical question: what evidence would show that Guest Hosts are ready for their redesigned work?", t("Week 10 - The People Phase", "What must the organisation deliver?")],
+              ["A new title and functioning kiosks are not enough, because neither proves employees can handle real exceptions.", q("What would convince you that Qasr is operationally ready?")],
+              ["The People phase must deliver concrete arrangements: defined roles, decision authority, aligned measures, demonstrated capability and accountable adoption tracking.", st("Readiness requires evidence, not simply completed project activities.")],
+              ["Start with the twenty-two employees who moved from Front Desk Agent positions into Guest Host roles.", dg("The redesigned Guest Host role", D.flow(["Guest|arrives", "Kiosk|processes", "!Exception|identified", "Guest Host|resolves"]), "The Guest Host supports arrivals and handles exceptions requiring human judgement.")],
+              ["Their job description should explain the work, its boundaries, reporting relationships and expected contribution to guest service.", it(1, 5, "users", "Define the role", "Describe responsibilities, boundaries, reporting and expected outcomes.")],
+              ["This matters because an unclear role encourages employees to return to responsibilities they understood before the redesign.", null],
+              ["Changed judgement and accountability also justify reviewing job grades and rewards, although any adjustment requires proper evaluation.", st("Material changes in work require a justified review of employment arrangements.")],
+              ["Next comes decision authority, because employees cannot perform independently when the necessary permissions remain uncertain.", it(2, 5, "key", "Document authority", "Specify permitted decisions and escalation beyond delegated limits.")],
+              ["At Qasr, eligible rate discrepancies up to AED 400 may be waived, but that permission must be reflected in formal delegation.", dg("Making delegation usable", D.flow(["New|responsibility", "Decision|required", "Formal|authority", "Escalation|boundary"]), "Documented authority must support the decisions assigned to employees.")],
+              ["A briefing alone cannot provide the same dependable organisational protection as an approved decision boundary.", iss("Expected decisions remain unclear in formal authority arrangements.", "Undocumented delegation")],
+              ["Now examine performance measures. The previous role rewarded check-ins completed and average transaction speed.", cmp("a", "Previous objectives", "Conventional check-in volume and transaction speed.", "down")],
+              ["The redesigned role instead needs recognition for appropriate guest assistance and exception resolution.", cmp("b", "Redesigned contribution", "Effective resolution of eligible exceptions with quality safeguards.", "up")],
+              ["This is the third deliverable: measures and incentives that reward the work employees are actually expected to perform.", it(3, 5, "gauge", "Align measures", "Reward intended outcomes while protecting decision quality.")],
+              ["Otherwise, employees may perform valuable exception work while appearing unsuccessful against inherited transaction targets.", iss("The new job and old scorecard reward different behaviours.", "Conflicting incentives")],
+              ["The fourth deliverable concerns capability, because a new responsibility does not automatically create the skill to perform it.", it(4, 5, "brain", "Demonstrate capability", "Practise realistic cases and assess appropriate decisions.")],
+              ["Guest Hosts must investigate unusual situations, apply judgement and recognise when managerial escalation is necessary.", dg("Building capability", D.flow(["Identify|skill gaps", "Practise|real cases", "Assess|judgement", "Support|performance"]), "Capability must be demonstrated through realistic decisions.")],
+              ["Attendance records show participation, but they do not establish whether an employee can resolve a difficult guest exception.", st("Training attendance is not evidence of demonstrated decision capability.")],
+              ["Finally, Qasr needs adoption evidence showing whether real arrivals follow the redesigned process.", it(5, 5, "chart", "Track adoption", "Assign an owner to measure use and investigate alternative paths.")],
+              ["Someone must own that measure, explain deviations and coordinate corrective action when operating behaviour differs from the design.", dg("From readiness to adoption", D.flow(["Role|defined", "Authority|documented", "Capability|assessed", "Adoption|measured", "Owner|accountable"]), "People-phase outputs connect organisational readiness with actual process use.")],
+              ["These deliverables must also connect with Develop, because technology and organisational responsibilities need to support the same operating design.", st("People and Develop remain coordinated throughout implementation.")],
+              ["The sponsor should therefore ask for evidence of readiness, not simply a collection of approved documents.", null],
+              ["Together, these outputs turn a promising redesign into work that employees can perform consistently.", q("Which missing People-phase deliverable would most seriously prevent Guest Hosts from doing their new jobs?")]
+            ],
+            review: [
+              {
+                title: "The airport that redesigned boarding but forgot the gate team",
+                lines: [
+                  ["Imagine an airport introducing automated boarding checks while asking gate agents to resolve unusual travel-document problems.", t("Remedial - People-phase deliverables", "Airport boarding shows why organisational arrangements matter.")],
+                  ["Routine passengers pass through automated gates, leaving employees to investigate exceptions requiring human judgement.", dg("The redesigned boarding process", D.flow(["Passenger|arrives", "Automatic|check", "!Exception|identified", "Gate agent|assists", "Boarding|continues"]), "Automation handles routine boarding while employees investigate exceptions.")],
+                  ["However, management leaves the old job descriptions and performance objectives unchanged.", iss("Technology changes, but formal employee responsibilities do not.", "An incomplete redesign")],
+                  ["An agent encounters an unusual document and cannot determine whether local approval is permitted.", q("Which People-phase deliverable would clarify this decision?")],
+                  ["Documented delegation should specify which decisions agents may make and when supervisory approval remains necessary.", st("Authority establishes permission; role definitions establish responsibility.")],
+                  ["The revised role must also explain how exception handling fits into the agent's work.", null],
+                  ["Now imagine the airport continuing to reward passengers processed per minute.", cmp("a", "Old objective", "Maximise passenger throughput.", "down")],
+                  ["That measure may discourage the careful investigation required by difficult boarding exceptions.", cmp("b", "Redesigned contribution", "Resolve eligible exceptions accurately without unnecessary delay.", "up")],
+                  ["The airport therefore needs outcome measures that recognise appropriate exception resolution while protecting decision quality.", null],
+                  ["Agents also need realistic practice because operating a scanner differs from interpreting an unusual document.", dg("Developing capability", D.flow(["Identify|new decisions", "Practise|exceptions", "Test|judgement", "Provide|support"]), "Practical assessment tests readiness for the redesigned work.")],
+                  ["A capability assessment should establish whether employees can apply the rules rather than merely attend training.", st("Readiness requires demonstrated performance.")],
+                  ["The airport must then measure how frequently passengers actually follow the redesigned boarding process.", null],
+                  ["A named owner should investigate workarounds because successful installation does not prove successful adoption.", dg("Tracking adoption", D.flow(["Observe|boarding", "Record|alternative paths", "Investigate|causes", "Correct|weaknesses"]), "Adoption tracking connects the intended process with actual operating behaviour.")],
+                  ["Roles, authority, measures, capability and adoption evidence address different problems but support the same passenger journey.", null],
+                  ["The airport becomes ready when these arrangements work together, rather than when its equipment installation is complete.", q("What is missing if employees have new roles but cannot demonstrate the required decision capability?")]
+                ]
+              },
+              {
+                title: "The service centre that looked ready on paper",
+                lines: [
+                  ["Imagine a service centre celebrating its redesigned complaint process because the software is installed and everyone attended training.", t("Remedial - Evidence of readiness", "Completed activities do not automatically prove operational readiness.")],
+                  ["The dashboard shows green, but frontline employees are now expected to resolve complaints previously handled by specialists.", st("Project completion and employee readiness are different achievements.")],
+                  ["Their existing job descriptions still tell them to record complaints and transfer difficult cases.", dg("The responsibility gap", D.flow(["Complaint|received", "New process|expects resolution", "!Old role|requires transfer", "Customer|waits"]), "The intended process conflicts with the existing formal role.")],
+                  ["Employees continue transferring cases because their responsibilities and decision authority have not changed together.", iss("The new process expects decisions the old role does not authorise.", "An organisational contradiction")],
+                  ["The centre must define the revised responsibilities and formally delegate appropriate complaint decisions.", q("What happens when employees are accountable for resolutions they cannot formally authorise?")],
+                  ["They may escalate defensively, because making an unauthorised decision can feel riskier than keeping the customer waiting.", st("Responsibility requires usable decision authority.")],
+                  ["Now suppose managers still evaluate employees according to how quickly they close complaint records.", cmp("a", "Inherited expectation", "Close records quickly and transfer difficult cases.", "down")],
+                  ["The redesigned process instead requires careful investigation and appropriate resolution of eligible complaints.", cmp("b", "Redesigned expectation", "Resolve appropriate complaints while maintaining decision quality.", "up")],
+                  ["A revised scorecard should recognise outcomes employees can influence and protect against rushed or inappropriate decisions.", null],
+                  ["Employees also need realistic practice handling ambiguous complaints and recognising the limits of their authority.", dg("Evidence of readiness", D.flow(["Role|defined", "Authority|documented", "Measures|aligned", "Capability|tested", "Adoption|tracked"]), "Operational readiness requires connected organisational evidence.")],
+                  ["Training attendance cannot demonstrate this judgement, so managers should assess performance using realistic cases.", st("Capability must be tested, not assumed.")],
+                  ["After launch, the centre should track whether complaints actually follow the redesigned process.", null],
+                  ["A named owner must investigate repeated transfers and alternative operating paths rather than relying on green milestones.", iss("Completed project activities may conceal continued use of the old process.", "A misleading green status")],
+                  ["This resembles Qasr, where a new title and completed induction cannot establish complete organisational readiness.", null],
+                  ["The People phase succeeds when roles, authority, measures, capability and adoption evidence support the redesigned work.", q("Would you declare the service centre ready if everyone attended training but nobody tested decision-making capability?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "Who does the work, and who answers for it?",
+            sec: "W10O1c",
+            lines: [
+              ["Now imagine a Guest Host facing a traveller whose confirmed corporate rate differs from the amount displayed at check-in.", t("Who does the work, and who answers for it?", "Making responsibility and accountability visible.")],
+              ["The employee can investigate the discrepancy, but revenue policy and managerial authority may also be involved.", dg("A cross-functional decision", D.flow(["Guest|raises issue", "Guest Host|investigates", "Revenue|policy", "Decision|required"]), "One guest exception may involve several organisational functions.")],
+              ["Without clear ownership, the guest may be passed between employees who each expect somebody else to decide.", iss("Several people contribute, but final decision ownership remains unclear.", "The accountability gap")],
+              ["A RACI matrix helps by distinguishing four contributions: Responsible, Accountable, Consulted and Informed.", st("RACI makes cross-functional responsibility and accountability explicit.")],
+              ["Responsible identifies the person performing an activity, such as the Guest Host investigating the disputed rate.", it(1, 4, "users", "Responsible", "Performs the activity and gathers the necessary evidence.")],
+              ["The employee may investigate successfully without possessing authority over every policy decision arising from that investigation.", dg("Responsibility in action", D.flow(["Guest|reports issue", "Guest Host|investigates", "Evidence|prepared"]), "Performing an investigation does not automatically confer decision authority.")],
+              ["Accountable identifies the role ultimately answerable for an activity's result or governing decision.", it(2, 4, "target", "Accountable", "Ultimately answers for the activity or decision.")],
+              ["Each activity should have one clearly identified accountable role, even when several employees contribute to its completion.", st("One activity, one accountable owner.")],
+              ["Imagine two managers both claiming final approval while disagreeing about how the exception should be handled.", iss("Competing accountable owners create conflicting instructions.", "Two owners, no clear decision")],
+              ["The Guest Host could be left waiting for agreement while the traveller experiences another unnecessary delay.", null],
+              ["Consulted identifies someone whose expertise informs the decision, such as a revenue manager advising on rate policy.", it(3, 4, "brain", "Consulted", "Provides knowledge or advice before a decision is completed.")],
+              ["Consultation improves judgement, but it does not automatically transfer accountability to the person providing advice.", dg("Advice supports the decision", D.flow(["Guest Host|investigates", "Revenue manager|advises", "Decision owner|decides"]), "Consultation provides input without necessarily changing decision ownership.")],
+              ["Informed identifies someone who receives relevant updates without necessarily participating in or approving the decision.", it(4, 4, "link", "Informed", "Receives information about progress, decisions or outcomes.")],
+              ["A senior manager may need visibility of exception patterns without approving every individual guest case.", st("Keeping someone informed does not create another approval stage.")],
+              ["Now picture Qasr's RACI matrix covering operational, technical, commercial and executive roles.", dg("Cross-functional roles", D.flow(["Process|owner", "Front|desk", "IT", "Revenue|manager", "COO"]), "The RACI exhibit connects roles across the redesigned arrival process.")],
+              ["Activities include defining standards, approving redesign, building workflows, running operations, monitoring performance and escalating exceptions.", null],
+              ["Each activity needs a clear accountable owner, because shared participation must not become shared ambiguity.", st("Cross-functional participation does not remove the need for one accountable role.")],
+              ["For example, the workflow-building activity needs explicit accountability rather than an empty or ambiguous assignment.", dg("Making accountability visible", D.flow(["Workflow|requirements", "Responsible|builder", "Accountable|owner", "Approved|workflow"]), "The workflow-building activity needs both execution responsibility and clear accountability.")],
+              ["The matrix should follow the redesigned process rather than simply reproduce the previous departmental hierarchy.", iss("Copying old organisational boundaries into RACI can preserve outdated handoffs.", "The old structure returns")],
+              ["At Qasr, the Guest Host must know which exceptions can be resolved locally and which require escalation.", dg("The decision boundary", D.flow(["Guest Host|investigates", "Within|authority?", "Resolve|locally", "Escalate|when required"]), "Delegated authority determines which decisions can be made locally.")],
+              ["Remember that RACI clarifies who owns activities, while formal delegation specifies which decisions employees may make.", cmp("a", "RACI", "Clarifies responsibility, accountability, consultation and information.", "up")],
+              ["Delegation provides the authorised decision boundary, so both arrangements must support the same redesigned work.", cmp("b", "Formal delegation", "Specifies permitted decisions and escalation limits.", "up")],
+              ["When they agree, employees can act appropriately without repeatedly searching for somebody willing to accept responsibility.", st("Clear accountability and usable authority support dependable decisions.")],
+              ["Qasr's goal is to make every important handoff understandable before the guest encounters another avoidable delay.", q("Does investigating a discrepancy automatically make the Guest Host accountable for every related policy decision?")]
+            ],
+            review: [
+              {
+                title: "The supplier payment that nobody owned",
+                lines: [
+                  ["Imagine a company struggling to pay suppliers because several departments participate in every invoice.", t("Remedial - Understanding RACI", "Doing the work is different from owning its result.")],
+                  ["Purchasing checks orders, warehouse employees verify deliveries and finance reviews payment.", dg("The supplier payment journey", D.flow(["Invoice|received", "Order|checked", "Delivery|verified", "Payment|reviewed", "Supplier|paid"]), "Several departments contribute to one end-to-end process.")],
+                  ["A price discrepancy appears, but purchasing expects finance to decide while finance expects purchasing to resolve it.", iss("Two departments participate, but neither accepts final ownership.", "An accountability gap")],
+                  ["The invoice remains unpaid because participation does not establish who ultimately answers for the decision.", st("RACI distinguishes performing work from accountability for its result.")],
+                  ["A purchasing officer investigates the disputed price by comparing the invoice with the approved purchase order.", dg("Responsible means performing", D.flow(["Purchasing|investigates", "Documents|compared", "Difference|identified"]), "The responsible employee establishes the facts.")],
+                  ["That officer is responsible for investigating, but another authorised role may be accountable for approving the final treatment.", null],
+                  ["The organisation should identify exactly one accountable role for that approval activity.", q("Why would assigning two accountable managers make this decision less reliable?")],
+                  ["Competing owners could issue contradictory instructions, leaving employees uncertain about which decision is final.", iss("Multiple accountable owners create conflicting approval directions.", "Conflicting ownership")],
+                  ["Consulted employees provide expertise without automatically becoming accountable for the decision.", cmp("a", "Accountable", "Ultimately answers for the decision or activity.", "up")],
+                  ["For example, warehouse staff may clarify the delivered quantity before finance completes its review.", cmp("b", "Consulted", "Provides relevant information and advice.", "up")],
+                  ["An informed stakeholder receives an update after the decision without needing to approve another stage.", dg("Information without another approval", D.flow(["Decision|completed", "Relevant|update", "Stakeholder|informed"]), "Information does not necessarily create additional approval.")],
+                  ["This distinction prevents unnecessary referrals and keeps the supplier payment process moving.", null],
+                  ["The company should assign RACI roles around the redesigned payment journey rather than historical departmental boundaries.", st("Accountability should support the process, not preserve unnecessary handoffs.")],
+                  ["Qasr faces the same challenge when Guest Hosts investigate rate discrepancies involving operational and revenue considerations.", null],
+                  ["Clear responsibility, accountability and escalation allow employees to resolve problems without sending customers through organisational loops.", q("Why might the person investigating a problem differ from the person accountable for its final resolution?")]
+                ]
+              },
+              {
+                title: "The university enrolment decision",
+                lines: [
+                  ["Imagine a university redesigning enrolment so students no longer contact several offices separately about unusual cases.", t("Remedial - Coordinating across departments", "RACI prevents competing decision owners.")],
+                  ["A student adviser now coordinates cases involving academic requirements and financial obligations.", dg("The redesigned enrolment journey", D.flow(["Student|requests enrolment", "Adviser|reviews", "Exception|identified", "Decision|obtained", "Enrolment|completed"]), "One adviser coordinates the journey across organisational functions.")],
+                  ["The adviser gathers information and helps each case move forward, but cannot approve every academic or financial exception.", iss("Coordination responsibility does not confer unlimited decision authority.", "Different roles, different decisions")],
+                  ["Imagine a student requesting registration without satisfying a prerequisite for a particular course.", null],
+                  ["The adviser checks the record and identifies the requirement preventing ordinary registration.", dg("The adviser's responsibility", D.flow(["Student|requests help", "Adviser|checks record", "Prerequisite|issue identified"]), "The adviser performs the investigation.")],
+                  ["An authorised academic role must decide whether the applicable rules permit an exception.", st("Each decision activity needs one accountable owner.")],
+                  ["A programme coordinator might be consulted because that person understands the academic consequences.", cmp("a", "Accountable role", "Answers for the academic exception decision.", "up")],
+                  ["The consulted coordinator provides advice, but does not automatically become the final decision owner.", cmp("b", "Consulted role", "Provides relevant academic expertise.", "up")],
+                  ["The adviser may then be informed so the student receives an accurate explanation.", dg("The RACI contributions", D.flow(["Responsible|performs", "Accountable|answers", "Consulted|advises", "Informed|receives updates"]), "RACI distinguishes four contributions.")],
+                  ["Receiving the decision does not make the adviser accountable for the academic judgement behind it.", null],
+                  ["Now suppose two university managers both claim final authority over the same prerequisite exception.", iss("Competing accountable managers delay a decision the student needs.", "Two owners, no resolution")],
+                  ["A clear RACI assignment identifies one accountable decision owner and prevents that ambiguity.", st("One accountable role makes ownership understandable.")],
+                  ["The university also needs documented escalation when unusual cases exceed the authority assigned to employees.", dg("From investigation to decision", D.flow(["Adviser|investigates", "Authority|checked", "Decision owner|decides", "Student|informed"]), "Responsibility and authority must connect through a clear process.")],
+                  ["This brings us back to Qasr, where Guest Hosts coordinate exceptions without inheriting unlimited revenue authority.", null],
+                  ["Their work becomes dependable when employees know who investigates, who decides, who advises and who receives updates.", q("Would making every participating department accountable for the same exception improve coordination or create confusion?")]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "l2",
+        title: "The Guest Host's impossible job",
+        sections: [
+          {
+            title: "Authority without ambiguity",
+            sec: "W10O2a",
+            lines: [
+              ["The Guest Host knows the job. But when a guest needs a decision, does the organisation actually permit it?", t("Authority without ambiguity", "A new responsibility needs a real decision right.")],
+              ["Imagine a traveller whose confirmed corporate rate differs from the kiosk's calculation. The Guest Host investigates while the guest waits.", dg("The exception reaches a decision", D.flow(["Guest|arrives", "!Rate|discrepancy", "Guest Host|investigates", "Decision|required"]), "The redesigned arrival process depends on an employee being able to act.")],
+              ["Qasr has told Guest Hosts they may waive eligible discrepancies up to AED 400 without referring every case to a manager.", st("AED 400: the communicated local waiver limit.")],
+              ["But that permission appears in a briefing email, not the formal delegation schedule. It is also missing from the job description.", iss("The employee is expected to decide, but formal authority has not caught up.", "An authority gap")],
+              ["Put yourself in that lobby. The guest wants an answer, but you cannot find written confirmation that management will support your decision.", q("Why might an employee hesitate even when the manager has encouraged independent decisions?")],
+              ["This is not automatically resistance. An employee may understand the guest's problem while reasonably questioning whether the decision is authorised.", null],
+              ["The operating evidence makes the contradiction urgent: nine of Qasr's twenty-two Guest Hosts refer every rate discrepancy upward.", dg("Nine employees always refer", D.flow(["22 Guest|Hosts", "9 always|refer", "Duty manager|decides", "Guest|waits"]), "Observed referrals are evidence of a problem, not proof of individual motives.")],
+              ["We do not know why each employee refers. Unclear authority is one plausible cause that the programme must investigate.", st("Observe the behaviour. Investigate the cause. Do not invent the motive.")],
+              ["Authority means recognised permission to make specified decisions. Accountability means being answerable for their quality and consequences.", cmp("a", "Authority", "Permission to decide within approved boundaries.", "up")],
+              ["A dependable role needs both, because independence without accountability can create inconsistent decisions.", cmp("b", "Accountability", "Answerability for appropriate decisions and outcomes.", "up")],
+              ["Picture four combinations of authority and accountability. Only one consistently supports confident, responsible local judgement.", dg("Authority and accountability", D.matrix2x2(["Low authority", "High authority"], ["High accountability", "Low accountability"], ["Defensive escalation", "Ownership", "Compliance without engagement", "Inconsistent local practice"]), "The desirable arrangement combines meaningful authority with clear accountability.")],
+              ["With high accountability but low authority, employees may refer decisions defensively because they carry consequences without dependable permission.", iss("Expected to deliver the result, but unable to authorise the necessary action.", "High accountability, low authority")],
+              ["With high authority but weak accountability, employees may interpret similar exceptions differently across properties.", st("Authority without accountability can create inconsistent local practice.")],
+              ["The repair is not to tell employees to be braver. Qasr must make the intended decision boundary formally usable.", dg("Repair the decision boundary", D.flow(["Rate|discrepancy", "Check|eligibility", "Within AED|400 limit?", "Resolve|appropriately", "Escalate|outside limit"]), "The proposed formal delegation distinguishes eligible local decisions from cases requiring escalation.")],
+              ["For a teaching simulation, imagine an eligible AED 320 discrepancy. Written authority allows the Guest Host to consider local resolution; an AED 460 case requires the appropriate escalation.", st("AED 320: consider local resolution. AED 460: escalate beyond the limit.")],
+              ["The amounts illustrate the rule, not actual Qasr transactions. Eligibility and sound judgement still matter, even below AED 400.", null],
+              ["Formal delegation, the job description and operating guidance must agree. Employees should not have to reconcile contradictory instructions during a guest encounter.", dg("One coherent authority arrangement", D.flow(["Defined|responsibility", "Formal|delegation", "Decision|guidance", "Quality|accountability"]), "The documents and operating arrangements must support the same decisions.")],
+              ["The sponsor should also test whether Guest Hosts can apply that authority correctly rather than assume documentation alone will change behaviour.", null],
+              ["Our aim is appropriate local resolution, not automatic waivers or unlimited independence.", q("What must Qasr change beyond repeating the AED 400 instruction in another briefing?")]
+            ],
+            review: [
+              {
+                title: "The delivery driver who could not solve a simple problem",
+                lines: [
+                  ["Imagine a delivery company asking drivers to resolve straightforward customer problems at the doorstep.", t("Remedial - Authority and accountability", "A driver needs permission as well as responsibility.")],
+                  ["Previously, minor service adjustments required a call to the central office. The redesign promises faster local decisions.", dg("The intended delivery journey", D.flow(["Driver|arrives", "Customer|reports issue", "Driver|assesses", "Local|resolution"]), "The redesigned process aims to avoid unnecessary referrals.")],
+                  ["But management announces the change without updating formal delegation.", iss("Drivers are expected to decide, but their decision rights remain undocumented.", "Responsibility without authority")],
+                  ["A customer reports damaged packaging. The driver understands the problem but cannot establish whether a service adjustment is permitted.", q("Why might this driver still call a supervisor?")],
+                  ["The employee may fear being held accountable for a decision that the organisation has not formally authorised.", st("High accountability with unclear authority can encourage defensive escalation.")],
+                  ["This is different from a capability gap. The driver might know exactly what should happen but lack permission to do it.", cmp("a", "Capability gap", "The employee cannot reliably assess or resolve the problem.", "down")],
+                  ["An authority gap exists when the employee understands the situation but lacks a dependable decision right.", cmp("b", "Authority gap", "The employee lacks clear permission to make the decision.", "up")],
+                  ["The company should document permitted adjustments and identify when supervisory approval remains necessary.", dg("Documented delegation", D.flow(["Exception|identified", "Within|authority?", "Driver|resolves", "Supervisor|handles excess"]), "Local decisions and escalation require clear boundaries.")],
+                  ["Accountability must accompany the permission, because customers should receive consistent and appropriate treatment.", null],
+                  ["Giving drivers unlimited discretion would create a different risk: similar customers could receive inconsistent outcomes.", iss("Broad authority without appropriate accountability can undermine fairness.", "The opposite imbalance")],
+                  ["The strongest arrangement combines responsibility, usable authority, practical guidance and accountability.", st("Employees need permission to decide and responsibility for decision quality.")],
+                  ["This is also Qasr's challenge. Guest Hosts have been told about a limited waiver, but the formal delegation does not contain it.", dg("The shared design problem", D.flow(["New|responsibility", "Documented|authority", "Clear|accountability", "Appropriate|decision"]), "Formal arrangements must support the redesigned responsibility.")],
+                  ["A briefing communicates an intention. Formal delegation makes the decision boundary organisationally dependable.", null],
+                  ["The goal is not unrestricted independence, but appropriate decisions within agreed limits.", q("How would documented authority change the driver's ability to deliver the redesigned service?")]
+                ]
+              },
+              {
+                title: "The insurance adviser who always asked the manager",
+                lines: [
+                  ["An insurance company wants advisers to resolve eligible claims during customer conversations instead of referring every decision upward.", t("Remedial - Defensive escalation", "A confident employee still needs dependable authority.")],
+                  ["The redesigned process gives advisers responsibility for investigating claims and applying specified rules.", dg("The intended claims journey", D.flow(["Customer|raises claim", "Adviser|investigates", "Eligibility|assessed", "Decision|communicated"]), "Eligible claims should follow a defined decision path.")],
+                  ["Yet the formal job description still describes collecting information and recommending managerial decisions.", iss("The new process expects decisions while the old role still expects referrals.", "Conflicting expectations")],
+                  ["An adviser identifies a claim that appears eligible but worries that independent approval might later be challenged.", q("Does this hesitation necessarily mean the adviser resists change?")],
+                  ["No. The behaviour could reflect uncertain authority rather than unwillingness to serve customers.", st("Observed hesitation is not proof of resistance.")],
+                  ["Repeating the instruction to act independently would increase pressure without correcting the formal contradiction.", cmp("a", "Repeat the instruction", "Demand independent decisions without changing formal authority.", "down")],
+                  ["A stronger response documents permitted decisions, accountability and escalation boundaries.", cmp("b", "Repair the role", "Align decision rights, accountability and practical guidance.", "up")],
+                  ["The company should identify which claims advisers may approve and which require specialist review.", dg("The claims decision boundary", D.flow(["Claim|assessed", "Within|authority?", "Adviser|decides", "Specialist|reviews excess"]), "Appropriate local decisions remain subject to defined limits.")],
+                  ["This protects customers from unnecessary waiting while protecting the organisation against inappropriate approvals.", null],
+                  ["The opposite imbalance also matters. Broad authority without decision-quality review may create inconsistent treatment.", iss("High authority with weak accountability can encourage inconsistent local decisions.", "An accountability gap")],
+                  ["The solution therefore combines formal authority, clear responsibility, quality checks and realistic practice.", dg("A coherent role", D.flow(["Defined|responsibility", "Documented|authority", "Clear|accountability", "Appropriate|escalation"]), "The organisational arrangements must support one operating design.")],
+                  ["Qasr's AED 400 waiver presents the same design challenge.", null],
+                  ["Nine Guest Hosts always refer discrepancies, but their individual reasons remain unknown.", st("Investigate authority, capability and operating conditions before judging behaviour.")],
+                  ["A sound diagnosis asks whether the expected decision is both possible and defensible.", q("Why might formal delegation achieve more than repeatedly asking advisers to show confidence?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "When the old measure defeats the new design",
+            sec: "W10O2b",
+            lines: [
+              ["A Guest Host spends fifteen minutes resolving a difficult rate discrepancy. The traveller leaves satisfied, but the employee's performance score may suffer.", t("When the old measure defeats the new design", "The organisation may reward the very behaviour it wants to replace.")],
+              ["Watch the difference between a routine kiosk transaction and a complicated exception requiring investigation.", dg("Two very different arrivals", D.flow(["Guest|arrives", "Kiosk|handles routine", "!Complex|exception", "Guest Host|investigates", "Appropriate|resolution"]), "Automation changes the work that remains for employees.")],
+              ["The Guest Host checks the booking, explains the discrepancy and coordinates an appropriate decision. That takes time because judgement is involved.", st("Longer handling time can represent valuable redesigned work.")],
+              ["Now reveal the inherited scorecard. Qasr still evaluates employees using check-ins completed per shift and average transaction time.", cmp("a", "Inherited objectives", "Conventional check-in volume and transaction speed.", "down")],
+              ["Neither measure was designed around complex kiosk exceptions, and kiosk check-ins are not attributed to individual Guest Hosts.", iss("The employee performs valuable work that the inherited scorecard does not recognise.", "The measurement contradiction")],
+              ["The organisation changed the job without changing the formal definition of good performance.", null],
+              ["Imagine three tasks competing for attention: a routine check-in, a complicated exception and an unnecessary managerial referral.", dg("Which task looks productive?", D.flow(["Old|throughput target", "Employee|priorities", "Cases|selected", "Guest|outcome"]), "Performance measures influence which activities appear worthwhile.")],
+              ["Under the old scorecard, quick transactions can look attractive while difficult investigations reduce apparent productivity.", st("Employees may respond to the incentive the organisation actually measures.")],
+              ["That response can resemble resistance, even when employees are trying to meet the objectives management continues enforcing.", q("What behaviour does Qasr reward when it measures conventional check-in volume?")],
+              ["The People phase must repair this contradiction because measurement is part of the operating design, not an administrative afterthought.", null],
+              ["A proposed replacement is appropriate exceptions resolved without unnecessary escalation, supported by a sample checking decision quality.", cmp("b", "Redesigned contribution", "Resolve eligible exceptions appropriately, with quality safeguards.", "up")],
+              ["The quality check matters. Without it, employees might waive cases beyond their authority merely to increase their resolution count.", iss("A resolution target without quality safeguards can reward inappropriate decisions.", "A new incentive risk")],
+              ["So the redesigned measure must recognise both useful outcomes and compliance with the decision boundary.", dg("A balanced performance measure", D.flow(["Eligible|exception", "Appropriate|resolution", "Quality|sample", "Outcome|reviewed"]), "Resolution effectiveness and decision quality must be assessed together.")],
+              ["The old conflicting objective must also be removed explicitly. Adding a new target beside it leaves employees with two competing instructions.", st("Replace the conflicting measure; do not merely add another one.")],
+              ["Think of the scorecard as a set of signals. If one signal rewards speed and another rewards careful investigation, employees need to know which behaviour matters.", null],
+              ["For Guest Hosts, appropriate exception resolution is a possible outcome measure, but Qasr's final revised scorecard has not yet been established.", dg("From old scorecard to new", D.flow(["Remove|conflicting target", "Define|relevant outcome", "Add|quality safeguard", "Review|behaviour"]), "This is a proposed design, not an already implemented Qasr arrangement.")],
+              ["The organisation should also review grade and reward arrangements because the redesigned role requires different judgement and responsibility.", null],
+              ["Such a review does not automatically justify higher rewards; it establishes whether employment arrangements still fit the work.", st("Role, measures and rewards should communicate consistent expectations.")],
+              ["A perfectly accurate metric can still be harmful when it rewards the wrong behaviour.", iss("The problem is not inaccurate counting. It is counting the wrong success.", "A misleading measure")],
+              ["Our test is straightforward: can employees improve their performance assessment by doing the redesigned work properly?", q("Why might retaining check-ins per shift discourage Guest Hosts from accepting complicated exceptions?")]
+            ],
+            review: [
+              {
+                title: "The hospital that rewarded speed instead of safe discharge",
+                lines: [
+                  ["A hospital redesigns discharge so coordinators resolve obstacles before patients experience unnecessary delays.", t("Remedial - Measures and incentives", "A useful intervention can look unproductive under the wrong scorecard.")],
+                  ["The new role involves coordinating departments and resolving difficult departure problems.", dg("The redesigned discharge journey", D.flow(["Discharge|approved", "!Exception|identified", "Coordinator|resolves", "Patient|leaves"]), "The coordinator helps patients leave safely and promptly.")],
+                  ["Previously, employees were assessed by how many discharge records they completed during a shift.", cmp("a", "Old objective", "Maximise administrative records completed.", "down")],
+                  ["Imagine a coordinator spending twenty minutes resolving missing medication documentation that prevents safe departure.", iss("The employee protects the patient but completes fewer records.", "Valuable work, poor score")],
+                  ["The old measure makes straightforward records look more productive than careful exception resolution.", q("Which work would employees prioritise if their assessment depended mainly on completed records?")],
+                  ["They might favour simpler cases, not necessarily because they lack commitment, but because those cases improve the measured result.", st("Misaligned incentives can discourage the redesigned behaviour.")],
+                  ["A better measure could recognise discharge obstacles resolved appropriately without unnecessary escalation.", cmp("b", "Redesigned contribution", "Resolve discharge exceptions while respecting clinical safeguards.", "up")],
+                  ["However, speed must never override essential clinical requirements or decisions reserved for authorised professionals.", null],
+                  ["The hospital should sample decision quality and check whether employees involved the right professionals.", dg("Outcome with safeguards", D.flow(["Exception|identified", "Appropriate|resolution", "Quality|review", "Safe|departure"]), "The measure must reward useful outcomes without encouraging unsafe shortcuts.")],
+                  ["The conflicting old volume target should be removed rather than retained beside the replacement.", iss("Two contradictory objectives leave employees uncertain about what management values.", "Competing targets")],
+                  ["The hospital should also review rewards against the judgement required by the new role.", st("Measures and rewards must reinforce the redesigned contribution.")],
+                  ["Qasr faces the same contradiction because Guest Hosts inherited conventional front-desk objectives.", null],
+                  ["Their work now centres on assisting arrivals and resolving exceptions that kiosks cannot handle independently.", dg("The shared measurement principle", D.flow(["New|responsibility", "Relevant|outcome", "Quality|safeguard", "Aligned|incentive"]), "Measure the contribution the redesigned process needs.")],
+                  ["The lesson is not to ignore productivity, but to define it around the actual work and protect decision quality.", q("Why would adding an exception-resolution target without removing the old throughput target leave the hospital's problem unresolved?")]
+                ]
+              },
+              {
+                title: "The customer service team that avoided difficult complaints",
+                lines: [
+                  ["A telecommunications company redesigns complaint handling so trained agents resolve more problems during the first conversation.", t("Remedial - Designing the right incentive", "The scorecard must change when the job changes.")],
+                  ["The previous process rewarded many calls completed and low average handling time.", cmp("a", "Inherited objective", "High call volume and short conversations.", "down")],
+                  ["The new process requires investigation, judgement and appropriate decisions about complicated customer problems.", dg("The intended complaint journey", D.flow(["Customer|contacts", "Agent|investigates", "Decision|made", "Complaint|resolved"]), "The redesigned process aims to avoid repeated transfers.")],
+                  ["Imagine an agent examining several disputed charges. Resolving the case properly takes longer than answering routine questions.", iss("The valuable investigation lowers the employee's old throughput score.", "A contradictory incentive")],
+                  ["An agent might transfer the difficult complaint to protect measured performance, recreating the handoff the redesign intended to remove.", q("Which activity improves the old score, and which better serves the redesigned process?")],
+                  ["The organisation should not assume that every transfer reflects poor motivation or deliberate resistance.", st("Employee behaviour can reflect the incentives management continues enforcing.")],
+                  ["A replacement measure could recognise eligible complaints resolved appropriately without unnecessary escalation.", cmp("b", "Redesigned objective", "Appropriate resolution of eligible complex complaints.", "up")],
+                  ["But a high resolution count is not enough if employees close cases superficially or approve inappropriate outcomes.", null],
+                  ["Quality sampling should check whether decisions followed policy and genuinely addressed customer problems.", dg("Checking decision quality", D.flow(["Complaint|investigated", "Resolution|recorded", "Quality|sampled", "Outcome|verified"]), "A quality safeguard protects against superficial closure.")],
+                  ["Employees must also know which decisions exceed their delegated authority.", st("Measures must reward appropriate resolution, not unauthorised independence.")],
+                  ["The old call-volume target should be removed when it conflicts with the new responsibility.", iss("Keeping both targets sends employees competing behavioural instructions.", "Two incompatible objectives")],
+                  ["Managers should review rewards and expectations because formal incentives communicate what the organisation values.", null],
+                  ["Qasr's Guest Hosts face the same problem when exception handling is assessed through conventional check-in measures.", dg("Aligning the new role", D.flow(["Redesigned|work", "Relevant|measure", "Quality|review", "Aligned|reward"]), "The scorecard must support the new contribution.")],
+                  ["The principle is simple: employees should succeed by performing the redesigned work well.", q("How could an exception-resolution measure improve behaviour while still creating risks if decision quality were ignored?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "Designing a role people can actually perform",
+            sec: "W10O2c",
+            lines: [
+              ["Qasr now has two connected problems: unclear authority and performance measures that reward the previous job.", t("Designing a role people can actually perform", "Turn a new title into a workable organisational arrangement.")],
+              ["The sponsor asks you to repair the Guest Host specification. Where would you begin?", q("What must be documented before this role can work reliably?")],
+              ["Start with the actual purpose: Guest Hosts welcome arrivals and resolve exceptions that self-service kiosks cannot handle.", dg("The redesigned Guest Host role", D.flow(["Guest|arrives", "Kiosk|handles routine", "!Exception|identified", "Guest Host|assists"]), "The new role combines guest assistance with appropriate exception resolution.")],
+              ["The specification must translate that purpose into responsibilities, boundaries and expected outcomes.", st("A role specification must describe work employees can actually perform.")],
+              ["At Qasr, revised job descriptions arrived three weeks after go-live. Employees therefore began the redesigned work before receiving updated formal expectations.", iss("The redesigned responsibilities started before the role documentation caught up.", "A late role definition")],
+              ["The repaired description should explain which exceptions Guest Hosts investigate and how their work connects with other functions.", dg("Connecting the role to the process", D.flow(["Guest Host|investigates", "Relevant role|advises", "Authorised role|decides", "Guest|receives outcome"]), "Operational responsibilities and decision ownership must fit together.")],
+              ["RACI assignments should identify who performs activities and who is accountable for decisions, without simply reproducing outdated departmental handoffs.", null],
+              ["Next, the specification needs formal authority for eligible rate waivers up to AED 400.", cmp("a", "Expected authority", "Eligible discrepancies may be waived locally up to AED 400.", "up")],
+              ["The existing delegation schedule does not record that permission, so the formal arrangements must be corrected.", cmp("b", "Documented authority", "The AED 400 waiver remains absent from formal delegation.", "down")],
+              ["The repair should define eligibility, the decision limit and escalation when a case exceeds the employee's authority.", dg("The proposed decision path", D.flow(["Rate|discrepancy", "Check|eligibility", "Within|delegation?", "Local|decision", "Escalate|when required"]), "Documented decision rights make the role operationally usable.")],
+              ["A reporting relationship is also necessary so employees know where to obtain support. The case does not establish Qasr's final reporting line.", st("Choose and document a justified reporting arrangement; do not invent an existing one.")],
+              ["Now turn to performance. Guest Hosts still inherit objectives based on check-in volume and transaction time.", iss("The new responsibility and old performance objectives pull in different directions.", "The incentive mismatch")],
+              ["A proposed scorecard could recognise eligible exceptions resolved appropriately without unnecessary escalation, with a quality sample protecting decision accuracy.", dg("A proposed balanced measure", D.flow(["Eligible|exception", "Appropriate|resolution", "Quality|checked", "Outcome|reviewed"]), "This is a proposed measure, not an established Qasr result.")],
+              ["The old conflicting targets should be removed because employees need one coherent definition of success.", st("Reward the redesigned contribution and protect decision quality.")],
+              ["The unchanged job grade and reward arrangements also deserve review, because the role now involves different judgement and responsibility.", dg("Reviewing employment arrangements", D.flow(["Changed|responsibilities", "Evaluate|job grade", "Review|rewards", "Align|expectations"]), "A justified review is required; a higher grade is not automatic.")],
+              ["The organisation must evaluate the work before deciding whether any grade or reward adjustment is appropriate.", null],
+              ["Finally, Guest Hosts need practical capability. Formal authority cannot substitute for knowing how to investigate unusual cases.", iss("A coherent document still fails if employees cannot exercise the required judgement.", "The capability gap")],
+              ["Realistic scenarios should test investigation, waiver decisions, escalation and the reasoning behind each response.", dg("From specification to capability", D.flow(["Define|decisions", "Practise|exceptions", "Assess|judgement", "Provide|support"]), "The capability plan must test the work the role requires.")],
+              ["A named owner should then monitor whether the redesigned process is genuinely adopted across the four properties.", null],
+              ["Bring these elements together: responsibilities, accountability, authority, reporting, measures, rewards and demonstrated capability.", dg("One coherent Guest Host design", D.flow(["Role|defined", "Authority|documented", "Measures|aligned", "Capability|assessed", "Adoption|owned"]), "The organisational arrangements must reinforce the same redesigned process.")],
+              ["Each element supports the others. Changing only the title leaves the old operating conditions largely intact.", st("A workable role is a connected design, not a renamed position.")],
+              ["Our next challenge is finding out whether the twenty-two Guest Hosts can actually perform the judgement their new role demands.", q("Which elements would you require before declaring the Guest Host role operationally ready?")]
+            ],
+            review: [
+              {
+                title: "Designing the hospital discharge coordinator",
+                lines: [
+                  ["A hospital introduces a discharge coordinator to help patients leave safely without unnecessary departmental delays.", t("Remedial - Building a complete role", "A coordinator needs more than a job title.")],
+                  ["The redesigned process connects discharge approval, outstanding requirements and the patient's departure.", dg("The discharge journey", D.flow(["Discharge|approved", "Requirements|checked", "Exceptions|resolved", "Patient|leaves"]), "The coordinator supports the complete departure journey.")],
+                  ["Imagine medication information and transport arrangements remaining incomplete. The coordinator must identify the obstacles and contact the right people.", q("What should the coordinator do, and which decisions must remain with authorised clinical professionals?")],
+                  ["The role specification should describe investigation, communication and operational coordination.", st("Responsibilities translate the redesigned process into actual work.")],
+                  ["Clinical decisions must remain with appropriately authorised professionals, even when the coordinator manages the wider journey.", cmp("a", "Discharge coordinator", "Coordinates operational requirements and appropriate administrative decisions.", "up")],
+                  ["The authorised clinical role remains accountable for decisions requiring professional clinical judgement.", cmp("b", "Clinical decision owner", "Retains responsibility for clinical decisions and safeguards.", "up")],
+                  ["The coordinator also needs documented authority for operational adjustments and escalation when issues exceed that authority.", dg("A defined decision boundary", D.flow(["Issue|identified", "Within|authority?", "Coordinator|resolves", "Specialist|decides"]), "Local decisions and specialist escalation must be distinguished.")],
+                  ["Without that boundary, employees may repeatedly request approval for work the redesign intended to simplify.", iss("Coordination responsibility without usable authority recreates delays.", "An incomplete role")],
+                  ["Performance measures should recognise appropriate resolution of discharge obstacles rather than merely counting records.", st("The scorecard must reflect the coordinator's redesigned contribution.")],
+                  ["Quality safeguards matter because faster departure must not compromise patient safety.", dg("A balanced measure", D.flow(["Discharge|obstacle", "Appropriate|resolution", "Clinical|safeguards", "Safe|departure"]), "Outcome measures must protect necessary clinical requirements.")],
+                  ["The hospital should review grade and reward arrangements against the actual responsibilities, without assuming a change is automatically justified.", null],
+                  ["Coordinators also need realistic practice handling missing information, conflicting requirements and necessary escalation.", dg("Preparing the employee", D.flow(["Define|role", "Clarify|authority", "Align|measures", "Practise|cases", "Assess|capability"]), "A complete role combines formal arrangements and demonstrated capability.")],
+                  ["Finally, the reporting relationship must show where operational support belongs when departments disagree.", null],
+                  ["This is the same design problem Qasr faces with Guest Hosts coordinating guest exceptions across organisational boundaries.", st("A role becomes workable when its organisational arrangements support its decisions.")],
+                  ["A detailed job description alone is insufficient when authority, measures and capability remain misaligned.", q("Why would the coordinator still struggle if the job description were updated but decision rights remained unclear?")]
+                ]
+              },
+              {
+                title: "The returns specialist whose job existed only on paper",
+                lines: [
+                  ["An online retailer automates routine refunds and creates a returns specialist role for unusual customer cases.", t("Remedial - Repairing an incomplete role", "A new title must be supported by a complete operating design.")],
+                  ["The software handles straightforward returns, leaving employees with cases requiring investigation and judgement.", dg("The redesigned returns process", D.flow(["Return|requested", "Automatic|check", "!Complex|exception", "Specialist|investigates", "Decision|communicated"]), "Automation changes the work that remains for employees.")],
+                  ["Management announces the new title but does not revise responsibilities or formal refund authority.", iss("The specialist is expected to decide without a documented decision boundary.", "A role without support")],
+                  ["Imagine a damaged product return that appears to justify an exception. The employee understands the evidence but cannot confirm local approval permission.", q("Which missing role element prevents the specialist from completing the expected decision?")],
+                  ["The immediate weakness is delegated authority, which must identify permitted decisions and escalation limits.", st("Responsibility explains the work; authority establishes permission to decide.")],
+                  ["The specification should also clarify accountability and reporting relationships so employees know who owns difficult decisions.", dg("Repairing decision ownership", D.flow(["Specialist|investigates", "Authority|checked", "Appropriate|decision", "Escalation|when needed"]), "Clear decision rights support the redesigned role.")],
+                  ["Now imagine the old performance system still rewarding returns processed per hour.", cmp("a", "Inherited measure", "Returns completed per hour.", "down")],
+                  ["Complex investigations take longer, so employees can appear less productive while performing valuable work.", cmp("b", "Redesigned contribution", "Appropriate resolution of complicated returns.", "up")],
+                  ["The retailer should replace conflicting throughput targets with outcome measures supported by decision-quality review.", dg("A balanced measure", D.flow(["Exception|investigated", "Appropriate|decision", "Quality|checked", "Outcome|recorded"]), "Performance measures must not encourage inappropriate refunds.")],
+                  ["The organisation should review grade and rewards against the changed responsibilities rather than assume a new title requires higher pay.", null],
+                  ["Specialists also need practice applying policy to ambiguous returns and recognising when escalation is necessary.", dg("Demonstrating capability", D.flow(["Identify|skills", "Practise|exceptions", "Test|decisions", "Provide|support"]), "Capability assessment tests the judgement required by the redesigned work.")],
+                  ["A clear reporting relationship should identify support when unusual cases exceed local authority.", null],
+                  ["The retailer must also monitor whether employees genuinely follow the redesigned process instead of returning to familiar referrals.", st("A complete role connects responsibilities, authority, measures, capability and adoption.")],
+                  ["Qasr needs the same connected repair for Guest Hosts across its four pilot properties.", null],
+                  ["The goal is not more paperwork. It is making the redesigned work understandable, authorised and achievable.", q("Which elements would you verify before declaring the returns specialist ready to work independently?")]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "l3",
+        title: "Capability is more than attendance",
+        sections: [
+          {
+            title: "Training for judgement, not just buttons",
+            sec: "W10O3a",
+            lines: [
+              ["Qasr has a new Guest Host role, but can employees actually make the decisions it requires?", t("Training for judgement, not just buttons", "A green training report is not proof of readiness.")],
+              ["The sponsor opens the people-workstream dashboard. All twenty-two Guest Hosts attended a four-hour induction, and the status is green.", dg("The green dashboard", D.flow(["22 Guest|Hosts", "Four-hour|induction", "Attendance|complete", "Status|green"]), "All twenty-two employees attended induction, but capability was not assessed.")],
+              ["That confirms participation. It does not show whether employees can resolve an unfamiliar guest exception appropriately.", cmp("a", "Attendance", "Confirms participation in the scheduled induction.", "up")],
+              ["Demonstrated capability is different: employees must investigate, decide within authority and recognise when escalation is necessary.", cmp("b", "Capability", "Shows that employees can apply judgement in realistic situations.", "up")],
+              ["Imagine a traveller whose corporate rate differs from the amount displayed by the kiosk.", dg("A real decision challenge", D.flow(["Guest|raises exception", "Host|investigates", "Judgement|required", "Appropriate|decision"]), "The employee must understand the discrepancy before deciding.")],
+              ["The Guest Host knows where the waiver button is. But does the employee know whether using it would be appropriate?", q("Can someone operate the software correctly and still make the wrong process decision?")],
+              ["Yes. A technically correct action can still exceed delegated authority or produce an inappropriate outcome.", iss("Knowing the interface does not establish sound decision-making.", "System knowledge is not process judgement")],
+              ["System training explains where information appears and how actions are recorded.", it(1, 2, "dash", "System training", "Learn the interface, controls and technical actions.")],
+              ["Process training explains why an action matters, what happens next and when judgement or escalation is required.", it(2, 2, "brain", "Process training", "Understand decisions, dependencies and authority boundaries.")],
+              ["Both are necessary because an incorrect decision can travel through the guest journey even when the software works perfectly.", st("Employees need to understand both how and why.")],
+              ["Qasr should therefore use realistic exception cases rather than relying entirely on presentations and interface demonstrations.", dg("Practising the decision", D.flow(["Case|presented", "Evidence|examined", "Decision|explained", "Feedback|provided"]), "Worked cases develop practical judgement.")],
+              ["Start with an eligible rate discrepancy below AED 400. Ask the employee to explain the evidence, eligibility and appropriate response.", st("Practice case: an eligible discrepancy within the delegated limit.")],
+              ["Now change the circumstances. The amount exceeds AED 400, so the employee must recognise the need for escalation.", dg("The decision changes", D.flow(["Discrepancy|identified", "Check|eligibility", "Outside|authority", "Escalate|appropriately"]), "A change in circumstances changes the authorised response.")],
+              ["The important learning is not memorising an amount. It is understanding the decision boundary and applying it consistently.", null],
+              ["During practice, an employee might approve a case that should have been escalated. That mistake becomes useful when a trainer explains why.", dg("Learning safely", D.flow(["Attempt|decision", "Review|reasoning", "Correct|misunderstanding", "Practise|again"]), "Safe practice exposes misunderstandings before they affect guests.")],
+              ["Employees should explain their reasoning because selecting the right answer by chance does not demonstrate dependable capability.", st("A correct answer needs sound reasoning.")],
+              ["After practice, Qasr should assess whether employees can investigate exceptions, apply waiver rules and escalate appropriately.", dg("A practical capability assessment", D.flow(["Realistic|case", "Employee|decision", "Quality|review", "Readiness|evidence"]), "Assessment tests the decisions required by the redesigned role.")],
+              ["Decision quality matters as much as speed. A quick resolution is not successful when it breaches policy or authority.", cmp("a", "Decision effectiveness", "Can the employee resolve an eligible exception appropriately?", "up")],
+              ["The quality check asks whether the employee respected the rules and recognised when further approval was required.", cmp("b", "Decision quality", "Was the decision accurate, authorised and appropriately escalated?", "up")],
+              ["Qasr conducted no post-induction capability assessment, so individual readiness remains unverified.", iss("Training attendance is known; decision capability has not been tested.", "An evidence gap")],
+              ["Nine Guest Hosts refer every rate discrepancy upward, but we cannot assume they all need more training.", dg("Diagnosing repeated referrals", D.branch("Repeated escalation", ["Unclear authority?", "Capability gap?", "Other operating difficulty?"]), "The observed behaviour may have several causes.")],
+              ["An employee who understands the decision but lacks formal permission needs authority clarification, not another software demonstration.", st("Authority gaps and capability gaps require different remedies.")],
+              ["The people-workstream report should therefore show assessed capability, unresolved risks and targeted support alongside training attendance.", dg("From attendance to readiness", D.flow(["Induction|completed", "Capability|assessed", "Gaps|identified", "Support|provided", "Readiness|reviewed"]), "A credible report connects participation with demonstrated performance.")],
+              ["A green milestone can confirm that training happened. It cannot establish that employees are ready for every difficult guest encounter.", q("What evidence would convince you that a Guest Host can make appropriate decisions rather than merely operate the kiosk?")]
+            ],
+            review: [
+              {
+                title: "The pharmacy technician who knew the screen",
+                lines: [
+                  ["A pharmacy introduces a digital collection process that identifies unusual prescription cases requiring professional review.", t("Remedial - System training versus process capability", "Knowing the screen is not the same as understanding the decision.")],
+                  ["Technicians learn to find records and complete routine collections, but some situations require a pharmacist.", dg("The redesigned collection process", D.flow(["Patient|arrives", "Record|checked", "!Exception|identified", "Pharmacist|reviews", "Collection|completed"]), "Routine operations and professional decisions have different boundaries.")],
+                  ["Everyone attends training, so the manager reports completion. Yet nobody has tested how technicians handle exceptions.", iss("Attendance is confirmed, but judgement remains untested.", "The readiness gap")],
+                  ["Imagine a patient whose information conflicts with the prescription record. The technician can open the screen but does not know what should happen next.", q("Does correct system navigation establish safe process capability?")],
+                  ["No. System training teaches interface operation, while process training develops understanding of decisions and escalation.", cmp("a", "System training", "Navigate records and perform technical actions.", "up")],
+                  ["Process training helps employees recognise when professional review is necessary and why that boundary matters.", cmp("b", "Process training", "Understand exceptions, professional boundaries and appropriate escalation.", "up")],
+                  ["The pharmacy should practise realistic cases involving missing information, discrepancies and pharmacist intervention.", dg("Safe practice", D.flow(["Example|presented", "Technician|responds", "Trainer|reviews", "Understanding|improves"]), "Practice allows errors to be corrected before real patient care.")],
+                  ["A technician might initially attempt to complete a collection that requires referral. The trainer can explain the error safely.", null],
+                  ["The important question is whether the technician understands why the case must be escalated.", st("Capability includes recognising the limits of one's authority.")],
+                  ["The manager should assess performance using new cases rather than assuming that attendance created the required judgement.", dg("Demonstrating capability", D.flow(["Recognise|exception", "Understand|boundary", "Escalate|appropriately", "Protect|service quality"]), "Assessment provides evidence of appropriate decisions.")],
+                  ["Professional boundaries remain essential because technical competence does not authorise clinical decisions.", null],
+                  ["Qasr faces a similar challenge when Guest Hosts distinguish eligible waivers from discrepancies requiring managerial consideration.", st("Technical skill, process judgement and authority must reinforce each other.")],
+                  ["Employees need practice, feedback and assessment before their readiness can be established.", q("How could the pharmacy manager test process understanding rather than simply ask whether technicians remember the interface?")]
+                ]
+              },
+              {
+                title: "The insurance adviser who passed induction",
+                lines: [
+                  ["An insurance company introduces a claims process that allows advisers to resolve eligible cases without unnecessary managerial referrals.", t("Remedial - Demonstrating readiness", "Training completion and operational capability are different achievements.")],
+                  ["Advisers attend induction and learn the new software. The programme manager reports that everyone is ready.", dg("The intended claims process", D.flow(["Customer|submits claim", "Adviser|investigates", "Eligibility|assessed", "Decision|communicated"]), "The process expects appropriate decisions within delegated authority.")],
+                  ["But nobody has tested whether advisers can distinguish straightforward claims from those requiring specialist review.", iss("Attendance is recorded, but decision capability is unknown.", "Readiness remains untested")],
+                  ["Imagine a claim with conflicting coverage information. The adviser knows the software but is uncertain about the appropriate decision.", q("What additional evidence would establish readiness?")],
+                  ["A realistic assessment should require the employee to investigate the evidence and explain the decision.", cmp("a", "Attendance evidence", "Confirms participation in the scheduled induction.", "up")],
+                  ["Capability evidence demonstrates appropriate investigation, judgement and escalation in unfamiliar cases.", cmp("b", "Capability evidence", "Shows the employee can perform the redesigned responsibility.", "up")],
+                  ["Worked examples allow advisers to practise difficult situations and receive feedback before real customers are affected.", dg("Learning from safe mistakes", D.flow(["Case|presented", "Decision|attempted", "Error|explained", "Case|revisited"]), "Practice helps employees correct misunderstandings.")],
+                  ["If an adviser incorrectly approves a claim, the trainer can explain the decision boundary and ask the employee to try another case.", null],
+                  ["The organisation should then test whether the corrected reasoning transfers to a different situation.", st("Demonstrated capability requires application, not memorisation.")],
+                  ["However, repeated escalation does not always indicate a training problem.", dg("Diagnosing the cause", D.branch("Repeated referral", ["Authority unclear?", "Capability insufficient?", "Operating support missing?"]), "Similar behaviour can arise from different causes.")],
+                  ["An adviser who understands the rules but lacks formal approval authority needs a delegation correction.", iss("Repeating induction cannot repair missing decision rights.", "An authority gap")],
+                  ["Managers should investigate the difficulty before choosing training, authority clarification or practical support.", dg("Targeted improvement", D.flow(["Observe|difficulty", "Identify|cause", "Choose|support", "Assess|improvement"]), "Different causes require different remedies.")],
+                  ["This applies to Qasr's nine Guest Hosts who refer every rate discrepancy, for reasons not yet established.", null],
+                  ["The organisation should test judgement while correcting formal authority and examining actual working conditions.", q("Why would repeating induction be ineffective if employees already understand the process but lack documented authority?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "One organisation, two processes",
+            sec: "W10O3b",
+            lines: [
+              ["Qasr's kiosks are running, but are guests actually following the redesigned arrival process?", t("One organisation, two processes", "Implementation is not the same as adoption.")],
+              ["Eleven weeks after go-live, the sponsor examines operating evidence from the four pilot properties.", dg("The week-eleven review", D.flow(["Redesigned|arrival", "Four pilot|properties", "Eleven weeks|after launch", "Adoption|review"]), "The sponsor needs evidence of actual process use.")],
+              ["The technology is operational and Guest Hosts are assigned. Those achievements confirm implementation, not complete behavioural change.", cmp("a", "Implementation", "The redesigned process and supporting technology are available.", "up")],
+              ["Adoption asks a different question: are actual arrivals following the intended process?", cmp("b", "Adoption", "Relevant cases genuinely use the redesigned operating arrangement.", "up")],
+              ["At week eleven, Qasr reports sixty-five percent kiosk adoption.", dg("Observed kiosk adoption", D.progress("Week-eleven kiosk adoption", 65, 100, "%"), "The observed figure is 65% at week eleven.")],
+              ["That is substantial use, but it does not mean the redesigned process has become the only operating arrangement.", st("65% adoption is an operating observation, not proof of complete change.")],
+              ["The case also reports that twenty-nine percent of arrivals are handled at the desk.", dg("Observed desk handling", D.progress("Desk-handled arrivals", 29, 100, "%"), "The case reports 29% desk-handled arrivals.")],
+              ["Before calling those arrivals workarounds, we need to know why they followed the desk route.", q("Does every desk-handled arrival represent resistance to the kiosk process?")],
+              ["No. Property managers report that most desk-handled arrivals involve cases rejected by the kiosk.", dg("Classifying the desk route", D.branch("Desk-handled arrival", ["Kiosk-rejected exception", "Possible workaround", "Reason requires investigation"]), "The observed desk share does not establish how many cases are inappropriate workarounds.")],
+              ["A guest whose case cannot be completed by the kiosk may legitimately need human assistance.", st("Necessary exception handling is not automatically a workaround.")],
+              ["An avoidable workaround occurs when people bypass an available intended path without a justified operating need.", iss("An alternative route may conceal a weakness in the redesigned process.", "A possible workaround")],
+              ["Imagine a Guest Host referring an eligible rate discrepancy upward because formal delegation remains unclear.", dg("The referral loop", D.flow(["Eligible|discrepancy", "Guest Host|hesitates", "Manager|referral", "Guest|waits"]), "Unclear authority may recreate a handoff the redesign intended to remove.")],
+              ["The referral is observable. Its precise cause still needs investigation rather than an assumption about employee resistance.", null],
+              ["Qasr should record alternative operating paths by type and frequency, then investigate why they occur.", dg("Learning from alternative paths", D.flow(["Observe|path", "Classify|reason", "Measure|frequency", "Investigate|cause", "Correct|weakness"]), "Workaround analysis turns deviations into diagnostic evidence.")],
+              ["Weekly adoption tracking is also essential because one observation cannot show whether use is improving, stalling or declining.", st("Measure adoption weekly from go-live.")],
+              ["The Week 10 illustration shows adoption rising before flattening near sixty-five percent, while workaround use changes over time.", dg("Illustrative adoption and workaround trends", D.lines(["Week 1", "Week 4", "Week 8", "Week 12", "Week 16"], [{ name: "Illustrative adoption", values: [18, 42, 59, 65, 65] }, { name: "Illustrative workaround use", values: [12, 24, 18, 12, 9] }]), "Conceptual sixteen-week curves; these plotted values are illustrative, not Qasr observations.")],
+              ["Imagine moving along the curve. Early growth looks encouraging, but the later plateau signals that a persistent barrier may remain.", null],
+              ["Do not confuse this illustration with Qasr's measured history. The verified adoption figure is sixty-five percent at week eleven.", st("Observed Qasr evidence: 65% at week eleven. Later plotted values: illustrative.")],
+              ["When adoption remains incomplete, the organisation may effectively operate two processes at once.", dg("Two operating realities", D.branch("Guest arrival", ["Redesigned kiosk-supported path", "Alternative desk-handled path", "Investigate each case type"]), "The two paths may include legitimate exceptions and avoidable departures.")],
+              ["That can increase complexity because employees must support both the intended design and alternative arrangements.", iss("The new process operates while elements of the old process may continue.", "Two processes at once")],
+              ["One Qasr pilot property has reinstated a permanent desk position that the redesign removed.", dg("The reinstated desk", D.branch("Permanent desk restored", ["Protects necessary service?", "Recreates old practice?", "Investigate actual cases"]), "The reinstatement has competing interpretations.")],
+              ["The desk may protect guests whose kiosk exceptions genuinely require assistance.", cmp("a", "Service protection", "Human support for cases that cannot follow the routine kiosk path.", "up")],
+              ["Alternatively, it may encourage unnecessary conventional check-ins and weaken adoption.", cmp("b", "Redesign erosion", "Avoidable return to the previous operating arrangement.", "down")],
+              ["Neither interpretation is established simply because the desk exists. The sponsor needs evidence about the cases it handles.", st("Classify actual cases before judging the desk.")],
+              ["A named adoption owner should report kiosk use, exception types, alternative paths and corrective actions.", dg("A more useful sponsor dashboard", D.flow(["Adoption|measured", "Exceptions|classified", "Workarounds|investigated", "Action|owned"]), "Operating evidence should guide corrective decisions.")],
+              ["The goal is not forcing every guest through a kiosk. It is ensuring that each arrival follows an appropriate, dependable path.", q("What evidence would help you decide whether Qasr's reinstated desk protects guests or undermines the redesign?")]
+            ],
+            review: [
+              {
+                title: "The hospital that launched a digital discharge process",
+                lines: [
+                  ["A hospital launches a digital discharge process so departments can coordinate patients' departure through shared information.", t("Remedial - Implementation versus adoption", "A live system does not guarantee changed working practices.")],
+                  ["The system works, and employees can access it. Managers celebrate the successful launch.", dg("The intended discharge process", D.flow(["Discharge|approved", "Requirements|recorded", "Departments|coordinate", "Patient|leaves"]), "The new process uses shared information across departments.")],
+                  ["But difficult cases still involve separate spreadsheets and telephone arrangements.", iss("The new system operates alongside familiar working methods.", "Implementation without full adoption")],
+                  ["Implementation establishes availability. Adoption measures whether actual cases follow the redesigned process.", cmp("a", "Implementation", "The digital discharge system is operational.", "up")],
+                  ["Adoption concerns whether departments genuinely use the intended coordination process.", cmp("b", "Adoption", "Actual discharges follow the redesigned arrangement.", "up")],
+                  ["Imagine a patient waiting because transport arrangements remain unresolved. A coordinator may use the system or contact another department directly.", q("When is direct communication legitimate, and when might it become an avoidable workaround?")],
+                  ["A telephone call can be appropriate when the process requires immediate coordination.", st("Not every alternative action is inappropriate.")],
+                  ["A separate spreadsheet may be problematic if it creates conflicting records and bypasses the shared system.", iss("Unrecorded parallel work can undermine reliable coordination.", "A possible workaround")],
+                  ["The hospital should classify alternative practices before deciding which require correction.", dg("Investigating alternative paths", D.flow(["Observe|practice", "Classify|reason", "Measure|frequency", "Correct|weakness"]), "Evidence distinguishes legitimate exceptions from avoidable departures.")],
+                  ["Weekly adoption measurement would reveal whether use improves or stalls after launch.", dg("Adoption over time", D.flow(["Week|one", "Weekly|measurement", "Trend|review", "Action|selected"]), "Adoption requires continuing observation.")],
+                  ["A named owner should interpret the evidence and coordinate improvements across departments.", null],
+                  ["Otherwise, the project dashboard may remain green while employees continue maintaining competing arrangements.", iss("Completed milestones can conceal incomplete behavioural change.", "A misleading green status")],
+                  ["Qasr faces the same challenge with sixty-five percent kiosk adoption and substantial desk-handled activity.", null],
+                  ["Some desk cases may legitimately require assistance, so the sponsor must investigate rather than assume resistance.", st("Adoption analysis needs both measurement and explanation.")],
+                  ["The programme succeeds when actual work increasingly follows the intended process without neglecting necessary exceptions.", q("Why must the hospital measure adoption after launch rather than rely on completed implementation milestones?")]
+                ]
+              },
+              {
+                title: "The retailer running two returns processes",
+                lines: [
+                  ["An online retailer introduces automatic approval for straightforward returns while specialists investigate unusual cases.", t("Remedial - Understanding workarounds", "Alternative paths can reveal unresolved design problems.")],
+                  ["The intended process directs routine requests through automation and exceptions towards human judgement.", dg("The redesigned returns journey", D.flow(["Customer|submits return", "System|checks eligibility", "Routine|approval", "!Exception|to specialist"]), "The new process separates routine and exceptional work.")],
+                  ["After launch, some stores continue accepting returns through the old manual procedure.", iss("Manual handling continues, but the reason is not yet known.", "An untested explanation")],
+                  ["Management initially interprets this as resistance, but some customers may genuinely be unable to complete the online process.", cmp("a", "Necessary assistance", "Human support for customers facing a real process limitation.", "up")],
+                  ["Other manual cases may reflect avoidable use of familiar methods when automation could handle the request.", cmp("b", "Avoidable workaround", "Bypassing an available redesigned path without an operational need.", "down")],
+                  ["The same visible behaviour can therefore have different causes and require different responses.", q("Why is it unreliable to label every manual return as employee resistance?")],
+                  ["A legitimate exception may reveal missing system functionality, while an avoidable workaround may reflect unclear guidance or incentives.", st("Investigate the cause before choosing the remedy.")],
+                  ["The retailer should record each manual case and classify why it followed that path.", dg("Classifying manual returns", D.flow(["Manual|case observed", "Reason|identified", "Type|recorded", "Pattern|reviewed"]), "Workaround analysis identifies recurring operating weaknesses.")],
+                  ["Weekly adoption tracking can show whether the redesigned returns process becomes the normal operating method.", null],
+                  ["If adoption plateaus, managers should investigate barriers rather than simply repeat launch announcements.", iss("A stable adoption plateau may signal unresolved operating problems.", "Change has stalled")],
+                  ["Imagine a store restoring a permanent manual returns counter. It could protect customers or preserve unnecessary old activity.", dg("The restored counter", D.branch("Manual counter restored", ["Necessary customer support?", "Avoidable old practice?", "Evidence required"]), "The counter's purpose must be established from actual cases.")],
+                  ["The retailer should examine what the counter handles before deciding whether it should remain, change or disappear.", null],
+                  ["Qasr faces the same judgement when one pilot property restores a permanent front desk.", cmp("a", "Service protection", "The desk supports guests with legitimate exceptions.", "up")],
+                  ["It could also weaken adoption if routine arrivals unnecessarily return to conventional check-in.", cmp("b", "Redesign erosion", "The desk preserves avoidable old transactions.", "down")],
+                  ["Neither conclusion follows automatically from reinstatement.", st("Observed activity needs interpretation grounded in case evidence.")],
+                  ["Implementation shows availability, adoption shows use, and workaround analysis helps explain deviations.", q("What evidence would help the retailer decide whether its manual returns counter should remain?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "The knowledge the redesign might lose",
+            sec: "W10O3c",
+            lines: [
+              ["We have examined visible operating problems. Now consider something less obvious: the knowledge that could disappear when jobs change.", t("The knowledge the redesign might lose", "Protect valuable experience without preserving inefficient routines.")],
+              ["Imagine an experienced Front Desk Agent who has spent years handling unusual guest arrivals.", dg("Experience behind the old process", D.flow(["Unusual|guest problem", "Experienced|employee", "Practical|judgement", "Appropriate|resolution"]), "Experienced employees may hold knowledge that formal procedures do not capture.")],
+              ["The employee recognises recurring booking discrepancies and knows which situations require careful investigation.", null],
+              ["Some knowledge is written in procedures. Other knowledge develops through repeated encounters with difficult cases.", cmp("a", "Documented knowledge", "Formal procedures, system records and written rules.", "up")],
+              ["Practical knowledge includes recognising unusual patterns, departmental dependencies and the reasons behind effective decisions.", cmp("b", "Experience-based knowledge", "Judgement developed through real operating situations.", "up")],
+              ["A process diagram may show that an exception was resolved without explaining how an experienced employee recognised its cause.", st("A diagram rarely captures every judgement behind successful work.")],
+              ["Qasr moved twenty-two former Front Desk Agents into Guest Host roles. Their previous experience may remain valuable.", dg("The role transition", D.flow(["Front Desk|Agent", "Existing|experience", "Guest Host|role", "New|responsibilities"]), "The transition should retain useful knowledge while changing the work.")],
+              ["The organisation should not assume that every feature of the previous job was inefficient or obsolete.", null],
+              ["An old handoff may need removal while the expertise that once helped employees manage it remains essential.", q("How can Qasr preserve useful judgement without preserving the old process?")],
+              ["Imagine an experienced employee explaining that a particular rate discrepancy often follows an earlier reservation adjustment.", dg("An experienced insight", D.flow(["Rate|discrepancy", "Earlier|adjustment", "Cause|recognised", "Decision|supported"]), "Experience can reveal causes that are not obvious from the final system record.")],
+              ["That explanation could become a worked exception used by Guest Hosts across all four properties.", st("Turn individual experience into reusable guidance.")],
+              ["A worked example should describe the situation, evidence, authority boundary and reasoning behind the response.", dg("Capturing a worked exception", D.flow(["Employee|explains case", "Evidence|identified", "Reasoning|documented", "Guidance|shared"]), "Capture why the decision was appropriate, not just what happened.")],
+              ["Employees can then practise the example and apply the reasoning to similar situations.", null],
+              ["Copying the old job description would not achieve this because the important knowledge may never have appeared in that document.", iss("Documenting activities without decision reasoning can allow valuable expertise to disappear.", "Knowledge at risk")],
+              ["The People phase should capture practical knowledge before roles change materially or experienced employees leave.", st("Knowledge preservation belongs inside the change plan.")],
+              ["There is also a human concern. Employees may wonder whether the new role values the expertise they developed over many years.", cmp("a", "Unclear transition", "Employees cannot see how their experience fits the redesigned organisation.", "down")],
+              ["A supported transition explains future responsibilities and invites employees to contribute their knowledge.", cmp("b", "Supported transition", "Employees understand their contribution and help improve the new process.", "up")],
+              ["These arrangements matter because uncertainty about future roles can create retention risks.", null],
+              ["Qasr reports that two of the twenty-two Guest Hosts have resigned since the redesign began.", dg("Observed departures", D.flow(["22 Guest|Hosts", "2 observed|resignations", "Reasons|unknown", "Risk|investigation"]), "The case reports two departures but does not establish individual motives.")],
+              ["We must not attribute those departures to resistance or dissatisfaction without evidence.", iss("Two resignations are observed; their causes remain unknown.", "Do not invent motives")],
+              ["Nevertheless, Qasr should investigate retention risks because losing experienced employees may also mean losing practical knowledge.", dg("Managing retention risk", D.flow(["Role|uncertainty", "Retention|risk", "Programme|register", "Mitigation|planned"]), "Retention and knowledge risks require deliberate management.")],
+              ["Managers can involve experienced Guest Hosts in developing worked examples and improving exception guidance.", st("Employee involvement can support both knowledge transfer and organisational change.")],
+              ["This does not mean protecting every old practice. It means separating valuable expertise from unnecessary handoffs.", dg("What changes and what remains", D.branch("Existing practice", ["Remove inefficient routine", "Preserve useful judgement", "Embed knowledge in new role"]), "The redesigned process should benefit from operational experience.")],
+              ["A stronger redesign helps employees understand their future while making their practical knowledge available to colleagues.", q("How could Qasr capture experienced Guest Hosts' judgement without recreating the inefficient front-desk practices it replaced?")]
+            ],
+            review: [
+              {
+                title: "The maintenance technician who knew the machine",
+                lines: [
+                  ["A manufacturer installs sensors that monitor equipment and alert technicians when unusual conditions appear.", t("Remedial - Preserving practical knowledge", "Automation changes work, but experience may remain essential.")],
+                  ["The new process replaces routine inspections with targeted responses to detected problems.", dg("The redesigned maintenance process", D.flow(["Sensors|monitor", "Alert|generated", "Technician|investigates", "Action|taken"]), "Automation identifies conditions requiring attention.")],
+                  ["An experienced technician recognises subtle patterns that the sensor record alone cannot explain.", st("Operational experience can contain knowledge absent from formal records.")],
+                  ["Imagine a warning that becomes serious only under particular production conditions.", dg("The warning and its context", D.flow(["Sensor|warning", "Operating|conditions", "Technician|interprets", "Appropriate|response"]), "The meaning of a warning may depend on context.")],
+                  ["The system records the warning, but the technician understands why it matters.", cmp("a", "System record", "Captures readings and the detected warning.", "up")],
+                  ["Experienced judgement explains how operating conditions affect the appropriate response.", cmp("b", "Practical knowledge", "Interprets the warning using accumulated experience.", "up")],
+                  ["If roles change without capturing that reasoning, the organisation may lose valuable expertise.", iss("The reasoning behind effective decisions could disappear when experienced employees leave.", "Knowledge loss")],
+                  ["Technicians should explain difficult cases while their knowledge remains available.", dg("Capturing a worked case", D.flow(["Warning|observed", "Context|explained", "Decision|documented", "Example|shared"]), "Worked examples preserve practical decision reasoning.")],
+                  ["These examples can support training because employees learn why a response is appropriate.", null],
+                  ["Knowledge capture should not preserve inefficient inspection routines simply because they are familiar.", st("Keep useful expertise while replacing outdated practices.")],
+                  ["Managers should also explain future roles so employees understand how their experience contributes to the redesigned process.", q("How might employee involvement support both knowledge preservation and the transition?")],
+                  ["The programme should record significant retention risks and plan mitigation before important expertise disappears.", dg("Supporting the transition", D.flow(["Explain|future role", "Recognise|expertise", "Transfer|knowledge", "Manage|retention risk"]), "Role clarity and knowledge transfer reinforce each other.")],
+                  ["Qasr faces the same challenge as experienced Front Desk Agents become Guest Hosts.", null],
+                  ["Their understanding of unusual guest situations may remain essential even when conventional desk transactions decline.", st("A successful redesign changes work without discarding valuable judgement.")],
+                  ["Employees are not simply positions on a process chart. Their knowledge can make the new process dependable.", q("Why should the manufacturer capture technicians' reasoning before their roles change materially?")]
+                ]
+              },
+              {
+                title: "The university adviser whose experience was disappearing",
+                lines: [
+                  ["A university redesigns student advising so routine requests move online while advisers focus on complicated academic circumstances.", t("Remedial - Knowledge and retention", "A digital service still depends on experienced judgement.")],
+                  ["The new process handles straightforward enquiries automatically and directs unusual cases to advisers.", dg("The redesigned advising process", D.flow(["Student|submits request", "System|handles routine", "!Complex|case", "Adviser|supports decision"]), "Automation changes the work remaining for advisers.")],
+                  ["An experienced adviser understands how programme requirements interact and which cases require academic review.", st("Experienced employees may know more than formal procedures record.")],
+                  ["But the university writes new job descriptions without asking advisers how they handle difficult cases.", iss("The workflow is documented, but the reasoning behind unusual decisions is overlooked.", "Incomplete knowledge transfer")],
+                  ["Imagine a student whose previous study creates an unusual eligibility question.", dg("An unusual student case", D.flow(["Student|requests advice", "Previous|study reviewed", "Eligibility|uncertain", "Academic|decision needed"]), "Complex cases require evidence and appropriate decision ownership.")],
+                  ["The adviser knows which evidence matters and which authorised academic role should decide.", q("What knowledge might disappear if experienced advisers are excluded from the redesign?")],
+                  ["The university could lose practical understanding of recurring exceptions, relevant evidence and escalation relationships.", null],
+                  ["A better approach invites advisers to develop worked examples explaining how they recognise and investigate unusual cases.", dg("Turning experience into guidance", D.flow(["Unusual|student case", "Adviser|explains reasoning", "Worked|example", "Guidance|shared"]), "Practical knowledge becomes reusable organisational guidance.")],
+                  ["Those examples help colleagues recognise difficult situations without relying entirely on informal contacts.", st("Knowledge transfer should preserve judgement while respecting formal decision boundaries.")],
+                  ["Employees also need to understand how their expertise remains valuable in the redesigned service.", cmp("a", "Unclear transition", "New instructions arrive without explaining the future role.", "down")],
+                  ["A supported transition gives employees clear responsibilities and opportunities to contribute their experience.", cmp("b", "Supported transition", "Employees understand their contribution and help improve the service.", "up")],
+                  ["Uncertainty can create retention risks even when the technology operates successfully.", iss("A technically successful redesign may still threaten valuable employee knowledge.", "The human transition matters")],
+                  ["Managers should investigate concerns and record significant retention risks before experienced advisers leave.", dg("Managing knowledge and retention", D.flow(["Identify|concerns", "Capture|expertise", "Clarify|future roles", "Manage|risks"]), "Knowledge preservation and retention require early attention.")],
+                  ["Qasr reports two Guest Host resignations, but their individual reasons are unknown.", st("Observed departures justify investigation, not assumptions about resistance.")],
+                  ["The goal is to preserve useful experience without protecting outdated routines.", q("How could involving experienced Guest Hosts in worked exception cases support knowledge transfer and organisational change?")]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "l4",
+        title: "Making the people design real",
+        sections: [
+          {
+            title: "Repairing the Guest Host specification",
+            sec: "W10O2d",
+            lines: [
+              ["We have identified Qasr's authority gap, conflicting measures, untested capability and knowledge risks. Now the sponsor wants a repair, not another diagnosis.", t("Repairing the Guest Host specification", "Turn the People-phase findings into a workable role.")],
+              ["Twenty-two former Front Desk Agents now support arrivals and investigate exceptions across four pilot properties.", dg("The Guest Host's real work", D.flow(["Guest|arrives", "Kiosk|handles routine", "!Exception|identified", "Guest Host|investigates"]), "The redesigned role combines human assistance with appropriate exception resolution.")],
+              ["But their revised job descriptions arrived three weeks after go-live. Employees started new responsibilities before receiving updated formal expectations.", iss("New responsibilities began before the role documentation was ready.", "Three-week documentation delay")],
+              ["The first repair is a role description explaining responsibilities, boundaries, reporting and the outcomes Guest Hosts should deliver.", it(1, 5, "users", "Define the work", "Document responsibilities, accountability and reporting relationships.")],
+              ["RACI must agree with that description, because investigating an exception does not automatically make the Guest Host accountable for every policy decision.", dg("Responsibility and ownership", D.flow(["Guest Host|investigates", "Relevant role|advises", "Decision owner|decides", "Guest|receives outcome"]), "The redesigned role must connect with cross-functional accountability.")],
+              ["Now examine the AED 400 waiver. Guest Hosts received this permission in a briefing, but it remains absent from formal delegation.", iss("The expected local decision lacks documented authority.", "The AED 400 gap")],
+              ["The second repair formally defines eligible waivers, the decision limit and escalation beyond that limit.", it(2, 5, "key", "Document authority", "Make the permitted decision boundary organisationally dependable.")],
+              ["Imagine an eligible AED 320 discrepancy. The Host should be able to consider local resolution, while an AED 460 case exceeds the communicated limit.", dg("Two illustrative decisions", D.branch("Rate discrepancy", ["AED 320: check eligibility", "AED 460: escalate", "Apply decision-quality rules"]), "These amounts illustrate the proposed decision boundary, not observed Qasr transactions.")],
+              ["The limit is not permission to waive every smaller discrepancy. Eligibility, judgement and accountability still matter.", st("Authority enables appropriate decisions, not automatic approvals.")],
+              ["The specification also needs a justified reporting relationship. Qasr's final Guest Host reporting line is not established in the case.", q("Who should provide operational support when a decision exceeds the Host's authority?")],
+              ["Next, the inherited scorecard still rewards check-ins completed per shift and average transaction time.", cmp("a", "Inherited objectives", "Conventional check-in volume and transaction speed.", "down")],
+              ["Those measures conflict with a role centred on difficult exceptions, especially because kiosk check-ins are not attributed to individual Hosts.", iss("The employee's valuable new work may reduce performance against the old targets.", "The incentive contradiction")],
+              ["The third repair replaces conflicting throughput targets with appropriate exception-resolution outcomes and quality safeguards.", it(3, 5, "gauge", "Align performance", "Recognise eligible resolutions without rewarding inappropriate decisions.")],
+              ["A quality sample should check whether employees followed policy, respected authority and escalated when necessary.", dg("A proposed balanced measure", D.flow(["Eligible|exception", "Appropriate|resolution", "Quality|sample", "Outcome|reviewed"]), "The measure is proposed; it is not an implemented Qasr scorecard.")],
+              ["Qasr should also review the unchanged job grade and rewards against the redesigned responsibilities, without assuming that a higher grade is automatically justified.", st("Employment changes require evaluation of the actual work.")],
+              ["The fourth repair is demonstrated capability. Employees must practise difficult cases and explain their decisions.", it(4, 5, "brain", "Assess capability", "Test investigation, judgement, waiver eligibility and escalation.")],
+              ["All twenty-two attended induction, but nobody assessed their capability afterwards. A green attendance report cannot close that gap.", dg("Attendance versus readiness", D.flow(["22 attended|induction", "Capability|not assessed", "Realistic|cases", "Readiness|evidence"]), "Participation is confirmed; decision capability remains unverified.")],
+              ["Finally, the fifth repair assigns ownership for adoption measurement and investigation of alternative operating paths.", it(5, 5, "chart", "Own adoption", "Measure actual use, classify exceptions and coordinate corrective action.")],
+              ["That owner should examine the sixty-five percent adoption figure, desk-handled arrivals and repeated referrals without assuming every deviation is resistance.", dg("The complete role repair", D.flow(["Role|defined", "Authority|documented", "Measures|aligned", "Capability|assessed", "Adoption|owned"]), "Five connected changes support one redesigned process.")],
+              ["These are recommendations, not completed corrections. The sponsor must approve, implement and test them.", st("A repair proposal becomes credible when operating evidence shows improvement.")],
+              ["If you could begin with one documented contradiction, which would you correct first, and how would you know the correction worked?", q("Which Guest Host repair deserves priority, and what evidence would demonstrate improvement?")]
+            ],
+            review: [
+              {
+                title: "Repairing the university student success adviser role",
+                lines: [
+                  ["A university creates Student Success Adviser positions to coordinate complicated academic and administrative requests.", t("Remedial - Repairing a redesigned role", "A university adviser needs more than a new title.")],
+                  ["The redesigned process expects advisers to investigate problems and help students obtain appropriate decisions.", dg("The redesigned support journey", D.flow(["Student|requests help", "Adviser|investigates", "Relevant|decision", "Student|receives outcome"]), "One adviser coordinates the student's journey across functions.")],
+                  ["But the old job description still describes recording enquiries and referring students to separate offices.", iss("The new process expects coordination, but the formal role remains referral-based.", "An incomplete role")],
+                  ["Imagine a student requesting an exception to an enrolment requirement. The adviser understands the problem but cannot establish who may approve it.", q("What must be clarified before expecting the adviser to resolve this case?")],
+                  ["The university must define the adviser's responsibilities while preserving decisions reserved for authorised academic roles.", cmp("a", "Student Success Adviser", "Investigates and coordinates the student's case.", "up")],
+                  ["The authorised decision owner remains accountable for approvals governed by academic or administrative rules.", cmp("b", "Authorised decision owner", "Makes decisions within the relevant delegated authority.", "up")],
+                  ["Formal delegation should explain which administrative decisions advisers may make and when escalation is required.", dg("A usable decision boundary", D.flow(["Issue|identified", "Authority|checked", "Local|decision", "Escalation|when required"]), "Responsibilities and authority must agree.")],
+                  ["Now imagine managers continuing to measure advisers by enquiries closed per shift.", iss("Complex coordination takes longer but may appear less productive.", "The wrong incentive")],
+                  ["The university should replace conflicting targets with appropriate case-resolution outcomes and quality safeguards.", dg("Aligning performance", D.flow(["Redesigned|responsibility", "Relevant|outcome", "Quality|review", "Aligned|measure"]), "The scorecard should support the new contribution.")],
+                  ["It should also review job grade and rewards against actual responsibilities, rather than assuming a new title automatically deserves higher pay.", st("Grade and reward decisions require justified evaluation.")],
+                  ["Advisers need realistic practice with unusual cases, followed by assessment of their judgement and escalation decisions.", dg("Demonstrating readiness", D.flow(["Define|work", "Document|authority", "Align|measures", "Assess|capability", "Monitor|adoption"]), "A coherent role combines formal arrangements with demonstrated capability.")],
+                  ["A named owner should then examine whether students genuinely receive support through the intended process.", null],
+                  ["This is the same connected repair Qasr needs for its Guest Hosts.", st("A workable role aligns responsibility, authority, measures, capability and adoption.")],
+                  ["Updating the job description alone would leave several operating contradictions unresolved.", q("Why would a revised adviser job description be insufficient without decision authority and aligned measures?")]
+                ]
+              },
+              {
+                title: "The insurance claims specialist's missing specification",
+                lines: [
+                  ["An insurance company automates routine claims and asks specialists to investigate complicated exceptions.", t("Remedial - A complete role-repair decision", "A claims specialist needs a coherent operating design.")],
+                  ["The software handles straightforward cases, while specialists examine unusual evidence and make appropriate decisions.", dg("The redesigned claims journey", D.flow(["Claim|submitted", "Automatic|assessment", "!Complex|exception", "Specialist|investigates", "Decision|communicated"]), "Automation changes the work remaining for employees.")],
+                  ["But the formal role still describes recommending approvals, and the delegation schedule omits the authority announced during briefing.", iss("Expected independent decisions conflict with formal responsibilities and delegation.", "A contradictory role")],
+                  ["A specialist investigates a valid claim but refers it upward because independent approval might later be challenged.", q("Would repeating the instruction to act independently repair this problem?")],
+                  ["No. The company must document permitted decisions, accountability and escalation beyond approved limits.", dg("Repairing authority", D.flow(["Specialist|investigates", "Delegation|checked", "Appropriate|decision", "Escalation|when needed"]), "Formal permission must support the redesigned responsibility.")],
+                  ["The inherited performance measure also rewards claims processed per hour, although complicated investigations naturally take longer.", cmp("a", "Inherited objective", "Maximise claims processed per hour.", "down")],
+                  ["A replacement should recognise appropriate resolution of eligible complex claims, supported by quality review.", cmp("b", "Redesigned contribution", "Resolve eligible exceptions accurately and within authority.", "up")],
+                  ["Without quality safeguards, employees might approve questionable claims merely to increase their resolution count.", iss("A resolution target can encourage inappropriate approvals if decision quality is ignored.", "A new incentive risk")],
+                  ["The company should review grade and rewards against changed responsibilities, but any adjustment requires evaluation.", st("Rewards must fit the work rather than the new title alone.")],
+                  ["Specialists also need practice handling ambiguous evidence and recognising when specialist escalation is required.", dg("From role repair to readiness", D.flow(["Role|clarified", "Authority|documented", "Measures|aligned", "Capability|tested", "Support|provided"]), "Formal arrangements and demonstrated capability reinforce each other.")],
+                  ["Managers should assess realistic decisions and provide targeted support when misunderstandings become visible.", null],
+                  ["A named owner must also monitor whether claims follow the redesigned process rather than familiar referrals.", dg("Monitoring adoption", D.flow(["Observe|cases", "Classify|referrals", "Investigate|causes", "Correct|weaknesses"]), "Adoption evidence tests whether the new role works.")],
+                  ["Qasr faces the same combination of authority, measurement and capability weaknesses.", st("A complete repair changes the organisational conditions shaping employee decisions.")],
+                  ["The strongest priority is a documented contradiction supported by evidence, followed by testing its correction.", q("Which correction would you prioritise if specialists understood the claims rules but lacked formal approval authority?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "The eleven-week decision",
+            sec: "W10O3d",
+            lines: [
+              ["Eleven weeks after launch, Qasr's sponsor opens a reassuring green dashboard. But does green mean the redesigned work is succeeding?", t("The eleven-week decision", "Look beyond milestones and choose defensible corrective action.")],
+              ["The people workstream is green because all twenty-two Guest Hosts attended a four-hour induction.", dg("The green dashboard", D.flow(["22 Guest|Hosts", "Four-hour|induction", "Attendance|complete", "Status|green"]), "The status reflects completed induction attendance.")],
+              ["Nobody assessed their capability afterwards. The dashboard confirms an activity, not readiness for difficult decisions.", iss("Attendance is complete, but operational capability remains unverified.", "A misleading readiness signal")],
+              ["Now the sponsor reveals the operating evidence: kiosk adoption is sixty-five percent at week eleven.", dg("Observed adoption", D.progress("Week-eleven kiosk adoption", 65, 100, "%"), "The verified Qasr observation is 65% kiosk adoption at week eleven.")],
+              ["That shows substantial use, but it does not establish that the redesigned process has become the normal path for every arrival.", st("Implementation is not complete adoption.")],
+              ["Another twenty-nine percent of arrivals are desk-handled. Property managers report that most involve cases rejected by the kiosk.", dg("Desk-handled arrivals", D.progress("Desk-handled arrivals", 29, 100, "%"), "The 29% desk share includes cases that may legitimately require human assistance.")],
+              ["The sponsor should not call every desk arrival a workaround without examining the reason for that path.", q("Which desk cases are necessary exceptions, and which might unnecessarily bypass the redesign?")],
+              ["Next comes a more direct organisational contradiction: nine of the twenty-two Guest Hosts refer every rate discrepancy upward.", dg("Repeated escalation", D.flow(["22 Guest|Hosts", "9 always|refer", "Duty manager|decides", "Guest|waits"]), "The referral pattern is observed; individual motives remain unknown.")],
+              ["The communicated AED 400 waiver is missing from formal delegation, even though eligible local decisions are part of the redesigned role.", iss("Expected authority and documented authority do not agree.", "A confirmed design weakness")],
+              ["That makes formalising the waiver a defensible immediate priority, although the sponsor must still investigate why individual employees refer.", cmp("a", "Confirmed weakness", "The AED 400 waiver is absent from formal delegation.", "down")],
+              ["The proposed correction is to document eligibility, decision limits and escalation, then test whether employees apply the rules correctly.", cmp("b", "Defensible response", "Formalise authority and assess decision capability.", "up")],
+              ["Consider an eligible AED 320 discrepancy in a simulation. The Guest Host should understand when local resolution is appropriate.", dg("Testing the correction", D.flow(["Eligible|case", "Authority|confirmed", "Host|decides", "Quality|reviewed"]), "The example illustrates how formal authority and practical assessment work together.")],
+              ["A case beyond AED 400 requires appropriate escalation, because clearer authority does not remove decision boundaries.", st("The correction must improve appropriate decisions, not simply reduce referrals.")],
+              ["The sponsor also learns that two Guest Hosts resigned after the redesign began.", dg("Observed departures", D.flow(["22 Guest|Hosts", "2 observed|resignations", "Reasons|unknown", "Retention|review"]), "The case reports two departures without establishing their causes.")],
+              ["Those departures justify investigating retention and knowledge risks, but they do not prove dissatisfaction or resistance.", iss("Observed resignations cannot establish individual motives.", "A retention question, not a verdict")],
+              ["Finally, one pilot property reinstated a permanent desk that the redesign had removed.", dg("The reinstated desk", D.branch("Permanent desk restored", ["Necessary service support?", "Avoidable old practice?", "Investigate actual cases"]), "The decision has competing interpretations.")],
+              ["It might protect guests whose kiosk exceptions genuinely require assistance.", cmp("a", "Service protection", "The desk supports legitimate exceptions.", "up")],
+              ["Or it might encourage routine arrivals to return unnecessarily to conventional check-in.", cmp("b", "Redesign erosion", "The desk preserves avoidable old activity.", "down")],
+              ["The sponsor needs classified case evidence before deciding whether to retain, modify or remove the desk.", st("Do not choose between plausible explanations without examining actual cases.")],
+              ["Now bring the evidence together: adoption, desk activity, repeated referrals, untested capability and retention concerns.", dg("The sponsor's evidence board", D.flow(["65%|adoption", "29%|desk-handled", "9 always|refer", "Capability|untested", "2 observed|departures"]), "Each observation raises a distinct management question.")],
+              ["A credible decision separates established facts, plausible causes and proposed actions rather than treating every concern as employee resistance.", dg("A defensible decision sequence", D.flow(["Confirm|evidence", "Diagnose|causes", "Prioritise|corrections", "Assign|owners", "Measure|results"]), "The sponsor needs accountable corrective action and evidence of improvement.")],
+              ["Formal delegation is a strong starting point because its absence is documented. Capability assessment and adoption investigation should accompany it.", st("Prioritise confirmed contradictions while investigating unresolved causes.")],
+              ["The sponsor should revise the green readiness interpretation and request operating evidence that tests whether the corrections work.", q("What would you tell Qasr's sponsor about the green status, and which correction would you defend first?")]
+            ],
+            review: [
+              {
+                title: "The hospital discharge programme that reported green",
+                lines: [
+                  ["A hospital redesigns discharge coordination and reports a green programme status after launching its system and completing training.", t("Remedial - Reading beyond the green status", "Completed activities do not automatically establish operational readiness.")],
+                  ["The new system connects discharge requirements across clinical and administrative departments.", dg("The intended discharge process", D.flow(["Discharge|approved", "Requirements|coordinated", "Exceptions|resolved", "Patient|leaves"]), "Digital coordination and human judgement must work together.")],
+                  ["All coordinators attended training, but nobody assessed how they handle difficult discharge cases.", iss("Training attendance is confirmed; practical capability remains untested.", "A readiness gap")],
+                  ["The sponsor discovers that difficult cases still involve repeated telephone calls between departments.", q("Does that prove resistance, or could unclear authority and capability also explain the behaviour?")],
+                  ["A coordinator may understand the system but lack permission to resolve an operational dependency.", cmp("a", "Authority gap", "The employee lacks clear permission to make an expected decision.", "down")],
+                  ["Another coordinator may possess authority but struggle to recognise when specialist clinical input is necessary.", cmp("b", "Capability gap", "The employee cannot yet apply the required judgement reliably.", "down")],
+                  ["These causes require different remedies. Repeating software training cannot create missing decision authority.", st("Diagnose the organisational cause before choosing corrective action.")],
+                  ["The hospital should examine real cases and assess decisions using realistic discharge scenarios.", dg("Investigating readiness", D.flow(["Observe|case", "Identify|cause", "Assess|decision", "Choose|correction"]), "Operational evidence should guide the response.")],
+                  ["The sponsor also needs adoption evidence showing whether departments use the redesigned coordination process.", null],
+                  ["Alternative paths must be classified because some may protect patients while others recreate unnecessary delays.", dg("Classifying operating paths", D.branch("Alternative discharge path", ["Necessary coordination?", "Avoidable workaround?", "Evidence required"]), "Not every alternative activity is inappropriate.")],
+                  ["Imagine one ward restoring a dedicated administrative desk. It could support complex discharges or preserve outdated arrangements.", iss("Restoring an old arrangement has competing interpretations.", "A decision requiring evidence")],
+                  ["The sponsor should examine the cases handled before deciding what to change.", st("Distinguish observed facts from explanations that still require investigation.")],
+                  ["This resembles Qasr's green people-workstream status despite untested Guest Host capability.", dg("A credible sponsor response", D.flow(["Evidence|reviewed", "Weakness|identified", "Correction|proposed", "Result|measured"]), "Management decisions should connect operating evidence with targeted action.")],
+                  ["The lesson is that successful organisational change requires more than completed milestones.", q("Why should the hospital sponsor request capability and adoption evidence before accepting a green readiness status?")]
+                ]
+              },
+              {
+                title: "The retailer deciding whether to keep its manual counter",
+                lines: [
+                  ["An online retailer reviews its redesigned returns process after one store reinstates a permanent manual counter.", t("Remedial - Defending a corrective decision", "A restored service channel can have competing explanations.")],
+                  ["Routine returns should receive automatic decisions, while specialists investigate unusual circumstances.", dg("The intended returns journey", D.flow(["Return|requested", "Automatic|assessment", "!Exception|identified", "Specialist|resolves"]), "The redesigned process separates routine and exceptional work.")],
+                  ["The store manager argues that the counter protects customers who cannot complete digital returns.", cmp("a", "Service continuity", "The counter supports genuine exceptions or access difficulties.", "up")],
+                  ["The programme manager worries that employees are sending ordinary requests back to familiar manual procedures.", cmp("b", "Redesign erosion", "The counter encourages unnecessary manual handling.", "down")],
+                  ["Both explanations are plausible. The counter's existence alone cannot establish which one is correct.", q("What evidence would help determine whether the counter protects customers or undermines the redesign?")],
+                  ["The retailer should classify the returns handled and examine whether the digital process could reasonably have completed them.", dg("Investigating the counter", D.flow(["Manual|case recorded", "Reason|classified", "Authority|checked", "Corrective|decision"]), "Case evidence helps distinguish necessary assistance from avoidable manual work.")],
+                  ["Imagine specialists referring every disputed refund upward because their approval authority was never formally updated.", iss("Repeated referrals may reflect missing delegation rather than unwillingness to change.", "An authority contradiction")],
+                  ["The retailer should document decision rights and assess whether employees understand how to apply them.", null],
+                  ["Managers must also examine performance measures that might reward manual transaction volume instead of appropriate exception resolution.", st("Authority, capability and incentives should be investigated together.")],
+                  ["Suppose the sponsor needs to choose a priority before every cause is known.", dg("Choosing a defensible priority", D.flow(["Confirmed|weakness", "Targeted|repair", "Operating|test", "Result|review"]), "Prioritise a documented contradiction and test its correction.")],
+                  ["Assuming resistance would be weak reasoning. Correcting a missing formal delegation is stronger when that weakness is established.", cmp("a", "Weak response", "Assume employees resist and demand immediate compliance.", "down")],
+                  ["A stronger response repairs the documented contradiction while continuing to investigate other causes.", cmp("b", "Evidence-based response", "Correct authority, assess capability and monitor operating behaviour.", "up")],
+                  ["The sponsor should measure adoption and classify alternative paths after the correction.", null],
+                  ["Qasr faces the same decision when a pilot property reinstates a permanent desk.", st("A justified decision protects necessary service while removing avoidable old practices.")],
+                  ["The goal is not eliminating every alternative path. It is ensuring each path supports the intended process.", q("How would you defend a decision about the manual counter without claiming every customer's reason for using it is known?")]
+                ]
+              }
+            ]
+          },
+          {
+            title: "The handover and the next phase",
+            sec: "W10O3e",
+            lines: [
+              ["We have reached the end of Qasr's People-phase investigation. What must the sponsor carry forward?", t("The handover and the next phase", "Turn People-phase findings into requirements for Develop.")],
+              ["The redesigned arrival process needs organisational arrangements that make the new work possible, not merely functioning kiosks and new job titles.", st("The People phase prepares employees and the organisation to perform the redesigned process.")],
+              ["First, Qasr needs role definitions that describe Guest Host responsibilities and identify accountability across the arrival journey.", dg("The People-phase handover", D.flow(["Redesigned|process", "Defined|roles", "Documented|authority", "Aligned|measures", "Assessed|capability"]), "The handover connects the approved process design with organisational requirements.")],
+              ["Second, formal delegation must document the eligible AED 400 waiver and escalation when cases exceed authorised limits.", dg("From responsibility to authority", D.flow(["Guest Host|investigates", "Formal|delegation", "Appropriate|decision", "Escalation|when needed"]), "Employees need dependable decision rights and clear boundaries.")],
+              ["Third, performance measures must recognise appropriate exception resolution rather than reward conventional check-in volume and speed.", cmp("a", "Inherited objectives", "Check-ins per shift and average transaction time.", "down")],
+              ["A revised measure should recognise useful outcomes while checking decision quality and compliance with authority.", cmp("b", "Redesigned contribution", "Appropriate exception resolution with quality safeguards.", "up")],
+              ["The conflicting old targets must be removed, because keeping both sends employees contradictory instructions.", st("Measures and rewards must reinforce the redesigned work.")],
+              ["Fourth, capability must be demonstrated through realistic cases. Attendance at induction is not enough.", dg("From training to readiness", D.flow(["Induction|attended", "Realistic|practice", "Capability|assessed", "Gaps|addressed"]), "The programme needs evidence of practical judgement.")],
+              ["Qasr knows that all twenty-two Guest Hosts attended induction, but their post-induction capability was not assessed.", iss("Completed training does not establish operational readiness.", "Capability remains unverified")],
+              ["Fifth, adoption needs a named owner who reports actual use, classifies alternative paths and coordinates corrective action.", dg("Adoption ownership", D.flow(["Weekly|adoption", "Exceptions|classified", "Owner|reports", "Sponsor|reviews"]), "Adoption evidence must have clear accountability.")],
+              ["At week eleven, kiosk adoption is sixty-five percent and twenty-nine percent of arrivals are desk-handled.", dg("The observed operating position", D.progress("Week-eleven kiosk adoption", 65, 100, "%"), "Qasr reports 65% kiosk adoption; desk handling requires separate investigation.")],
+              ["Some desk-handled cases may legitimately require human assistance, so the sponsor must not label every alternative path a workaround.", st("Investigate actual cases before judging the operating path.")],
+              ["These requirements must remain coordinated with technology development, because systems need to support the decisions employees are authorised to make.", dg("People and Develop together", D.flow(["People|requirements", "Technology|requirements", "Coordinated|design", "Operational|readiness"]), "Organisational and technical requirements must reinforce each other.")],
+              ["For example, a workflow should recognise the approved waiver boundary and route cases beyond that authority appropriately.", q("What would happen if developers configured approval rules before Qasr clarified formal delegation?")],
+              ["The next BPM framework phase is Develop, phase seven, where the programme builds, configures or acquires supporting components.", dg("The next phase", D.route([6]), "Develop follows People as framework phase seven.")],
+              ["People and Develop are connected rather than isolated. Technical discoveries may reveal additional responsibilities, decision rules or capability needs.", cmp("a", "People", "Who performs the work, with what authority, capability and incentives?", "up")],
+              ["Develop asks what supporting components must be built, configured or acquired for the approved design.", cmp("b", "Develop", "How will technology and operational components support the process?", "up")],
+              ["Before leaving Week 10, you will apply this reasoning to an unfamiliar organisation in the discussion forum.", t("Week 10 discussion forum", "The Role That Was Never Designed")],
+              ["Read the forum case and its exhibit. Your task is to design an appropriate role and explain how performance measures may influence behaviour.", dg("The forum challenge", D.flow(["Read|case and exhibit", "Design|role", "Explain|measures", "Defend|reasoning"]), "Use evidence from the actual forum case rather than assuming it mirrors Qasr.")],
+              ["Post a substantive initial contribution by mid-week, then respond meaningfully to at least two classmates.", dg("Constructive discussion", D.flow(["Initial|analysis", "Peer|argument", "Reasoned|challenge", "Stronger|conclusion"]), "Academic disagreement should use evidence and BPM concepts.")],
+              ["Include a reasoned disagreement that challenges or extends an argument rather than simply expressing approval.", null],
+              ["Support your discussion with Jeston's Chapter 18 and read the facilitator's end-of-week summary.", st("Use the reading, the case exhibit and your own evidence-based reasoning.")],
+              ["The forum is formative and contributes to Assessment 4, Participation, scheduled for Week 14.", null],
+              ["Finally, remember that Qasr's corrections remain proposals until implementation and operating evidence demonstrate improvement.", dg("From People to performance", D.flow(["Role|ready", "Authority|usable", "Capability|demonstrated", "Adoption|measured", "Value|realised"]), "The People phase creates conditions for dependable future performance.")],
+              ["A redesigned process becomes real when employees can perform it, managers support it and evidence shows that it works.", q("When Qasr enters Develop, what evidence would convince you that its people arrangements are ready?")]
+            ],
+            review: [
+              {
+                title: "The hospital preparing its digital discharge handover",
+                lines: [
+                  ["A hospital prepares to develop a digital discharge service that coordinates departments and supports safe patient departure.", t("Remedial - Preparing a credible handover", "Organisational requirements must accompany technology development.")],
+                  ["The redesigned process uses shared information and a coordinator to manage outstanding requirements.", dg("The redesigned discharge journey", D.flow(["Discharge|approved", "Requirements|coordinated", "Exceptions|resolved", "Patient|leaves"]), "Digital coordination and human judgement work together.")],
+                  ["The technology team is ready, but the sponsor asks whether employees have clear responsibilities and authority.", iss("A working application cannot compensate for incomplete organisational arrangements.", "An incomplete handover")],
+                  ["Role definitions should explain what coordinators do and which decisions remain with authorised clinical professionals.", dg("Defining the role", D.flow(["Coordinator|investigates", "Operational|decision", "Clinical|authority", "Patient|supported"]), "Responsibilities must respect professional decision boundaries.")],
+                  ["Accountability should follow the redesigned discharge journey rather than reproduce unnecessary departmental handoffs.", st("Role definitions and accountability must agree with the redesigned process.")],
+                  ["Coordinators need documented authority for appropriate operational adjustments and escalation when specialist approval is required.", dg("Decision boundaries", D.flow(["Issue|identified", "Authority|checked", "Local|resolution", "Specialist|escalation"]), "Clear delegation supports appropriate decisions.")],
+                  ["Now imagine coordinators still measured by administrative records completed per shift.", cmp("a", "Old objective", "Administrative records completed during a shift.", "down")],
+                  ["That target can discourage difficult coordination work, so the hospital needs a measure recognising appropriate discharge-obstacle resolution.", cmp("b", "Redesigned contribution", "Resolve discharge obstacles while respecting clinical safeguards.", "up")],
+                  ["The old conflicting target should be removed, and reward arrangements reviewed against the new responsibilities.", null],
+                  ["Employees also need realistic practice handling missing information and recognising when clinical decisions require authorised professionals.", dg("Demonstrating capability", D.flow(["Realistic|case", "Coordinator|responds", "Decision|assessed", "Support|provided"]), "Capability is demonstrated through performance, not inferred from attendance.")],
+                  ["A named owner should then measure whether actual discharges follow the redesigned process.", dg("The complete People handover", D.flow(["Roles|defined", "Authority|documented", "Measures|aligned", "Capability|assessed", "Adoption|owned"]), "Organisational readiness supports later implementation.")],
+                  ["Technology developers can use these requirements to configure information, permissions and escalation routes.", st("People and technology requirements must be coordinated.")],
+                  ["The handover does not end people-related work. Technical discoveries may require additional support or revised responsibilities.", null],
+                  ["Qasr faces the same connection between Guest Host authority and kiosk-supported workflows.", q("Why should the hospital clarify responsibilities and decision rights before treating its digital discharge design as ready for development?")]
+                ]
+              },
+              {
+                title: "The retailer taking its redesigned returns process into development",
+                lines: [
+                  ["An online retailer prepares to develop technology for automatic routine returns and specialist handling of unusual cases.", t("Remedial - Connecting People with Develop", "Employee decision rights shape technology requirements.")],
+                  ["The intended process sends routine requests through automation while specialists investigate exceptions.", dg("The redesigned returns journey", D.flow(["Return|requested", "Automatic|assessment", "!Exception|identified", "Specialist|resolves"]), "Automation and human judgement support different parts of the journey.")],
+                  ["But specialist responsibilities and approval authority remain unclear as developers begin designing the workflow.", iss("Technology development begins before essential people requirements are settled.", "An incomplete specification")],
+                  ["A developer asks which refund amounts specialists may approve without managerial permission.", q("Why is this an organisational question as well as a technology question?")],
+                  ["The system must reflect formal authority, because workflow controls should support decisions employees are permitted to make.", dg("From people requirements to system controls", D.flow(["Defined|responsibility", "Required|information", "Decision|controls", "Supported|workflow"]), "Role requirements shape the supporting technology.")],
+                  ["The retailer should document delegation and escalation before finalising approval rules.", st("People and Develop must remain coordinated.")],
+                  ["Specialists also need information that supports investigation and communication with customers.", null],
+                  ["Their inherited performance measures still reward transaction volume, although complex cases require more judgement.", cmp("a", "Old objective", "Maximise returns processed each hour.", "down")],
+                  ["A better measure could recognise eligible exceptions resolved appropriately with a quality review.", cmp("b", "Redesigned contribution", "Resolve eligible complex returns accurately and within authority.", "up")],
+                  ["The retailer should remove conflicting targets and review reward arrangements against the changed responsibilities.", null],
+                  ["Employees need realistic practice applying refund rules and recognising cases requiring escalation.", dg("Preparing for implementation", D.flow(["Practise|cases", "Assess|judgement", "Address|gaps", "Support|operation"]), "Readiness requires demonstrated capability.")],
+                  ["Training attendance alone cannot establish that employees can make appropriate decisions.", st("Capability evidence must go beyond completion of scheduled learning activities.")],
+                  ["After launch, a named owner should measure adoption and classify alternative manual handling.", dg("Adoption after launch", D.flow(["Observe|returns", "Classify|manual paths", "Investigate|causes", "Correct|weaknesses"]), "Some manual cases may be necessary while others reveal avoidable workarounds.")],
+                  ["The retailer should not assume that every manual case represents resistance or failure.", null],
+                  ["This connects the People phase with implementation, value realisation and sustainable performance.", st("Organisational arrangements and technology must support the same process.")],
+                  ["Qasr faces the same issue as it moves into Develop: its systems must reflect documented Guest Host authority.", q("What could go wrong if the retailer developed approval controls before deciding which exceptions specialists may authorise?")]
+                ]
+              }
+            ]
+          }
+        ]
+      }
     ]
   };
-
-  // Claude review fixes (original line indices): sentence replacements, then removals in descending order.
-  const FIX = [["W10O1a",-1,3,"That experience led Qasr to investigate its guest arrival process and design a better way of serving guests."],["W10O1c",-1,21,"Its roles include the process owner, front desk lead, IT, revenue manager and chief operating officer."],["W10O1c",-1,22,"The activities include defining the process standard, approving the redesign, building the workflow, training the team, monitoring performance and escalating exceptions."],["W10O2b",-1,7,"This is the problem Qasr faces, because its Guest Hosts inherited annual performance objectives set in January."],["W10O2c",-1,33,"Notice how each element reinforces the others, because changing one alone can recreate old behaviour."],["W10O3a",-1,34,"That is why the slides treat capability test results as a project risk, not an HR matter."],["W10O3b",-1,22,"Its adoption curve rises steeply before levelling near sixty-five percent, while workaround use peaks early and settles near nine percent."],["W10O3c",-1,1,"Now let\u0027s consider something less visible than kiosk adoption, but just as important."],["W10O3e",-1,26,"The phases stay connected, because unclear employee authority can expose decisions that systems must recognise and control."],["W10O2c",1,1,"The new software approves routine returns automatically, leaving employees with unusual or disputed cases."],["W10O2c",1,3,"However, nobody has revised the job descriptions or documented which refund decisions specialists may approve."],["W10O3a",1,20,"This applies directly to Qasr\u0027s nine Guest Hosts who refer every rate discrepancy, for reasons not yet established."],["W10O3e",1,3,"Specialists are expected to approve certain exceptions, yet the organisation has not documented their decision authority."]];
-  const CUT = [["W10O1a",-1,4],["W10O2c",-1,27],["W10O2c",1,19],["W10O2c",1,16],["W10O2d",-1,18],["W10O2d",-1,3],["W10O2d",1,22],["W10O2d",1,20],["W10O2d",1,1],["W10O3a",-1,30],["W10O3a",-1,24],["W10O3a",1,21],["W10O3a",1,14],["W10O3b",-1,29],["W10O3b",-1,17],["W10O3b",1,19],["W10O3b",1,17],["W10O3b",1,7],["W10O3c",-1,29],["W10O3c",1,15],["W10O3c",1,11],["W10O3c",1,1],["W10O3d",-1,13],["W10O3d",-1,9],["W10O3d",-1,7],["W10O3e",-1,35],["W10O3e",-1,25],["W10O3e",-1,11],["W10O3e",-1,5],["W10O3e",1,15],["W10O3e",1,11],["W10O3e",1,1]];
-  COURSE.lessons.forEach((l) => l.sections.forEach((s) => {
-    const T = (v) => (v < 0 ? s.lines : s.review[v].lines);
-    FIX.filter((f) => f[0] === s.sec).forEach((f) => { T(f[1])[f[2]][0] = f[3]; });
-    CUT.filter((f) => f[0] === s.sec).forEach((f) => { T(f[1]).splice(f[2], 1); });
-  }));
-
-  // Plain-text scripts for tools that expect them.
-  COURSE.lessons.forEach((l) =>
-    l.sections.forEach((s) => {
-      s.script = s.lines.map((x) => x[0]).join(" ");
-
-      if (Array.isArray(s.review)) {
-        s.review.forEach((r) => {
-          r.script = r.lines.map((x) => x[0]).join(" ");
+ 
+  COURSE.lessons.forEach((lesson) => {
+    lesson.sections.forEach((section) => {
+      section.script = section.lines.map((line) => line[0]).join(" ");
+      if (Array.isArray(section.review)) {
+        section.review.forEach((remedial) => {
+          remedial.script = remedial.lines.map((line) => line[0]).join(" ");
         });
       }
-    })
-  );
-
+    });
+  });
+ 
+  window.COURSE = COURSE;
 })();
