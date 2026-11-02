@@ -42,6 +42,14 @@
 .w10s-host[data-look=motion] .w10s-mount{filter:saturate(1.5) contrast(1.06)}
 .w10s-host[data-look=motion] .w10s-text .k{display:inline-block;background:#3a5cff;color:#fff;padding:3px 10px;border-radius:4px;letter-spacing:.08em}
 .w10s-host[data-look=motion] .w10s-text .m{font-family:"Segoe UI",Inter,Arial,sans-serif;font-weight:800;letter-spacing:-.01em}
+@media (min-width:900px) and (min-aspect-ratio:5/4){
+.w10s-host .w10s-inner{flex-direction:row;align-items:center;gap:28px;padding:0 18px}
+.w10s-host .w10s-mount{flex:1 1 60%!important;max-height:100%!important;height:100%;min-width:0}
+.w10s-host .w10s-text{flex:0 0 34%;min-height:0;max-height:100%;overflow:auto;align-self:center;padding:0 8px 0 0}
+.w10s-host .w10s-text .m{font-size:clamp(20px,1.9vw,30px)}
+.w10s-host .w10s-text .s{font-size:clamp(15px,1.25vw,19px)}
+.w10s-host[data-look=journey] .w10s-text{margin-left:0}
+}
 @keyframes w10sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.w10s-host .w10s-text.in{animation:none}}
 .w10s-host .w10s-mount{display:flex;flex-direction:column;justify-content:center}.w10s-host .w10s-mount>.w10s{flex:0 1 auto;width:100%;max-height:100%}
