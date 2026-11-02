@@ -32,6 +32,14 @@
   let P;
   try { P = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
   if (!P || !Array.isArray(P.queue) || !P.queue[P.idx] || !Array.isArray(P.hist)) P = fresh();
+  // Progress saved before part checks existed: rebuild the rest of the current lesson so each part is followed by its check.
+  else if (!P.queue.some((q) => q.kind === "quiz" && q.sec)) {
+    const st = P.queue[P.idx];
+    if (st.kind === "sec" && !st.replay && C.lessons[st.l]) {
+      const plan = lessonPlan(st.l);
+      P.queue = P.queue.slice(0, P.idx).concat(plan.slice(Math.max(0, plan.findIndex((q) => q.kind === "sec" && q.s === st.s))));
+    }
+  }
   const save = () => { try { if(deferredReturn){const snapshot={...P,queue:deferredReturn.queue,idx:deferredReturn.idx,part:deferredReturn.part,sent:deferredReturn.sent,q:deferredReturn.q};localStorage.setItem(KEY,JSON.stringify(snapshot));}else localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {} };
   const cur = () => P.queue[P.idx];
   const rkey = (st) => `${st.l}:${st.round}`;
