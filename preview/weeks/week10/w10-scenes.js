@@ -15,6 +15,31 @@
 .w10s-host .w10s-text .m{font-size:clamp(19px,2.6vw,30px);line-height:1.3;font-weight:700;margin:0}
 .w10s-host .w10s-text .s{font-size:clamp(15px,1.8vw,20px);line-height:1.45;margin:8px 0 0;opacity:.85}
 .w10s-host .w10s-text.in{animation:w10sIn .45s ease both}
+.w10s-host[data-look=notebook]{background:repeating-linear-gradient(to bottom,transparent 0 31px,rgba(70,110,160,.16) 31px 32px),#fbf8f1!important}
+.w10s-host[data-look=notebook]::before{content:"";position:absolute;top:0;bottom:0;left:22px;width:2px;background:rgba(190,70,60,.45);z-index:0}
+.w10s-host[data-look=notebook] .w10s-inner{position:relative;z-index:1;padding-left:18px}
+.w10s-host[data-look=notebook] .w10s-mount{filter:sepia(.25) saturate(.9)}
+.w10s-host[data-look=notebook] .w10s-text .m{font-family:Georgia,"Times New Roman",serif;font-weight:600}
+.w10s-host[data-look=notebook] .w10s-text .k{color:#b34a3c;font-family:Georgia,serif;font-style:italic;letter-spacing:.04em;text-transform:none;font-size:15px}
+.w10s-host[data-look=journey]{background:radial-gradient(circle at 85% 10%,rgba(214,170,90,.25),transparent 40%),linear-gradient(180deg,#f3e8d2,#e6efe4)!important}
+.w10s-host[data-look=journey]::before{content:"";position:absolute;left:14px;top:0;bottom:0;width:4px;background:repeating-linear-gradient(to bottom,#2f6b57 0 10px,transparent 10px 18px);opacity:.55}
+.w10s-host[data-look=journey]::after{content:"";position:absolute;left:8px;top:18px;width:16px;height:16px;border-radius:50%;background:#c46a2b;box-shadow:0 0 0 5px rgba(196,106,43,.25)}
+.w10s-host[data-look=journey] .w10s-inner{padding-left:22px}
+.w10s-host[data-look=journey] .w10s-text .m{color:#24473b}
+.w10s-host[data-look=journey] .w10s-text{border-left:4px dashed #2f6b57;margin-left:14px;padding-left:16px;position:relative}
+.w10s-host[data-look=journey] .w10s-text::before{content:"";position:absolute;left:-11px;top:6px;width:14px;height:14px;border-radius:50%;background:#2f6b57;box-shadow:0 0 0 4px rgba(47,107,87,.2)}
+.w10s-host[data-look=journey] .w10s-text .k{color:#2f6b57}
+.w10s-host[data-look=journey] .w10s-mount{filter:hue-rotate(-12deg) saturate(1.05)}
+.w10s-host[data-look=board]{background:radial-gradient(ellipse at 50% 30%,#2c4a42,#1c312b)!important;box-shadow:inset 0 0 0 10px #6b4a2f,inset 0 0 0 12px #3d2a1a}
+.w10s-host[data-look=board] .w10s-mount{filter:invert(1) hue-rotate(180deg) brightness(1.15) contrast(.95)}
+.w10s-host[data-look=board] .w10s-text .m,.w10s-host[data-look=board] .w10s-text .s{color:#f3efe2;font-family:"Comic Sans MS","Segoe Print","Bradley Hand",cursive}
+.w10s-host[data-look=board] .w10s-text .k{color:#f2c14e}
+.w10s-host[data-look=motion]{background:radial-gradient(circle,rgba(58,92,255,.12) 1.2px,transparent 1.4px) 0 0/18px 18px,#ffffff!important}
+.w10s-host[data-look=motion]::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:linear-gradient(90deg,#3a5cff,#ff4f8b,#ffb020)}
+.w10s-host[data-look=motion] .w10s-text .m{font-size:clamp(22px,3vw,34px);color:#101a3a}
+.w10s-host[data-look=motion] .w10s-mount{filter:saturate(1.5) contrast(1.06)}
+.w10s-host[data-look=motion] .w10s-text .k{display:inline-block;background:#3a5cff;color:#fff;padding:3px 10px;border-radius:4px;letter-spacing:.08em}
+.w10s-host[data-look=motion] .w10s-text .m{font-family:"Segoe UI",Inter,Arial,sans-serif;font-weight:800;letter-spacing:-.01em}
 @keyframes w10sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.w10s-host .w10s-text.in{animation:none}}
 .w10s-host .w10s-mount{display:flex;flex-direction:column;justify-content:center}.w10s-host .w10s-mount>.w10s{flex:0 1 auto;width:100%;max-height:100%}
@@ -155,9 +180,12 @@
         try { scene.reset(); } catch (e) { console.warn("[w10s] reset", id, e); }
         root.setAttribute("data-w10s", "on");
         st.host.classList.add("on");
-        // Paper colour of the look so the scene sits on the same surface.
-        const bg = getComputedStyle(root).backgroundColor;
-        if (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) st.host.style.backgroundColor = bg;
+        // Each look dresses the same scene its own way (see the [data-look] rules).
+        st.host.dataset.look = style.id || "";
+        if (!["notebook", "journey", "board", "motion"].includes(style.id)) {
+          const bg = getComputedStyle(root).backgroundColor;
+          if (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) st.host.style.backgroundColor = bg;
+        }
       } catch (e) { console.warn("[w10s] load", e); }
       return r;
     };
