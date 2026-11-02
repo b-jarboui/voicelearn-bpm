@@ -458,7 +458,7 @@ MA("W13O1b-12", "W13O1b", 3,
 M("W13O1c-01", "W13O1c", 1,
   "A redesigned process cuts the effort needed for existing work, yet payroll is unchanged and the freed time has not been assigned to anything. How should this improvement be classified?",
   ["Capacity released, which becomes a benefit only once it is redeployed to something measured", "Cost removed, because the reduced effort has already left the operating budget", "Cost avoided, because the freed time proves that a committed spend will not occur", "Revenue gained, because faster work can be attributed to additional sales"],
-  "The improvement releases capacity, because the same people now need less time for the same work. The slides are clear that released capacity counts as a benefit only when it is redeployed to something measured. Nothing has left the budget, no committed spend has been stopped and no extra revenue has been shown, so the other categories do not fit.");
+  "The improvement releases capacity, because the same people now need less time for the same work. Released capacity counts as a benefit only when it is redeployed to something measured. Nothing has left the budget, no committed spend has been stopped and no extra revenue has been shown, so the other categories do not fit.");
  
 M("W13O1c-02", "W13O1c", 2,
   "Qasr claims AED 180,000 in retained corporate revenue, but corporate rates fell by four percent during renewal. What is the main implication for benefits realisation?",
@@ -893,7 +893,7 @@ V("W13O2a-08", "W13O2a", 2,
     [D.flow(["Late, not absent", "Action not yet taken", "Favourable recalculation"]), "The gap is partly closed by recalculating the figures in the programme's favour"],
     [D.flow(["Implementation failure", "No operational change", "No business value"]), "The whole gap is read as proof that the redesign achieved nothing"]
   ],
-  "The slides describe three kinds of shortfall: benefits that are late rather than absent, benefits that wait on an action nobody has taken, and benefits that were never realisable. A gap is by definition value not yet realised, so it cannot already be realised. A favourable recalculation is exactly what the slides warn against, and the gap alone does not prove that the redesign failed.");
+  "There are three kinds of shortfall: benefits that are late rather than absent, benefits that wait on an action nobody has taken, and benefits that were never realisable. A gap is by definition value not yet realised, so it cannot already be realised. A favourable recalculation is exactly the trap to avoid, and the gap alone does not prove that the redesign failed.");
  
 V("W13O2a-09", "W13O2a", 3,
   "Which diagram shows the most defensible process for reviewing Qasr's difference between promised and tracked benefits?",
@@ -1052,7 +1052,7 @@ TF("W13O2b-05", "W13O2b", 2,
 DR("W13O2b-06", "W13O2b", 1,
   "When managers are rewarded for {1} rather than realised outcomes, missing benefits go uninvestigated, and reluctance to report shortfalls keeps {2} in the reports.",
   [["implementation milestones", "verified savings", "agreed baselines"], ["optimistic estimates", "reconciled amounts", "measured outcomes"]],
-  "If success is defined as reaching implementation milestones, nobody has a reason to look for benefits that never arrived. When reporting a shortfall feels risky, optimistic estimates stay in the reports instead of being challenged. Both problems are organisational rather than technical, which is why the slides say the phase must be designed at the start.");
+  "If success is defined as reaching implementation milestones, nobody has a reason to look for benefits that never arrived. When reporting a shortfall feels risky, optimistic estimates stay in the reports instead of being challenged. Both problems are organisational rather than technical, which is why the phase must be designed at the start.");
  
 DR("W13O2b-07", "W13O2b", 3,
   "When the implementation team disbands without preserving benefit assumptions, the organisation risks losing {1}; when nobody accepts responsibility for capturing value, it faces {2}.",
@@ -1911,7 +1911,7 @@ V("W13O3a-09", "W13O3a", 3,
 OR("W13O3a-10", "W13O3a", 2,
   "Arrange these steps for giving a benefit a real owner from approval to review.",
   ["Name the business owner in the business case", "Approve the programme with that owner on record", "Take the redesigned process live", "Measure the benefit on the date agreed before go-live", "Report the result, or the shortfall with its owner and a date"],
-  "The slides say the owner is named in the business case, before approval, not in the closing report. Approval follows, and then go-live. The benefit is measured on the date agreed in advance, and the report comes last, showing either the result or the shortfall with an owner and a date.");
+  "The owner is named in the business case, before approval, not in the closing report. Approval follows, and then go-live. The benefit is measured on the date agreed in advance, and the report comes last, showing either the result or the shortfall with an owner and a date.");
  
 MA("W13O3a-11", "W13O3a", 2,
   "Match each benefits governance role to its principal responsibility.",
@@ -2085,7 +2085,7 @@ V("W13O3b-09", "W13O3b", 3,
 OR("W13O3b-10", "W13O3b", 2,
   "Arrange these steps in the life of one entry in Qasr's benefits register.",
   ["Enter the objective, baseline and owner before go-live", "Take the redesigned process live", "Have the owner record the measured outcome on its agreed date", "Have finance examine the claim against the accounts", "Present verified and unresolved amounts to the committee"],
-  "The slides require the baseline, owner and measurement date to be set before go-live, so the entry starts there. The outcome can only be measured after the process is live. Finance examines the measured claim before anything reaches the committee, which then sees verified and unresolved amounts side by side.");
+  "The baseline, owner and measurement date must be set before go-live, so the entry starts there. The outcome can only be measured after the process is live. Finance examines the measured claim before anything reaches the committee, which then sees verified and unresolved amounts side by side.");
  
 MA("W13O3b-11", "W13O3b", 2,
   "Match each benefits register element to its principal purpose.",
@@ -2264,7 +2264,7 @@ V("W13O3c-09", "W13O3c", 2,
 OR("W13O3c-10", "W13O3c", 2,
   "Arrange these steps for Qasr's proposed corporate-billing programme so the benefits argument does not recur.",
   ["Agree benefits, baselines and owners before funding is approved", "Approve funding for the corporate-billing programme", "Implement the redesigned billing process", "Measure the benefits and reconcile them with finance", "Carry ownership forward into Sustainable Performance"],
-  "The slides say benefits management is designed at the start, so the agreements come before funding. Implementation follows approval, and benefits can only be measured and reconciled after go-live. Ownership then continues into Sustainable Performance, because a gain that nobody holds in place can decay.");
+  "Benefits management is designed at the start, so the agreements come before funding. Implementation follows approval, and benefits can only be measured and reconciled after go-live. Ownership then continues into Sustainable Performance, because a gain that nobody holds in place can decay.");
  
 MA("W13O3c-11", "W13O3c", 2,
   "Match each proposed benefits governance responsibility to its purpose in Qasr's next programme.",
