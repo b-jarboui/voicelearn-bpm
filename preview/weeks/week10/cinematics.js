@@ -161,7 +161,7 @@
     });
 
     return `<text ${a}>${lines.map((part, i) =>
-      `<tspan x="${x}" dy="${i ? size * 1.16 : 0}">${esc(part)}</tspan>`
+      `<tspan x="${x}" dy="${i ? size * 1.16 : 0}">${esc(part)}${i < lines.length - 1 ? " " : ""}</tspan>`
     ).join("")}</text>`;
   }
 

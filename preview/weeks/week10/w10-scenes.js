@@ -9,7 +9,14 @@
 .w10s-host{position:absolute;inset:0;z-index:30;overflow:hidden;background:#fbf8f1;display:none;box-sizing:border-box;
   padding:10px 8px 10px;font-family:inherit;color:#1b2a3a;touch-action:manipulation}
 .w10s-host.on{display:block}
-.w10s-host .w10s-inner{width:100%;height:100%;min-height:380px;display:flex;flex-direction:column;justify-content:center}
+.w10s-host .w10s-inner{width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-start;gap:10px}
+.w10s-host .w10s-text{flex:0 0 auto;padding:4px 10px 8px;text-align:left;min-height:96px}
+.w10s-host .w10s-text .k{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#a4553a;margin:0 0 6px}
+.w10s-host .w10s-text .m{font-size:clamp(19px,2.6vw,30px);line-height:1.3;font-weight:700;margin:0}
+.w10s-host .w10s-text .s{font-size:clamp(15px,1.8vw,20px);line-height:1.45;margin:8px 0 0;opacity:.85}
+.w10s-host .w10s-text.in{animation:w10sIn .45s ease both}
+@keyframes w10sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.w10s-host .w10s-text.in{animation:none}}
 .w10s-host .w10s-mount{display:flex;flex-direction:column;justify-content:center}.w10s-host .w10s-mount>.w10s{flex:0 1 auto;width:100%;max-height:100%}
 [data-w10s="on"]{position:relative}
 `;
@@ -49,6 +56,44 @@
     });
   }
 
+  function linesFor(id) {
+    const lessons = window.COURSE && window.COURSE.lessons;
+    if (!id || !Array.isArray(lessons)) return [];
+    for (const l of lessons) for (const s of (l.sections || [])) if (s && s.sec === id) return s.lines || [];
+    return [];
+  }
+
+  // On-screen words for the current moment, taken from the lesson's own visual for that line.
+  function momentText(v) {
+    if (!v || typeof v !== "object") return null;
+    const clean = s => (s == null ? "" : String(s).replace(/\|/g, " ").trim());
+    switch (v.type) {
+      case "title": return { k: v.kicker, m: v.text };
+      case "item": return { k: v.n && v.of ? v.n + " of " + v.of : "", m: v.title, s: v.text };
+      case "compare": return { k: v.side, m: v.label, s: v.note };
+      case "diagram": return { k: v.kicker, m: v.caption };
+      case "formula": return { k: "", m: clean(v.label) };
+      case "issue": return { k: "", m: v.text, s: v.effect };
+      default: return { k: "", m: v.text };
+    }
+  }
+
+  function showText(st, index) {
+    if (!st.text) return;
+    const line = st.lines && st.lines[index];
+    const t = momentText(Array.isArray(line) ? line[1] : null);
+    st.text.replaceChildren();
+    if (!t || !(t.m || t.s)) return;
+    [["k", t.k], ["m", t.m], ["s", t.s]].forEach(([c, s]) => {
+      if (!s) return;
+      const p = document.createElement("p");
+      p.className = c;
+      p.textContent = String(s).replace(/\|/g, " ");
+      st.text.appendChild(p);
+    });
+    st.text.classList.remove("in"); void st.text.offsetWidth; st.text.classList.add("in");
+  }
+
   const hosts = new WeakMap();
 
   function install(style) {
@@ -79,7 +124,8 @@
         css();
         const id = secIdFor(section);
         const scene = id && window.W10_SCENES[id];
-        st.n = (section && (section.sentences && section.sentences.length)) || 0;
+        st.lines = (section && Array.isArray(section.lines)) ? section.lines : linesFor(id);
+        st.n = st.lines.length || (section && section.sentences && section.sentences.length) || 0;
         const root = st.root;
         if (!root) return r;
         if (!scene) { if (st.host) { st.host.classList.remove("on"); root.removeAttribute("data-w10s"); } st.scene = null; st.id = null; return r; }
@@ -95,8 +141,12 @@
           st.inner.className = "w10s-inner";
           const mountEl = document.createElement("div");
           mountEl.className = "w10s-mount";
-          mountEl.style.cssText = "width:100%;flex:1 1 auto;min-height:380px;position:relative";
+          mountEl.style.cssText = "width:100%;flex:1 1 auto;min-height:0;max-height:58%;position:relative;overflow:hidden";
           st.inner.appendChild(mountEl);
+          st.text = document.createElement("div");
+          st.text.className = "w10s-text";
+          st.text.setAttribute("aria-live", "polite");
+          st.inner.appendChild(st.text);
           st.host.appendChild(st.inner);
           try { scene.build(mountEl); } catch (e) { console.warn("[w10s] build", id, e); }
           st.built = id;
@@ -115,7 +165,7 @@
     style.step = function (index) {
       const r = base.step.apply(this, arguments);
       try {
-        if (st.scene && index >= 0) st.scene.step(index, st.n || 1);
+        if (st.scene && index >= 0) { st.scene.step(index, st.n || 1); showText(st, index); }
         else if (st.scene && index < 0) st.scene.reset();
       } catch (e) { console.warn("[w10s] step", st.id, e); }
       return r;
