@@ -232,9 +232,9 @@ TF("W8O2a-04", "W8O2a", 1, "Touch time measures active work, while elapsed time 
 TF("W8O2a-05", "W8O2a", 2, "If a delay is caused by another department, it must be excluded from the end-to-end customer journey measurement.", false,
   "This statement is false. The complete customer journey may include waiting across several departments. Responsibility for a delay is a separate question from whether that delay belongs within the process boundary.");
  
-DR("W8O2a-06", "W8O2a", 1, "In the slide example, the process has an elapsed duration of {1} days and active work of {2} days.",
+DR("W8O2a-06", "W8O2a", 1, "In the example, the process has an elapsed duration of {1} days and active work of {2} days.",
   [["21.1", "17.0", "4.1"], ["4.1", "21.1", "17.0"]],
-  "The slide example reports 21.1 days of elapsed duration and 4.1 days of active work. The difference illustrates how substantial process time can occur outside active processing.");
+  "The example reports 21.1 days of elapsed duration and 4.1 days of active work. The difference illustrates how substantial process time can occur outside active processing.");
  
 DR("W8O2a-07", "W8O2a", 3, "A delay caused by an activity within the organisation is classified as {1} waiting, while waiting for information the customer must provide is {2} waiting.",
   [["internal", "customer-attributable", "value-adding"], ["customer-attributable", "internal", "automated"]],
@@ -394,14 +394,14 @@ M("W8O1d-03", "W8O1d", 3, "A manager proposes eliminating every checking activit
 TF("W8O1d-04", "W8O1d", 1, "Rework occurs when an activity must be repeated or corrected because earlier work did not produce an acceptable result.", true,
   "This statement is true. Rework consumes additional effort because previously completed work requires correction or repetition. Identifying rework helps investigators understand why a process takes longer than its intended sequence suggests.");
  
-TF("W8O1d-05", "W8O1d", 2, "The slides demonstrate that Qasr has already reduced its actual guest arrival time from 82 minutes to 22 minutes.", false,
+TF("W8O1d-05", "W8O1d", 2, "The evidence shows that Qasr has already reduced its actual guest arrival time from 82 minutes to 22 minutes.", false,
   "This statement is false. The 82-minute and 22-minute before-and-after decomposition is an analytical illustration, not evidence of an implemented Qasr redesign. Understand establishes current performance before later phases develop and evaluate improvements.");
  
 DR("W8O1d-06", "W8O1d", 1, "Work that directly contributes to the customer's desired outcome is {1} work. Repeating an activity to correct an unacceptable result is {2}.",
   [["value-adding", "customer-attributable", "duplicated"], ["rework", "waiting", "checking"]],
   "Value-adding work directly contributes to the outcome the customer needs. Rework involves correcting or repeating earlier work, so distinguishing these categories helps investigators explain how process time is consumed.");
  
-DR("W8O1d-07", "W8O1d", 3, "In the slides' illustrative before-redesign decomposition, waiting accounts for {1} minutes and rework accounts for {2} minutes.",
+DR("W8O1d-07", "W8O1d", 3, "In the illustrative before-redesign decomposition, waiting accounts for {1} minutes and rework accounts for {2} minutes.",
   [["47", "14", "9"], ["12", "9", "14"]],
   "The illustrative before-redesign process contains 14 minutes of value-adding work, 47 minutes of waiting, 12 minutes of rework and 9 minutes of checking. These categories total 82 minutes and must not be confused with the separate Qasr observation reporting 8.1 minutes of value-adding activity.");
  
