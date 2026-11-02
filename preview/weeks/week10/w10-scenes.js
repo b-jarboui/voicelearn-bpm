@@ -3,7 +3,9 @@
 (() => {
   "use strict";
   if (window.W10_SCENES_HOST) return;
-  window.W10_SCENES = window.W10_SCENES || {};
+  // One registry for every week: weeks register window.VL_SCENES[sectionId] = { build, step, reset }.
+  window.W10_SCENES = window.W10_SCENES || window.VL_SCENES || {};
+  window.VL_SCENES = window.W10_SCENES;
 
   const CSS = `
 .w10s-host{position:absolute;inset:0;z-index:30;overflow:hidden;background:#fbf8f1;display:none;box-sizing:border-box;
