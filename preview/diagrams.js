@@ -7,7 +7,7 @@
   const parse = (s) => { s = String(s); const k = { "*": "hi", "!": "bad", "+": "good", "~": "ghost" }[s[0]]; return k ? [k, s.slice(1)] : ["", s]; };
   function txt(x, y, label, o = {}) {
     const size = o.size || 11, ls = String(label).split("|"), y0 = y - ((ls.length - 1) * size * 1.15) / 2;
-    return `<text x="${x}" y="${y0}" font-size="${size}" font-weight="${o.weight || 700}" text-anchor="${o.anchor || "middle"}" dominant-baseline="middle" fill="${o.fill || C.ink}"${o.italic ? ' font-style="italic"' : ""}>${ls.map((l, i) => `<tspan x="${x}" dy="${i ? size * 1.15 : 0}">${esc(l)}</tspan>`).join("")}</text>`;
+    return `<text x="${x}" y="${y0}" font-size="${size}" font-weight="${o.weight || 700}" text-anchor="${o.anchor || "middle"}" dominant-baseline="middle" fill="${o.fill || C.ink}"${o.italic ? ' font-style="italic"' : ""}>${ls.map((l, i) => `<tspan x="${x}" dy="${i ? size * 1.15 : 0}">${esc(l)}${i < ls.length - 1 ? " " : ""}</tspan>`).join("")}</text>`;
   }
   function box(x, y, w, h, label, k = "", size = 11) {
     const f = k === "hi" ? C.hi : k === "good" ? "rgba(61,214,140,.22)" : k === "bad" ? "rgba(255,107,107,.22)" : C.box;
