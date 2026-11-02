@@ -189,7 +189,7 @@ OR("W5O1a-10", "W5O1a", 1,
   "The organisation needs to understand its objectives before establishing priorities and evaluating improvement proposals. Authorisation should follow that evaluation so that the selected work has a defensible strategic purpose."
 );
 
-OR("W5O1a-11", "W5O1a", 3, "Qasr receives a proposal to automate guest check-in. Arrange the reasoning needed to decide whether it deserves funding.", ["Describe the proposed check-in change and its claimed benefit", "Trace that benefit upward to the strategic objective it claims to serve", "Judge the strength of that link against competing proposals", "Fund or defer the proposal, and record the reason in writing"], "Tracing works upward from the proposal to the objective it claims to serve, as in the slide's stock-count example. Only after the strength of that link is compared with competing proposals can the steering group fund or defer it, and the written reason keeps the decision traceable.");
+OR("W5O1a-11", "W5O1a", 3, "Qasr receives a proposal to automate guest check-in. Arrange the reasoning needed to decide whether it deserves funding.", ["Describe the proposed check-in change and its claimed benefit", "Trace that benefit upward to the strategic objective it claims to serve", "Judge the strength of that link against competing proposals", "Fund or defer the proposal, and record the reason in writing"], "Tracing works upward from the proposal to the objective it claims to serve, as in the stock-count example. Only after the strength of that link is compared with competing proposals can the steering group fund or defer it, and the written reason keeps the decision traceable.");
 
 MA("W5O1a-12", "W5O1a", 2,
   "Match each Qasr strategic objective with its stated organisational ambition.",
@@ -1027,7 +1027,7 @@ TF("W5O2c-04", "W5O2c", 1,
   "Strategic alignment establishes how a proposal supports organisational objectives, but investment decisions also require practical feasibility. A worthwhile proposal may need to be postponed, redesigned, or reconsidered when resources and implementation conditions make immediate delivery inappropriate."
 );
 
-TF("W5O2c-05", "W5O2c", 2, "Qasr should convert strong, moderate, and weak alignment ratings into numerical scores and automatically fund the two highest totals.", false, "Totals such as the slide's eight and six make the comparison arguable, but the weights behind them remain a judgement. Funding the two highest totals automatically would bypass sponsor priorities, feasibility and risk, which the steering group must still decide and own.");
+TF("W5O2c-05", "W5O2c", 2, "Qasr should convert strong, moderate, and weak alignment ratings into numerical scores and automatically fund the two highest totals.", false, "Totals such as eight and six make the comparison arguable, but the weights behind them remain a judgement. Funding the two highest totals automatically would bypass sponsor priorities, feasibility and risk, which the steering group must still decide and own.");
 
 DR("W5O2c-06", "W5O2c", 1,
   "A defensible funding decision uses strategic alignment as {1} and relies on authorised {2} to determine acceptable priorities and trade-offs.",
@@ -1934,7 +1934,7 @@ OR("W5O4a-11", "W5O4a", 3,
   "An unresolved dependency should be investigated and recorded rather than ignored or treated as automatic grounds for abandoning the initiative. Conditional acceptance can authorise limited further work while protecting the organisation from commitments that exceed the available evidence."
 );
 
-MA("W5O4a-12", "W5O4a", 2, "Match each output of the Organization Strategy phase with its purpose.", [["Agreed objectives with measures", "State what the organisation must achieve in measurable terms"], ["Objectives-to-process map", "Shows which processes deliver each strategic objective"], ["Trade-off decision record", "Records each trade-off with the sponsor's name against it"], ["Out-of-scope agreement", "States what the programme will not address and why"]], "The slides list these four outputs as what the phase must produce. Together they become the acceptance criteria for the whole programme, so every later phase can be judged against them.");
+MA("W5O4a-12", "W5O4a", 2, "Match each output of the Organization Strategy phase with its purpose.", [["Agreed objectives with measures", "State what the organisation must achieve in measurable terms"], ["Objectives-to-process map", "Shows which processes deliver each strategic objective"], ["Trade-off decision record", "Records each trade-off with the sponsor's name against it"], ["Out-of-scope agreement", "States what the programme will not address and why"]], "These four outputs are what the phase must produce. Together they become the acceptance criteria for the whole programme, so every later phase can be judged against them.");
 
 // W5O4b · Benefits, baselines, targets and accountability
 // Correct answers are written first; the bank player shuffles options.
@@ -1993,7 +1993,7 @@ DR("W5O4b-06", "W5O4b", 1,
   "A baseline establishes the performance level against which subsequent results can be compared. A target defines the intended improvement, allowing managers to assess whether actual outcomes meet agreed expectations."
 );
 
-DR("W5O4b-07", "W5O4b", 2, "The project manager is accountable for delivering {1}, while the line owner who keeps the process is accountable for delivering the {2}.", [["the approved change", "every strategic objective", "all future investment"], ["benefit", "supplier advertising", "departmental budget"]], "The slides state that the benefit belongs to the line owner who keeps the process, not to the project manager. The project manager delivers the change, but the benefit must be sustained and demonstrated after the project closes.");
+DR("W5O4b-07", "W5O4b", 2, "The project manager is accountable for delivering {1}, while the line owner who keeps the process is accountable for delivering the {2}.", [["the approved change", "every strategic objective", "all future investment"], ["benefit", "supplier advertising", "departmental budget"]], "The benefit belongs to the line owner who keeps the process, not to the project manager. The project manager delivers the change, but the benefit must be sustained and demonstrated after the project closes.");
 
 V("W5O4b-08", "W5O4b", 2,
   "Which diagram best distinguishes implementation from benefit realisation in Qasr's guest arrival improvement?",
