@@ -3510,7 +3510,7 @@
 
     const thresholds=[3,6,9,12,16,19];
 
-    bridgeSegments.forEach((_,j)=>{
+    Array.from({length:6}).forEach((_,j)=>{
       const installed=i>=thresholds[j];
 
       opacity(r,`.m-segment-${j}`,
