@@ -348,7 +348,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 (function () {
   var m = location.search.match(/[?&]week=(\d+)/), w = m ? +m[1] : 1; if (!(w >= 1 && w <= 14)) w = 1;
   window.WEEK = w; window.WEEKDIR = w === 1 ? "" : "weeks/week" + (w < 10 ? "0" : "") + w + "/";
-  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = w === 1 ? "" : "?v=10";
+  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = w === 1 ? "" : "?v=11";
   window.__wkWrite = function (list) { list.forEach(function (s) { document.write("<script src=\"" + window.WEEKDIR + s + (s.indexOf("?") < 0 ? v : "") + "\"><" + "/script>"); }); };
   window.__wkWrite(f);
 })();
