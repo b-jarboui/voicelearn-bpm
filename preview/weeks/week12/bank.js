@@ -812,7 +812,7 @@ TF("W12O2b-04", "W12O2b", 1,
 TF("W12O2b-05", "W12O2b", 2,
   "Once employees complete their training, implementation support should depend entirely on remote ticket queues because frontline assistance discourages independent working.",
   false,
-  "This statement is false. The slides emphasise support where the work occurs, particularly during the initial six weeks. Frontline assistance helps employees resolve unfamiliar problems while protecting service continuity. Remote ticket queues alone may be inadequate when immediate operational decisions are required.");
+  "This statement is false. Good practice puts support where the work occurs, particularly during the initial six weeks. Frontline assistance helps employees resolve unfamiliar problems while protecting service continuity. Remote ticket queues alone may be inadequate when immediate operational decisions are required.");
  
 DR("W12O2b-06", "W12O2b", 1,
   "Training that prepares employees for their actual responsibilities is called {1}, while assistance available where employees perform their work is called {2}.",
@@ -1589,7 +1589,7 @@ DR("W12O3a-07", "W12O3a", 3,
     ["waiver", "rollback trigger", "stop criterion"],
     ["justification", "verbal agreement", "revised deployment date"]
   ],
-  "A readiness waiver is an authorised exception to an agreed criterion, and the slides require the waiver and its reason to be recorded. Its justification must be documented so the decision remains transparent and accountable. Recording the waiver does not eliminate the unresolved condition or make unacceptable operational risk safe.");
+  "A readiness waiver is an authorised exception to an agreed criterion, and the waiver and its reason must be recorded. Its justification must be documented so the decision remains transparent and accountable. Recording the waiver does not eliminate the unresolved condition or make unacceptable operational risk safe.");
  
 V("W12O3a-08", "W12O3a", 2,
   "Which diagram best represents an accountable go/no-go decision process?",
@@ -1924,7 +1924,7 @@ M("W12O3c-01", "W12O3c", 1,
     "Every expected financial benefit must already have been fully realised",
     "All assisted arrival processing must be eliminated regardless of approved exceptions"
   ],
-  "The slides require an appointed and operating process owner as a condition of implementation closure. Active ownership establishes continuing accountability after the project team leaves. Closure does not require permanent project dependence or proof that every expected business benefit has already been realised.");
+  "An appointed and operating process owner is a condition of implementation closure. Active ownership establishes continuing accountability after the project team leaves. Closure does not require permanent project dependence or proof that every expected business benefit has already been realised.");
  
 M("W12O3c-02", "W12O3c", 2,
   "Why is a documented end-to-end performance measure insufficient by itself for Qasr's implementation closure?",
@@ -1944,7 +1944,7 @@ M("W12O3c-03", "W12O3c", 3,
     "Require every minor defect to disappear before any operational ownership can begin",
     "Remove the outstanding defects from the project record so the deployment can be reported as complete"
   ],
-  "The slides require outstanding defects to be transferred with named owners and dates. This allows unresolved work to remain visible and accountable after the project team leaves. Closure does not require pretending that every minor defect has vanished, but unassigned defects create an unacceptable accountability gap.");
+  "Outstanding defects must be transferred with named owners and dates. This allows unresolved work to remain visible and accountable after the project team leaves. Closure does not require pretending that every minor defect has vanished, but unassigned defects create an unacceptable accountability gap.");
  
 TF("W12O3c-04", "W12O3c", 1,
   "Implementation closure requires exception volumes to be within the range anticipated by the approved process design.",
@@ -1970,7 +1970,7 @@ DR("W12O3c-07", "W12O3c", 3,
     ["named owners", "unassigned responsibility", "automatic closure"],
     ["dates", "no follow-up commitments", "assumed completion"]
   ],
-  "The slides require outstanding defects to transfer with named owners and dates. These details establish accountability and allow unresolved work to be tracked after the implementation project closes. A defect should not disappear simply because the temporary project team is leaving.");
+  "Outstanding defects must transfer with named owners and dates. These details establish accountability and allow unresolved work to be tracked after the implementation project closes. A defect should not disappear simply because the temporary project team is leaving.");
  
 V("W12O3c-08", "W12O3c", 2,
   "Which visual correctly represents the five implementation closure conditions?",
