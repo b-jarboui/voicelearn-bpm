@@ -66,7 +66,7 @@
   function updateSkipButton(){const b=$("skipQuestion");if(!b)return;const st=cur();b.hidden=!(view==="player"&&st&&st.kind==="quiz"&&P.part!=="feedback");}
   function skipQuestion(auto=false){
     const st=cur();if(!st||st.kind!=="quiz"||P.part==="feedback")return;
-    if(!st.qs){st.qs=firstCheck(st.l);save();}
+    if(!st.qs){st.qs=st.sec?partCheck(st.l,st.sec):firstCheck(st.l);save();}
     const id=st.qs[P.q];if(!id)return;
     deferQuestion(id);playing=false;waiting=false;stopSpeech();
     P.part="main";P.sent=0;
@@ -1176,7 +1176,9 @@ function updateNavigation() {
     function seekPart(delta){if(view!=="player")return;const st=cur();if(st.kind!=="sec")return;const next=st.s+delta;if(next<0||next>=C.lessons[st.l].sections.length)return;pause();
       // Review navigation is a replay only; do not consume questions or alter mastery.
       const nx=P.queue[P.idx+1], rep={kind:"sec",l:st.l,s:next,replay:true};
-      if(delta>0&&nx&&nx.kind==="sec"&&nx.l===st.l&&nx.s===next)P.idx++;
+      // A part's own check is never skipped: "next" first goes to the questions on this part.
+      if(delta>0&&!st.replay&&nx&&nx.kind==="quiz"&&nx.sec)P.idx++;
+      else if(delta>0&&nx&&nx.kind==="sec"&&nx.l===st.l&&nx.s===next)P.idx++;
       else if(delta>0)P.queue[P.idx]=rep;
       else P.queue.splice(P.idx,0,rep);
       P.part="main";P.sent=0;P.q=0;save();load();updateNavigation();}
