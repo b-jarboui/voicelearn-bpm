@@ -3988,7 +3988,7 @@
         ["The forum is not asking you merely to produce an attractive diagram or repeat definitions from this lesson.",
           null],
 
-        ["It asks you to justify architectural choices using the unfamiliar organisation's circumstances and the principles from Jeston's chapter.",
+        ["It asks you to justify architectural choices using the unfamiliar organisation's circumstances and the principles from this week.",
           st(
             "Your forum task",
             "Develop and defend an evidence-based architectural argument for a different organisation."
