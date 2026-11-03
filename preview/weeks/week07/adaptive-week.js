@@ -691,7 +691,7 @@ O3f: [
       ["Instead of dismissing the argument, you examine whether the financial evidence changes your assessment.", q("What additional evidence would make membership renewals a stronger opening candidate?")],
       ["This is the reasoning expected in your Week Seven forum discussion.", null],
       ["Read Where to Start When Everything Is Broken and its exhibit before recommending a starting process.", iss("The forum case has its own evidence, so Qasr's recommendation cannot simply be copied.", "A different organisation")],
-      ["Support your post using relevant ideas from Jeston's Chapter Fifteen and the case evidence.", null],
+      ["Support your post using relevant ideas from this week and the case evidence.", null],
       ["Respond substantively to at least two classmates, including a constructive challenge to an alternative recommendation.", st("The forum tests your ability to justify a starting choice and engage thoughtfully with competing evidence.")],
       ["Remember that prioritisation is a reasoned decision about where meaningful improvement can realistically begin.", null]
     ]
