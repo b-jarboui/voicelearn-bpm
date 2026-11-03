@@ -348,7 +348,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 (function () {
   var m = location.search.match(/[?&]week=(\d+)/), w = m ? +m[1] : 1; if (!(w >= 1 && w <= 14)) w = 1;
   window.WEEK = w; window.WEEKDIR = w === 1 ? "" : "weeks/week" + (w < 10 ? "0" : "") + w + "/";
-  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = "?v=12";
+  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = "?v=13";
   window.__wkWrite = function (list) { list.forEach(function (s) { document.write("<script src=\"" + window.WEEKDIR + s + (s.indexOf("?") < 0 ? v : "") + "\"><" + "/script>"); }); };
   window.__wkWrite(f);
 })();
@@ -359,7 +359,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script src="lab/style-notebook.js?v=30"></script>
 <script src="lab/style-journey.js?v=30"></script>
 <script src="lab/style-board.js?v=2"></script>
-<script src="lab/style-motion.js?v=2"></script><script src="weeks/week10/cinematics.js?v=34"></script><script src="weeks/week10/w10-scenes.js?v=6"></script><script>window.__wkWrite(["scenes-week.js?v=1"]);</script>
+<script src="lab/style-motion.js?v=2"></script><script src="weeks/week10/cinematics.js?v=34"></script><script src="weeks/week10/w10-scenes.js?v=6"></script><script>window.__wkWrite(["scenes-week.js?v=2"]);</script>
 <script>window.__wkWrite(["moments.js" + (window.WEEK === 1 ? "?v=9" : "")]);</script>
 <script>
 (function () {
