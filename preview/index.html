@@ -15,7 +15,7 @@
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="scenes.css?v=24"><link rel="stylesheet" href="visual-v25.css?v=35"><link rel="stylesheet" href="s2/s2.css?v=2">
+<link rel="stylesheet" href="scenes.css?v=25"><link rel="stylesheet" href="visual-v25.css?v=35"><link rel="stylesheet" href="s2/s2.css?v=2">
 <style>
 /* Narrated presentation: the stage plays like a video; one Pause/Continue control. */
 :root{
@@ -348,7 +348,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 (function () {
   var m = location.search.match(/[?&]week=(\d+)/), w = m ? +m[1] : 1; if (!(w >= 1 && w <= 14)) w = 1;
   window.WEEK = w; window.WEEKDIR = w === 1 ? "" : "weeks/week" + (w < 10 ? "0" : "") + w + "/";
-  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = w === 1 ? "" : "?v=11";
+  var f = w === 1 ? ["course.js?v=9", "adaptive.js?v=9", "bank.js?v=9"] : ["course.js", "adaptive-week.js", "bank.js"], v = "?v=12";
   window.__wkWrite = function (list) { list.forEach(function (s) { document.write("<script src=\"" + window.WEEKDIR + s + (s.indexOf("?") < 0 ? v : "") + "\"><" + "/script>"); }); };
   window.__wkWrite(f);
 })();
@@ -364,7 +364,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=3\"><" + "/script>"); }); document.write("<script src=\"player.js?v=33\"><" + "/script>"); }
+  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=4\"><" + "/script>"); }); document.write("<script src=\"player.js?v=34\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();

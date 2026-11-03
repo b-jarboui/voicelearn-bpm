@@ -20,9 +20,9 @@
   M("O1a-02", "O1a", 2, "You book a taxi in an app. What is the trigger of this process?",
     ["You request the ride in the app", "The driver ends the trip", "Your card is charged", "The app asks you for a rating"],
     "The trigger is what starts the process, and here that is your request. Everything else happens later, in the sequence or at the end.");
-  M("O1a-03", "O1a", 3, "A government office calls 'Scan and archive files' its key process. Using Jeston's test, what is the best response?",
+  M("O1a-03", "O1a", 3, "A government office calls 'Scan and archive files' its key process. Using the process test, what is the best response?",
     ["Ask who the customer is and what outcome they get; if nobody can say, it is a task, not yet a process", "Accept it, because anything with steps is a process", "Rename it 'Archive Management' so it sounds like a process", "Count how many files are scanned per hour"],
-    "Jeston's test says: if you can't name the customer and the outcome, you haven't found a process. Scanning is probably one task inside a bigger process.");
+    "The process test says: if you can't name the customer and the outcome, you haven't found a process. Scanning is probably one task inside a bigger process.");
   TF("O1a-04", "O1a", 1, "Work only counts as a process, rather than a task list, when it crosses more than one function.", true,
     "True. Crossing functions is what makes it a process. Steps done inside one team are closer to a task list.");
   TF("O1a-05", "O1a", 2, "A process ends when the last department finishes its part, whether or not the customer has received anything.", false,

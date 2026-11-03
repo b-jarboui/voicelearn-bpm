@@ -344,7 +344,8 @@
     lookEl.toggleAttribute("data-tall", lookEl.clientHeight / Math.max(1, lookEl.clientWidth) > 1.75);
   }
   // The quiz/result stage takes the colours of the chosen look (the other looks keep the default dark blue).
-  function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey"); if (["notebook", "journey"].includes(VS.look)) stageEl.classList.add("look-" + VS.look); }
+  // Questions and other stage screens wear the same look the learner chose for the lessons.
+  function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey", "look-board", "look-motion"); stageEl.classList.add("look-" + (VS.look || "board")); }
   function showLook(on) { lookEl.hidden = !on; stageEl.hidden = on; }
   function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); }
   function loadLook(key, lessonLabel, title, body) {
