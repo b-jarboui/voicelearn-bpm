@@ -856,7 +856,7 @@
                 ["Any criterion can be defended, but only if you explain which risk in the evidence it addresses.", st("A strong recommendation links one criterion to case evidence and explains its consequences.")],
                 ["That is the challenge waiting for you in this week's discussion forum.", null],
                 ["Please post your own answer before reading your classmates' posts, so your thinking stays genuinely your own.", dg("Building an evidence-based argument", D.flow(["Case|evidence", "Your own|post", "Two substantive|replies", "+Respectful|disagreement"]), "Post your own view first, then engage two classmates, disagreeing with at least one.")],
-                ["Support your position with Jeston's Chapters 7 and 8, because assertion without evidence earns no credit.", null],
+                ["Support your position with this week's BPM concepts and the case evidence, because assertion without evidence earns no credit.", null],
                 ["Then reply substantively to at least two classmates, and disagree with at least one of them.", st("Post first, reply to two, disagree with one, and cite the chapter.")],
                 ["Honest disagreement matters, because it tests reasoning in a way that polite agreement never can.", null],
                 ["Your forum contributions across the term count toward Assessment 4, which rewards participation.", st("Forum contributions across the term are what Assessment 4 (Participation) rewards.")],
