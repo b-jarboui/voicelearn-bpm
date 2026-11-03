@@ -2633,16 +2633,16 @@ DR("W10O3e-10", "W10O3e", 3,
   "The Week 10 forum uses the case titled {1}, and learners should support their reasoning with {2}.",
   [
     ["The Role That Was Never Designed", "The Guest Host's Eleven-Week Review", "The Kiosk Development Decision"],
-    ["Jeston, Chapter 18", "Jeston, Chapter 2", "the kiosk installation checklist"]
+    ["the People-phase concepts", "personal opinion alone", "the kiosk installation checklist"]
   ],
-  "The asynchronous forum case is titled The Role That Was Never Designed. Learners must use the supplied case and exhibit and support their reasoning with the relevant core reading, Jeston Chapter 18. The forum provides an opportunity to transfer People-phase concepts beyond the Qasr running case."
+  "The asynchronous forum case is titled The Role That Was Never Designed. Learners must use the supplied case and exhibit and support their reasoning with the People-phase concepts from this week. The forum provides an opportunity to transfer People-phase concepts beyond the Qasr running case."
 );
  
 OR("W10O3e-11", "W10O3e", 3,
   "Arrange these steps in a logical sequence for completing the Week 10 forum learning activity.",
   [
     "Read The Role That Was Never Designed and its accompanying exhibit",
-    "Develop an evidence-based role and performance-measurement argument using Jeston Chapter 18",
+    "Develop an evidence-based role and performance-measurement argument using the People-phase concepts",
     "Post a substantive initial response by mid-week before examining classmates' contributions",
     "Respond meaningfully to at least two peers and challenge or extend their reasoning",
     "Read the facilitator's end-of-week summary and reflect on the arguments"
