@@ -93,7 +93,7 @@
     "w4-O1a-05", "O1a", 2,
     "People change management should run through every BPM phase rather than appear only just before implementation.",
     true,
-    "True. Jeston treats people change management as a continuous essential. Starting early surfaces concerns while there is still time to act on them."
+    "True. BPM treats people change management as a continuous essential. Starting early surfaces concerns while there is still time to act on them."
   );
   DR(
     "w4-O1a-06", "O1a", 1,
@@ -106,7 +106,7 @@
   );
   DR(
     "w4-O1a-07", "O1a", 2,
-    "In Jeston's framework, people change management is a {1} essential, not an activity left until {2}.",
+    "In the BPM framework, people change management is a {1} essential, not an activity left until {2}.",
     [
       ["continuous", "temporary", "technical"],
       ["implementation", "planning", "measurement"]
@@ -2210,7 +2210,7 @@
     "w4-O3g-02", "O3g", 2,
     "Which reply best meets the forum's expectations?",
     [
-      "A reasoned challenge to a peer's diagnosis, grounded in the case and Chapter 25",
+      "A reasoned challenge to a peer's diagnosis, grounded in the case and the week's concepts",
       "A short note praising a peer's post and agreeing with all of it",
       "A summary of your own post repeated under a peer's reply",
       "A question asking the facilitator for the model answer"
@@ -2236,9 +2236,9 @@
   );
   TF(
     "w4-O3g-05", "O3g", 2,
-    "Citing Jeston's Chapter 25 is optional in the forum post.",
+    "Supporting your forum post with the week's concepts is optional.",
     false,
-    "False. The forum rules ask you to cite the chapter, which gives everyone a shared evidence base."
+    "False. The forum rules ask you to support your post with the week's concepts, which gives everyone a shared evidence base."
   );
   TF(
     "w4-O3g-06", "O3g", 2,
@@ -2274,9 +2274,9 @@
           "Diagnose|the causes",
           "Test for|defects",
           "Propose|with costs",
-          "Cite|Jeston Ch. 25"
+          "Use|course concepts"
         ]),
-        "Read the evidence, diagnose causes, test for defects, propose costed changes and cite the chapter"
+        "Read the evidence, diagnose causes, test for defects, propose costed changes and support them with the week's concepts"
       ],
       [
         D.flow([

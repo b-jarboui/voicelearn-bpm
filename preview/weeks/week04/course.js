@@ -254,7 +254,7 @@
           null
         ],
         [
-          "Jeston treats this responsibility as a continuous essential across every BPM phase, rather than a separate finishing activity.",
+          "BPM treats this responsibility as a continuous essential across every phase, rather than a separate finishing activity.",
           dg(
             "Change management throughout BPM",
             D.route([], { band: true }),
@@ -610,7 +610,7 @@
           null
         ],
         [
-          "That is one cause of resistance in Jeston's chapter, genuine knowledge that the new design fails a real case.",
+          "That is one recognised cause of resistance: genuine knowledge that the new design fails a real case.",
           dg(
             "Why people resist a better process",
             D.flow([
@@ -2245,7 +2245,7 @@
               "Diagnose|the causes",
               "Test for|defects",
               "Propose|with costs",
-              "+Cite|Jeston Ch. 25"
+              "+Use|course concepts"
             ]),
             "A strong post reads the evidence, diagnoses causes, tests for defects, proposes costed changes, and cites the chapter."
           )
@@ -2255,13 +2255,13 @@
           null
         ],
         [
-          "Support your reasoning by citing Jeston's chapter twenty-five, because the chapter is your shared evidence base.",
+          "Support your reasoning with this week's change-management concepts, because they are your shared evidence base.",
           it(
             3,
             4,
             "book",
             "Cite the chapter",
-            "Ground your argument in Jeston, Chapter 25."
+            "Ground your argument in this week's change-management concepts."
           )
         ],
         [

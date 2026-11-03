@@ -2873,9 +2873,9 @@ O1a: [
               "Diagnose|the causes",
               "Test for|defects",
               "Propose|with costs",
-              "+Cite|Jeston Ch. 25"
+              "+Use|course concepts"
             ]),
-            "A strong post moves from evidence to diagnosis, testing, costed proposals, and citation."
+            "A strong post moves from evidence to diagnosis, testing, costed proposals, and support from the week's concepts."
           )
         ],
         [
@@ -2883,13 +2883,13 @@ O1a: [
           null
         ],
         [
-          "Support your reasoning by citing Jeston's chapter twenty-five, because it gives everyone a shared evidence base.",
+          "Support your reasoning with this week's change-management concepts, because they give everyone a shared evidence base.",
           it(
             3,
             4,
             "book",
             "Cite the chapter",
-            "Ground your argument in Jeston, Chapter 25."
+            "Ground your argument in this week's change-management concepts."
           )
         ],
         [
@@ -2982,7 +2982,7 @@ O1a: [
         [
           "It might suggest a role in designing the new standard instead, and cite the chapter to support that view.",
           st(
-            "Match the response to the cause, and support it with Jeston, Chapter 25."
+            "Match the response to the cause, and support it with this week's change-management concepts."
           )
         ],
         [
