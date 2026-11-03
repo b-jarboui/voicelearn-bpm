@@ -1053,7 +1053,7 @@
     ["Before moving forward, you will apply this reasoning independently through the discussion forum called Automating the Exception.", null],
     ["The forum presents an unfamiliar organisation, so you must examine its evidence rather than simply repeat Qasr's circumstances.", t("Discussion forum", "Automating the Exception: make and defend a development decision for an unfamiliar organisation.")],
     ["Your task is to defend a configure-or-customise position while considering whether the exception itself should remain.", null],
-    ["A convincing response explains the process outcome, acknowledges trade-offs and supports its reasoning using Jeston Chapter 19.", st("A strong forum contribution defends a build decision through process reasoning and evidence rather than software preference alone.")],
+    ["A convincing response explains the process outcome, acknowledges trade-offs and supports its reasoning with this week's concepts.", st("A strong forum contribution defends a build decision through process reasoning and evidence rather than software preference alone.")],
     ["Post your substantive response by mid-week, then engage critically with at least two classmates' contributions.", null],
     ["Challenge or extend their reasoning rather than merely agreeing, and read the facilitator's summary at week's end.", q("Can you challenge another recommendation respectfully by identifying a process consequence its author has overlooked?")],
     ["The forum is formative, and its participation contributes to Assessment Four in Week 14.", null],
