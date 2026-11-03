@@ -205,12 +205,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[5]={week:5,title:"Organization 
     "exhibitTitle": "Exhibit 1 - The three initiatives",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 13"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

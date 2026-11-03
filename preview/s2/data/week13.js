@@ -253,12 +253,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[13]={week:13,title:"The Realize
     "exhibitTitle": "Exhibit 1 - Claimed benefits and objections",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 21"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

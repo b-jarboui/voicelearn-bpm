@@ -209,12 +209,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[2]={week:2,title:"Drivers and T
     "exhibitTitle": "Exhibit 1 - The three proposals",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapters 4-5"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",
@@ -226,7 +222,7 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[2]={week:2,title:"Drivers and T
      ]
     ],
     "questions": [
-     "Classify each of the three pressures using Jeston's drivers and triggers. Which are drivers and which are triggers, and does the distinction change what the bank should do?",
+     "Classify each of the three pressures using this week's drivers and triggers. Which are drivers and which are triggers, and does the distinction change what the bank should do?",
      "The three proposals target one process. Argue for how the bank should sequence them, and be explicit about what is lost by whatever you sequence last.",
      "The COO's offshoring proposal is the cheapest route to the cost benchmark. Evaluate whether it would survive the regulatory driver, and justify your answer."
     ],
@@ -260,7 +256,7 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[2]={week:2,title:"Drivers and T
     "contract": {
      "asks": [
       {
-       "text": "Classify each of the three pressures using Jeston's drivers and triggers. Which are drivers and which are triggers, and does the distinction change what the bank should do?",
+       "text": "Classify each of the three pressures using this week's drivers and triggers. Which are drivers and which are triggers, and does the distinction change what the bank should do?",
        "kind": "prose",
        "count": null,
        "options": []

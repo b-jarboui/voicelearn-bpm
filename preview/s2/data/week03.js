@@ -244,12 +244,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[3]={week:3,title:"BPM Technolog
     "exhibitTitle": "Exhibit 1 - Business case vs actual, at 18 months",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapters 7-8"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

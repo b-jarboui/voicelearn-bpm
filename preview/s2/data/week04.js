@@ -240,12 +240,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[4]={week:4,title:"BPM and Organ
     "exhibitTitle": "Exhibit 1 - Six weeks after go-live",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 25"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

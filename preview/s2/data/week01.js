@@ -358,12 +358,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[1]={week:1,title:"Fundamentals 
     "exhibitTitle": "Exhibit 1 - Departmental KPIs for the month in question",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapters 1-2"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

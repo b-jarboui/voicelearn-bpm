@@ -250,12 +250,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[8]={week:8,title:"The Understan
     "exhibitTitle": "Exhibit 1 - Three views of the same process",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 16"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

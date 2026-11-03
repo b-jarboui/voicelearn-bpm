@@ -272,12 +272,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[14]={week:14,title:"The Sustain
     "exhibitTitle": "Exhibit 1 - Two years of the end-to-end measure",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 22"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

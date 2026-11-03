@@ -214,12 +214,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[6]={week:6,title:"Process Archi
     "exhibitTitle": "Exhibit 1 - Audit findings",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 14"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

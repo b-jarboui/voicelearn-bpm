@@ -210,12 +210,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[10]={week:10,title:"The People 
     "exhibitTitle": "Exhibit 1 - Gate Coordinator: designed vs supported",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 18"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",

@@ -255,12 +255,8 @@ window.S2_DATA=window.S2_DATA||{};window.S2_DATA[9]={week:9,title:"The Innovate 
     "exhibitTitle": "Exhibit 1 - Option comparison",
     "exhibit": [
      [
-      "Core reading",
-      "Jeston, Chapter 17"
-     ],
-     [
       "Estimated time",
-      "90 minutes self-paced (45 min case and reading, 30 min initial post, 15 min replies)"
+      "90 minutes self-paced (45 min case study, 30 min initial post, 15 min replies)"
      ],
      [
       "Outcomes evidenced",
