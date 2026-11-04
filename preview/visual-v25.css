@@ -491,9 +491,22 @@ body:not([data-view="player"]) .card:hover {
   overscroll-behavior: contain;
 }
 
+.later-list {
+  grid-auto-rows: max-content;
+  align-content: start;
+}
+
 .later-resume {
   min-height: 52px;
+  height: auto;
   padding: 12px 14px;
+  align-items: flex-start;
+}
+
+.later-resume span {
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.35;
 }
 
 /* =========================================================
