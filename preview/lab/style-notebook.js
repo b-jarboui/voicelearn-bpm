@@ -942,6 +942,7 @@ body .player .look.vl-notebook {
     ).slice(0, 12);
 
     labels.forEach((label, i) => {
+      const markup = label.innerHTML;
       const original = label.textContent;
       const match = original.match(
         /(\d+(?:\.\d+)?)\s*(min|mins|minutes|%)/i
@@ -962,7 +963,7 @@ body .player .look.vl-notebook {
             state.value.toFixed(decimals) + " " + match[2];
         },
         onComplete: () => {
-          label.textContent = original;
+          label.innerHTML = markup;
         }
       }, .4 + i * .08);
     });
@@ -1206,7 +1207,7 @@ body .player .look.vl-notebook {
     });
 
     entry.originalLabels?.forEach(([e, text]) => {
-      e.textContent = text;
+      e.innerHTML = text;
     });
   }
 
@@ -1338,7 +1339,7 @@ body .player .look.vl-notebook {
       prepareDiagram(entry);
       entry.originalLabels = Array.from(
         entry.element.querySelectorAll("svg text")
-      ).map(e => [e, e.textContent]);
+      ).map(e => [e, e.innerHTML]);
     });
 
     scroll.scrollTop = 0;

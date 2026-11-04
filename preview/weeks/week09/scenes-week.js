@@ -1123,7 +1123,7 @@
           { L: "Weigh it all together", a: M(clear(), ON("brace", "pAll"), { rBen: { f: HL }, rCost: { f: HL }, rRisk: { f: HL }, rTime: { f: HL } }), p: "brace" },
           { L: "Test feasibility", a: M(clear(), row("rFea"), OFF("brace", "relink", "block"), { feaA: { o: 1 }, feaB: { o: 1, w: 0.3 } }), p: "feaB" },
           { L: "Not cheapest or fastest", a: M(clear(), ON("nope1", "nope2", "nope3"), { nopeX: { o: 1, w: 0.6 } }), p: "nope3" },
-          { L: "A choice you can defend", dur: 1.2, a: M(clear(), { board: { o: 0.2 }, cardA: { o: 0.2 }, cardB: { o: 0.2 }, memo: { o: 1 }, pDef: { o: 1, w: 0.6 } }), e: "back", p: "memo" }
+          { L: "A choice you can defend", dur: 1.2, a: M(clear(), { board: { o: 0.2 }, cardA: { o: 0 }, cardB: { o: 0 }, memo: { o: 1 }, pDef: { o: 1, w: 0.6 } }), e: "back", p: "memo" }
         ];
       })()
     });
@@ -3020,7 +3020,7 @@
         Rr += G("c1", R(104, 170, 20, 20, "#fff", 4, 'stroke="' + K.navy + '" stroke-width="2"') + T(132, 186, "Desk staffed, peak", 15, K.ink, "start"), 200, 180);
         Rr += G("c2", R(104, 204, 20, 20, "#fff", 4, 'stroke="' + K.navy + '" stroke-width="2"') + T(132, 220, "January plan", 15, K.ink, "start"), 200, 214);
         Rr += G("ck1", CHECK(114, 180, K.green, 3) , 114, 180) + G("ck2", CHECK(114, 214, K.green, 3), 114, 214) + G("ckB", CHECK(114, 146, K.green, 3), 114, 146);
-        Rr += G("elseA", P("M310 214 C340 214 350 240 350 260", K.navy, 3) + R(300, 262, 96, 40, "#e3eef8", 8, 'stroke="' + K.navy + '" stroke-width="2"') + T(348, 280, "Else: A +", 15, K.navy, "middle", 'class="vw-n"') + T(348, 296, "reuse", 15, K.navy, "middle", 'class="vw-n"'), 348, 270);
+        Rr += G("elseA", P("M310 214 C340 214 350 240 350 260", K.navy, 3) + R(300, 262, 96, 40, "#e3eef8", 8, 'stroke="' + K.navy + '" stroke-width="2"') + T(348, 276, "Else: A +", 15, K.navy, "middle", 'class="vw-n"') + T(348, 298, "reuse", 15, K.navy, "middle", 'class="vw-n"'), 348, 270);
         Rr += G("tgtS", AT(200, 256, R(-80, -15, 160, 30, "rgba(255,255,255,.9)", 6, 'stroke="#2b6f9e" stroke-width="2.5" stroke-dasharray="5 4"') + T(0, 6, "Minutes = targets", 15, "#2b6f9e", "middle", 'class="vw-n"'), 1, -4), 200, 256);
         Rr += G("rival", R(14, 70, 70, 100, "#f6f1fa", 8, 'stroke="' + K.plum + '" stroke-width="2"') + T(49, 100, "Best", 15, K.plum, "middle", 'class="vw-n"') + T(49, 120, "rival", 15, K.plum, "middle", 'class="vw-n"') + P("M28 140 H70 M28 152 H62", "#c9b8e0", 3), 49, 120);
         Rr += G("vsR", T(49, 196, "vs", 18, K.ink), 49, 190);

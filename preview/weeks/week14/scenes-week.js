@@ -553,7 +553,7 @@
         [[5, "Month 5"], [13, "Month 13"], [22, "Month 22"]].forEach(function (m) { ch += line(X(m[0]), 226, X(m[0]), 234, "sN", { "stroke-width": 2 }) + TX(m[0] === 22 ? 316 : X(m[0]), 251, m[1], 14, "fN"); });
         ch += circ(X(5), Y(24), 7, "fG") + TX(X(5), Y(24) + 26, "24", 18, "fG");
         ch += R("1", "dr", path("M" + X(5) + " " + r1(Y(24)) + " L" + X(13) + " " + r1(Y(28)) + " L" + X(22) + " " + r1(Y(39)), "sO f0 dw", { pathLength: 1, "stroke-width": 4, "stroke-linecap": "round", "stroke-linejoin": "round" }));
-        ch += R("1", "pop", circ(X(13), Y(28), 7, "fO") + TX(X(13) + 14, Y(28) + 22, "28", 18, "fO"));
+        ch += R("1", "pop", circ(X(13), Y(28), 7, "fO") + TX(X(13) - 18, Y(28) - 18, "28", 18, "fO"));
         ch += R("1", "pop", circ(X(22), Y(39), 8, "fO") + TX(X(22) - 2, Y(39) - 14, "39", 20, "fO"));
         ch += R("2", "up", arrow(338, 150, 338, Y(39) + 4, "sO", 2.6) + arrow(338, 150, 338, Y(24) - 4, "sO", 2.6) + chip(290, 178, "+15 min", "o", 15));
         var chev = ""; for (var m = 17; m <= 22; m++) chev += path("M" + r1(X(m) - 4.5) + " 222 l4.5 -6 l4.5 6", "sO f0", { "stroke-width": 2.4, "stroke-linecap": "round" });
@@ -567,7 +567,7 @@
       on: function (A) {
         A.num(".bigv", A.k >= 1 ? 39 : 24, { from: A.fresh ? 24 : undefined, dur: 1.4 });
         A.fill(".bigv", A.k >= 1 ? "var(--o)" : "var(--n)");
-        A.cls(".chartG", "dim", A.k === 3);
+        A.op(".chartG", A.k === 3 ? 0 : 1);
       }
     });
 
@@ -594,8 +594,8 @@
     P.push({
       svg: function () {
         var s = card(44, 40, 272, 104, "p") + icon("coin", 92, 92, 1.8) + TX(214, 72, "Rate waiver limit", 16, "fN") +
-          TX(202, 120, "AED", 20, "fO e") + TX(208, 120, "400", 40, "fO s wv");
-        s += R("0", "up", TX(214, 138, "was AED 400", 13, "fM"));
+          TX(202, 120, "AED", 20, "fO e") + TX(208, 108, "400", 36, "fO s wv");
+        s += R("0", "up", TX(214, 148, "was AED 400", 13, "fM"));
         s += R("1", "up", TX(180, 172, "Waiver discretion", 15, "fN") + rect(40, 182, 280, 20, "fL sN", { rx: 10, "stroke-width": 1.6 }) +
           rect(42, 184, 276, 16, "dfill fG", { rx: 8 }) + TX(40, 220, "AED 0", 13, "fM s") + TX(320, 220, "AED 400", 13, "fM e"));
         s += R("1", "pop", icon("clock", 96, 244, 1.05) + qB(114, 232, 9) + chip(214, 244, "Time impact unknown", "pm", 14));
@@ -794,7 +794,7 @@
         var s = bars({ x: 40, base: 236, h: 160, max: 90, bw: 62, gap: 36, fs: 24, items: [
           { v: 82, l: "Baseline", r: "0", c: "fM" }, { v: 24, l: "Month 5", r: "0", c: "fG" }, { v: 39, l: "Month 22", r: "1", c: "fO" }] });
         s += R("1", "up", arrow(212, 186, 258, 174, "sO", 3));
-        var pins = [["Ownership weakened", 60], ["Review neglected", 96], ["Changes accumulated", 132]];
+        var pins = [["Ownership weakened", 48], ["Review neglected", 82], ["Changes accumulated", 116]];
         pins.forEach(function (p, j) { s += R("2", "l", icon("pin", 158, p[1] - 2, 0.75) + chip(256, p[1], p[0], "po", 14)); });
         return tag("Qasr evidence", "pm") + s;
       }
@@ -1085,7 +1085,7 @@
     P.push({
       svg: function () {
         var s = card(14, 38, 332, 220, "p") + rect(56, 66, 26, 140, "fW sN", { rx: 13, "stroke-width": 2 }) + circ(69, 214, 18, "fO") +
-          rect(62, 140, 12, 76, "merc fO", { rx: 4 }) + TX(69, 244, "Room", 13, "fN") + TX(69, 258, "thermometer", 13, "fN");
+          rect(62, 140, 12, 76, "merc fO", { rx: 4 }) + TX(92, 250, "Room thermometer", 13, "fN");
         s += rect(206, 64, 120, 46, "fL sN", { rx: 6, "stroke-width": 2 }) + [76, 86, 96].map(function (y) { return line(218, y, 314, y, "sM", { "stroke-width": 2 }); }).join("") +
           TX(266, 134, "Cooling unit", 14, "fN") + rect(244, 156, 44, 26, "fM", { rx: 13 }) + circ(256, 169, 10, "fW") + TX(266, 204, "Switch untouched", 14, "fM");
         s += G("rise", path("M140 200 q-8 -12 0 -24 q8 -12 0 -24", "sO f0", { "stroke-width": 3, "stroke-linecap": "round" })) +
@@ -1908,7 +1908,7 @@
         ["1 Measure", "2 Review", "3 Improve", "4 Embed"].forEach(function (n, j) { var p = ringPts(180, 140, 66, 4)[j]; d += chip(p[0], p[1], n, "n", 13); });
         return tag("Qasr + proposal", "po") + R("0-1", "f", G("bothG hl", a)) + b + R("2-2", "pop", c) + R("3", "pop", d);
       },
-      on: function (A) { A.cls(".bothG", "dim", A.k === 1); }
+      on: function (A) { A.op(".bothG", A.k === 1 ? 0 : 1); }
     });
 
     define({
@@ -3952,7 +3952,7 @@
           icon("spark", 180, 112, 0.8) + TX(180, 226, "Conditions change", 13, "fO"));
         return s;
       },
-      on: function (A) { A.cls(".tg9", "dim", A.k >= 2); A.op(".tg9", A.k === 1 ? 0 : 1); }
+      on: function (A) { A.op(".tg9", A.k === 0 ? 1 : 0); }
     });
 
     /* V4 · lines 9-10 — illustration: a restaurant improves speed under a supervising team; the team leaves - who protects it?
@@ -4303,7 +4303,7 @@
         var s = TX(180, 58, "Guests using kiosks", 15, "fN") + rect(30, 92, 300, 46, "fM", { rx: 8 }) + rect(30, 92, 300 * 0.65, 46, "abar fG", { rx: 8 }) +
           icon("kiosk", 50, 115, 0.9, "fW") + TX(66, 121, "Kiosk users", 15, "nh fW s") + icon("desk", 300, 112, 0.8, "fW") + TX(170, 182, "65", 40, "fG apct") + TX(204, 182, "%", 22, "fG s");
         s += R("1", "up", [["Month 5", 65, "fG"], ["Month 13", 61, "fO"], ["Month 22", 48, "fO"]].map(function (m) { return line(30 + 3 * m[1], 86, 30 + 3 * m[1], 144, m[2] === "fG" ? "sG" : "sO", { "stroke-width": 2.4 }); }).join("") +
-          TX(213, 160, "61", 13, "fO") + TX(174, 82, "48", 13, "fO"));
+          TX(213, 78, "61", 13, "fO") + TX(174, 82, "48", 13, "fO"));
         s += R("2", "pop", line(174, 200, 225, 200, "sO", { "stroke-width": 3 }) + line(174, 194, 174, 206, "sO", { "stroke-width": 3 }) + line(225, 194, 225, 206, "sO", { "stroke-width": 3 }) +
           chip(110, 228, "−17 points", "o", 14) + icon("clock", 256, 228, 1) + TX(330, 234, "Benefit shrinks", 13, "fO e") + G("rise", icon("spark", 288, 210, 0.6)));
         return tag("Qasr evidence", "pm") + s;

@@ -391,8 +391,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           let s = H("gm", person(64, 186, 1.9, C.plum) + F("M92 150 L118 136 L118 168 Z", C.plum) + R(84, 146, 10, 10, C.plum, 2) + P("M124 140 q8 12 0 24 M132 134 q12 18 0 36", C.plum, 2.4, 'class="a-blink"'));
           s += H("bb", bubble(14, 50, 150, 40, "Redesign now!", { sz: 16, st: C.plum, fg: C.plum, tx: 40 }));
           s += H("cl", R(36, 220, 52, 36, C.white, 3, `stroke="${C.orange}" stroke-width="2"`) + P("M36 220 L62 240 L88 220", C.orange, 2) + chip(62, 276, "Guest complaint", { sz: 13, st: C.orange, fg: C.orange }));
-          s += H("ca", R(186, 36, 96, 114, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + monitor(234, 76, 1.5) + T(234, 124, "New", 15, C.navy) + T(234, 140, "software", 15, C.navy));
-          s += H("cb", R(294, 36, 96, 114, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + person(320, 88, 0.8, C.green) + person(342, 84, 0.8, C.navy2) + person(364, 88, 0.8, C.green) + T(342, 124, "Staffing", 15, C.navy) + T(342, 140, "change", 15, C.navy));
+          s += H("ca", R(186, 36, 96, 114, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + monitor(234, 76, 1.5) + T(234, 114, "New", 15, C.navy) + T(234, 140, "software", 15, C.navy));
+          s += H("cb", R(294, 36, 96, 114, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + person(320, 88, 0.8, C.green) + person(342, 84, 0.8, C.navy2) + person(364, 88, 0.8, C.green) + T(342, 114, "Staffing", 15, C.navy) + T(342, 140, "change", 15, C.navy));
           s += H("qa", O(276, 40, 16, C.orange) + T(276, 47, "?", 20, C.white));
           s += H("qb", O(384, 40, 16, C.orange) + T(384, 47, "?", 20, C.white));
           s += H("nj", chip(288, 176, "Not yet justified", { sz: 14, st: C.orange, fg: C.orange, dash: 1 }));

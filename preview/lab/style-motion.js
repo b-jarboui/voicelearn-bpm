@@ -1760,6 +1760,7 @@ body .player .look.vm-root {
     ).slice(0, 12);
  
     labels.forEach((text, i) => {
+      const markup = text.innerHTML;
       const original = text.textContent;
       const match = original.match(
         /(\d+(?:\.\d+)?)\s*(mins?)/i
@@ -1788,7 +1789,7 @@ body .player .look.vm-root {
               " " + unit;
           },
           onComplete: () => {
-            text.textContent = original;
+            text.innerHTML = markup;
           }
         },
         .4 + i * .1
@@ -2219,7 +2220,7 @@ body .player .look.vm-root {
      */
  
     scene.minuteLabels?.forEach(([n, value]) => {
-      n.textContent = value;
+      n.innerHTML = value;
     });
  
     scene.complete = true;
@@ -2503,7 +2504,7 @@ body .player .look.vm-root {
       /^\s*\d+(?:\.\d+)?\s*mins?\s*$/i.test(
         n.textContent || ""
       )
-    ).map(n => [n, n.textContent]);
+    ).map(n => [n, n.innerHTML]);
  
     return scene;
   }

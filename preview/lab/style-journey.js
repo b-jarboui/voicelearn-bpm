@@ -1272,6 +1272,7 @@ body .player .look.vl-journey {
     ).slice(0, 12);
 
     labels.forEach((label, i) => {
+      const markup = label.innerHTML;
       const original = label.textContent;
       const match = original.match(
         /(\d+(?:\.\d+)?)\s*(min|mins|minutes|%)/i
@@ -1292,7 +1293,7 @@ body .player .look.vl-journey {
             state.value.toFixed(decimals) + " " + match[2];
         },
         onComplete: () => {
-          label.textContent = original;
+          label.innerHTML = markup;
         }
       }, .4 + i * .08);
     });
@@ -1380,7 +1381,7 @@ body .player .look.vl-journey {
     });
 
     station.originalLabels?.forEach(([e, value]) => {
-      e.textContent = value;
+      e.innerHTML = value;
     });
   }
 
@@ -1608,7 +1609,7 @@ body .player .look.vl-journey {
 
       entry.originalLabels = Array.from(
         card.querySelectorAll("svg text")
-      ).map(e => [e, e.textContent]);
+      ).map(e => [e, e.innerHTML]);
 
       stations.push(entry);
     }

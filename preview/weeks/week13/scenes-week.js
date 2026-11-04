@@ -903,10 +903,10 @@
          https://motionarray.com/after-effects-templates/infographics-for-everything-2593374/  */
       BD(0, 2, "115", function () {
         var s = "";
-        s += M("ca", 108, 136, R(-84, -64, 168, 128, C.white, { rx: 14, s: C.navy, sw: 3 }) + T(0, -36, "AED", { z: 14, f: C.slate }) +
-          T(0, 2, "", { z: 42, f: C.navy, k: "na", num: { v: 0, suf: "k" } }) + T(0, 40, "PROMISED", { z: 16, f: C.navy }));
-        s += M("cb", 292, 136, R(-84, -64, 168, 128, C.white, { rx: 14, s: C.green, sw: 3 }) + T(0, -36, "AED", { z: 14, f: C.slate }) +
-          T(0, 2, "", { z: 42, f: C.green, k: "nb", num: { v: 0, suf: "k" } }) + T(0, 40, "TRACKED", { z: 16, f: C.green }));
+        s += M("ca", 108, 136, R(-84, -64, 168, 128, C.white, { rx: 14, s: C.navy, sw: 3 }) + T(0, -46, "AED", { z: 14, f: C.slate }) +
+          T(0, 2, "", { z: 42, f: C.navy, k: "na", num: { v: 0, suf: "k" } }) + T(0, 48, "PROMISED", { z: 16, f: C.navy }));
+        s += M("cb", 292, 136, R(-84, -64, 168, 128, C.white, { rx: 14, s: C.green, sw: 3 }) + T(0, -46, "AED", { z: 14, f: C.slate }) +
+          T(0, 2, "", { z: 42, f: C.green, k: "nb", num: { v: 0, suf: "k" } }) + T(0, 48, "TRACKED", { z: 16, f: C.green }));
         s += M("crk", 200, 136, qb(15, C.red));
         s += M("hard", 200, 236, L(0, 0, "HARD TO RECONCILE", { z: 16, s: C.red }), { o0: 0 });
         s += M("subA", 108, 222, L(0, 0, "PER YEAR", { z: 14, s: C.navy }), { o0: 0 });
@@ -2207,7 +2207,7 @@
         s += M("sets", 270, 98, L(0, 0, "EVIDENCE SETS AMOUNT", { z: 13, s: C.green }), { o0: 0 });
         return s;
       }, function (b, S) {
-        S("sl", { o: b === 0 ? 1 : 0.15, y: b === 1 ? -40 : 0 });
+        S("sl", { o: b === 0 ? 1 : 0, y: b === 1 ? -40 : 0 });
         V(S, "knob", b === 0, { x: b === 0 ? -20 : -160, dur: 1.4, del: 0.2 });
         V(S, "unc", b === 0, { del: 0.6 }); V(S, "gv", b === 0, { del: 0.9, e: "back" });
         V(S, "evs", b === 1); S("clm", { o: b === 1 ? 1 : 0, sy: b === 1 ? 1 : 0.02, del: 0.4 });
@@ -3388,8 +3388,8 @@
         }
         s += M("q", 200, 78, L(0, 0, "UNCOMFORTABLE QUESTION", { z: 15, s: C.gold, f: C.ink }), { o0: 0 });
         s += M("cl", 200, 78, L(0, 0, "AED 240k = 11 FEWER", { z: 16, s: C.orange }), { o0: 0 });
-        s += M("n11", 110, 240, T(0, 0, "11", { z: 40, f: C.orange }) + T(0, 30, "ASSUMED", { z: 13, f: C.orange }), { o0: 0 });
-        s += M("n4", 290, 240, T(0, 0, "4", { z: 40, f: C.green }) + T(0, 30, "OBSERVED", { z: 13, f: C.green }), { o0: 0 });
+        s += M("n11", 110, 240, T(0, 0, "11", { z: 40, f: C.orange }) + T(0, 40, "ASSUMED", { z: 13, f: C.orange }), { o0: 0 });
+        s += M("n4", 290, 240, T(0, 0, "4", { z: 40, f: C.green }) + T(0, 40, "OBSERVED", { z: 13, f: C.green }), { o0: 0 });
         s += M("gap", 200, 240, L(0, 0, "A LARGE GAP", { z: 14, s: C.ink, f: C.ink }), { o0: 0 });
         return s;
       }, function (b, S) {

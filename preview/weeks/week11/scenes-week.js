@@ -297,7 +297,7 @@ function F_RULES(p) {
     draw() {
       let s = "";
       s += f.K("agr", doc(12, 44, "Corporate", "agreement", C.navy));
-      s += f.H("agrX", R(12, 44, 104, 48, "rgba(255,255,255,.9)", 8, `stroke="${C.red}" stroke-width="2.4" stroke-dasharray="5 4"`) + T(64, 73, "Unavailable", 13, C.red));
+      s += f.H("agrX", R(12, 44, 104, 48, C.white, 8, `stroke="${C.red}" stroke-width="2.4" stroke-dasharray="5 4"`) + T(64, 73, "Unavailable", 13, C.red));
       s += f.K("bkg", doc(12, 108, "Booking", "details", C.navy2));
       s += f.D("a1", "M116 68 C142 68 150 84 168 92", C.navy, 2.6);
       s += f.D("a2", "M116 132 C142 132 150 100 168 92", C.navy, 2.6);
@@ -622,7 +622,7 @@ function F_LEDGER(p) {
       s += f.H("diff", P(`M228 ${BASE - 26} V60 H328 V40`, C.red, 1.8, 'stroke-dasharray="3 3"') + chip(278, 52, "+AED 360K", { sz: 13, st: C.red, fg: C.red }));
       s += f.H("tot", T(8, 266, "4-yr total", 12.5, C.red, "", "start") + X.map((x) => T(x, 266, "AED ?", 14, C.red)).join(""));
       s += f.H("leg", chip(110, 287, "Known", { sz: 12.5, bg: C.navy, st: C.navy, fg: C.white }) + chip(205, 287, "Estimate needed", { sz: 12.5, st: C.red, fg: C.red, dash: 1 }) + chip(320, 287, "Not available", { sz: 12.5, st: C.slate, fg: C.slate }));
-      s += noteSVG(f, "nb", 228, 287) + noteSVG(f, "nt", 228, 64);
+      s += noteSVG(f, "nb", 228, 287) + noteSVG(f, "nt", 228, 286);
       return s;
     },
     render(c, s) {
@@ -1866,7 +1866,7 @@ function F_RULES(p) {
     draw() {
       let s = "";
       s += f.K("agr", doc(12, 44, "Corporate", "agreement", C.navy));
-      s += f.H("agrX", R(12, 44, 104, 48, "rgba(255,255,255,.9)", 8, `stroke="${C.red}" stroke-width="2.4" stroke-dasharray="5 4"`) + T(64, 73, "Unavailable", 13, C.red));
+      s += f.H("agrX", R(12, 44, 104, 48, C.white, 8, `stroke="${C.red}" stroke-width="2.4" stroke-dasharray="5 4"`) + T(64, 73, "Unavailable", 13, C.red));
       s += f.K("bkg", doc(12, 108, "Booking", "details", C.navy2));
       s += f.D("a1", "M116 68 C142 68 150 84 168 92", C.navy, 2.6);
       s += f.D("a2", "M116 132 C142 132 150 100 168 92", C.navy, 2.6);
@@ -2191,7 +2191,7 @@ function F_LEDGER(p) {
       s += f.H("diff", P(`M228 ${BASE - 26} V60 H328 V40`, C.red, 1.8, 'stroke-dasharray="3 3"') + chip(278, 52, "+AED 360K", { sz: 13, st: C.red, fg: C.red }));
       s += f.H("tot", T(8, 266, "4-yr total", 12.5, C.red, "", "start") + X.map((x) => T(x, 266, "AED ?", 14, C.red)).join(""));
       s += f.H("leg", chip(110, 287, "Known", { sz: 12.5, bg: C.navy, st: C.navy, fg: C.white }) + chip(205, 287, "Estimate needed", { sz: 12.5, st: C.red, fg: C.red, dash: 1 }) + chip(320, 287, "Not available", { sz: 12.5, st: C.slate, fg: C.slate }));
-      s += noteSVG(f, "nb", 228, 287) + noteSVG(f, "nt", 228, 64);
+      s += noteSVG(f, "nb", 228, 287) + noteSVG(f, "nt", 228, 286);
       return s;
     },
     render(c, s) {
@@ -3429,7 +3429,7 @@ function F_RULES(p) {
     draw() {
       let s = "";
       s += f.K("agr", doc(12, 44, "Corporate", "agreement", C.navy));
-      s += f.H("agrX", R(12, 44, 104, 48, "rgba(255,255,255,.9)", 8, `stroke="${C.red}" stroke-width="2.4" stroke-dasharray="5 4"`) + T(64, 73, "Unavailable", 13, C.red));
+      s += f.H("agrX", R(12, 44, 104, 48, C.white, 8, `stroke="${C.red}" stroke-width="2.4" stroke-dasharray="5 4"`) + T(64, 73, "Unavailable", 13, C.red));
       s += f.K("bkg", doc(12, 108, "Booking", "details", C.navy2));
       s += f.D("a1", "M116 68 C142 68 150 84 168 92", C.navy, 2.6);
       s += f.D("a2", "M116 132 C142 132 150 100 168 92", C.navy, 2.6);
@@ -3754,7 +3754,7 @@ function F_LEDGER(p) {
       s += f.H("diff", P(`M228 ${BASE - 26} V60 H328 V40`, C.red, 1.8, 'stroke-dasharray="3 3"') + chip(278, 52, "+AED 360K", { sz: 13, st: C.red, fg: C.red }));
       s += f.H("tot", T(8, 266, "4-yr total", 12.5, C.red, "", "start") + X.map((x) => T(x, 266, "AED ?", 14, C.red)).join(""));
       s += f.H("leg", chip(110, 287, "Known", { sz: 12.5, bg: C.navy, st: C.navy, fg: C.white }) + chip(205, 287, "Estimate needed", { sz: 12.5, st: C.red, fg: C.red, dash: 1 }) + chip(320, 287, "Not available", { sz: 12.5, st: C.slate, fg: C.slate }));
-      s += noteSVG(f, "nb", 228, 287) + noteSVG(f, "nt", 228, 64);
+      s += noteSVG(f, "nb", 228, 287) + noteSVG(f, "nt", 228, 286);
       return s;
     },
     render(c, s) {

@@ -327,8 +327,8 @@
       left += G("a-l6", T(375, 259, "PEOPLE", 14, C.navy));
       left += G("a-l7", T(293, 259, "DEVELOP", 14, C.navy));
       left += G("a-l8", T(210, 197, "IMPLEMENT", 16, C.orange, 'class="hl"'));
-      left += G("a-l9", T(127, 258, "REALIZE", 14, C.green) + T(127, 274, "VALUE", 14, C.green));
-      left += G("a-l10", T(4, 168, "SUSTAINABLE", 14, C.green, "", "start") + T(4, 184, "PERFORMANCE", 14, C.green, "", "start"));
+      left += G("a-l9", T(127, 252, "REALIZE", 14, C.green) + T(127, 278, "VALUE", 14, C.green));
+      left += G("a-l10", T(12, 162, "SUSTAINABLE", 14, C.green, "", "start") + T(12, 188, "PERFORMANCE", 14, C.green, "", "start"));
       left += G("a-flag", P("M133 211 V158", C.ink, 3) + R(133, 158, 36, 22, "rgba(255,255,255,.7)", 2, `stroke="${C.green}" stroke-width="2.5" stroke-dasharray="4 4"`));
       left += G("a-live", chip(210, 264, "LIVE", 14, C.white, C.orange));
       left += G("a-tram", R(-17, -11, 34, 22, C.navy, 8) + R(-11, -6, 22, 9, C.blue, 3) + O(-9, 12, 3, C.ink) + O(9, 12, 3, C.ink));
@@ -454,7 +454,10 @@
       a.vis(".a-four", rts, { s: b === 16 ? 1.08 : 1 });
       /* threads + dimming */
       const thr = b === 11 || b === 12;
-      a.to(".a-left, .a-right", { o: b === 11 ? 0.28 : b === 12 ? 0.5 : 1 });
+      /* Hide the world outside the camera, including expanded wide-screen margins. */
+      const worldOpacity = b === 11 ? 0.28 : b === 12 ? 0.5 : 1;
+      a.to(".a-left", { o: cam[0] > -400 ? worldOpacity : 0 });
+      a.to(".a-right", { o: cam[0] < -400 ? worldOpacity : 0 });
       for (let k = 0; k < 3; k++) a.to(".a-th" + k, { o: thr || (b === 10 && half) ? 1 : 0.28 });
       a.vis(".a-thl", b === 11, { y: b === 11 ? 0 : 10 });
       a.to(".a-ths", { y: b === 11 ? -120 : 0, sy: b === 11 ? 2.4 : 1, d: 1.1 });
@@ -1367,7 +1370,7 @@ function F_BOARD(p) {
       }
       s += f.H("sx", rep(3, (i) => R(18 + i * 30, 234, 26, 18, C.white, 6, `stroke="${C.slate}" stroke-width="1.6"`) + cross(31 + i * 30, 243, 0.5, C.red, 2.2)));
       s += f.H("meg", megaI(136, 262, C.orange, 1.1));
-      s += f.H("cred", T(282, 252, "Staff trust", 12.5, C.navy) + R(190, 260, 190, 14, "#e4e9ef", 7) + `<rect data-k="${p}cf" x="190" y="260" width="190" height="14" rx="7" fill="${C.green}"/>`);
+      s += f.H("cred", T(282, 288, "Staff trust", 12.5, C.navy) + R(190, 260, 190, 14, "#e4e9ef", 7) + `<rect data-k="${p}cf" x="190" y="260" width="190" height="14" rx="7" fill="${C.green}"/>`);
       s += noteSVG(f, "nt", 200, 22) + noteSVG(f, "nm", 200, 236);
       return s;
     },
@@ -1549,7 +1552,7 @@ function F_BARS(p) {
       for (let i = 0; i < 5; i++) {
         const y = 74 + i * 42;
         s += f.H("r" + i, f.TK("l" + i, 20, y - 6, "", 13, C.ink, "start") + R(20, y, 300, 20, "#e8edf2", 5) +
-          `<rect data-k="${p}b${i}" x="20" y="${y}" width="300" height="20" rx="5" fill="${C.navy}"/>` + f.TK("v" + i, 330, y + 15.5, "", 15, C.ink, "start") + markSVG(f, "m" + i, 384, y + 10, 0.85));
+          `<rect data-k="${p}b${i}" x="20" y="${y}" width="300" height="20" rx="5" fill="${C.navy}"/>` + f.TK("v" + i, 372, y + 15.5, "", 13, C.ink, "end") + markSVG(f, "m" + i, 384, y + 10, 0.85));
       }
       s += noteSVG(f, "nb", 200, 286) + noteSVG(f, "nm", 200, 252);
       return s;
@@ -1630,7 +1633,7 @@ function F_MAP(p) {
       let s = "";
       Object.keys(ZB).forEach((g) => { const [x, y, w, h, l] = ZB[g]; s += f.H("z_" + g, R(x, y, w, h, "rgba(255,255,255,.7)", 10, `stroke="${GC[g]}" stroke-width="2"`) + T(x + 8, y + 16, l, 12, GC[g], "", "start")); });
       s += f.H("trv", P("M60 40 Q150 4 250 38", C.green, 2.4, 'stroke-dasharray="5 5"') + P("M44 124 Q46 134 70 140", C.green, 2.4, 'stroke-dasharray="5 5"') + P("M96 124 Q200 128 290 138", C.green, 2.4, 'stroke-dasharray="5 5"') +
-        [[156, 20], [52, 134], [200, 129]].map(([x, y]) => O(x, y, 9, C.white, `stroke="${C.orange}" stroke-width="2"`) + T(x, y + 4.5, "?", 12, C.orange)).join(""));
+        [[156, 20], [52, 126], [200, 129]].map(([x, y]) => O(x, y, 9, C.white, `stroke="${C.orange}" stroke-width="2"`) + T(x, y + 4.5, "?", 12, C.orange)).join(""));
       for (let i = 0; i < 14; i++) {
         const x = HX[i], y = HY(i), col = GC[GRP(i)];
         s += f.K("h" + i, house(x, y, col, 1.2));
@@ -2811,7 +2814,7 @@ function F_BOARD(p) {
       }
       s += f.H("sx", rep(3, (i) => R(18 + i * 30, 234, 26, 18, C.white, 6, `stroke="${C.slate}" stroke-width="1.6"`) + cross(31 + i * 30, 243, 0.5, C.red, 2.2)));
       s += f.H("meg", megaI(136, 262, C.orange, 1.1));
-      s += f.H("cred", T(282, 252, "Staff trust", 12.5, C.navy) + R(190, 260, 190, 14, "#e4e9ef", 7) + `<rect data-k="${p}cf" x="190" y="260" width="190" height="14" rx="7" fill="${C.green}"/>`);
+      s += f.H("cred", T(282, 288, "Staff trust", 12.5, C.navy) + R(190, 260, 190, 14, "#e4e9ef", 7) + `<rect data-k="${p}cf" x="190" y="260" width="190" height="14" rx="7" fill="${C.green}"/>`);
       s += noteSVG(f, "nt", 200, 22) + noteSVG(f, "nm", 200, 236);
       return s;
     },
@@ -2993,7 +2996,7 @@ function F_BARS(p) {
       for (let i = 0; i < 5; i++) {
         const y = 74 + i * 42;
         s += f.H("r" + i, f.TK("l" + i, 20, y - 6, "", 13, C.ink, "start") + R(20, y, 300, 20, "#e8edf2", 5) +
-          `<rect data-k="${p}b${i}" x="20" y="${y}" width="300" height="20" rx="5" fill="${C.navy}"/>` + f.TK("v" + i, 330, y + 15.5, "", 15, C.ink, "start") + markSVG(f, "m" + i, 384, y + 10, 0.85));
+          `<rect data-k="${p}b${i}" x="20" y="${y}" width="300" height="20" rx="5" fill="${C.navy}"/>` + f.TK("v" + i, 372, y + 15.5, "", 13, C.ink, "end") + markSVG(f, "m" + i, 384, y + 10, 0.85));
       }
       s += noteSVG(f, "nb", 200, 286) + noteSVG(f, "nm", 200, 252);
       return s;
@@ -3074,7 +3077,7 @@ function F_MAP(p) {
       let s = "";
       Object.keys(ZB).forEach((g) => { const [x, y, w, h, l] = ZB[g]; s += f.H("z_" + g, R(x, y, w, h, "rgba(255,255,255,.7)", 10, `stroke="${GC[g]}" stroke-width="2"`) + T(x + 8, y + 16, l, 12, GC[g], "", "start")); });
       s += f.H("trv", P("M60 40 Q150 4 250 38", C.green, 2.4, 'stroke-dasharray="5 5"') + P("M44 124 Q46 134 70 140", C.green, 2.4, 'stroke-dasharray="5 5"') + P("M96 124 Q200 128 290 138", C.green, 2.4, 'stroke-dasharray="5 5"') +
-        [[156, 20], [52, 134], [200, 129]].map(([x, y]) => O(x, y, 9, C.white, `stroke="${C.orange}" stroke-width="2"`) + T(x, y + 4.5, "?", 12, C.orange)).join(""));
+        [[156, 20], [52, 126], [200, 129]].map(([x, y]) => O(x, y, 9, C.white, `stroke="${C.orange}" stroke-width="2"`) + T(x, y + 4.5, "?", 12, C.orange)).join(""));
       for (let i = 0; i < 14; i++) {
         const x = HX[i], y = HY(i), col = GC[GRP(i)];
         s += f.K("h" + i, house(x, y, col, 1.2));
@@ -4264,7 +4267,7 @@ function F_BOARD(p) {
       }
       s += f.H("sx", rep(3, (i) => R(18 + i * 30, 234, 26, 18, C.white, 6, `stroke="${C.slate}" stroke-width="1.6"`) + cross(31 + i * 30, 243, 0.5, C.red, 2.2)));
       s += f.H("meg", megaI(136, 262, C.orange, 1.1));
-      s += f.H("cred", T(282, 252, "Staff trust", 12.5, C.navy) + R(190, 260, 190, 14, "#e4e9ef", 7) + `<rect data-k="${p}cf" x="190" y="260" width="190" height="14" rx="7" fill="${C.green}"/>`);
+      s += f.H("cred", T(282, 288, "Staff trust", 12.5, C.navy) + R(190, 260, 190, 14, "#e4e9ef", 7) + `<rect data-k="${p}cf" x="190" y="260" width="190" height="14" rx="7" fill="${C.green}"/>`);
       s += noteSVG(f, "nt", 200, 22) + noteSVG(f, "nm", 200, 236);
       return s;
     },
@@ -4446,7 +4449,7 @@ function F_BARS(p) {
       for (let i = 0; i < 5; i++) {
         const y = 74 + i * 42;
         s += f.H("r" + i, f.TK("l" + i, 20, y - 6, "", 13, C.ink, "start") + R(20, y, 300, 20, "#e8edf2", 5) +
-          `<rect data-k="${p}b${i}" x="20" y="${y}" width="300" height="20" rx="5" fill="${C.navy}"/>` + f.TK("v" + i, 330, y + 15.5, "", 15, C.ink, "start") + markSVG(f, "m" + i, 384, y + 10, 0.85));
+          `<rect data-k="${p}b${i}" x="20" y="${y}" width="300" height="20" rx="5" fill="${C.navy}"/>` + f.TK("v" + i, 372, y + 15.5, "", 13, C.ink, "end") + markSVG(f, "m" + i, 384, y + 10, 0.85));
       }
       s += noteSVG(f, "nb", 200, 286) + noteSVG(f, "nm", 200, 252);
       return s;
@@ -4527,7 +4530,7 @@ function F_MAP(p) {
       let s = "";
       Object.keys(ZB).forEach((g) => { const [x, y, w, h, l] = ZB[g]; s += f.H("z_" + g, R(x, y, w, h, "rgba(255,255,255,.7)", 10, `stroke="${GC[g]}" stroke-width="2"`) + T(x + 8, y + 16, l, 12, GC[g], "", "start")); });
       s += f.H("trv", P("M60 40 Q150 4 250 38", C.green, 2.4, 'stroke-dasharray="5 5"') + P("M44 124 Q46 134 70 140", C.green, 2.4, 'stroke-dasharray="5 5"') + P("M96 124 Q200 128 290 138", C.green, 2.4, 'stroke-dasharray="5 5"') +
-        [[156, 20], [52, 134], [200, 129]].map(([x, y]) => O(x, y, 9, C.white, `stroke="${C.orange}" stroke-width="2"`) + T(x, y + 4.5, "?", 12, C.orange)).join(""));
+        [[156, 20], [52, 126], [200, 129]].map(([x, y]) => O(x, y, 9, C.white, `stroke="${C.orange}" stroke-width="2"`) + T(x, y + 4.5, "?", 12, C.orange)).join(""));
       for (let i = 0; i < 14; i++) {
         const x = HX[i], y = HY(i), col = GC[GRP(i)];
         s += f.K("h" + i, house(x, y, col, 1.2));

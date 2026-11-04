@@ -665,7 +665,8 @@
     } else if (!on && was) { tgt.d = 0.35; }
     go(pm, tgt);
     const h = q(el, ".v2halo"); if (h) shown(h, on && !!st.hot);
-    if (st.lab != null && q(el, ".lab") && q(el, ".lab")._s !== st.lab) { setLab(q(el, ".lab"), st.lab); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
+    const label = st.lab == null ? p.lab : st.lab;
+    if (label != null && q(el, ".lab") && q(el, ".lab")._s !== label) { setLab(q(el, ".lab"), label); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
     if (k.u) k.u(el, p, st, prev);
     el._st = st;
   }
@@ -1285,7 +1286,7 @@
       P("ev", "card", 106, 150, { w: 184, h: 140, ic: "bolt", lab: "Regulatory|announcement", col: C.orange, is: 44 }),
       P("cal", "cal", 300, 126, { w: 120, h: 96, lab: "January start", due: 2 }),
       P("lk", "lock", 352, 90, { sz: 1.1 }),
-      P("ck", "clock", 300, 266, { r: 38, lab: "24-hour record" }),
+      P("ck", "clock", 300, 248, { r: 38, lab: "24-hour record" }),
       P("rq", "pill", 106, 278, { w: 196, lab: "Required outcome", ic: "lock", tone: "goal" }),
       P("n1", "pill", 106, 330, { w: 180, lab: "Negotiable extra", tone: "sky", ls: 14 }),
       P("n2", "pill", 300, 340, { w: 180, lab: "Negotiable extra", tone: "off", ls: 14 })
@@ -2124,7 +2125,8 @@
     } else if (!on && was) { tgt.d = 0.35; }
     go(pm, tgt);
     const h = q(el, ".v2halo"); if (h) shown(h, on && !!st.hot);
-    if (st.lab != null && q(el, ".lab") && q(el, ".lab")._s !== st.lab) { setLab(q(el, ".lab"), st.lab); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
+    const label = st.lab == null ? p.lab : st.lab;
+    if (label != null && q(el, ".lab") && q(el, ".lab")._s !== label) { setLab(q(el, ".lab"), label); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
     if (k.u) k.u(el, p, st, prev);
     el._st = st;
   }
@@ -2350,7 +2352,7 @@
       P("g3", "person", 160, 304, { sz: 0.78, col: C.plum, mood: "sad" }),
       P("as", "bubble", 296, 288, { w: 170, lab: "Unhappy guests?", tail: "l", col: C.plum }),
       P("mg", "icon", 296, 350, { ic: "search", sz: 36, col: C.navy, idle: "v2float" }),
-      P("ns", "stamp", 296, 288, { lab: "Not so simple", r: -6 })
+      P("ns", "stamp", 296, 242, { lab: "Not so simple", r: -6 })
     ], [
       { t: "The board finally approves", on: ["tb", "ap"], hot: ["ap"] },
       { t: "Because guests were unhappy?", on: ["g1", "g2", "g3", "as"], hot: ["as"] },
@@ -2838,7 +2840,7 @@
       { t: "Deadline forces scope choices", on: ["rl", "dl", "dp", "mw", "ex"], hot: ["mw", "ex"], f: "dl" },
       { t: "Write the choices down", on: ["lg"], s: { lg: { hl: { 0: "g", 1: "g" } } }, hot: ["lg"] },
       { t: "Adoption decides reliability", on: ["e1", "e2", "e3", "ad"], s: { ad: { lv: 0.7 }, e1: { mood: "happy" }, e3: { mood: "worry" } }, hot: ["ad"] },
-      { t: "Unexplained means aspiration", on: ["ap"], s: { lg: { dim: 1 }, ad: { dim: 1 }, mw: { dim: 1 } }, hot: ["ap"] }
+      { t: "Unexplained means aspiration", off: ["lg", "e1", "e2", "e3", "ad"], on: ["ap"], s: { lg: { dim: 1 }, ad: { dim: 1 }, mw: { dim: 1 } }, hot: ["ap"] }
     ]),
     // Act 9 (moments 30-32). Benchmark Part2 #091 "cro process"
     // https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to
@@ -3528,7 +3530,8 @@
     } else if (!on && was) { tgt.d = 0.35; }
     go(pm, tgt);
     const h = q(el, ".v2halo"); if (h) shown(h, on && !!st.hot);
-    if (st.lab != null && q(el, ".lab") && q(el, ".lab")._s !== st.lab) { setLab(q(el, ".lab"), st.lab); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
+    const label = st.lab == null ? p.lab : st.lab;
+    if (label != null && q(el, ".lab") && q(el, ".lab")._s !== label) { setLab(q(el, ".lab"), label); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
     if (k.u) k.u(el, p, st, prev);
     el._st = st;
   }
@@ -3903,7 +3906,7 @@
       P("po", "card", 296, 134, { w: 176, h: 126, ic: "key", lab: "Process|owner", sub: "Continuing performance", col: C.green, is: 34 }),
       P("b1", "bar", 200, 250, { w: 330, lab: "Programme lifespan", max: 1, col: C.plum, v: "Programme ends", ls: 14 }),
       P("b2", "bar", 200, 316, { w: 330, lab: "Ownership lifespan", max: 1, col: C.green, v: "Ownership continues", ls: 14 }),
-      P("pc", "stamp", 104, 150, { lab: "Programme closed", r: -8 }),
+      P("pc", "stamp", 104, 216, { lab: "Programme closed", r: -8 }),
       P("t1", "tile", 112, 282, { w: 170, h: 104, lab: "Records complete", v: "Being monitored", tone: "unk", vs: 17 }),
       P("t2", "tile", 288, 282, { w: 170, h: 104, lab: "Handoffs reliable", v: "Being monitored", tone: "unk", vs: 17 })
     ], [
@@ -4950,7 +4953,8 @@
     } else if (!on && was) { tgt.d = 0.35; }
     go(pm, tgt);
     const h = q(el, ".v2halo"); if (h) shown(h, on && !!st.hot);
-    if (st.lab != null && q(el, ".lab") && q(el, ".lab")._s !== st.lab) { setLab(q(el, ".lab"), st.lab); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
+    const label = st.lab == null ? p.lab : st.lab;
+    if (label != null && q(el, ".lab") && q(el, ".lab")._s !== label) { setLab(q(el, ".lab"), label); const fg = q(el, ".v2fit"); if (fg) fitOne(fg); }
     if (k.u) k.u(el, p, st, prev);
     el._st = st;
   }

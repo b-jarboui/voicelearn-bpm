@@ -347,7 +347,7 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
         grp(LV(3, "fade"), Array.from({ length: 8 }, (_, j) => pth(`M${215 + j * 22} 34 V280`, COL.mist, 1.2)).join("")) +
         grp(LV(3, "pop"), pins.map(([x, y], j) => grp({ class: "w6-m pin" },
           circ(x, y, j === 13 ? 10 : 8, j === 13 ? COL.orange : COL.navy, { stroke: COL.white, "stroke-width": 2.5 }))).join("")) +
-        rv(3, "pop", tx(300, 168, "14", 66, COL.navy) + tx(300, 198, "properties", 17, COL.navy));
+        rv(3, "pop", tx(300, 168, "14", 66, COL.navy) + tx(300, 218, "properties", 17, COL.navy));
       return {
         at: 0, tag: "One group, many hotels", L: 3, svg: s,
         tick(api, k) {
@@ -1967,7 +1967,7 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
           for (let b = 0; b < m; b++) st += rect(x - 32, 202 - b * 32, 64, 28, b < d ? COL.red : COL.navy, 6) + (b < d ? txOn(x, 222 - b * 32, "disputed", 12.5) : txOn(x, 222 - b * 32, "model", 13));
           if (!m) st += rect(x - 32, 170, 64, 60, "none", 6, { stroke: COL.grey, "stroke-width": 2.5, "stroke-dasharray": "6 5" }) + tx(x, 205, "none", 14, COL.grey);
           const lbl = tx(x, 254, nm, 13.5, COL.ink);
-          const note = m ? tx(x, 196 - m * 32, `${d} of ${m}`, 16, COL.red) + tx(x, 180 - m * 32, "no owner", 13.5, COL.grey) : "";
+          const note = m ? tx(x, 196 - m * 32, `${d} of ${m}`, 16, COL.red) + tx(x, 172 - m * 32, "no owner", 13.5, COL.grey) : "";
           return rv(lvOf[j], "rise", st + lbl) + (m ? rv(j === 0 ? 1 : lvOf[j], "pop", note) : "");
         }).join("");
       return { at: 9, tag: "The analyst-drawn models", L: 4, svg: s };
@@ -1977,7 +1977,7 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
     (() => {
       const s =
         rect(14, 50, 120, 50, COL.green, 10) + txOn(74, 72, "Property", 14) + txOn(74, 90, "teams: 2", 14) +
-        rect(14, 140, 120, 130, COL.navy, 10) + txOn(74, 198, "Analysts:", 15) + txOn(74, 220, "9", 22) +
+        rect(14, 140, 120, 130, COL.navy, 10) + txOn(74, 180, "Analysts:", 15) + txOn(74, 228, "9", 22) +
         pth("M134 75 C220 75 220 120 266 120", COL.green, 14, { opacity: 0.5, class: "a" }) +
         pth("M134 205 C220 205 220 176 266 176", COL.navy, 46, { opacity: 0.35, class: "b" }) +
         rect(266, 96, 120, 108, COL.orange, 12) + txOn(326, 150, "11", 36) + txOn(326, 180, "models", 15) +

@@ -1193,10 +1193,10 @@
           }
           return S(0, o + card(40, 44, 100, 50, "Check-in", C.pale, C.green, C.ink, 15) + badge(134, 48, true, 0.7)) +
             S(0, T(200, 256, "One process improves beautifully", 15), 0) +
-            S(1, DP("M140 69 L150 69", C.slate, 3) + DP("M90 94 L90 106", C.slate, 3) + T(200, 76, "?", 22, C.red) + T(310, 76, "?", 22, C.red) + T(90, 138, "?", 22, C.red) +
+            S(1, DP("M140 69 L150 69", C.slate, 3) + DP("M90 94 L90 106", C.slate, 3) + T(244, 56, "?", 18, C.red) + T(354, 56, "?", 18, C.red) + T(134, 118, "?", 18, C.red) +
               T(200, 256, "...and nothing follows", 15, C.red), 1) +
             S(2, links + T(200, 256, "Process architecture: the full map", 15, C.navy), 2) +
-            S(3, links + stamp(200, 140, "Momentum stops", C.red, 20) + T(200, 256, "No map, no governance: what next?", 15, C.red));
+            S(3, links + stamp(200, 240, "Momentum stops", C.red, 17) + T(200, 286, "No map, no governance: what next?", 14, C.red));
         },
         // V4 · lines 12-15 · benefits evaporate: claimed savings, unchanged budget, nothing agreed to measure
         // template: Modern Data Infographics templates — https://motionarray.com/after-effects-templates/infographics/
@@ -1855,7 +1855,7 @@
           var st = "", k;
           for (k = 0; k < 5; k++) st += R(30 + k * 68, 240 - (k + 1) * 34, 68, (k + 1) * 34, k ? C.ice : C.teal, 2, C.navy, 2) + T(64 + k * 68, 230 - k * 34, String(k + 1), 16, k ? C.navy : C.white);
           return qh(3, "Maturity") +
-            S(0, st + person(64, 172, C.teal, 0.9) + T(64, 150, "Qasr", 14, C.teal) + flag(330, 72, C.coral) + T(340, 100, "Plan", 14, C.coral)) +
+            S(0, st + person(64, 172, C.teal, 0.9) + T(64, 150, "Qasr", 14, C.teal) + flag(330, 72, C.coral) + T(340, 124, "Plan", 14, C.coral)) +
             S(0, T(200, 272, "How well it already manages", 15), 0) +
             S(1, DP("M84 150 Q200 40 320 64", C.red, 3.5) + pill(170, 82, "Big jump", C.red) + T(200, 272, "Never owned or measured yet", 15, C.red));
         },

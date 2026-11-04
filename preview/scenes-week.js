@@ -1181,7 +1181,7 @@ var PART = "v4p2";
         mv: { q6g: function () { return { x: 352, y: 268 }; } } },
       // template: Dribbble — Motion Graphics tag (elastic queue: requests accumulate under pressure) — https://dribbble.com/tags/motion-graphics
       { a: 17, d: bgc("#f4efe6") + bx(6, 100, 110, 80, C.mint, C.green) + t(61, 146, "SALES", C.green) +
-          F("M170 80 L300 80 L256 150 L256 196 L214 196 L214 150 Z", "#dbe3ec", { stroke: C.slate, "stroke-width": 2.5 }) + t(235, 100, "HOUSE-", C.slate, null, 16) + t(235, 120, "KEEPING", C.slate, null, 16) +
+          F("M170 80 L300 80 L256 150 L256 196 L214 196 L214 150 Z", "#dbe3ec", { stroke: C.slate, "stroke-width": 2.5 }) + t(235, 96, "HOUSE-", C.slate, null, 16) + t(235, 124, "KEEPING", C.slate, null, 16) +
           arr(235, 200, 235, 240, C.slate) + t(320, 236, "SAME PACE", C.slate, null, 16) +
           H("r7a", arr(118, 128, 166, 112, C.green, 4) + arr(118, 148, 166, 140, C.green, 4)) +
           H("r7b", arr(118, 112, 166, 96, C.green, 4) + arr(118, 164, 166, 156, C.green, 4)) +

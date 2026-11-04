@@ -1,0 +1,41 @@
+/* Scene readability additions to the shared interface in week1-design.css. */
+html[data-week] .lesson button { min-height: 44px; }
+html[data-week] .player .w10s-inner { min-height: 0; }
+html[data-week] .player .w10s-mount { flex: 1 1 58%; min-width: 0; }
+html[data-week] .player .w10s-text { flex: 0 1 auto; min-height: 0; max-height: 42%; overflow-y: auto; overscroll-behavior: contain; }
+html[data-week] .player .w10s-text p { overflow-wrap: anywhere; }
+html[data-week] .player .w10s-text .s { font: 400 clamp(15px,1.5vw,18px)/1.5 var(--body); }
+/* Scene captions need their full claim, including at narrow phone widths. */
+html[data-week] .w10s-mount :is(.vx-chip,.w04-txt,.w05-lab,.w6-chip,.vlw-kick,.vlw-chip,.w08-lab,.vw-lab,.w10-lab,.w11-lab,.w12-lab) {
+  white-space: normal; overflow: visible; text-overflow: clip;
+  overflow-wrap: anywhere; line-height: 1.4; letter-spacing: 0;
+}
+html[data-week] .w10s-mount :is(.vx-top,.w04-cap,.w05-cap,.w6-top,.vlw-head,.w08-cap,.vw-chip,.w10-cap,.w11-cap,.w12-cap) {
+  flex-shrink: 0; height: auto; min-height: 36px;
+}
+html[data-week] .w10s-mount :is(.w04-pr,.w05-bar,.w08-bar,.w10-bar,.w11-bar,.w12-bar) { flex-basis: 28px; }
+html[data-week] .w10s-mount > div { min-height: 0; }
+html[data-week] .stage.scroll .qsel { width: 100%; min-width: 0; }
+html[data-week] .stage.scroll :is(.qchip,.qplaced,.qstem,.qwhy) { overflow-wrap: anywhere; }
+/* Desktop scenes have the same balanced side-by-side layout in every week. */
+@media (min-width: 900px) and (min-aspect-ratio: 5/4) {
+  html[data-week] .player .w10s-inner { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr); align-items: center; gap: 28px; }
+  html[data-week] .player .w10s-text { max-height: 100%; }
+}
+/* The full-screen picture ends exactly above the caption band in every orientation. */
+html[data-week] body.fs.cc-off { --vl25-caption-h: 0px; }
+html[data-week] body.fs[data-view="player"] .player :is(.look,.stage) {
+  top: 0; bottom: calc(var(--vl25-controls-h) + var(--vl25-caption-h) + env(safe-area-inset-bottom,0px)) !important;
+  height: auto !important; margin: 0 !important; border-radius: 0 !important;
+}
+html[data-week] body.fs:not(.cc-off) #cc { height: var(--vl25-caption-h); max-height: var(--vl25-caption-h); overscroll-behavior: contain; }
+@media (orientation: landscape) and (max-height: 500px) {
+  html[data-week] body.fs:not(.cc-off) { --vl25-caption-h: 70px; }
+}
+
+html[data-week] body.fs:not(.cc-off) #cc { pointer-events: auto; }
+@media (orientation: landscape) and (max-height: 500px) {
+  html[data-week]:has(body[data-step="report"]:not(.fs)),
+  html[data-week] body[data-step="report"]:not(.fs) { overflow-y: auto !important; }
+  html[data-week] body[data-view="player"][data-step="report"]:not(.fs) main { padding-bottom: 72px !important; }
+}

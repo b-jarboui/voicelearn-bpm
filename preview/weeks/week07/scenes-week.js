@@ -85,7 +85,7 @@
     const w = Math.round(s.length * z * 0.66 + 62), x0 = x - w / 2;
     return R(x0, y - 19, w, 38, 19, C.paper, c, 3, dash ? 'stroke-dasharray="7 5"' : "") + badge(x0 + 21, y) + T(x0 + 42, y + 6, s, { a: "start", z, c });
   };
-  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: 20, c }));
+  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: s.length > 26 ? 18 : 20, c }));
   // ---------- icon library (centred on x, y) ----------
   const person = (x, y, s = 1, c = C.navy) => Gs(x, y, s, Ci(0, -13, 8.5, c) + Fi("M-15 17Q-15 0 0 0Q15 0 15 17Z", c));
   const hotel = (x, y, s = 1, c = C.navy, f = C.paper) => Gs(x, y, s, R(-13, -20, 26, 40, 3, f, c, 2.5) +
@@ -386,7 +386,7 @@
         root = document.createElement("div");
         root.className = `vls-w07-${id}`;
         root.innerHTML =
-          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
+          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="-24 -12 ${VW + 48} ${VH + 24}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
           `<defs><pattern id="vlw7v2dots-${id}" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="${C.blue}"/></pattern></defs>` +
           `<rect x="-800" y="-800" width="2000" height="2000" fill="url(#vlw7v2dots-${id})" opacity=".7"/>` +
           S.map((s) => `<g data-k="S${s.i}" data-ox="200" data-oy="190">${s.svg}</g>`).join("") +
@@ -1165,7 +1165,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
     const w = Math.round(s.length * z * 0.66 + 62), x0 = x - w / 2;
     return R(x0, y - 19, w, 38, 19, C.paper, c, 3, dash ? 'stroke-dasharray="7 5"' : "") + badge(x0 + 21, y) + T(x0 + 42, y + 6, s, { a: "start", z, c });
   };
-  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: 20, c }));
+  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: s.length > 26 ? 18 : 20, c }));
   // ---------- icon library (centred on x, y) ----------
   const person = (x, y, s = 1, c = C.navy) => Gs(x, y, s, Ci(0, -13, 8.5, c) + Fi("M-15 17Q-15 0 0 0Q15 0 15 17Z", c));
   const hotel = (x, y, s = 1, c = C.navy, f = C.paper) => Gs(x, y, s, R(-13, -20, 26, 40, 3, f, c, 2.5) +
@@ -1466,7 +1466,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         root = document.createElement("div");
         root.className = `vls-w07-${id}`;
         root.innerHTML =
-          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
+          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="-24 -12 ${VW + 48} ${VH + 24}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
           `<defs><pattern id="vlw7v2dots-${id}" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="${C.blue}"/></pattern></defs>` +
           `<rect x="-800" y="-800" width="2000" height="2000" fill="url(#vlw7v2dots-${id})" opacity=".7"/>` +
           S.map((s) => `<g data-k="S${s.i}" data-ox="200" data-oy="190">${s.svg}</g>`).join("") +
@@ -1655,7 +1655,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
       svg: () => hl("h0", "VALUE AT THE CENTRE", C.green) + hl("h1", "QASR'S OBJECTIVES", C.green) + hl("h2", "VISIBLE ISN'T STRATEGIC", C.orange) + hl("h3", "AN OBJECTIVE, NOT FRUSTRATION", C.navy) +
         G("tg", 200, 200, target(200, 200, 74, C.green)) +
         [["PROTECT", "RELATIONSHIPS", 80, 96, (x, y) => person(x - 8, y, 0.7, C.navy) + person(x + 10, y, 0.7, C.green)], ["BETTER GUEST", "EXPERIENCES", 330, 96, (x, y) => face(x, y, 14, C.green, 1)], ["FEWER AVOIDABLE", "LOSSES", 316, 300, (x, y) => coin(x, y, 12)]].map(([a, b, x, y, f], i) =>
-          G("o" + i, x, y, f(x, y) + T2(x, y + 34, a, b, { z: 17, c: C.navy }) + arr(x + (x < 200 ? 30 : -30), y + (y < 200 ? 30 : -30), 200 + (x - 200) * 0.32, 200 + (y - 200) * 0.32, C.green, 3.5))).join("") +
+          G("o" + i, x, y, f(x, y) + T2(Math.min(x, 300), y + 34, a, b, { z: 17, c: C.navy }) + arr(x + (x < 200 ? 30 : -30), y + (y < 200 ? 30 : -30), 200 + (x - 200) * 0.32, 200 + (y - 200) * 0.32, C.green, 3.5))).join("") +
         G("mg", 80, 300, mega(70, 296, 1.8, C.orange) + T2(90, 352, "VISIBLE", "INCONVENIENCE", { z: 17, c: C.orange }) + Pa("M110 280Q180 240 300 260", C.orange, 3, 'stroke-dasharray="6 5"') + noB(300, 260, 12)) +
         G("lk", 200, 200, R(18, 300, 120, 60, 10, C.paper, C.navy, 3) + CAND[1](78, 330, 0.9) + Pa("M138 320Q200 280 250 214", C.green, 4) + okB(250, 214, 10) +
           face(330, 330, 20, C.orange, -1) + noB(354, 312, 10) + T(384, 372, "PERSONAL FRUSTRATION", { a: "end", z: 17, c: C.orange })),
@@ -1703,7 +1703,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("tp", 200, 210, person(200, 216, 1.8, C.navy) + arr(150, 216, 70, 216, C.orange, 6) + arr(250, 216, 330, 216, C.gold, 6) + person(46, 216, 1.4, C.orange) + person(354, 216, 1.4, C.gold) +
           Pa("M186 180l-6 -12M200 176v-14M214 180l6 -12", C.orange, 3) + T2(200, 300, "CAPABLE TEAM", "STUCK", { c: C.orange })) +
         G("tt", 200, 210, R(20, 120, 156, 50, 8, C.gold) + T(98, 152, "EXEC SPONSOR", { z: 17, c: C.ink }) + noB(170, 116, 12) + T2(98, 220, "TITLE", "ALONE", { c: C.orange }) +
-          [["TIME", (x, y) => clock(x, y, 16, C.green, 90)], ["AUTHORITY", (x, y) => keyI(x, y, 1)], ["SUPPORT", (x, y) => person(x, y + 6, 0.8, C.green)]].map(([s, f], i) => f(226, 110 + i * 60) + T(244, 116 + i * 60, "REAL " + s, { a: "start", z: 17, c: C.green })).join("")),
+          [["TIME", (x, y) => clock(x, y, 16, C.green, 90)], ["AUTHORITY", (x, y) => keyI(x, y, 1)], ["SUPPORT", (x, y) => person(x, y + 6, 0.8, C.green)]].map(([s, f], i) => f(226, 110 + i * 60) + T(244, 116 + i * 60, "REAL " + s, { a: "start", z: 16, c: C.green })).join("")),
       steps: ["+h0 +gt", "-h0 +h1 -gt +mg", "-h1 +h2 -mg +tp", "-h2 +h3 -tp +tt"] },
 
     // Template 120 · Animated Dashboards (LottieFiles) — https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
@@ -1932,8 +1932,8 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           [[110, 80], [170, 64], [230, 72], [290, 84], [140, 100], [260, 104]].map(([x, y], i) => bub(x, y, 46, 28, CCOL[i % 4]) + Gl(x, y + 6, "…", 18, CCOL[i % 4])).join("") +
           R(140, 286, 120, 50, 12, C.green) + T(200, 318, "ONE DECISION", { c: C.paper, nh: true })) +
         [[0, 92, 210, "GUEST", "ARRIVAL"], [1, 308, 210, "CORPORATE", "BILLING"], [2, 92, 110, "DIGITAL", "RECORD"], [3, 308, 110, "ROOM", "RELEASE"]].map(([i, x, y, a, b]) =>
-          G("c" + i, x, y, R(x - 86, y - 38, 172, 76, 14, C.paper, CCOL[i], 3.5) + CAND[i](x - 52, y, 0.95) + T2(x - 18, y - 4, a, b, { a: "start", z: 17, c: C.ink }))).join("") +
-        G("pd", 92, 300, person(92, 304, 1.6, C.green) + T(104, 362, "PROGRAMME DIRECTOR", { z: 17, c: C.green })) +
+          G("c" + i, x, y, R(x - 86, y - 38, 172, 76, 14, C.paper, CCOL[i], 3.5) + CAND[i](x - 52, y, 0.95) + T2(x - 26, y - 4, a, b, { a: "start", z: 16, c: C.ink }))).join("") +
+        G("pd", 92, 300, person(92, 304, 1.6, C.green) + T2(104, 346, "PROGRAMME", "DIRECTOR", { z: 16, c: C.green })) +
         G("fr", 308, 300, person(308, 304, 1.6, C.navy) + T(308, 362, "FINANCE REP", { c: C.navy })) +
         G("tug", 200, 290, arr(150, 290, 120, 290, C.green, 4) + arr(250, 290, 280, 290, C.navy, 4) + Fi("M206 270L192 292H202L194 314L212 286H202L210 270Z", C.orange)) +
         G("dl", 92, 110, cal(160, 92, 0.7, C.orange)) + G("ct", 308, 110, brk(358, 386, 86, C.green, 3.5)),
@@ -1957,7 +1957,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
             RY.map((y, i) => CAND[i](62, y, 0.9) + Pa(`M100 ${y + 29}H368`, C.blue, 2)).join("")) +
           RY.map((y, i) => G("r" + i, 230, y, CX.map((x, j) => marks[PROF[i][j]](x, y)).join(""))).join("") +
           G("clip", 230, 210, RY.map((y) => CX.map((x) => Pa(`M${x + 12} ${y - 16}l4 -6l4 6v10`, C.ink, 1.8)).join("")).join("")) +
-          G("fog", 260, 230, cloud(270, 236, 2.4, C.blue, C.navy) + T(270, 238, "UNKNOWN FACTS", { z: 17, c: C.navy })) +
+          G("fog", 260, 230, cloud(270, 236, 2.4, C.blue, C.navy) + T(270, 270, "UNKNOWN FACTS", { z: 17, c: C.navy })) +
           G("sc", 106, 210, R(34, 166, 144, 84, 12, C.ink) + Gl(106, 224, "#.#", 40, C.gold) + noB(172, 170, 14) + T(106, 280, "PRECISE SCORE?", { c: C.orange }));
       },
       steps: [
@@ -2178,7 +2178,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
     const w = Math.round(s.length * z * 0.66 + 62), x0 = x - w / 2;
     return R(x0, y - 19, w, 38, 19, C.paper, c, 3, dash ? 'stroke-dasharray="7 5"' : "") + badge(x0 + 21, y) + T(x0 + 42, y + 6, s, { a: "start", z, c });
   };
-  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: 20, c }));
+  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: s.length > 26 ? 18 : 20, c }));
   // ---------- icon library (centred on x, y) ----------
   const person = (x, y, s = 1, c = C.navy) => Gs(x, y, s, Ci(0, -13, 8.5, c) + Fi("M-15 17Q-15 0 0 0Q15 0 15 17Z", c));
   const hotel = (x, y, s = 1, c = C.navy, f = C.paper) => Gs(x, y, s, R(-13, -20, 26, 40, 3, f, c, 2.5) +
@@ -2479,7 +2479,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         root = document.createElement("div");
         root.className = `vls-w07-${id}`;
         root.innerHTML =
-          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
+          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="-24 -12 ${VW + 48} ${VH + 24}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
           `<defs><pattern id="vlw7v2dots-${id}" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="${C.blue}"/></pattern></defs>` +
           `<rect x="-800" y="-800" width="2000" height="2000" fill="url(#vlw7v2dots-${id})" opacity=".7"/>` +
           S.map((s) => `<g data-k="S${s.i}" data-ox="200" data-oy="190">${s.svg}</g>`).join("") +
@@ -2639,7 +2639,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("ln", 330, 180, lens(338, 170, 30, C.navy) + qB(338, 170, 14)) +
         G("jr", 200, 230, Pa("M20 230H380", C.navy, 6) + [60, 130, 200, 270, 340].map((x) => Ci(x, 230, 9, C.paper, C.navy, 3)).join("")) +
         Mv("Ms", [[200, 200], [80, 200]], flag(0, 0, 1.2, C.green) + qB(26, -40, 11)) + Mv("Me", [[200, 200], [320, 200]], flag(0, 0, 1.2, C.green) + qB(26, -40, 11)) +
-        G("lb", 200, 300, T(84, 300, "STARTS WHERE?", { c: C.green }) + T(320, 300, "ENDS WHERE?", { c: C.green })),
+        G("lb", 200, 300, T(94, 300, "STARTS WHERE?", { z: 16, c: C.green }) + T(310, 300, "ENDS WHERE?", { z: 16, c: C.green })),
       steps: ["+h0 +cd", "-h0 +h1 +cn +ln cd.x=-60", "-h1 +h2 -cd -cn -ln +jr +Ms Ms@1 +Me Me@1 +lb"] },
 
     // Template 099 · Bottling factory (LottieFiles) — https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x
@@ -2836,7 +2836,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
       svg: () => hl("h0", "HIGH INFLUENCE, HIGH INTEREST", C.green) + hl("h1", "MANAGE CLOSELY", C.green) +
         G("mm", 70, 104, miniMap(24, 56, 1, C.green)) +
         [0, 1, 2].map((i) => G("e" + i, 172, 104 + i * 76, chairE(172, 112 + i * 76, 1, C.navy) + R(204, 92 + i * 76, 184, 26, 8, "none", C.navy, 2, 'stroke-dasharray="5 5"'))).join("") +
-        G("s0", 172, 104, person(172, 112, 1.3, C.gold) + crown(172, 80, 0.75) + T(200, 112, "EXECUTIVE SPONSOR", { a: "start", c: C.ink })) +
+        G("s0", 172, 104, person(172, 112, 1.3, C.gold) + crown(172, 80, 0.75) + T(200, 112, "EXECUTIVE SPONSOR", { a: "start", z: 16, c: C.ink })) +
         G("s1", 172, 180, person(172, 188, 1.3, C.navy) + coin(192, 164, 8) + T(200, 188, "FINANCE DIRECTOR", { a: "start", c: C.ink })) +
         G("s2", 172, 256, person(172, 264, 1.3, C.green) + gear(194, 238, 7, C.navy) + T(200, 264, "PROCESS OWNER", { a: "start", c: C.ink })) +
         G("dz", 200, 336, doc(48, 336, 0.9, C.navy, 2) + pill(200, 338, "IMPORTANT DECISIONS", C.navy) + doc(352, 336, 0.9, C.navy, 2)) +
@@ -3140,7 +3140,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
       svg: () => hl("h0", "WRITE THE COMMITMENT", C.green) + hl("h1", "OPEN CONCERNS STAY VISIBLE", C.orange) + hl("h2", "NOT EVERYONE AGREED FIRST", C.navy) + hl("h3", "A SHARED REFERENCE", C.green) + hl("h4", "MEASURES COME NEXT", C.navy) +
         G("dc", 200, 170, R(26, 56, 348, 236, 14, C.paper, C.navy, 3) +
           ["AGREED BOUNDARY", "DEPARTMENT CONTRIBUTIONS", "DECISION RIGHTS", "ESCALATION ROUTE", "OWNERS FOR ACTIONS"].map((s, i) =>
-            G("r" + i, 200, 90 + i * 44, okB(56, 90 + i * 44, 12) + T(80, 96 + i * 44, s, { a: "start", c: C.ink }))).join("")) +
+            G("r" + i, 200, 90 + i * 44, okB(56, 90 + i * 44, 12) + T(80, 96 + i * 44, s, { a: "start", z: 16, c: C.ink }))).join("")) +
         G("oc", 200, 334, R(30, 306, 340, 58, 12, C.pale, C.orange, 3, 'stroke-dasharray="7 5"') + lens(64, 330, 13, C.orange) + T(100, 342, "OPEN CONCERNS TRACKED", { a: "start", c: C.orange })) +
         G("sg", 200, 336, [C.orange, C.navy, C.gold].map((c, i) => person(110 + i * 90, 352, 0.95, c) + ck(132 + i * 90, 326, 0.7, C.green, 3.5)).join("") +
           Ci(96, 318, 7, C.orange) + R(190, 311, 14, 14, 2, C.navy) + Fi("M286 310L294 324H278Z", C.gold)) +
@@ -3244,7 +3244,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
     const w = Math.round(s.length * z * 0.66 + 62), x0 = x - w / 2;
     return R(x0, y - 19, w, 38, 19, C.paper, c, 3, dash ? 'stroke-dasharray="7 5"' : "") + badge(x0 + 21, y) + T(x0 + 42, y + 6, s, { a: "start", z, c });
   };
-  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: 20, c }));
+  const hl = (k, s, c = C.navy, y = 32) => G(k, 200, y - 7, T(200, y, s, { z: s.length > 26 ? 18 : 20, c }));
   // ---------- icon library (centred on x, y) ----------
   const person = (x, y, s = 1, c = C.navy) => Gs(x, y, s, Ci(0, -13, 8.5, c) + Fi("M-15 17Q-15 0 0 0Q15 0 15 17Z", c));
   const hotel = (x, y, s = 1, c = C.navy, f = C.paper) => Gs(x, y, s, R(-13, -20, 26, 40, 3, f, c, 2.5) +
@@ -3545,7 +3545,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         root = document.createElement("div");
         root.className = `vls-w07-${id}`;
         root.innerHTML =
-          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
+          `<div class="vlw-stage"><svg xmlns="${NS}" viewBox="-24 -12 ${VW + 48} ${VH + 24}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(title)}">` +
           `<defs><pattern id="vlw7v2dots-${id}" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="${C.blue}"/></pattern></defs>` +
           `<rect x="-800" y="-800" width="2000" height="2000" fill="url(#vlw7v2dots-${id})" opacity=".7"/>` +
           S.map((s) => `<g data-k="S${s.i}" data-ox="200" data-oy="190">${s.svg}</g>`).join("") +

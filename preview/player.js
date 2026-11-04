@@ -582,6 +582,7 @@
     script = Object.assign({ main: head.concat(say), offset: 0 }, s);
     Scenes.loadBeats(cap, `${P.q + 1}/${st.qs.length}`, beats);
     wireQuestion(q);
+    if (window.VL_QUESTIONS) VL_QUESTIONS.enhance(stageEl);
   }
 
   function wireQuestion(q) {
@@ -635,7 +636,12 @@
     script.feedback = [ok ? "Correct." : `Not quite. ${script.rightSay}`].concat(sentences(q.why));
     const f = stageEl.querySelector("#fbk"); f.textContent = ok ? "✓ Correct" : "✗ Not quite"; f.style.color = ok ? "var(--st-good)" : "var(--st-bad)";
     Scenes.step(99);
-    setTimeout(() => stageEl.scrollTo({ top: stageEl.scrollHeight, behavior: smooth() }), 400);
+    const feedback = stageEl.querySelector("#fbk");
+    setTimeout(() => {
+      if (!feedback?.isConnected || P.part !== "feedback") return;
+      if (stageEl.scrollHeight > stageEl.clientHeight + 2) stageEl.scrollTo({ top: stageEl.scrollHeight, behavior: smooth() });
+      else feedback.scrollIntoView({ block: "nearest", behavior: smooth() });
+    }, 400);
     playing = true; play();
   }
 

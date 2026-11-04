@@ -2501,8 +2501,8 @@ const BG = [];
       K("inv", R(300, 60, 86, 34, C.amber, 6) + T(343, 82, "Invoicing", 14, C.white)) + fin(343, 30) + T(200, 284, "Programme scope", 14, C.teal));
     s += H("gr", grid() + pill(302, 92, "COO", { bg: C.coral, st: C.coral, fg: C.white, sz: 13 }) + pill(302, 120, "Process owner", { bg: C.coral, st: C.coral, fg: C.white, sz: 13 }) +
       D("trail", "M147 168 C200 168 240 150 296 160", C.amber, 3, 'stroke-dasharray="4 5"') + K("f2", fin(147, 168)));
-    s += H("eng", R(100, 196, 70, 44, C.white, 6, `stroke="${C.slate}" stroke-width="2"`) + P("M100 196 L135 220 L170 196", C.slate, 2) + T(135, 256, "Briefing", 13, C.slate) +
-      arw(182, 218, 222, 218, C.navy, 2.4) + R(238, 216, 100, 12, C.wood, 4) + man(258, 210, 0.8, C.amber) + man(318, 210, 0.8, C.coral) + T(288, 256, "Co-design", 13, C.green));
+    s += H("eng", R(100, 196, 70, 44, C.white, 6, `stroke="${C.slate}" stroke-width="2"`) + P("M100 196 L135 220 L170 196", C.slate, 2) + T(135, 282, "Briefing", 13, C.slate) +
+      arw(182, 218, 222, 218, C.navy, 2.4) + R(238, 216, 100, 12, C.wood, 4) + man(258, 210, 0.8, C.amber) + man(318, 210, 0.8, C.coral) + T(288, 282, "Co-design", 13, C.green));
     return s;
   }, play: (c, j) => {
     c.vis({ sm: j === 0, eng: j === 3 }); c.op("gr", j === 3 ? 0.18 : j >= 1 ? 1 : 0);

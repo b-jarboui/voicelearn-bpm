@@ -1,4 +1,4 @@
-/* Week 1 presentation only. Other weeks retain their existing design. */
+/* The adopted interface shared by every week. */
 html[data-week]:root {
   --bg: #f4f5f0;
   --surface: #ffffff;
