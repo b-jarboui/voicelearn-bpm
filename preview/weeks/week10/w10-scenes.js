@@ -113,8 +113,7 @@
     }
   }
 
-  function showText(st, index) {
-    if (!st.text) return;
+  function notesFor(st, index) {
     // A null moment keeps the previous picture, so keep the previous words too (never an empty box).
     let notes = [];
     for (let j = index; j >= 0 && !notes.length; j--) {
@@ -128,11 +127,11 @@
       const said = Array.isArray(line) ? line[0] : line;
       if (said) notes = [{ k: "", m: String(said) }];
     }
-    const key = JSON.stringify(notes);
-    if (key && st.text.dataset.shown === key && st.text.childElementCount) return;
-    st.text.dataset.shown = key;
-    st.text.replaceChildren();
-    notes.forEach(t => {
+    return notes;
+  }
+
+  function noteNodes(notes) {
+    return notes.map(t => {
       const note = document.createElement("div");
       note.className = "w10s-note";
       [["k", t.k], ["m", t.m], ["s", t.s]].forEach(([c, s]) => {
@@ -142,9 +141,18 @@
         p.textContent = String(s).replace(/\|/g, " ");
         note.appendChild(p);
       });
-      st.text.appendChild(note);
+      return note;
     });
+  }
+
+  function showText(st, index) {
+    if (!st.text) return;
+    const notes = notesFor(st, index), key = JSON.stringify(notes);
+    if (key && st.text.dataset.shown === key && st.text.childElementCount) return;
+    st.text.dataset.shown = key;
+    st.text.replaceChildren(...noteNodes(notes));
     st.text.scrollTop = 0;
+    window.VL_LAYOUT?.refresh();
   }
 
   // Before the first scene step (the part's opening lines): show the part title, not an empty box.
@@ -155,6 +163,7 @@
     p.className = "m";
     p.textContent = st.title;
     st.text.replaceChildren(p);
+    window.VL_LAYOUT?.refresh();
   }
 
   const hosts = new WeakMap();
@@ -163,6 +172,7 @@
     if (!active) return;
     const st = active;
     active = null;
+    window.VL_LAYOUT?.scene(null);
     // reset() owns scene timers/RAF work; remove GSAP work before its SVG is detached.
     try { st.scene?.reset(); } catch (e) { console.warn("[w10s] release", st.id, e); }
     if (st.root && window.gsap) gsap.killTweensOf([st.root, ...st.root.querySelectorAll("*")]);
@@ -209,7 +219,6 @@
         if (!st.host || !root.contains(st.host)) {
           st.host = document.createElement("div");
           st.host.className = "w10s-host";
-          st.host.setAttribute("aria-hidden", "true");
           root.appendChild(st.host);
         }
         if (st.built !== id) {
@@ -219,6 +228,7 @@
           st.inner.className = "w10s-inner";
           const mountEl = document.createElement("div");
           mountEl.className = "w10s-mount";
+          mountEl.setAttribute("aria-hidden", "true");
           mountEl.style.cssText = "width:100%;flex:1 1 auto;min-height:0;max-height:58%;position:relative;overflow:hidden";
           st.inner.appendChild(mountEl);
           st.text = document.createElement("div");
@@ -235,6 +245,8 @@
         st.host.classList.add("on");
         // Each look dresses the same scene its own way (see the [data-look] rules).
         st.host.dataset.look = style.id || "";
+        window.VL_LAYOUT?.scene({host:st.host,mount:st.inner.querySelector('.w10s-mount'),text:st.text,
+          states:[noteNodes([{m:st.title}]),...st.lines.map((_,i)=>noteNodes(notesFor(st,i)))]});
         if (style.id === "board" && !st.undress) st.undress = window.VL_BOARD?.dressScene(st.inner.querySelector(".w10s-mount"));
         if (!["notebook", "journey", "board", "motion"].includes(style.id)) {
           const bg = getComputedStyle(root).backgroundColor;

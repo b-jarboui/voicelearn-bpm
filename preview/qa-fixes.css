@@ -1,19 +1,5 @@
 /* Shared course repairs. Loaded after both adopted design sheets. */
 /* Round 4 board presentation rules follow the shared repairs below. */
-/* Changing caption line counts must not resize an illustration mid-animation. */
-html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
-  flex: 0 0 108px; height: 108px; max-height: 108px; overflow-y: auto;
-}
-@media (min-width: 900px) and (min-height: 501px) {
-  html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
-    flex-basis: 84px; height: 84px; max-height: 84px;
-  }
-}
-@media (orientation: landscape) and (max-height: 500px) {
-  html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
-    flex-basis: 70px; height: 70px; max-height: 70px;
-  }
-}
 /* Let the picture use the space left by its explanation on portrait screens. */
 html[data-week] .player .w10s-mount { max-height: none !important; flex: 1 1 0; }
 html[data-week] .player .w10s-text { flex: 0 1 auto; }
@@ -305,39 +291,95 @@ html[data-week] .player .look.vl-notebook:not([data-w10s]) svg.dg {
   }
 }
 
-/* Full screen: a compact caption band, two lines in portrait and one in landscape; longer sentences scroll inside it. */
-html[data-week] body.fs:not(.cc-off) { --vl25-caption-h: clamp(52px, 8.5dvh, 72px) !important; }
-@media (orientation: landscape) and (max-height: 500px) {
-  html[data-week] body.fs:not(.cc-off) { --vl25-caption-h: 42px !important; }
+/* Round 6: compact captions measured from the longest sentence of this part.
+   lesson-layout.js resolves the actual viewport, controls, notes and SVG ratio. */
+html[data-week] body[data-view="player"] { --vl25-caption-h: var(--vl-caption-size, 0px) !important; }
+html[data-week] body[data-view="player"] #cc {
+  display: block !important; flex: 0 0 var(--vl-caption-size, auto) !important;
+  height: var(--vl-caption-size, auto) !important; max-height: var(--vl-caption-size, none) !important;
+  padding: .35em .6em !important; margin: 0 !important; overflow-y: auto; overscroll-behavior: contain;
+  font: 400 1rem/1.35 var(--body) !important; text-align: center;
+  white-space: normal !important; text-overflow: clip; text-wrap: pretty;
+  -webkit-line-clamp: unset !important; -webkit-box-orient: initial !important;
 }
-html[data-week] body.fs:not(.cc-off) .cc {
-  display: flex !important; align-items: center; justify-content: center; overflow-y: auto;
-  padding: 6px 16px !important; font-size: clamp(14px, 1.9dvh, 17px) !important; line-height: 1.35 !important;
+html[data-week] body[data-view="player"].cc-off #cc { display: none !important; }
+html[data-week] body.fs[data-view="player"] #cc { bottom: var(--vl-controls-size) !important; color: #f5f7fa; }
+html[data-week] body.vl-measured[data-view="player"]:is([data-step="sec"],[data-step="review"]) main {
+  display: flex !important; flex-direction: column; justify-content: flex-start;
+  padding: .4rem .35rem !important; height: auto !important; min-height: 0 !important;
 }
-
-/* Normal view: a compact caption band of two lines (one in phone landscape); fixed height so the picture never jumps. */
-html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
-  flex: 0 0 62px !important; height: 62px !important; max-height: 62px !important;
-  display: flex !important; align-items: center; justify-content: center; overflow-y: auto;
-  padding: 4px 16px !important; font-size: 15px !important; line-height: 1.35 !important; color: var(--ink, #18352f) !important;
+html[data-week] body.vl-measured[data-view="player"]:is([data-step="sec"],[data-step="review"]) .player {
+  flex: 0 0 auto !important; height: var(--vl-picture-size) !important; min-height: 0 !important;
+  margin-top: var(--vl-spare, 0px) !important;
 }
-@media (min-width: 900px) and (min-height: 501px) {
-  html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
-    flex-basis: 56px !important; height: 56px !important; max-height: 56px !important; font-size: 16px !important;
+html[data-week] body.vl-measured[data-view="player"]:is([data-step="sec"],[data-step="review"]) .player .look {
+  height: var(--vl-picture-size) !important; min-height: 0 !important;
+}
+html[data-week] body.vl-measured.fs:is([data-step="sec"],[data-step="review"]) .player .look {
+  bottom: auto !important; top: calc(env(safe-area-inset-top, 0px) + var(--vl-spare, 0px)) !important;
+}
+html[data-week] body.vl-measured.fs:is([data-step="sec"],[data-step="review"]) #cc {
+  top: calc(var(--vl-picture-size) + env(safe-area-inset-top, 0px) + var(--vl-spare, 0px)) !important; bottom: auto !important;
+}
+html[data-week] body.vl-measured .player .w10s-host {
+  padding: .4rem .35rem; height: 100%; color-scheme: light;
+}
+html[data-week] body.vl-measured .player .w10s-host .w10s-inner {
+  display: flex !important; flex-direction: column !important; align-items: center !important;
+  justify-content: flex-start !important; gap: var(--vl-scene-gap); padding: 0 !important;
+  width: 100%; height: auto !important; min-height: 0;
+}
+html[data-week] body.vl-measured .player .w10s-host:is([data-look="journey"],[data-look="notebook"]) .w10s-inner { padding-left: .6rem !important; }
+html[data-week] body.vl-measured .player .w10s-host[data-look="journey"]::before { left: .45rem; width: 2px; }
+html[data-week] body.vl-measured .player .w10s-host[data-look="journey"]::after { left: .15rem; width: .75rem; height: .75rem; box-shadow: 0 0 0 3px #c46a2b33; }
+html[data-week] body.vl-measured .player .w10s-host[data-look="notebook"]::before { left: .45rem; width: 1px; }
+html[data-week] body.vl-measured .player .w10s-host[data-look="board"] { padding-top: 1.8rem; }
+html[data-week] body.vl-measured .player .w10s-host .w10s-mount {
+  flex: none !important; width: var(--vl-scene-width) !important; height: var(--vl-scene-height) !important;
+  min-height: 0 !important; max-height: none !important; max-width: 100%;
+  display: block !important; align-self: center;
+  container-type: inline-size;
+}
+html[data-week] body.vl-measured .player .w10s-mount > div {
+  width: 100% !important; height: 100% !important; min-height: 0 !important; max-height: none !important;
+  display: flex !important; flex-direction: column !important;
+}
+html[data-week] body.vl-measured .player .w10s-mount svg {
+  width: 100% !important; height: 100% !important; min-height: 0; max-height: 100% !important;
+}
+html[data-week] body.vl-measured .player .w10s-mount > div > [data-vl-figure] {
+  flex: none !important; height: var(--vl-art-height) !important; min-height: 0 !important; max-height: none !important;
+  order: 0;
+}
+html[data-week] body.vl-measured .player .w10s-mount > div > :not([data-vl-figure]) { order: 1; }
+html[data-week] body.vl-measured .player .w10s-mount .vl-scene-caption {
+  max-height: var(--vl-footer-limit); overflow-y: auto; overscroll-behavior: contain;
+}
+@container (max-width: 20rem) {
+  html[data-week] body.vl-measured .player .w10s-mount :is(.w01-cap,.w04-cap,.w05-cap,.w08-cap,.w10-cap,.w11-cap) {
+    flex-wrap: wrap; gap: .2em .6em;
+  }
+  html[data-week] body.vl-measured .player .w10s-mount :is(.w01-lab,.w04-txt,.w05-lab,.w08-lab,.w10-lab,.w11-lab) {
+    flex: 1 0 100%; order: -1;
   }
 }
-@media (orientation: landscape) and (max-height: 500px) {
-  html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
-    flex-basis: 40px !important; height: 40px !important; max-height: 40px !important; font-size: 14px !important;
-  }
+html[data-week] body.vl-measured .player .w10s-host .w10s-text {
+  flex: none !important; width: var(--vl-note-width); min-width: 0; min-height: 0 !important;
+  max-height: var(--vl-note-limit) !important; height: auto !important;
+  margin: 0 !important; padding: .3rem .45rem !important; overflow-y: auto; align-self: center;
+  border-left: 0 !important; border-top: 0; text-align: left;
 }
-
-/* Phone portrait: picture at its natural height, explanation right below it and easier to read. */
-@media (orientation: portrait) and (max-width: 899px) {
-  html[data-week] .player .w10s-inner { justify-content: center !important; gap: 10px; }
-  html[data-week] .player .w10s-mount { flex: 0 1 auto !important; height: auto !important; min-height: 0 !important; }
-  html[data-week] .player .w10s-mount svg { height: auto !important; max-height: 100% !important; width: 100% !important; }
-  html[data-week] .player .w10s-text { flex: 0 0 auto !important; max-height: none !important; }
-  html[data-week] .player .w10s-text .m { font-size: clamp(17px, 4.6vw, 20px) !important; line-height: 1.45 !important; }
-  html[data-week] .player .w10s-text .k { font-size: 13px !important; }
+html[data-week] body.vl-measured .player .w10s-host[data-look="journey"] .w10s-text::before { display: none; }
+html[data-week] body.vl-measured .player .w10s-text .m { font-size: 1.15rem !important; line-height: 1.4 !important; }
+html[data-week] body.vl-measured .player .w10s-text .s { font-size: 1rem; line-height: 1.4; margin-top: .35em; }
+html[data-week] body.vl-measured .player .w10s-text .k { font-size: .75rem !important; margin-bottom: .3em; }
+html[data-week] body.vl-measured .player .w10s-note + .w10s-note { margin-top: .65em; }
+html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-inner {
+  flex-direction: row !important; align-items: center !important; justify-content: center !important;
+  height: var(--vl-row-height) !important;
 }
+html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-mount { align-self: flex-start; }
+html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-text { align-self: center; }
+.vl-measure { pointer-events: none !important; }
+/* Report links use the button's readable foreground in every look and theme. */
+html[data-week] .stage .st-next.primary :is(b,span) { color: var(--accent-ink) !important; opacity: 1; }

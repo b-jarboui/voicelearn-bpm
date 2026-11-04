@@ -482,14 +482,15 @@
     view = "home"; setRoute("home"); updateNavigation();
     const st = cur(), les = C.lessons[st.l] || C.lessons[0];
     const flagged = SECS.filter((s) => P.flags[s]);
+    const started = P.hist.length > 0 || P.idx > 0 || P.sent > 0 || deferred.length > 0 || !!deferredReturn || Object.keys(P.lessons).length > 0;
     $("main").innerHTML = `
       ${NEW_UI ? `<section class="w1-hero" aria-labelledby="weekTitle"><div class="eyebrow">${esc(C.code)} <span aria-hidden="true">/</span> WEEK ${String(WK).padStart(2, "0")}</div><div class="w1-hero-body"><div><h1 id="weekTitle">${esc(C.title)}</h1><p>Listen. See the connections. Put your understanding into practice.</p></div><div class="w1-route" aria-hidden="true"><span><i>01</i>Listen</span><b>→</b><span><i>02</i>Check</span><b>→</b><span><i>03</i>Grow</span></div></div><div class="w1-facts"><span><b>${C.lessons.length}</b> lessons</span><span><b>~${Math.max(5, Math.round(C.lessons.reduce((n,l)=>n+l.sections.reduce((m,s)=>m+words(s.lines ? s.lines.map(x=>x[0]).join(" ") : s.script || ""),0),0)/150))} min</b> narration</span><span><b>${pct(A.target)}%</b> mastery target</span></div></section>` : ""}
       <div class="card week-picker"><div class="eyebrow">Week</div><label class="fld" style="display:grid;gap:6px"><span class="muted" style="font-size:15px">Choose the week to study. Each week keeps its own progress.</span><select id="wkSel" style="font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%">${weekList().map((w) => `<option value="${w.n}"${w.n === WK ? " selected" : ""}>Week ${w.n} · ${esc(w.title)}</option>`).join("")}</select></label>${window.REVISION_WEEK ? `<div class="muted" style="font-size:15px">Week ${window.REVISION_WEEK}: revision week, see Moodle (no lessons here).</div>` : ""}</div>
       <div class="card later-card${deferred.length ? " has-pending" : ""}"><div class="eyebrow">To answer later</div><h2>${deferred.length} question${deferred.length===1?"":"s"} saved</h2>
         <p class="muted">Skipped checks are not marked wrong. Answer them when you are ready; the week stays unfinished until they are done.</p>
         ${deferred.length?`<div class="later-list">${deferred.map((id,i)=>`<button type="button" class="later-resume" data-later="${esc(id)}"><span>${i+1}. ${esc(allQ[id].q||id)}</span><strong>Resume →</strong></button>`).join("")}</div>`:"<p>Nothing waiting. You're up to date.</p>"}</div>
-      <div class="card resume-card"><div class="eyebrow">Continue</div><${NEW_UI ? "h2" : "h1"}>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</${NEW_UI ? "h2" : "h1"}>
-        <div class="row">${st.kind === "report" && nextWeek() ? `<button class="primary" id="nextWeek">Continue to Week ${nextWeek().n} →</button><button id="resume">See my report</button>` : `<button class="primary" id="resume">▶ Continue</button>`}<button id="restart">Start over</button></div></div>
+      <div class="card resume-card"><div class="eyebrow">${started ? "Continue" : "Start here"}</div><${NEW_UI ? "h2" : "h1"}>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</${NEW_UI ? "h2" : "h1"}>
+        <div class="row">${st.kind === "report" && nextWeek() ? `<button class="primary" id="nextWeek">Continue to Week ${nextWeek().n} →</button><button id="resume">See my report</button>` : `<button class="primary" id="resume">${started ? "▶ Continue" : "▶ Start lesson 1"}</button>`}<button id="restart">Start over</button></div></div>
       <div class="card look-card"><div class="eyebrow">Look · how the lessons appear</div>
         <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "journey") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
       <div class="card mastery-card"><div class="eyebrow">Achievement · target ${pct(A.target)}% on every part</div>
@@ -498,7 +499,7 @@
         ${flagged.length ? `<div class="muted" style="font-size:15px">Flagged for instructor review: ${flagged.map((s) => esc(A.sections[s].name)).join(", ")}</div>` : ""}</div>
       <div class="card s1-card"><div class="eyebrow">Session 1 · Lessons · ${esc(C.code)}</div><h2>${esc(C.title)}</h2>
         <div>${C.lessons.map((x, l) => { const r = P.lessons[x.id];
-          const pill = r ? (r.passed && !hasDeferredForLesson(l) ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
+          const pill = r ? (r.passed && !hasDeferredForLesson(l) ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (started && st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
           return `<div class="lesson"><div style="min-width:0"><b>${l + 1}. ${esc(x.title)}</b><div class="muted" style="font-size:15px">${x.sections.length} part${x.sections.length > 1 ? "s" : ""} + check</div></div>
           <div class="row">${pill}<button data-l="${l}" aria-label="Play lesson ${l + 1}">Play</button></div></div>`; }).join("")}</div></div>${window.S2 ? S2.homeCard() : ""}`;
     if (NEW_UI) {
@@ -512,7 +513,7 @@
     probeWeeks(); if (window.S2) S2.bindHome($("main"));
     $("resume").onclick = () => openPlayer();
     if ($("nextWeek")) $("nextWeek").onclick = () => goWeek(nextWeek().n);
-    $("restart").onclick = () => { P = fresh(); save(); openPlayer(); };
+    $("restart").onclick = () => { deferred = []; deferredReturn = null; saveDeferred(); P = fresh(); save(); openPlayer(); };
     document.querySelectorAll("[data-look]").forEach((b) => (b.onclick = () => { VS.look = b.dataset.look; saveVS(); document.querySelectorAll("[data-look]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("vLook").value = VS.look; }));
     // Playing a lesson from home runs it in full (each part, its check, the result) and then carries on to the next lesson.
     // Answered questions stay in the history, so a check only asks what is still fresh.
@@ -581,10 +582,11 @@
     else if (st.kind === "report") loadReport();
     renderSend(st.kind === "report" && !!T.sendReport);
     if (st.kind === "report") { const old = $("rateCard"); if (old) old.remove(); const rc = document.createElement("div"); rc.className = "card rate-card"; rc.id = "rateCard"; rc.innerHTML = `<div class="eyebrow">Your opinion</div><button class="primary" id="rateWeek" type="button">★ Rate this week</button><div class="muted" style="font-size:15px">Anonymous, two minutes. Opens in a new tab.</div>`; if (window.S2 && S2.reportCard) { const old2 = $("s2ReportCard"); if (old2) old2.remove(); const h = S2.reportCard(); if (h) { const w = document.createElement("div"); w.id = "s2ReportCard"; w.innerHTML = h; $("main").appendChild(w); S2.bindReport(w); } } $("main").appendChild(rc); $("rateWeek").onclick = openFeedback; }
-    if(st.kind==="report"&&deferred.length){const note=document.createElement("div");note.className="card pending-report";note.setAttribute("role","status");note.textContent=`Week not complete: ${deferred.length} question(s) saved To answer later. Return Home to finish them.`;$("main").prepend(note);}
+    if(st.kind==="report"&&deferred.length){const note=document.createElement("div");note.className="card pending-report";note.setAttribute("role","status");note.textContent=`Week not complete: ${deferred.length} question${deferred.length===1?"":"s"} saved for later. Return Home to finish them.`;$("main").prepend(note);}
     // Paint the saved sentence immediately, including a paused return or a look change.
     caption((P.part === "feedback" ? script.feedback : script.main)?.[P.sent]);
     if (P.part === "main") vstep(P.sent - script.offset);
+    window.VL_LAYOUT?.part(`${WK}:${st.kind}:${st.l}:${st.s ?? st.sec ?? ""}:${st.v ?? ""}:${P.q}:${P.part}`, P.part === "feedback" ? script.feedback : script.main);
   }
 
   // ---------- questions: six auto-checked, single-response types ----------
@@ -715,6 +717,7 @@
     P.part = "feedback"; P.sent = 0; waiting = false; save();
     stopSpeech();
     paintFeedback(ok, ui);
+    window.VL_LAYOUT?.part(`${WK}:feedback:${q.id}`, script.feedback);
     const feedback = stageEl.querySelector("#fbk");
     setTimeout(() => {
       if (!feedback?.isConnected || P.part !== "feedback") return;
@@ -984,7 +987,7 @@
   // Some engines (Chrome Android, Windows) never fire "voiceschanged": poll briefly until the list is there.
   if (synth) { let tries = 0; const poll = setInterval(() => { if (synth.getVoices().length || ++tries > 20) { clearInterval(poll); refreshVoiceLists(); } }, 250); }
   // Space toggles play, except when a control (answer button, list, input) has focus.
-  document.addEventListener("keydown", (e) => { if (e.code === "Space" && view === "player" && !e.target.closest("button,select,input,textarea,label")) { e.preventDefault(); $("toggle").click(); } });
+  document.addEventListener("keydown", (e) => { if (e.code === "Space" && view === "player" && !e.target.closest("button,select,input,textarea,label,summary,a,[contenteditable=true],[role=region]")) { e.preventDefault(); $("toggle").click(); } });
 
     // ---------- Astra onboarding and browser navigation (v9) ----------
     const ONKEY = "voicelearn.oper621.onboard.v1"; // global: shared by all weeks (progress is the only per-week storage)
@@ -1202,7 +1205,7 @@ function updateNavigation() {
   }
 
   const shortLoc = st.kind === "sec" ? `Part ${st.s + 1}` : st.kind === "review" ? "Review" : location;
-  const breadcrumb = `W${WK} · L${lessonNumber} · ${shortLoc}`;
+  const breadcrumb = st.kind === "report" ? `W${WK} · Achievement report` : `W${WK} · L${lessonNumber} · ${shortLoc}`;
   const fullCrumb = `Week ${WK}, lesson ${lessonNumber}: ${lesson ? lesson.title : ""}, ${location}`;
 
   const crumb = $("crumb");
@@ -1229,7 +1232,7 @@ function updateNavigation() {
       : 1;
 
   const progress =
-    st.kind === "quiz"
+    st.kind === "report" || st.kind === "result" ? 1 : st.kind === "quiz"
       ? (P.q + 1) /
         Math.max(1, st.qs?.length || 1)
       : (P.sent + 1) /
@@ -1257,7 +1260,7 @@ function updateNavigation() {
 
     progressBar.setAttribute(
       "aria-valuetext",
-      `${percent} percent complete`
+      st.kind === "report" ? "Achievement report" : st.kind === "result" ? "Check complete" : `${percent} percent complete`
     );
   }
 
@@ -1265,9 +1268,7 @@ function updateNavigation() {
 
   if (progressText) {
     progressText.textContent =
-      `${percent}% of ${
-        st.kind === "quiz" ? "check" : "part"
-      }`;
+      st.kind === "report" ? "Achievement report" : st.kind === "result" ? "Check complete" : `${percent}% of ${st.kind === "quiz" ? "check" : "part"}`;
   }
 
   $("navPrev").disabled =
@@ -1438,13 +1439,22 @@ if (settingsWeek) {
       if (on !== null) b.setAttribute("aria-checked", String(on));
       b.textContent = label + (on === null ? "" : on ? ": on" : ": off");
       b.disabled = !!src.disabled;
-      b.onclick = () => { close(); src.click(); };
+      b.onclick = () => { close(true); src.click(); };
       menu.appendChild(b);
     });
   }
   function open() { build(); menu.hidden = false; btn.setAttribute("aria-expanded", "true"); const f = menu.querySelector("button:not(:disabled)"); if (f) f.focus(); }
   function close(refocus) { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); if (refocus) btn.focus(); }
   btn.onclick = () => (menu.hidden ? open() : close(true));
+  menu.addEventListener("keydown", e => {
+    const keys = ["ArrowDown", "ArrowUp", "Home", "End"];
+    if (e.key === "Tab") { close(); return; }
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const choices = [...menu.querySelectorAll("button:not(:disabled)")], at = choices.indexOf(document.activeElement);
+    const next = e.key === "Home" ? 0 : e.key === "End" ? choices.length - 1 : (at + (e.key === "ArrowDown" ? 1 : -1) + choices.length) % choices.length;
+    choices[next]?.focus();
+  });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { e.preventDefault(); close(true); } });
   document.addEventListener("click", (e) => { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) close(); });
 })();
