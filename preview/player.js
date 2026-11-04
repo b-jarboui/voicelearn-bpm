@@ -137,7 +137,7 @@
   const synth = window.speechSynthesis;
   // Own settings key: the original prototype lives on the same github.io origin and must not share (or break) our settings.
   const VKEY = "voicelearn.oper621.voice.v2";
-  let VS = { uri: "", rate: 1, pitch: 1, look: "board" };
+  let VS = { uri: "", rate: 1, pitch: 1, look: "journey" };
   try { VS = Object.assign(VS, JSON.parse(localStorage.getItem(VKEY)) || {}); } catch (e) {}
   // Sanitize saved values: a bad rate/pitch (NaN, a string, out of range) makes some engines silent.
   const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
@@ -386,7 +386,7 @@
   const lookEl = document.createElement("div");
   lookEl.className = "look";
   let look = null, lookStep = -1;
-  const lookStyle = () => (window.STYLES || []).find((s) => s.id === (VS.look || "board")) || null;
+  const lookStyle = () => (window.STYLES || []).find((s) => s.id === (VS.look || "journey")) || null;
   function fitLook() {
     const k = Math.max(1, Math.min(lookEl.clientHeight / 600, lookEl.clientWidth / 300, 2.2));
     lookEl.style.setProperty("--k", k.toFixed(3));
@@ -394,7 +394,7 @@
   }
   // The quiz/result stage takes the colours of the chosen look (the other looks keep the default dark blue).
   // Questions and other stage screens wear the same look the learner chose for the lessons.
-  function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey", "look-board", "look-motion"); stageEl.classList.add("look-" + (VS.look || "board")); }
+  function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey", "look-board", "look-motion"); stageEl.classList.add("look-" + (VS.look || "journey")); }
   function showLook(on) { lookEl.hidden = !on; stageEl.hidden = on; }
   function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); }
   function loadLook(key, lessonLabel, title, body) {
@@ -439,7 +439,7 @@
       <div class="card resume-card"><div class="eyebrow">Continue</div><${NEW_UI ? "h2" : "h1"}>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</${NEW_UI ? "h2" : "h1"}>
         <div class="row">${st.kind === "report" && nextWeek() ? `<button class="primary" id="nextWeek">Continue to Week ${nextWeek().n} →</button><button id="resume">See my report</button>` : `<button class="primary" id="resume">▶ Continue</button>`}<button id="restart">Start over</button></div></div>
       <div class="card look-card"><div class="eyebrow">Look · how the lessons appear</div>
-        <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "board") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
+        <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "journey") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
       <div class="card mastery-card"><div class="eyebrow">Achievement · target ${pct(A.target)}% on every part</div>
         <div class="row">${CLOS.map((c) => badge(`CLO ${c}`, cloM(c), A.clos[c].full)).join(" ")}</div>
         <div class="row">${LOS.map((k) => badge(A.outcomes[k].name, loM(k), A.outcomes[k].full)).join(" ")}</div>
@@ -907,7 +907,7 @@
   $("vMode").onchange = (e) => { VS.mode = ["captions", "device"].includes(e.target.value) ? e.target.value : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
-  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "board"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
+  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "journey"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
   $("vPitch").oninput = (e) => { VS.pitch = +e.target.value; showPitch(); };
   $("vPitch").onchange = () => { saveVS(); applyLive(); };
   $("vClose").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); $("vBtn").focus(); };

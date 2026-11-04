@@ -33,7 +33,7 @@
 .w10s-host[data-look=journey] .w10s-text .k{color:#2f6b57}
 .w10s-host[data-look=journey] .w10s-mount{filter:hue-rotate(-12deg) saturate(1.05)}
 .w10s-host[data-look=board]{background:radial-gradient(ellipse at 50% 30%,#2c4a42,#1c312b)!important;box-shadow:inset 0 0 0 10px #6b4a2f,inset 0 0 0 12px #3d2a1a}
-.w10s-host[data-look=board] .w10s-mount{filter:invert(1) hue-rotate(180deg) brightness(1.15) contrast(.95)}
+.w10s-host[data-look=board] .w10s-mount{filter:none}
 .w10s-host[data-look=board] .w10s-text .m,.w10s-host[data-look=board] .w10s-text .s{color:#f3efe2;font-family:"Comic Sans MS","Segoe Print","Bradley Hand",cursive}
 .w10s-host[data-look=board] .w10s-text .k{color:#f2c14e}
 .w10s-host[data-look=motion]{background:radial-gradient(circle,rgba(58,92,255,.12) 1.2px,transparent 1.4px) 0 0/18px 18px,#ffffff!important}
