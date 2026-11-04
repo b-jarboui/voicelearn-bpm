@@ -422,17 +422,18 @@
       }).catch(() => {});
     }
   }
+  const NEW_UI = true; // the adopted design (Week 1, 4 Nov 2026) is the interface of every week
   function renderHome() {
     view = "home"; setRoute("home"); updateNavigation();
     const st = cur(), les = C.lessons[st.l] || C.lessons[0];
     const flagged = SECS.filter((s) => P.flags[s]);
     $("main").innerHTML = `
-      ${WK === 1 ? `<section class="w1-hero" aria-labelledby="weekTitle"><div class="eyebrow">${esc(C.code)} <span aria-hidden="true">/</span> WEEK 01</div><div class="w1-hero-body"><div><h1 id="weekTitle">${esc(C.title)}</h1><p>Listen. See the connections. Put your understanding into practice.</p></div><div class="w1-route" aria-hidden="true"><span><i>01</i>Listen</span><b>→</b><span><i>02</i>Check</span><b>→</b><span><i>03</i>Grow</span></div></div><div class="w1-facts"><span><b>${C.lessons.length}</b> lessons</span><span><b>~${Math.max(5, Math.round(C.lessons.reduce((n,l)=>n+l.sections.reduce((m,s)=>m+words(s.lines ? s.lines.map(x=>x[0]).join(" ") : s.script || ""),0),0)/150))} min</b> narration</span><span><b>${pct(A.target)}%</b> mastery target</span></div></section>` : ""}
+      ${NEW_UI ? `<section class="w1-hero" aria-labelledby="weekTitle"><div class="eyebrow">${esc(C.code)} <span aria-hidden="true">/</span> WEEK ${String(WK).padStart(2, "0")}</div><div class="w1-hero-body"><div><h1 id="weekTitle">${esc(C.title)}</h1><p>Listen. See the connections. Put your understanding into practice.</p></div><div class="w1-route" aria-hidden="true"><span><i>01</i>Listen</span><b>→</b><span><i>02</i>Check</span><b>→</b><span><i>03</i>Grow</span></div></div><div class="w1-facts"><span><b>${C.lessons.length}</b> lessons</span><span><b>~${Math.max(5, Math.round(C.lessons.reduce((n,l)=>n+l.sections.reduce((m,s)=>m+words(s.lines ? s.lines.map(x=>x[0]).join(" ") : s.script || ""),0),0)/150))} min</b> narration</span><span><b>${pct(A.target)}%</b> mastery target</span></div></section>` : ""}
       <div class="card week-picker"><div class="eyebrow">Week</div><label class="fld" style="display:grid;gap:6px"><span class="muted" style="font-size:15px">Choose the week to study. Each week keeps its own progress.</span><select id="wkSel" style="font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%">${weekList().map((w) => `<option value="${w.n}"${w.n === WK ? " selected" : ""}>Week ${w.n} · ${esc(w.title)}</option>`).join("")}</select></label>${window.REVISION_WEEK ? `<div class="muted" style="font-size:15px">Week ${window.REVISION_WEEK}: revision week, see Moodle (no lessons here).</div>` : ""}</div>
       <div class="card later-card${deferred.length ? " has-pending" : ""}"><div class="eyebrow">To answer later</div><h2>${deferred.length} question${deferred.length===1?"":"s"} saved</h2>
         <p class="muted">Skipped checks are not marked wrong. Answer them when you are ready; the week stays unfinished until they are done.</p>
         ${deferred.length?`<div class="later-list">${deferred.map((id,i)=>`<button type="button" class="later-resume" data-later="${esc(id)}"><span>${i+1}. ${esc(allQ[id].q||id)}</span><strong>Resume →</strong></button>`).join("")}</div>`:"<p>Nothing waiting. You're up to date.</p>"}</div>
-      <div class="card resume-card"><div class="eyebrow">Continue</div><${WK === 1 ? "h2" : "h1"}>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</${WK === 1 ? "h2" : "h1"}>
+      <div class="card resume-card"><div class="eyebrow">Continue</div><${NEW_UI ? "h2" : "h1"}>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</${NEW_UI ? "h2" : "h1"}>
         <div class="row"><button class="primary" id="resume">▶ Continue</button><button id="restart">Start over</button></div></div>
       <div class="card look-card"><div class="eyebrow">Look · how the lessons appear</div>
         <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "board") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
@@ -445,7 +446,7 @@
           const pill = r ? (r.passed && !hasDeferredForLesson(l) ? `<span class="pill done">Mastered</span>` : `<span class="pill warn">${r.flagged ? "Flagged" : "In progress"}</span>`) : (st.l === l ? '<span class="pill now">In progress</span>' : '<span class="pill">Not started</span>');
           return `<div class="lesson"><div style="min-width:0"><b>${l + 1}. ${esc(x.title)}</b><div class="muted" style="font-size:15px">${x.sections.length} part${x.sections.length > 1 ? "s" : ""} + check</div></div>
           <div class="row">${pill}<button data-l="${l}" aria-label="Play lesson ${l + 1}">Play</button></div></div>`; }).join("")}</div></div>${window.S2 ? S2.homeCard() : ""}`;
-    if (WK === 1) {
+    if (NEW_UI) {
       // Keep keyboard and screen-reader order aligned with the Week 1 layout.
       [".w1-hero", ".resume-card", ".later-card.has-pending", ".s1-card", ".mastery-card", ".later-card:not(.has-pending)", ".s2-home", ".look-card", ".week-picker"].forEach(selector => {
         const card = $("main").querySelector(selector); if (card) $("main").appendChild(card);
@@ -492,7 +493,7 @@
   // ---------- build the current step ----------
   function load() {
     const st = cur();
-    if (WK === 1) document.body.dataset.step = st.kind; // Presentation hooks only.
+    if (NEW_UI) document.body.dataset.step = st.kind; // Presentation hooks only.
     if (view === "player") { setRoute(st.kind === "report" ? "report" : "player", true); }
     waiting = false;
     updateLookClass();
