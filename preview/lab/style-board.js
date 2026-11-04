@@ -52,13 +52,13 @@
  
   const CSS = `
 .vb-root {
-  --vb-bg:#fbfaf5;
+  --vb-bg:#ffffff;
   --vb-ink:#202f39;
   --vb-muted:#455965;
-  --vb-blue:#17619a;
-  --vb-orange:#a64c16;
-  --vb-green:#176b4b;
-  --vb-red:#a63232;
+  --vb-blue:#175caa;
+  --vb-orange:#984600;
+  --vb-green:#126644;
+  --vb-red:#b12835;
   --vb-rule:#d9dfdc;
   --vb-soft:#eef3f4;
   --vb-warm:#fff0dc;
@@ -72,6 +72,8 @@
   min-height:0;
   overflow:hidden;
   background:var(--vb-bg);
+  border:1px solid #abb8c4;
+  border-radius:12px;
   color:var(--vb-ink);
   font-family:"Atkinson Hyperlegible",system-ui,sans-serif;
   line-height:1.45;
@@ -93,12 +95,7 @@ body .player .look.vb-root {
   position:absolute;
   inset:0;
   pointer-events:none;
-  background:linear-gradient(
-    to bottom,
-    transparent 31px,
-    var(--vb-rule) 32px
-  ) 0 0/100% 32px;
-  opacity:.22;
+  background:none;
 }
  
 .vb-root .vb-stage {
@@ -163,7 +160,7 @@ body .player .look.vb-root {
  
 .vb-root h2,
 .vb-root h3 {
-  font-family:"Bricolage Grotesque",system-ui,sans-serif;
+  font-family:"Segoe Print","Comic Sans MS","Atkinson Hyperlegible",sans-serif;
   font-weight:800;
   letter-spacing:-.025em;
 }
@@ -218,7 +215,7 @@ body .player .look.vb-root {
   width:min(100%,440px);
   height:24px;
   overflow:visible;
-  color:var(--vb-orange);
+  color:var(--vb-blue);
 }
  
 .vb-root .vb-mark path,
@@ -243,7 +240,7 @@ body .player .look.vb-root {
   width:72px;
   height:72px;
   border:2px solid var(--vb-blue);
-  border-radius:16px 13px 17px 12px;
+  border-radius:12px;
   background:var(--vb-soft);
   color:var(--vb-blue);
 }
@@ -274,7 +271,7 @@ body .player .look.vb-root {
 }
  
 .vb-root .vb-question-symbol {
-  color:var(--vb-orange);
+  color:var(--vb-blue);
   font-family:"Bricolage Grotesque",system-ui,sans-serif;
   font-size:64px;
   font-weight:800;
@@ -382,13 +379,13 @@ body .player .look.vb-root {
   min-width:0;
   padding:17px 19px;
   border:2px solid var(--vb-blue);
-  border-radius:13px 16px 12px 15px;
+  border-radius:12px;
   background:var(--vb-soft);
 }
  
 .vb-root .vb-compare[data-side="b"] {
-  border-color:var(--vb-orange);
-  background:var(--vb-warm);
+  border-color:var(--vb-blue);
+  background:var(--vb-soft);
 }
  
 .vb-root .vb-compare .vb-kicker {
@@ -396,7 +393,7 @@ body .player .look.vb-root {
 }
  
 .vb-root .vb-compare[data-side="b"] .vb-kicker {
-  color:var(--vb-orange);
+  color:var(--vb-blue);
 }
  
 .vb-root .vb-compare p {
@@ -411,7 +408,7 @@ body .player .look.vb-root {
 }
  
 .vb-root .vb-compare[data-side="b"] .vb-direction {
-  color:var(--vb-orange);
+  color:var(--vb-blue);
 }
  
 .vb-root .vb-diagram {
@@ -459,7 +456,7 @@ body .player .look.vb-root {
 }
  
 .vb-root svg.dg text[fill="#FFB84D"] {
-  fill:var(--vb-orange);
+  fill:var(--vb-blue);
   font-weight:800;
 }
  
@@ -490,11 +487,11 @@ body .player .look.vb-root {
 }
  
 .vb-root svg.dg [stroke="#FFB84D"] {
-  stroke:var(--vb-orange);
+  stroke:var(--vb-blue);
 }
  
 .vb-root svg.dg :not(text)[fill="#FFB84D"] {
-  fill:#f6bf71;
+  fill:var(--vb-soft);
 }
  
 .vb-root svg.dg [stroke="#FF6B6B"] {
@@ -582,37 +579,7 @@ body .player .look.vb-root {
   }
 }
  
-:root[data-theme="dark"] .vb-root {
-  --vb-bg:#17242a;
-  --vb-ink:#f5f5ed;
-  --vb-muted:#d3dedf;
-  --vb-blue:#87caff;
-  --vb-orange:#ffbb78;
-  --vb-green:#83e3b2;
-  --vb-red:#ff9e9e;
-  --vb-rule:#3a4b51;
-  --vb-soft:#243840;
-  --vb-warm:#403124;
-  --vb-bad:#422c30;
-  --vb-good:#233f35;
-}
- 
-@media (prefers-color-scheme:dark) {
-  :root:not([data-theme="light"]) .vb-root {
-    --vb-bg:#17242a;
-    --vb-ink:#f5f5ed;
-    --vb-muted:#d3dedf;
-    --vb-blue:#87caff;
-    --vb-orange:#ffbb78;
-    --vb-green:#83e3b2;
-    --vb-red:#ff9e9e;
-    --vb-rule:#3a4b51;
-    --vb-soft:#243840;
-    --vb-warm:#403124;
-    --vb-bad:#422c30;
-    --vb-good:#233f35;
-  }
-}
+/* A whiteboard remains white under both device colour schemes. */
  
 @media (prefers-reduced-motion:reduce) {
   .vb-root *,
@@ -2046,9 +2013,148 @@ body .player .look.vb-root {
     }
   }
  
-  /*
-   * Registration is idempotent.
+  /* Board-only presentation of the original weekly SVGs. Geometry, keyed groups,
+   * draw paths and scene timing stay owned by VL_SCENES. Never filter the artwork.
+   * Blue = process; red = problem; green = positive result; orange = customer.
+   * Neutrals carry no semantic meaning. Pale fills always have dark marker edges.
    */
+  const MARKERS = {
+    process: ["#175caa", "#edf4fc"],
+    problem: ["#b12835", "#fff0f2"],
+    good: ["#126644", "#eaf6ef"],
+    customer: ["#984600", "#fff3e6"]
+  };
+  function markerRole(el, color, fillColor) {
+    // Prefer the nearest named teaching element, not a whole scene's prose.
+    for (let n = el; n && n.tagName.toLowerCase() !== "svg"; n = n.parentElement) {
+      const key = ["data-k","data-h","data-prop","data-name"].map(a=>n.getAttribute(a)||"").join(" ").toLowerCase();
+      if (/problem|risk|bad|fail|error|delay|backlog|block|queue|bottleneck|reject|alarm|waste|issue|broken|wait|gap|warn|stuck/.test(key)) return "problem";
+      if (/customer|guest|client|visitor/.test(key)) return "customer";
+      if (/good|done|ready|success|approve|complete|solved|benefit|correct|happy|tick|checkmark/.test(key)) return "good";
+    }
+    // Explicit red status marks remain problems. Decorative warm/green colours
+    // become process blue unless the element has an explicit teaching role.
+    const [r,g,b] = color;
+    // Preserve actual green check marks, not green decorative strokes (for
+    // example the three horizontal lines on a procedures document).
+    const commands=(el.getAttribute("d")||"").match(/[a-z]/ig)||[];
+    if (g > r * 1.35 && g > b * 1.12 && el.tagName==="path"&&el.getAttribute("fill")==="none"&&
+      commands.length===3&&commands[0].toLowerCase()==="m"&&commands.slice(1).every(c=>c.toLowerCase()==="l")) return "good";
+    const red = ([r,g,b])=>r>100&&r>g*1.65&&g<b*1.45;
+    return red(color)||red(fillColor) ? "problem" : "process";
+  }
+  function dressScene(mount) {
+    installCSS();
+    const host = mount.closest(".w10s-host");
+    if (host && !host.querySelector(".vb-legend")) {
+      const legend = html("div","vb-legend");
+      for (const [role,label] of [["process","Process"],["problem","Problem"],["good","Positive"],["customer","Customer"]]) {
+        const item = html("span","",label); item.style.setProperty("--marker",MARKERS[role][0]);legend.appendChild(item);
+      }
+      host.appendChild(legend);
+    }
+    const originals = new WeakMap();
+    const canvas = document.createElement("canvas").getContext("2d");
+    function rgb(value) {
+      canvas.fillStyle = "#000000";
+      canvas.fillStyle = value;
+      const c = canvas.fillStyle;
+      if (c[0] === "#") return [1,3,5].map(i => parseInt(c.slice(i,i+2),16));
+      return (c.match(/[\d.]+/g) || [0,0,0]).slice(0,3).map(Number);
+    }
+    function remember(el) {
+      if (!(el instanceof SVGElement) || !/^(path|rect|circle|ellipse|line|polyline|polygon|text|tspan)$/.test(el.tagName) || el.closest("defs,clipPath,mask")) return;
+      if(!originals.has(el)) {
+        const cs=getComputedStyle(el);
+        originals.set(el,{fill:cs.fill,stroke:cs.stroke,inlineFill:el.style.fill,inlineStroke:el.style.stroke});
+      }
+    }
+    function paint(el, changed) {
+      if (!(el instanceof SVGElement) || !/^(path|rect|circle|ellipse|line|polyline|polygon|text|tspan)$/.test(el.tagName)) return;
+      if (el.closest("defs,clipPath,mask")) return;
+      let src = originals.get(el);
+      if (!src) {
+        remember(el);src=originals.get(el);
+      } else if (changed === "style") {
+        if (src.inlineFill === el.style.fill && src.inlineStroke === el.style.stroke) return;
+        if (src.inlineFill !== el.style.fill) src.fill = el.style.fill || el.getAttribute("fill") || "none";
+        if (src.inlineStroke !== el.style.stroke) src.stroke = el.style.stroke || el.getAttribute("stroke") || "none";
+        src.inlineFill=el.style.fill;src.inlineStroke=el.style.stroke;
+      } else if (changed) src[changed] = el.getAttribute(changed) || "none";
+      const isText = /^(text|tspan)$/.test(el.tagName);
+      const hasFill = src.fill !== "none" && src.fill !== "transparent" && !/rgba\([^)]*,\s*0\)$/.test(src.fill);
+      const hasStroke = src.stroke !== "none" && src.stroke !== "transparent";
+      const color = rgb(hasStroke ? src.stroke : src.fill);
+      let role = markerRole(el,color,rgb(src.fill));
+      // The weekly badge helper emits adjacent circle + white tick/cross, rather
+      // than a named group. Keep both strokes in the same positive/problem ink.
+      const whiteStroke=/^(#fff(?:fff)?|white)$/i.test(el.getAttribute("stroke")||"");
+      const previous=el.previousElementSibling;
+      if(el.tagName==="path"&&whiteStroke&&previous?.tagName==="circle"&&["good","problem"].includes(previous.dataset.vbPainted))role=previous.dataset.vbPainted;
+      if(el.tagName==="circle"&&el.nextElementSibling?.tagName==="path"&&/^(#fff(?:fff)?|white)$/i.test(el.nextElementSibling.getAttribute("stroke")||"")) {
+        const [r,g,b]=rgb(src.fill);if(g>r*1.35&&g>b*1.12)role="good";
+      }
+      const [ink,tint] = MARKERS[role];
+      let fill = hasFill ? tint : "none", stroke = hasStroke ? ink : "none";
+      let width = hasStroke ? "1.7px" : "0px";
+      if (isText) { fill="#202f39";stroke="none"; }
+      else {
+        const box = el.ownerSVGElement?.viewBox.baseVal;
+        const bg = el.tagName === "rect" && box && +el.getAttribute("width") >= box.width * .86 && +el.getAttribute("height") >= box.height * .72;
+        const small = (el.tagName === "circle" && +el.getAttribute("r") < 4) || (el.tagName === "rect" && Math.min(+el.getAttribute("width"),+el.getAttribute("height")) < 5);
+        if (bg) {fill="#fff";stroke="none";width="0px";}
+        else if (hasFill) {
+          // Filled artwork becomes clean marker outlines; tiny dots stay solid.
+          if (small || el.closest("marker")) fill=ink;
+          else {stroke=ink;width="1.7px";}
+          const c=rgb(src.fill);
+          if (Math.max(...c)-Math.min(...c)<45 && Math.max(...c)<95) {
+            fill=small ? "#202f39" : tint;
+            stroke="#202f39";
+          }
+          if (Math.min(...c)>235) fill="#fff";
+          // Filled header bands often use a second overlapping rectangle to
+          // square off their bottom corners. That repair strip is not a box:
+          // outlining it would draw a line straight through the heading.
+          const prev=el.previousElementSibling;
+          if(el.tagName==="rect"&&!hasStroke&&prev?.tagName==="rect"&&originals.get(prev)?.fill===src.fill&&
+            el.getAttribute("x")===prev.getAttribute("x")&&el.getAttribute("width")===prev.getAttribute("width")) {
+            const y=+el.getAttribute("y"),py=+prev.getAttribute("y");
+            if(y>py&&y<py+(+prev.getAttribute("height"))){stroke="none";width="0px";}
+          }
+        }
+      }
+      if(el.dataset.vbPainted!==role)el.dataset.vbPainted=role;
+      for(const [name,value] of [["--vb-fill",fill],["--vb-stroke",stroke],["--vb-width",width]]) {
+        if(el.style.getPropertyValue(name)!==value)el.style.setProperty(name,value);
+      }
+    }
+    // Read all source paints before writing any board styles. Alternating reads
+    // and writes forces a full style recalculation for every SVG primitive.
+    const drawings=[...mount.querySelectorAll("svg *")];
+    drawings.forEach(remember);drawings.forEach(el=>paint(el));
+    // Some scenes animate status colours via GSAP's AttrPlugin. Reclassify those
+    // colours while leaving opacity, transforms and stroke-dashoffset untouched.
+    const observer = new MutationObserver(records=>{
+      // Collapse repeated animation writes to each element before repainting.
+      const changed=new Map(),added=new Set();
+      for (const r of records) {
+        if (r.type === "attributes") {
+          if(!changed.has(r.target))changed.set(r.target,new Set());
+          changed.get(r.target).add(r.attributeName);
+        } else for (const n of r.addedNodes) if(n.nodeType===1)added.add(n);
+      }
+      for(const [el,attrs] of changed)if(mount.contains(el))for(const attr of attrs)paint(el,attr);
+      const fresh=[];
+      for(const n of added)if(mount.contains(n))fresh.push(n,...n.querySelectorAll("*"));
+      fresh.forEach(remember);fresh.forEach(el=>paint(el));
+    });
+    observer.observe(mount,{subtree:true,childList:true,attributes:true,attributeFilter:["fill","stroke","style"]});
+    return () => observer.disconnect();
+  }
+  window.VL_BOARD = { dressScene };
+
+  /* Registration is idempotent. */
  
   window.STYLES = window.STYLES || [];
  

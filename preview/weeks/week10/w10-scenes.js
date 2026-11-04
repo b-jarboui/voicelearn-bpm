@@ -32,10 +32,10 @@
 .w10s-host[data-look=journey] .w10s-text::before{content:"";position:absolute;left:-11px;top:6px;width:14px;height:14px;border-radius:50%;background:#2f6b57;box-shadow:0 0 0 4px rgba(47,107,87,.2)}
 .w10s-host[data-look=journey] .w10s-text .k{color:#2f6b57}
 .w10s-host[data-look=journey] .w10s-mount{filter:hue-rotate(-12deg) saturate(1.05)}
-.w10s-host[data-look=board]{background:radial-gradient(ellipse at 50% 30%,#2c4a42,#1c312b)!important;box-shadow:inset 0 0 0 10px #6b4a2f,inset 0 0 0 12px #3d2a1a}
+.w10s-host[data-look=board]{background:#fff!important;border:1px solid #abb8c4;border-radius:12px;box-shadow:none;padding:12px;color:#202f39;color-scheme:light}
 .w10s-host[data-look=board] .w10s-mount{filter:none}
-.w10s-host[data-look=board] .w10s-text .m,.w10s-host[data-look=board] .w10s-text .s{color:#f3efe2;font-family:"Comic Sans MS","Segoe Print","Bradley Hand",cursive}
-.w10s-host[data-look=board] .w10s-text .k{color:#f2c14e}
+.w10s-host[data-look=board] .w10s-text .m,.w10s-host[data-look=board] .w10s-text .s{color:#202f39;font-family:"Segoe Print","Comic Sans MS","Atkinson Hyperlegible",sans-serif;opacity:1}
+.w10s-host[data-look=board] .w10s-text .k{color:#175caa}
 .w10s-host[data-look=motion]{background:radial-gradient(circle,rgba(58,92,255,.12) 1.2px,transparent 1.4px) 0 0/18px 18px,#ffffff!important}
 .w10s-host[data-look=motion]::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:linear-gradient(90deg,#3a5cff,#ff4f8b,#ffb020)}
 .w10s-host[data-look=motion] .w10s-text .m{font-size:clamp(22px,3vw,34px);color:#101a3a}
@@ -168,6 +168,7 @@
     if (st.root && window.gsap) gsap.killTweensOf([st.root, ...st.root.querySelectorAll("*")]);
     st.scene = null; st.lastIndex = null;
     if (st.mo) st.mo.disconnect();
+    if (st.undress) { st.undress(); st.undress = null; }
   }
 
   function install(style) {
@@ -212,6 +213,7 @@
           root.appendChild(st.host);
         }
         if (st.built !== id) {
+          if (st.undress) { st.undress(); st.undress = null; }
           st.host.replaceChildren();
           st.inner = document.createElement("div");
           st.inner.className = "w10s-inner";
@@ -233,6 +235,7 @@
         st.host.classList.add("on");
         // Each look dresses the same scene its own way (see the [data-look] rules).
         st.host.dataset.look = style.id || "";
+        if (style.id === "board" && !st.undress) st.undress = window.VL_BOARD?.dressScene(st.inner.querySelector(".w10s-mount"));
         if (!["notebook", "journey", "board", "motion"].includes(style.id)) {
           const bg = getComputedStyle(root).backgroundColor;
           if (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) st.host.style.backgroundColor = bg;

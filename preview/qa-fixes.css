@@ -1,4 +1,5 @@
 /* Shared course repairs. Loaded after both adopted design sheets. */
+/* Round 4 board presentation rules follow the shared repairs below. */
 /* Changing caption line counts must not resize an illustration mid-animation. */
 html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
   flex: 0 0 108px; height: 108px; max-height: 108px; overflow-y: auto;
@@ -127,3 +128,118 @@ html body[data-step="quiz"] .stage.scroll .qorder { margin: 0; padding-left: 26p
   html body[data-step="quiz"] .stage.scroll .st-track { padding: 12px 16px; gap: 10px; }
   html body[data-step="quiz"] .stage.scroll .st-opts.vis { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
+
+/* Round 4: Animated Whiteboard only. The shared controls keep their current theme. */
+html[data-week] .player .w10s-host[data-look="board"] { padding-top:32px; }
+.w10s-host[data-look="board"] .vb-legend {
+  position:absolute;top:9px;left:14px;right:14px;display:flex;justify-content:center;
+  gap:14px;font:700 10px/1.4 "Atkinson Hyperlegible",sans-serif;color:#455965;
+}
+.vb-legend span { display:flex;align-items:center;gap:4px; }
+.vb-legend span::before { content:"";width:10px;height:3px;border-radius:2px;background:var(--marker); }
+html[data-week] .player .w10s-host[data-look="board"] .w10s-text {
+  padding:12px 4px 2px;border-top:1px solid #d3dde6;overflow:auto;min-height:0;
+}
+html[data-week] .player .w10s-host[data-look="board"] .w10s-text .m {
+  font:700 clamp(16px,1.6vw,21px)/1.5 "Segoe Print","Comic Sans MS","Atkinson Hyperlegible",sans-serif!important;
+  color:#202f39;letter-spacing:-.02em;
+}
+html[data-week] .player .w10s-host[data-look="board"] .w10s-text .s { color:#455965;font:400 15px/1.45 var(--body); }
+/* Remove coloured paper, dotted textures, bevels and label halos. Keep authored
+   SVG geometry and all narration-driven drawing states. */
+html[data-week] .w10s-host[data-look="board"] .w10s-mount :not(svg,svg *) {
+  background:transparent!important;background-image:none!important;box-shadow:none!important;
+  color:#202f39!important;text-shadow:none!important;
+}
+html[data-week] .w10s-host[data-look="board"] .w10s-mount > * { min-height:0!important;border:0!important;border-radius:0!important; }
+.w10s-host[data-look="board"] .w10s-mount svg { filter:none!important; }
+.w10s-host[data-look="board"] svg [data-vb-painted] {
+  fill:var(--vb-fill)!important;stroke:var(--vb-stroke)!important;stroke-width:var(--vb-width)!important;
+  stroke-linecap:round;stroke-linejoin:round;filter:none!important;
+}
+.w10s-host[data-look="board"] svg :is(text,tspan) {
+  font-family:"Atkinson Hyperlegible",sans-serif!important;font-weight:700!important;
+  letter-spacing:0!important;text-shadow:none!important;paint-order:normal!important;
+}
+/* Bind the later shared screen styles locally: dark device colours cannot leak
+   into this look's checks, review, results, report, or diagram dialog. */
+html[data-week] .player .stage.look-board,
+html:has(.stage.look-board) .qdiagram-dialog {
+  --surface:#fff;--bg:#f5f8fc;--ink:#202f39;--muted:#455965;--line:#abb8c4;
+  --accent:#175caa;--accent-ink:#fff;--ok:#126644;--warn:#b12835;--w1-soft:#edf4fc;
+  --st-bg:#fff;--st-panel:#fff;--st-panel2:#edf4fc;--st-ink:#202f39;--st-muted:#455965;
+  --st-line:#abb8c4;--st-accent:#175caa;--st-warm:#175caa;--st-bad:#b12835;--st-good:#126644;
+  background:#fff;color:#202f39;border:1px solid #abb8c4;box-shadow:none;color-scheme:light;
+}
+html[data-week] .stage.look-board :is(.st-h,.st-quote:not(.qstem)) {
+  font-family:"Segoe Print","Comic Sans MS","Atkinson Hyperlegible",sans-serif;
+  line-height:1.4;letter-spacing:-.02em;
+}
+html[data-week] .stage.look-board .st-it.bad { color:#b12835; }
+html[data-week] .stage.look-board .st-opt.right { background:#eaf6ef; }
+html[data-week] .stage.look-board .st-opt.picked { background:#fff0f2; }
+html[data-week] .stage.look-board .st-score.good { color:#126644;background:#eaf6ef; }
+html[data-week] .stage.look-board .st-score.bad { color:#b12835;background:#fff0f2; }
+html[data-week] .stage.look-board :is(.dgo,svg.dg),
+html:has(.stage.look-board) .qdiagram-dialog .dgo,
+html[data-week] .player .look.vb-root:not([data-w10s]) svg.dg {
+  --dg-box:#edf4fc;--dg-line:#175caa;--dg-soft:#455965;--dg-hi:#175caa;
+  --dg-dark:#fff;--dg-good:#126644;--dg-bad:#b12835;--dg-band:#f5f8fc;--dg-border:#455965;
+  color:#202f39;
+}
+body:has(.vb-root) .cc,body:has(.stage.look-board) .cc {
+  background:#fff!important;color:#202f39!important;border-top:1px solid #d3dde6!important;text-shadow:none!important;
+}
+.lookbtn.board .sw,.mini.board { background:#fff;border:1px solid #abb8c4;color:#202f39;box-shadow:none; }
+.mini.board .tile {
+  background:#edf4fc;border:2px solid #175caa;border-radius:10px;box-shadow:none;
+  font-family:"Segoe Print","Comic Sans MS","Atkinson Hyperlegible",sans-serif;
+}
+.mini.board .tile::after { background:#175caa;transform:none; }
+.lookbtn.board .sw {
+  background:linear-gradient(#175caa,#175caa) 16% 50%/24% 14px no-repeat,
+    linear-gradient(#175caa,#175caa) 50% 50%/20% 2px no-repeat,
+    linear-gradient(#175caa,#175caa) 84% 50%/24% 14px no-repeat,#fff;
+}
+@media (min-width:900px) and (min-aspect-ratio:5/4), (orientation:landscape) and (max-height:500px) {
+  html[data-week] .w10s-host[data-look="board"] .w10s-inner { flex-direction:row;align-items:center;gap:18px;padding:0 4px; }
+  html[data-week] .player .w10s-host[data-look="board"] .w10s-mount { flex:1 1 60%!important;height:100%;min-width:0; }
+  html[data-week] .player .w10s-host[data-look="board"] .w10s-text {
+    flex:0 1 36%;border-top:0;border-left:1px solid #d3dde6;padding:4px 4px 4px 16px;max-height:100%;
+  }
+}
+@media (orientation:landscape) and (max-height:500px) {
+  html[data-week] .player .w10s-host[data-look="board"] { padding:27px 8px 8px; }
+  html[data-week] .player .w10s-host[data-look="board"] .w10s-text .m { font:700 14px/1.45 "Atkinson Hyperlegible",sans-serif!important;letter-spacing:0; }
+  html[data-week] .player .w10s-host[data-look="board"] .w10s-text .s { font-size:13px; }
+}
+/* Clip each scene to its mount: some weekly SVGs deliberately overflow their
+   full-bleed canvas. They must never paint over the frame or marker key. */
+html[data-week] .player .w10s-host[data-look="board"] .w10s-mount {
+  overflow:hidden!important;contain:paint;isolation:isolate;
+}
+.w10s-host[data-look="board"] .vb-legend { z-index:4;pointer-events:none; }
+html[data-week] .w10s-host[data-look="board"] .w10s-mount :is(.w01-bar,.w04-pr,.vlw-bar,.vx-pg) { background:#d3dde6!important; }
+html[data-week] .w10s-host[data-look="board"] .w10s-mount :is(.w01-bar i,.w04-pr i,.vlw-bar i,.vx-pgb) { background:#175caa!important; }
+.w10s-host[data-look="board"] svg rect[data-vb-painted] { rx:6px;ry:6px; }
+/* Status ink must follow status, including nested counters and mastery bars. */
+html[data-week] .stage.look-board .st-score.good span { color:#126644; }
+html[data-week] .stage.look-board .st-score.bad span { color:#b12835; }
+html[data-week] .stage.look-board .st-lo-t i.good { background:#126644; }
+html[data-week] .stage.look-board .st-lo-t i.bad { background:#b12835; }
+html[data-week] .stage.look-board .st-score.bad:has(span:not([data-count])) { background:#f5f8fc; }
+html[data-week] .stage.look-board .st-score.bad span:not([data-count]) { color:#455965; }
+html[data-week] .stage.look-board .st-next.primary span { color:#fff; }
+/* Week 12 L2/P3: the bottom annotation needs ink clearance in phone landscape. */
+.w10s-host[data-look="board"] .vls-w12-W12O2c svg { padding:4px;box-sizing:border-box; }
+/* Week 8's direct SVG children are decorative graph-paper lines/dots. The
+   teaching drawings live inside data-beat groups; keep the board surface clean. */
+.w10s-host[data-look="board"] .w08-fig > svg > :is(path,circle) { display:none; }
+/* Marker roles change immediately. Inherited fill/stroke transitions otherwise
+   blend blue/red into muddy intermediate colours; retain drawing and movement. */
+.w10s-host[data-look="board"] svg [data-vb-painted] {
+  transition-property:opacity,transform,stroke-dashoffset,stroke-dasharray,width,height,x,y,cx,cy,r,rx,ry!important;
+}
+/* Fresh-explanation highlight boxes use solid process ink: their labels need
+   white ink rather than the base renderer's blanket dark-text rule. */
+html[data-week] .player .look.vb-root:not([data-w10s]) svg.dg text[fill*="--dg-dark"] { fill:#fff; }
