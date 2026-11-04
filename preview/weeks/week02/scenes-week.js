@@ -1,6 +1,6 @@
 // FILE w02-claude-v2-part1.js
-// OPER621 Â· Week 2 Â· Drivers and Triggers for BPM â€” animated teaching scenes (v2), part 1 of 4.
-// Lesson 1 Â· Why organisations finally act. Sections: W2O1a, W2O1b, W2O1c. Standalone: defines every helper it uses, registers its own
+// OPER621 · Week 2 · Drivers and Triggers for BPM — animated teaching scenes (v2), part 1 of 4.
+// Lesson 1 · Why organisations finally act. Sections: W2O1a, W2O1b, W2O1c. Standalone: defines every helper it uses, registers its own
 // scenes, and appends its own scoped rules to the shared <style id="vl-sc-w02">. Parts load in any order.
 // Contract: window.VL_SCENES['<sec id>'] = { build(el), step(i, n), reset() }.
 // Design (v2): one beat per narration moment. Each act is an original composition adapted from the
@@ -876,7 +876,7 @@
   addStyle();
 
   // =====================================================================
-  // W2O1a Â· Pressure builds before a programme begins â€” 32 moments, 10 acts
+  // W2O1a · Pressure builds before a programme begins — 32 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O1a"] = scene("W2O1a", [
     // Act 1 (moments 0-3). Benchmark Part2 #081 "Clean Workflow Visualization with Motion Graphics"
@@ -1078,12 +1078,12 @@
   ]);
 
   // =====================================================================
-  // W2O1b Â· The event that changes everything â€” 32 moments, 10 acts
+  // W2O1b · The event that changes everything — 32 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O1b"] = scene("W2O1b", [
     // Act 1 (moments 0-2). Benchmark Part2 #093 "Process-Para"
     // https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT
-    // Adapted: rotate, wait, (no) finish â€” pressure keeps cycling into a vessel while the gate stays shut.
+    // Adapted: rotate, wait, (no) finish — pressure keeps cycling into a vessel while the gate stays shut.
     A("P2#093", [
       L("l1", [70, 112], [92, 150], { col: C.orange, sw: 4, arrow: 1, tok: "dot", tc: C.orange, tn: 2 }),
       L("l2", [200, 112], [128, 150], { col: C.orange, sw: 4, arrow: 1, tok: "dot", tc: C.orange, tn: 2 }),
@@ -1168,7 +1168,7 @@
     ]),
     // Act 6 (moments 14-17). Benchmark B1 #64 "Kurzgesagt production method"
     // https://kurzgesagt.org/what-we-do
-    // Adapted: narration-led physical metaphor â€” decaying hidden wiring, then an alarm that forces a response.
+    // Adapted: narration-led physical metaphor — decaying hidden wiring, then an alarm that forces a response.
     A("B1#64", [
       L("hs", null, null, { d: "M24 146L124 64L224 146V352H24Z", col: C.navy, sw: 4 }),
       L("wr", null, null, { d: "M46 336V256H92l9-14 9 14H160V196H202V336", col: C.gold, sw: 5 }),
@@ -1260,7 +1260,7 @@
   ]);
 
   // =====================================================================
-  // W2O1c Â· Reading the real brief behind a trigger â€” 36 moments, 10 acts
+  // W2O1c · Reading the real brief behind a trigger — 36 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O1c"] = scene("W2O1c", [
     // Act 1 (moments 0-3). Benchmark Part2 #082 "Motion Design Process"
@@ -1347,7 +1347,7 @@
     ]),
     // Act 6 (moments 18-20). Benchmark Part2 #130 "Animated line chart lesson"
     // https://observablehq.com/@d3/learn-d3-animation
-    // Adapted: a time series is traced left to right â€” and stops, because nobody keeps tracking it.
+    // Adapted: a time series is traced left to right — and stops, because nobody keeps tracking it.
     A("P2#130", [
       P("ch", "line", 200, 148, { w: 320, h: 118, pts: [0.15, 0.72, 0.72, 0.72, 0.72, 0.72], col: C.green, marks: [{ i: 1, lab: "Claimed at launch", w: 158, y: -46, col: C.green, dx: 30 }, { i: 4, lab: "Never tracked", w: 140, y: 20, col: C.red }] }),
       P("s1", "person", 70, 304, { sz: 0.8, col: C.teal }),
@@ -1383,7 +1383,7 @@
     ]),
     // Act 8 (moments 26-29). Benchmark Part2 #080 "Creative Design Workflow Animation"
     // https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
-    // Adapted: shapes are assembled into a composition â€” but here the vendor's template shapes the process.
+    // Adapted: shapes are assembled into a composition — but here the vendor's template shapes the process.
     A("P2#080", [
       P("wr", "icon", 96, 170, { ic: "warn", sz: 96, col: C.orange, lab: "Technology trap", ls: 15 }),
       P("hc", "bar", 290, 150, { w: 190, lab: "Most common", max: 1, col: C.orange }),
@@ -1406,7 +1406,7 @@
     ]),
     // Act 9 (moments 30-32). Benchmark Part2 #090 "Multi-Step Icon Animation"
     // https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
-    // Adapted: one step activates after another â€” each trigger lights the expectation it creates.
+    // Adapted: one step activates after another — each trigger lights the expectation it creates.
     A("P2#090", [
       P("sw", "card", 100, 196, { w: 160, h: 150, ic: "db", lab: "New software", col: C.plum, is: 46 }),
       P("ne", "icon", 200, 196, { ic: "x", sz: 26, col: C.red, disc: C.blush }),
@@ -1458,8 +1458,8 @@
 // END FILE w02-claude-v2-part1.js
 
 // FILE w02-claude-v2-part2.js
-// OPER621 Â· Week 2 Â· Drivers and Triggers for BPM â€” animated teaching scenes (v2), part 2 of 4.
-// Lesson 2 Â· Qasr Hospitality asks why now. Sections: W2O2a, W2O2b, W2O2c. Standalone: defines every helper it uses, registers its own
+// OPER621 · Week 2 · Drivers and Triggers for BPM — animated teaching scenes (v2), part 2 of 4.
+// Lesson 2 · Qasr Hospitality asks why now. Sections: W2O2a, W2O2b, W2O2c. Standalone: defines every helper it uses, registers its own
 // scenes, and appends its own scoped rules to the shared <style id="vl-sc-w02">. Parts load in any order.
 // Contract: window.VL_SCENES['<sec id>'] = { build(el), step(i, n), reset() }.
 // Design (v2): one beat per narration moment. Each act is an original composition adapted from the
@@ -2335,7 +2335,7 @@
   addStyle();
 
   // =====================================================================
-  // W2O2a Â· Four pressures and one decisive event â€” 30 moments, 9 acts
+  // W2O2a · Four pressures and one decisive event — 30 moments, 9 acts
   // (audit: lowest score 3.4/10, rebuilt first)
   // =====================================================================
   W.VL_SCENES["W2O2a"] = scene("W2O2a", [
@@ -2376,7 +2376,7 @@
     ]),
     // Act 3 (moments 7-8). Benchmark Part2 #076 "Workflow Animation"
     // https://dribbble.com/shots/3791748-Workflow-Animation
-    // Adapted: an action fires, a trigger message is transferred, the notification arrives â€” here, too late.
+    // Adapted: an action fires, a trigger message is transferred, the notification arrives — here, too late.
     A("P2#076", [
       P("rm", "dept", 74, 118, { w: 84, h: 70, ic: "bed", lab: "Room ready" }),
       L("ms", [120, 118], [218, 118], { col: C.grey, sw: 4, brk: 1 }),
@@ -2392,7 +2392,7 @@
     ]),
     // Act 4 (moments 9-11). Benchmark Part2 #120 "Animated Dashboards"
     // https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
-    // Adapted: panel-to-panel transition â€” the rival's app screen, then Qasr's meeting, then the issue fades.
+    // Adapted: panel-to-panel transition — the rival's app screen, then Qasr's meeting, then the issue fades.
     A("P2#120", [
       P("ph", "screen", 98, 204, { w: 150, h: 228, lab: "Rival app" }),
       P("pi", "icon", 98, 180, { ic: "phone", sz: 70, col: C.green, idle: "v2float" }),
@@ -2525,7 +2525,7 @@
   ]);
 
   // =====================================================================
-  // W2O2b Â· The danger of two competing rationales â€” 31 moments, 10 acts
+  // W2O2b · The danger of two competing rationales — 31 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O2b"] = scene("W2O2b", [
     // Act 1 (moments 0-3). Benchmark Part2 #086 "Workflow by a"
@@ -2543,7 +2543,7 @@
     ]),
     // Act 2 (moments 4-6). Benchmark Part2 #085 "Creative process Motion design creative project"
     // https://www.behance.net/gallery/190390491/Creative-process-Motion-design-creative-project
-    // Adapted: an idea moves through iterations â€” from the guest's weakness, to hidden goals, to two named rationales.
+    // Adapted: an idea moves through iterations — from the guest's weakness, to hidden goals, to two named rationales.
     A("P2#085", [
       P("tv", "person", 70, 296, { col: C.teal, bag: 1, mood: "sad", lab: "Qasr traveller", ls: 14 }),
       P("wk", "pill", 252, 270, { w: 236, lab: "Weak service connections", tone: "blush", ls: 14 }),
@@ -2562,7 +2562,7 @@
     ]),
     // Act 3 (moments 7-10). Benchmark Part2 #123 "DashBoard by Amit Prajapati"
     // https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp
-    // Adapted: a dashboard screen comes into focus and its tiles report â€” one tile answers, one does not.
+    // Adapted: a dashboard screen comes into focus and its tiles report — one tile answers, one does not.
     A("P2#123", [
       P("m9", "pill", 200, 66, { w: 170, h: 32, lab: "Month nine", ic: "cal", tone: "solid", ls: 14 }),
       P("sc", "screen", 200, 214, { w: 364, h: 236, lab: "Progress report" }),
@@ -2577,7 +2577,7 @@
     ]),
     // Act 4 (moments 11-12). Benchmark Part2 #132 "Easing Animations"
     // https://observablehq.com/@d3/easing-animations
-    // Adapted: the same motion replayed with different timing â€” confidence swings down as answers miss.
+    // Adapted: the same motion replayed with different timing — confidence swings down as answers miss.
     A("P2#132", [
       P("gg", "gauge", 200, 176, { r: 82, lab: "Board confidence", rev: 1 }),
       P("b1", "person", 54, 160, { sz: 0.8, col: C.navy }),
@@ -2594,7 +2594,7 @@
     ]),
     // Act 5 (moments 13-15). Benchmark Part2 #094 "Process - Success"
     // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
-    // Adapted: activity turns into a check mark â€” but only as a target, while the journey stays broken.
+    // Adapted: activity turns into a check mark — but only as a target, while the journey stays broken.
     A("P2#094", [
       L("tk", [28, 120], [222, 120], { col: C.navy, sw: 6, tok: "doc", tc: C.navy, tn: 3, dur: 2.6 }),
       P("tm", "person", 52, 120, { sz: 0.8, col: C.teal }),
@@ -2650,7 +2650,7 @@
     ]),
     // Act 8 (moments 22-24). Benchmark B1 #62 "The Pudding one-hit wonders"
     // https://pudding.cool/2018/04/one-hit-wonders/
-    // Adapted: a trajectory draws with a moving focus marker â€” attention spikes, then decays.
+    // Adapted: a trajectory draws with a moving focus marker — attention spikes, then decays.
     A("B1#62", [
       P("at", "line", 200, 140, { w: 330, h: 120, pts: [0.18, 0.85, 0.9, 0.55, 0.28, 0.18], col: C.orange, xlab: "Executive attention", marks: [{ i: 1, lab: "Rule announced", w: 140, y: -48, col: C.orange, dx: 20 }, { i: 4, lab: "If rule met", w: 120, y: -10, col: C.navy }] }),
       P("n1", "pill", 72, 256, { w: 124, h: 50, lab: "Continued|sponsorship", ls: 13, tone: "goal" }),
@@ -2666,7 +2666,7 @@
     ]),
     // Act 9 (moments 25-26). Benchmark Part1 #032 "Supply Chain Animation"
     // https://www.behance.net/gallery/121206799/Supply-Chain-Animation
-    // Adapted: a parcel passes between two actors â€” empty when undocumented, full when documented.
+    // Adapted: a parcel passes between two actors — empty when undocumented, full when documented.
     A("P1#032", [
       P("so", "person", 74, 206, { sz: 1.15, col: C.navy, lab: "Original sponsor", ls: 13 }),
       P("su", "person", 326, 206, { sz: 1.15, col: C.plum, skin: C.skin2, lab: "New successor", ls: 13 }),
@@ -2681,7 +2681,7 @@
     ]),
     // Act 10 (moments 27-30). Benchmark Part2 #126 "Stacked-to-grouped bars"
     // https://observablehq.com/@d3/stacked-to-grouped-bars
-    // Adapted: bars keep their identity while regrouping â€” two outcomes reported separately, each with its reason.
+    // Adapted: bars keep their identity while regrouping — two outcomes reported separately, each with its reason.
     A("P2#126", [
       P("tb", "table", 200, 112, { rx: 118, lab: "Qasr board" }),
       P("cp", "bar", 200, 212, { w: 320, lab: "Progress to compliance", max: 1, col: C.gold, v: "Evidence due", ls: 14 }),
@@ -2698,7 +2698,7 @@
   ]);
 
   // =====================================================================
-  // W2O2c Â· Writing a purpose the board can defend â€” 33 moments, 9 acts
+  // W2O2c · Writing a purpose the board can defend — 33 moments, 9 acts
   // =====================================================================
   W.VL_SCENES["W2O2c"] = scene("W2O2c", [
     // Act 1 (moments 0-3). Benchmark Part2 #084 "Process - What is a Motion Designer?"
@@ -2716,7 +2716,7 @@
     ]),
     // Act 2 (moments 4-7). Benchmark Part2 #083 "The Process Architectural Motion"
     // https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
-    // Adapted: successive layers are built and then revised â€” a shared charter gains, then loses, its footing.
+    // Adapted: successive layers are built and then revised — a shared charter gains, then loses, its footing.
     A("P2#083", [
       P("ch", "doc", 200, 206, { w: 184, h: 230, title: "Programme charter", lines: ["World-class hospitality", "Digital transformation", "Compliance outcome?"], ls: 13 }),
       P("sp", "person", 54, 250, { sz: 0.9, col: C.navy }),
@@ -2842,7 +2842,7 @@
     ]),
     // Act 9 (moments 30-32). Benchmark Part2 #091 "cro process"
     // https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to
-    // Adapted: movement across business steps â€” the test runs along three linked steps.
+    // Adapted: movement across business steps — the test runs along three linked steps.
     A("P2#091", [
       P("wq", "doc", 200, 138, { w: 260, h: 140, title: "Wrong questions", lines: ["Sounds attractive?", "Looks impressive?"], ls: 14 }),
       L("c1", [124, 262], [142, 262], { col: C.navy, sw: 4, arrow: 1 }),
@@ -2862,8 +2862,8 @@
 // END FILE w02-claude-v2-part2.js
 
 // FILE w02-claude-v2-part3.js
-// OPER621 Â· Week 2 Â· Drivers and Triggers for BPM â€” animated teaching scenes (v2), part 3 of 4.
-// Lesson 3 Â· Managing the complete business process. Sections: W2O3a, W2O3b, W2O3c. Standalone: defines every helper it uses, registers its own
+// OPER621 · Week 2 · Drivers and Triggers for BPM — animated teaching scenes (v2), part 3 of 4.
+// Lesson 3 · Managing the complete business process. Sections: W2O3a, W2O3b, W2O3c. Standalone: defines every helper it uses, registers its own
 // scenes, and appends its own scoped rules to the shared <style id="vl-sc-w02">. Parts load in any order.
 // Contract: window.VL_SCENES['<sec id>'] = { build(el), step(i, n), reset() }.
 // Design (v2): one beat per narration moment. Each act is an original composition adapted from the
@@ -3739,7 +3739,7 @@
   addStyle();
 
   // =====================================================================
-  // W2O3a Â· A process owner needs a real mandate â€” 34 moments, 10 acts
+  // W2O3a · A process owner needs a real mandate — 34 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O3a"] = scene("W2O3a", [
     // Act 1 (moments 0-3). Benchmark Part1 #036 "Outline - Explainer Kit"
@@ -3827,7 +3827,7 @@
     ]),
     // Act 5 (moments 14-17). Benchmark Part2 #106 "Supply Chain and logistics"
     // https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu
-    // Adapted: dispatch, transit and receipt â€” the room-ready message is dispatched but received too late.
+    // Adapted: dispatch, transit and receipt — the room-ready message is dispatched but received too late.
     A("P2#106", [
       P("rm", "dept", 68, 118, { w: 82, h: 68, ic: "bed", lab: "Housekeeping|team" }),
       L("tr", [114, 118], [218, 118], { col: C.grey, sw: 4, brk: 1 }),
@@ -3871,7 +3871,7 @@
     ]),
     // Act 7 (moments 21-24). Benchmark Part2 #107 "Supply Chain and Shipping"
     // https://lottiefiles.com/free-animation/supply-chain-and-shipping-Gd8ZsVZpXq
-    // Adapted: shipments advance through a network of nodes â€” fourteen sites around one hub.
+    // Adapted: shipments advance through a network of nodes — fourteen sites around one hub.
     A("P2#107", [
       P("gd", "grid14", 200, 206, { dy: 66, hub: "Group|owner" }),
       P("sp", "pill", 200, 350, { w: 262, lab: "Same process, fourteen sites", ic: "hotel", tone: "solid", ls: 14 }),
@@ -3930,12 +3930,12 @@
   ]);
 
   // =====================================================================
-  // W2O3b Â· Measuring the customer's clock â€” 31 moments, 10 acts
+  // W2O3b · Measuring the customer's clock — 31 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O3b"] = scene("W2O3b", [
     // Act 1 (moments 0-3). Benchmark Part2 #121 "Dashboard by RAKIBUZZAMAN"
     // https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP
-    // Adapted: graph tiles fill and highlight â€” every department tile green, the guest's experience not.
+    // Adapted: graph tiles fill and highlight — every department tile green, the guest's experience not.
     A("P2#121", [
       P("ow", "person", 44, 326, { sz: 0.7, col: C.green }),
       P("t1", "tile", 122, 120, { w: 150, h: 96, lab: "Reception|desk", v: "On target", tone: "ok", vs: 17, ls: 13 }),
@@ -4004,7 +4004,7 @@
     ]),
     // Act 5 (moments 14-16). Benchmark Part2 #090 "Multi-Step Icon Animation"
     // https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
-    // Adapted: one step activates after another â€” twenty-one day tiles light by whose problem they are.
+    // Adapted: one step activates after another — twenty-one day tiles light by whose problem they are.
     A("P2#090", [
       P("dd", "days", 200, 168, { n: 21, cols: 7, cw: 42, t0: 14, t1: 18, lab: "The customer's 21 days" }),
       P("lg1", "pill", 104, 300, { w: 176, h: 36, lab: "Team: 4 days", tone: "solid", ls: 14 }),
@@ -4034,7 +4034,7 @@
     ]),
     // Act 7 (moments 19-21). Benchmark Part2 #076 "Workflow Animation"
     // https://dribbble.com/shots/3791748-Workflow-Animation
-    // Adapted: an action, a transferred trigger, and a notification â€” the delays live in the transfers.
+    // Adapted: an action, a transferred trigger, and a notification — the delays live in the transfers.
     A("P2#076", [
       P("a1", "dept", 64, 110, { w: 70, h: 58, ic: "person", lab: "People|handoff", ls: 14 }),
       P("a2", "dept", 200, 110, { w: 70, h: 58, ic: "users", lab: "Team|handoff", ls: 14 }),
@@ -4055,7 +4055,7 @@
     ]),
     // Act 8 (moments 22-24). Benchmark Part2 #128 "Pie chart update"
     // https://observablehq.com/@d3/pie-chart-update
-    // Adapted: one whole judged by several values updating together â€” speed, quality and cost to serve.
+    // Adapted: one whole judged by several values updating together — speed, quality and cost to serve.
     A("P2#128", [
       P("g1", "gauge", 72, 140, { r: 52 }),
       P("g2", "gauge", 200, 140, { r: 52 }),
@@ -4072,7 +4072,7 @@
     ]),
     // Act 9 (moments 25-27). Benchmark Part2 #097 "Business Solution conveyor"
     // https://lottiefiles.com/free-animation/business-solution-pNyNfkcRsa
-    // Adapted: boxes on a conveyor with a control panel â€” the whole line is timed, not one machine.
+    // Adapted: boxes on a conveyor with a control panel — the whole line is timed, not one machine.
     A("P2#097", [
       L("cv", [24, 150], [376, 150], { col: "#7e8a96", sw: 12, tok: "doc", tc: C.navy, tn: 4, dur: 4 }),
       P("p1", "dept", 64, 150, { w: 64, h: 54, ic: "doc", lab: "Record|request", ls: 14 }),
@@ -4089,7 +4089,7 @@
     ]),
     // Act 10 (moments 28-30). Benchmark Part1 #037 "Workflow Dashboard - Interactive Motion Design"
     // https://dribbble.com/shots/27538364-Workflow-Dashboard-Interactive-Motion-Design
-    // Adapted: dashboard tiles count up and flip status â€” green by throughput, red by the customer's clock.
+    // Adapted: dashboard tiles count up and flip status — green by throughput, red by the customer's clock.
     A("P1#037", [
       P("t1", "tile", 112, 130, { w: 170, h: 108, lab: "Department|throughput", v: "Looks good", tone: "ok", vs: 20, ls: 13 }),
       P("t2", "tile", 288, 130, { w: 170, h: 108, lab: "Customer|experience", v: "Feels worse", tone: "bad", vs: 20, ls: 13 }),
@@ -4103,12 +4103,12 @@
   ]);
 
   // =====================================================================
-  // W2O3c Â· Keeping sponsorship and performance alive â€” 35 moments, 10 acts
+  // W2O3c · Keeping sponsorship and performance alive — 35 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O3c"] = scene("W2O3c", [
     // Act 1 (moments 0-3). Benchmark Part2 #130 "Animated line chart lesson"
     // https://observablehq.com/@d3/learn-d3-animation
-    // Adapted: a time series traced left to right â€” attention rises with the trigger and may fall after it.
+    // Adapted: a time series traced left to right — attention rises with the trigger and may fall after it.
     A("P2#130", [
       P("ms", "pill", 200, 76, { w: 260, h: 36, lab: "Milestone demonstration", ic: "flag", tone: "solid", ls: 14 }),
       P("ch", "line", 200, 196, { w: 330, h: 140, pts: [0.15, 0.85, 0.9, 0.86, 0.55, 0.3], col: C.orange, xlab: "Executive attention", marks: [{ i: 1, lab: "Funding secured", w: 150, y: -56, col: C.orange, dx: 26 }, { i: 4, lab: "If rule met", w: 120, y: -30, col: C.navy }] }),
@@ -4121,7 +4121,7 @@
     ]),
     // Act 2 (moments 4-7). Benchmark Part2 #111 "Hierarchy traversal animated"
     // https://old.observablehq.com/@d3/hierarchy-traversal-animated
-    // Adapted: visit one node then the next â€” governance as who decides, who owns, who reviews.
+    // Adapted: visit one node then the next — governance as who decides, who owns, who reviews.
     A("P2#111", [
       P("r1", "pill", 72, 96, { w: 124, h: 50, lab: "Coordination|needed", tone: "goal", ls: 13 }),
       P("r2", "pill", 200, 96, { w: 124, h: 50, lab: "Resources|needed", tone: "goal", ls: 13 }),
@@ -4143,7 +4143,7 @@
     ]),
     // Act 3 (moments 8-10). Benchmark Part2 #089 "Git Workflow 1"
     // https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
-    // Adapted: two branches conflict at one file; a new commit (technology) does not merge them â€” an owner does.
+    // Adapted: two branches conflict at one file; a new commit (technology) does not merge them — an owner does.
     A("P2#089", [
       P("rc", "dept", 72, 130, { w: 80, h: 66, ic: "bell", lab: "Reception|desk" }),
       P("hk", "dept", 328, 130, { w: 80, h: 66, ic: "bed", lab: "Housekeeping|team" }),
@@ -4163,7 +4163,7 @@
     ]),
     // Act 4 (moments 11-13). Benchmark Part1 #049 "Workflow Dashboard UI Motion Concept"
     // https://dribbble.com/shots/27719715-SaaS-Dashboard-Workflow-UI-Motion-Concept
-    // Adapted: a hierarchy of cards reveals and re-organises â€” sponsor above, departments below.
+    // Adapted: a hierarchy of cards reveals and re-organises — sponsor above, departments below.
     A("P1#049", [
       P("tb", "table", 200, 104, { rx: 118, lab: "Senior management" }),
       P("sp", "person", 200, 216, { sz: 1.05, col: C.navy }),
@@ -4179,7 +4179,7 @@
     ]),
     // Act 5 (moments 14-16). Benchmark Part2 #078 "Data Workflow Animation"
     // https://dribbble.com/shots/27247003-Data-Workflow-Animation
-    // Adapted: nodes and links activate in sequence â€” a request, a refusal, then two roles connect them.
+    // Adapted: nodes and links activate in sequence — a request, a refusal, then two roles connect them.
     A("P2#078", [
       P("rc", "dept", 66, 132, { w: 74, h: 62, ic: "bell", lab: "Reception|desk" }),
       P("hk", "dept", 334, 132, { w: 74, h: 62, ic: "bed", lab: "Housekeeping|team" }),
@@ -4196,7 +4196,7 @@
     ]),
     // Act 6 (moments 17-20). Benchmark Part2 #094 "Process - Success"
     // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
-    // Adapted: activity transforms into a check â€” shown only as the test the programme must still pass.
+    // Adapted: activity transforms into a check — shown only as the test the programme must still pass.
     A("P2#094", [
       P("gv", "pill", 104, 90, { w: 150, h: 50, lab: "Governance|alone", ic: "shield", tone: "off", ls: 14 }),
       P("pb", "pill", 296, 90, { w: 150, h: 50, lab: "Promised|benefits?", ic: "q", tone: "unk", ls: 14 }),
@@ -4228,7 +4228,7 @@
     ]),
     // Act 8 (moments 25-28). Benchmark Part2 #104 "Logistics Trucks"
     // https://lottiefiles.com/free-animation/logistics-trucks-DHvuLcYVdQ
-    // Adapted: a vehicle and its delivery marker move â€” the sponsor leaves; the documented cargo must remain.
+    // Adapted: a vehicle and its delivery marker move — the sponsor leaves; the documented cargo must remain.
     A("P2#104", [
       P("so", "person", 76, 206, { sz: 1.15, col: C.navy, lab: "Original sponsor", ls: 13 }),
       P("su", "person", 324, 206, { sz: 1.15, col: C.plum, skin: C.skin2, lab: "New executive", ls: 13 }),
@@ -4245,7 +4245,7 @@
     ]),
     // Act 9 (moments 29-31). Benchmark B1 #67 "Linear product development site"
     // https://linear.app/
-    // Adapted: cards move from a project board into the operations column â€” then the guest returns.
+    // Adapted: cards move from a project board into the operations column — then the guest returns.
     A("B1#67", [
       P("c1", "panel", 104, 200, { w: 184, h: 230, lab: "Programme team", ls: 13, col: C.plum, fill: "#f4f0fa" }),
       P("c2", "panel", 296, 200, { w: 184, h: 230, lab: "Everyday operations", ls: 13, col: C.green, fill: "#eef7f2" }),
@@ -4262,7 +4262,7 @@
     ]),
     // Act 10 (moments 32-34). Benchmark Part2 #093 "Process-Para"
     // https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT
-    // Adapted: rotate, wait, finish â€” but here the cycle keeps turning after the team leaves.
+    // Adapted: rotate, wait, finish — but here the cycle keeps turning after the team leaves.
     A("P2#093", [
       P("tv", "person", 74, 210, { sz: 1.15, col: C.teal, bag: 1, mood: "happy", lab: "Her next visit", ls: 14 }),
       P("ht", "hotel", 270, 176, { w: 170, h: 160, lab: "Qasr Marina" }),
@@ -4284,8 +4284,8 @@
 // END FILE w02-claude-v2-part3.js
 
 // FILE w02-claude-v2-part4.js
-// OPER621 Â· Week 2 Â· Drivers and Triggers for BPM â€” animated teaching scenes (v2), part 4 of 4.
-// Lesson 4 Â· From a promising brief to a credible programme. Sections: W2O4a, W2O4b, W2O4c. Standalone: defines every helper it uses, registers its own
+// OPER621 · Week 2 · Drivers and Triggers for BPM — animated teaching scenes (v2), part 4 of 4.
+// Lesson 4 · From a promising brief to a credible programme. Sections: W2O4a, W2O4b, W2O4c. Standalone: defines every helper it uses, registers its own
 // scenes, and appends its own scoped rules to the shared <style id="vl-sc-w02">. Parts load in any order.
 // Contract: window.VL_SCENES['<sec id>'] = { build(el), step(i, n), reset() }.
 // Design (v2): one beat per narration moment. Each act is an original composition adapted from the
@@ -5161,13 +5161,13 @@
   addStyle();
 
   // =====================================================================
-  // W2O4a Â· Questions that expose an incomplete brief â€” 30 moments, 9 acts
+  // W2O4a · Questions that expose an incomplete brief — 30 moments, 9 acts
   // (audit: second-lowest score 3.8/10, rebuilt with priority)
   // =====================================================================
   W.VL_SCENES["W2O4a"] = scene("W2O4a", [
     // Act 1 (moments 0-3). Benchmark Part1 #059 "SVGator UI templates" (flip card)
     // https://www.svgator.com/animation-templates/ui-elements
-    // Adapted: a card is handed over and turned to show its content â€” and the side that is missing.
+    // Adapted: a card is handed over and turned to show its content — and the side that is missing.
     A("P1#059", [
       P("bd", "pill", 200, 76, { w: 236, h: 36, lab: "Board has approved", ic: "seal", tone: "ok", ls: 14 }),
       P("ad", "person", 70, 222, { sz: 1.2, col: C.navy, lab: "You, the|adviser", ls: 13 }),
@@ -5181,7 +5181,7 @@
     ]),
     // Act 2 (moments 4-7). Benchmark Part2 #088 "Automated Workflows"
     // https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK
-    // Adapted: repeated actions run but never complete â€” drivers cycle while the commitment gate stays shut.
+    // Adapted: repeated actions run but never complete — drivers cycle while the commitment gate stays shut.
     A("P2#088", [
       P("br", "doc", 104, 204, { w: 184, h: 236, title: "The brief", lines: ["Better efficiency", "Guest satisfaction", "Modern systems", "Why now? Absent"], ls: 13 }),
       P("mg", "icon", 168, 300, { ic: "search", sz: 44, col: C.plum, idle: "v2float" }),
@@ -5208,7 +5208,7 @@
     ]),
     // Act 3 (moments 8-10). Benchmark B1 #65 "Kurzgesagt studio overview"
     // https://kurzgesagt.org/
-    // Adapted: a physical metaphor carries the argument â€” one strike opens the gate the pressures could not.
+    // Adapted: a physical metaphor carries the argument — one strike opens the gate the pressures could not.
     A("B1#65", [
       P("gt", "gate", 200, 206, { w: 124, lab: "Commitment gate", ls: 14 }),
       P("bo", "bolt", 262, 120, { sz: 54 }),
@@ -5314,7 +5314,7 @@
     ]),
     // Act 9 (moments 27-29). Benchmark Part1 #054 "Animated Process Infographic with Geometric Circles and Arrows"
     // https://elements.envato.com/business-strategy-round-infographic-4-steps-templa-ZS2NQ92
-    // Adapted: segments light in sequence around one centre â€” six questions around one judgement.
+    // Adapted: segments light in sequence around one centre — six questions around one judgement.
     A("P1#054", [
       P("q1", "pill", 96, 100, { w: 170, h: 38, lab: "Why now?", ic: "bolt", tone: "sky", ls: 14 }),
       P("q2", "pill", 96, 150, { w: 170, h: 38, lab: "What outcome?", ic: "target", tone: "sky", ls: 14 }),
@@ -5333,12 +5333,12 @@
   ]);
 
   // =====================================================================
-  // W2O4b Â· Making the board's business case coherent â€” 30 moments, 10 acts
+  // W2O4b · Making the board's business case coherent — 30 moments, 10 acts
   // =====================================================================
   W.VL_SCENES["W2O4b"] = scene("W2O4b", [
     // Act 1 (moments 0-3). Benchmark Part1 #034 "SaaS Platform & Workflow Motion"
     // https://dribbble.com/shots/27719724-SaaS-Platform-Workflow-Motion-UI-Concept
-    // Adapted: interface cards transition and reflow â€” slides of a board presentation.
+    // Adapted: interface cards transition and reflow — slides of a board presentation.
     A("P1#034", [
       P("dr", "person", 46, 206, { sz: 1.05, col: C.plum, lab: "Programme|director", ls: 13 }),
       P("sc", "screen", 236, 178, { w: 296, h: 196, lab: "Board presentation" }),
@@ -5354,7 +5354,7 @@
     ]),
     // Act 2 (moments 4-6). Benchmark Part1 #047 "Stripe Connect"
     // https://stripe.com/ae/connect
-    // Adapted: funds travel from a source through a platform and split into payouts â€” investment into outcomes.
+    // Adapted: funds travel from a source through a platform and split into payouts — investment into outcomes.
     A("P1#047", [
       P("ob", "pill", 104, 96, { w: 176, h: 50, lab: "Compliance|obligation", ic: "lock", tone: "solid", ls: 14 }),
       P("gx", "pill", 296, 96, { w: 176, h: 50, lab: "Guest|experience", ic: "star", tone: "mint", ls: 14 }),
@@ -5374,7 +5374,7 @@
     ]),
     // Act 3 (moments 7-10). Benchmark Part1 #043 "Sankey animation - acyclic graph"
     // https://observablehq.com/@joaormendes/sankey-animation-acyclic-graph
-    // Adapted: particles split along weighted bands â€” four fragmented sources reunited by one redesign band.
+    // Adapted: particles split along weighted bands — four fragmented sources reunited by one redesign band.
     A("P1#043", [
       P("cg", "pill", 104, 86, { w: 176, h: 50, lab: "Specific|compliance gap", ic: "target", tone: "goal", ls: 13 }),
       P("vm", "pill", 296, 86, { w: 176, h: 50, lab: "Vague|modernisation", ic: "x", tone: "off", ls: 14 }),
@@ -5412,7 +5412,7 @@
     ]),
     // Act 5 (moments 13-16). Benchmark Part1 #001 "Interactive SVG Path & GSAP Animation"
     // https://codepen.io/WebGuyJeff/pen/rNdmqdO
-    // Adapted: a path is traced, a marker travels and each station lights â€” the guest-service journey.
+    // Adapted: a path is traced, a marker travels and each station lights — the guest-service journey.
     A("P1#001", [
       L("jp", null, null, { d: "M36 132C96 96 140 168 200 132S304 96 364 132", col: C.teal, sw: 6, tok: "dot", tc: C.teal, tn: 3, dur: 3.4 }),
       P("j1", "dept", 36, 132, { w: 52, h: 46, ic: "cal" }),
@@ -5432,7 +5432,7 @@
     ]),
     // Act 6 (moments 17-18). Benchmark Part1 #067 "Idea Flow Animation | Infographic Motion Design"
     // https://www.behance.net/gallery/247762027/Idea-Flow-Animation-Infographic-Motion-Design
-    // Adapted: ideas orbit a core and connect â€” departments orbit a review cycle with one resolver.
+    // Adapted: ideas orbit a core and connect — departments orbit a review cycle with one resolver.
     A("P1#067", [
       P("cy", "icon", 200, 196, { ic: "loop", sz: 96, col: C.navy, idle: "v2spinslow" }),
       P("rv", "pill", 200, 196, { w: 150, h: 36, lab: "Progress review", tone: "solid", ls: 14 }),
@@ -5452,7 +5452,7 @@
     ]),
     // Act 7 (moments 19-21). Benchmark Part1 #038 "Bar Chart Race, Explained"
     // https://observablehq.com/@d3/bar-chart-race-explained
-    // Adapted: bars grow and re-rank â€” compliance work moves to the protected top slot.
+    // Adapted: bars grow and re-rank — compliance work moves to the protected top slot.
     A("P1#038", [
       P("bq", "bubble", 200, 82, { w: 250, lab: "What if they compete?", tail: "b", tx: 0, col: C.plum, ls: 14 }),
       P("b1", "bar", 200, 156, { w: 330, lab: "Guest improvements", max: 1, col: C.green, ls: 14 }),
@@ -5466,7 +5466,7 @@
     ]),
     // Act 8 (moments 22-24). Benchmark Part1 #057 "GSAP SVG Research" (plant growth)
     // https://codepen.io/FabioG/post/svg-animation-research-gsap
-    // Adapted: a stem draws and leaves unfurl â€” value keeps growing only while someone tends it.
+    // Adapted: a stem draws and leaves unfurl — value keeps growing only while someone tends it.
     A("P1#057", [
       P("aq", "bubble", 200, 82, { w: 270, lab: "Useful after compliance?", tail: "b", tx: -60, col: C.plum, ls: 14 }),
       P("gr", "line", 200, 190, { w: 320, h: 120, pts: [0.2, 0.45, 0.6, 0.7, 0.78, 0.84], col: C.green, xlab: "Value over time", marks: [{ i: 2, lab: "Requirement met", w: 156, y: -52, col: C.gold, dx: -20 }] }),
@@ -5495,7 +5495,7 @@
     ]),
     // Act 10 (moments 28-29). Benchmark Part1 #058 "SVGator animated UI templates article"
     // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/
-    // Adapted: a before/after toggle switch â€” from attractive promises to an accountable decision.
+    // Adapted: a before/after toggle switch — from attractive promises to an accountable decision.
     A("P1#058", [
       P("ap", "card", 104, 156, { w: 176, h: 140, ic: "star", lab: "Attractive|promises", col: C.grey, is: 40 }),
       P("ad", "card", 296, 156, { w: 176, h: 140, ic: "seal", lab: "Accountable|decision", col: C.green, is: 40 }),
@@ -5513,13 +5513,13 @@
   ]);
 
   // =====================================================================
-  // W2O4c Â· Applying the distinction beyond Qasr â€” 34 moments, 10 acts
+  // W2O4c · Applying the distinction beyond Qasr — 34 moments, 10 acts
   // (forum case details were not supplied, so no organisation or figures are invented)
   // =====================================================================
   W.VL_SCENES["W2O4c"] = scene("W2O4c", [
     // Act 1 (moments 0-3). Benchmark B1 #63 "The Pudding Human Terrain"
     // https://pudding.cool/2018/10/city_3d/
-    // Adapted: towers rise to compare magnitudes â€” four pressures grow around one hotel group.
+    // Adapted: towers rise to compare magnitudes — four pressures grow around one hotel group.
     A("B1#63", [
       P("rv", "pill", 200, 76, { w: 220, h: 34, lab: "Week 2 in review", ic: "book", tone: "solid", ls: 14 }),
       P("ht", "hotel", 200, 186, { w: 140, h: 120, lab: "Qasr Hospitality", ls: 13 }),
@@ -5540,7 +5540,7 @@
     ]),
     // Act 2 (moments 4-7). Benchmark Part2 #101 "3D Camera Factory"
     // https://lottiefiles.com/free-animation/3d-camera-factory-2I4Nonw7Ad
-    // Adapted: an item progresses through production stations â€” event, decision, then two outputs.
+    // Adapted: an item progresses through production stations — event, decision, then two outputs.
     A("P2#101", [
       P("rq", "card", 104, 132, { w: 176, h: 120, ic: "doc", lab: "Authority|requirement", col: C.orange, is: 36 }),
       P("bo", "bolt", 200, 132, { sz: 46 }),
@@ -5559,7 +5559,7 @@
     ]),
     // Act 3 (moments 8-9). Benchmark Part1 #061 "SVGator icon templates"
     // https://www.svgator.com/animation-templates/icons
-    // Adapted: icons go from idle, to action, to completion â€” four supports switch on while urgency decays.
+    // Adapted: icons go from idle, to action, to completion — four supports switch on while urgency decays.
     A("P1#061", [
       P("i1", "icon", 72, 128, { ic: "key", sz: 34, col: "#ffffff", disc: C.green, lab: "Process|owner", ls: 13 }),
       P("i2", "icon", 158, 128, { ic: "chart", sz: 34, col: "#ffffff", disc: C.teal, lab: "Real|measures", ls: 13 }),
@@ -5572,7 +5572,7 @@
     ]),
     // Act 4 (moments 10-13). Benchmark Part1 #046 "Infographic MOGRT templates" (funnel)
     // https://motionarray.com/motion-graphics-templates/infographics/
-    // Adapted: many inputs drain into one output â€” three unnamed pressures, one budget.
+    // Adapted: many inputs drain into one output — three unnamed pressures, one budget.
     A("P1#046", [
       P("no", "card", 104, 150, { w: 176, h: 140, ic: "q", lab: "A new|organisation", col: C.plum, is: 44 }),
       P("fc", "doc", 296, 166, { w: 176, h: 196, title: "Forum case", lines: ["Three Pressures,", "One Budget", "Plus an exhibit"], ls: 13 }),
@@ -5616,7 +5616,7 @@
     ]),
     // Act 6 (moments 18-20). Benchmark B1 #59 "The Pudding sticky scrollytelling"
     // https://pudding.cool/process/scrollytelling-sticky/
-    // Adapted: one pinned bar re-states at each step â€” the same budget, read two ways.
+    // Adapted: one pinned bar re-states at each step — the same budget, read two ways.
     A("B1#59", [
       P("ym", "person", 64, 120, { sz: 0.9, col: C.navy, lab: "Your view", ls: 13 }),
       P("om", "person", 336, 120, { sz: 0.9, col: C.plum, skin: C.skin2, lab: "Another manager", ls: 13 }),
@@ -5654,7 +5654,7 @@
     ]),
     // Act 8 (moments 25-28). Benchmark Part2 #108 "Delivery Truck - Road Animation"
     // https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v
-    // Adapted: a vehicle translates along a route â€” your week travels to the summary and on across the term.
+    // Adapted: a vehicle translates along a route — your week travels to the summary and on across the term.
     A("P2#108", [
       P("tw", "pill", 104, 92, { w: 176, h: 50, lab: "Winning the|argument", ic: "x", tone: "off", ls: 13 }),
       P("dj", "pill", 296, 92, { w: 176, h: 50, lab: "Defensible|judgement", ic: "check", tone: "ok", ls: 13 }),
@@ -5672,7 +5672,7 @@
     ]),
     // Act 9 (moments 29-31). Benchmark Part2 #096 "Process in cub"
     // https://lottiefiles.com/free-animation/process-in-cub-9iNG7QP0qC
-    // Adapted: cube states cycle into a stacked block â€” three conditions build the programme.
+    // Adapted: cube states cycle into a stacked block — three conditions build the programme.
     A("P2#096", [
       P("rp", "pill", 104, 96, { w: 176, h: 50, lab: "Recognising|a problem", ic: "eye", tone: "sky", ls: 13 }),
       P("da", "pill", 296, 96, { w: 176, h: 50, lab: "Deciding|to act", ic: "flag", tone: "solid", ls: 13 }),
