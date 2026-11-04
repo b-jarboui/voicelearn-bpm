@@ -437,7 +437,7 @@
         <p class="muted">Skipped checks are not marked wrong. Answer them when you are ready; the week stays unfinished until they are done.</p>
         ${deferred.length?`<div class="later-list">${deferred.map((id,i)=>`<button type="button" class="later-resume" data-later="${esc(id)}"><span>${i+1}. ${esc(allQ[id].q||id)}</span><strong>Resume →</strong></button>`).join("")}</div>`:"<p>Nothing waiting. You're up to date.</p>"}</div>
       <div class="card resume-card"><div class="eyebrow">Continue</div><${NEW_UI ? "h2" : "h1"}>${st.kind === "report" ? "Your achievement report" : `Lesson ${st.l + 1}: ${esc(les.title)}`}</${NEW_UI ? "h2" : "h1"}>
-        <div class="row"><button class="primary" id="resume">▶ Continue</button><button id="restart">Start over</button></div></div>
+        <div class="row">${st.kind === "report" && nextWeek() ? `<button class="primary" id="nextWeek">Continue to Week ${nextWeek().n} →</button><button id="resume">See my report</button>` : `<button class="primary" id="resume">▶ Continue</button>`}<button id="restart">Start over</button></div></div>
       <div class="card look-card"><div class="eyebrow">Look · how the lessons appear</div>
         <div class="looks" role="group" aria-label="Choose a look">${LOOKS.map(([id, name, note]) => `<button class="lookbtn ${id}" data-look="${id}" aria-pressed="${(VS.look || "board") === id}"><span class="sw" aria-hidden="true"></span><b>${name}</b><span class="muted">${note}</span></button>`).join("")}</div></div>
       <div class="card mastery-card"><div class="eyebrow">Achievement · target ${pct(A.target)}% on every part</div>
@@ -459,6 +459,7 @@
     document.querySelectorAll("[data-later]").forEach(b=>b.onclick=()=>resumeDeferred(b.dataset.later));
     probeWeeks(); if (window.S2) S2.bindHome($("main"));
     $("resume").onclick = () => openPlayer();
+    if ($("nextWeek")) $("nextWeek").onclick = () => goWeek(nextWeek().n);
     $("restart").onclick = () => { P = fresh(); save(); openPlayer(); };
     document.querySelectorAll("[data-look]").forEach((b) => (b.onclick = () => { VS.look = b.dataset.look; saveVS(); document.querySelectorAll("[data-look]").forEach((x) => x.setAttribute("aria-pressed", x === b)); $("vLook").value = VS.look; }));
     // Playing a lesson from home runs it in full (each part, its check, the result) and then carries on to the next lesson.
@@ -733,6 +734,9 @@
     if ($("sShare")) $("sShare").onclick = async () => { keep(); try { await navigator.share({ title: subject(), text: reportText(pref.name) }); } catch (e) {} };
     $("sCopy").onclick = async () => { keep(); try { await navigator.clipboard.writeText(reportText(pref.name)); $("sMsg").textContent = "Report copied. Paste it into any email or message."; } catch (e) { $("sMsg").textContent = "Couldn't copy automatically."; } };
   }
+  // A finished week leads on to the next one (14 weeks; the revision week has no lessons here).
+  const nextWeek = () => weekList().find((w) => w.n === WK + 1) || null;
+  const goWeek = (n) => { const u = new URL(location.href); u.searchParams.set("week", String(n)); location.assign(u.href); };
   function loadReport() {
     const flagged = SECS.filter((s) => P.flags[s]), k1 = cloM(CLOS[0]);
     const said = (m) => (m == null ? "not assessed yet" : `${pct(m)} percent`);
@@ -749,8 +753,10 @@
       { at: 2 + LOS.length, html: `<div class="st-kicker">Every part</div><div class="st-los">${SECS.map((s) => bar(A.sections[s].name + (P.flags[s] ? " · flagged" : ""), secM(s), 2 + LOS.length, true)).join("")}</div>` },
       { at: say.length - 1, html: flagged.length ? `<div class="st-quote">Flagged for <em>instructor review</em>: ${esc(flagged.map((s) => A.sections[s].name).join(", "))}</div>` : `<div class="st-quote">Every part <em>achieved</em>.</div>` },
       ...(T.sendReport ? [{ at: say.length - 1, html: `<button class="st-card st-send"><b>✉ Send this report</b><span>By email or share</span></button>` }] : []),
+      ...(nextWeek() ? [{ at: say.length - 1, html: `<button class="st-card st-next primary"><b>Continue to Week ${nextWeek().n} →</b><span>${esc(nextWeek().title)}</span></button>` }] : []),
     ]);
     if (T.sendReport) stageEl.querySelector(".st-send").onclick = () => { pause(); const s = $("send"); if (s) s.scrollIntoView({ behavior: smooth(), block: "center" }); };
+    const nx = stageEl.querySelector(".st-next"); if (nx) nx.onclick = () => { pause(); goWeek(nextWeek().n); };
   }
 
   // ---------- playback ----------
