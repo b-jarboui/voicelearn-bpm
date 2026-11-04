@@ -1,5 +1,5 @@
-// OPER621 Â· Week 8 Â· The Understand Phase â€” animated teaching scenes (round 2, Claude)
-// File: w08-claude-part1.js Â· Lesson 1 Â· What really happens at Qasr? Â· Scenes: W8O1a, W8O1b, W8O1c
+// OPER621 · Week 8 · The Understand Phase — animated teaching scenes (round 2, Claude)
+// File: w08-claude-part1.js · Lesson 1 · What really happens at Qasr? · Scenes: W8O1a, W8O1b, W8O1c
 // Standalone part: defines its own engine and helpers, registers its scenes and appends its own
 // rules (all scoped under .vls-w08-<secId>) into the single shared <style id="vl-sc-w08">.
 // Parts may be loaded in any order or concatenated.
@@ -266,7 +266,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     : rep(34, (i) => P(`M${-400 + i * 40} -300 L${-160 + i * 40} 700`, line, 1)));
 
   // ============================================================
-  // W8O1a Â· "UNDERSTAND BEFORE YOU IMPROVE"  Â·  31 moments Â· 9 beats
+  // W8O1a · "UNDERSTAND BEFORE YOU IMPROVE"  ·  31 moments · 9 beats
   // Story: the hotel is rebuilt as an evidence question; the traveller's
   // 23 minutes trigger the investigation; the ten-phase road reaches
   // Understand; premature fixes are stamped "?"; the written procedure
@@ -287,8 +287,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Baseline proves value", "Defensible redesign", "How guests really arrive"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“1 Â· Adapted from benchmark 083 "The Process Architectural Motion"
-      // https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion â€” an idea grows layer by layer into a structure.
+      // Beat 1 · moments 0–1 · Adapted from benchmark 083 "The Process Architectural Motion"
+      // https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion — an idea grows layer by layer into a structure.
       {
         from: 0, to: 1,
         draw: () => {
@@ -316,8 +316,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("sub", j >= 1 ? 0 : j >= 0 ? 1 : 0);
         }
       },
-      // Beat 2 Â· moments 2â€“4 Â· Adapted from benchmark 001 "Interactive SVG Path & GSAP Animation"
-      // https://codepen.io/WebGuyJeff/pen/rNdmqdO â€” trace a path, move a marker, highlight the destination.
+      // Beat 2 · moments 2–4 · Adapted from benchmark 001 "Interactive SVG Path & GSAP Animation"
+      // https://codepen.io/WebGuyJeff/pen/rNdmqdO — trace a path, move a marker, highlight the destination.
       {
         from: 2, to: 4,
         draw: () => {
@@ -348,8 +348,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("lz", j >= 2, { s: 0.4, x: -60 }); c.in("why", j >= 2, { y: 16 }, { dl: 0.3 });
         }
       },
-      // Beat 3 Â· moments 5â€“8 Â· Adapted from benchmark 017 "Design process timeline - Animation"
-      // https://dribbble.com/shots/9892691-Design-process-timeline-Animation â€” milestones revealed in order along a road.
+      // Beat 3 · moments 5–8 · Adapted from benchmark 017 "Design process timeline - Animation"
+      // https://dribbble.com/shots/9892691-Design-process-timeline-Animation — milestones revealed in order along a road.
       {
         from: 5, to: 8,
         draw: () => {
@@ -383,8 +383,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ph", j >= 2, { x: -30 }); c.in("ev", j >= 3, { x: 30 }); c.in("as", j >= 3, { x: 30 }, { dl: 0.25 }); c.in("l4", j >= 3, {}, { dl: 0.4 });
         }
       },
-      // Beat 4 Â· moments 9â€“12 Â· Adapted from benchmark 035 "Explainer Video Kit"
-      // https://motionarray.com/after-effects-templates/explainer-video-18242/ â€” introduce actor, show the problem, switch to (premature) solutions.
+      // Beat 4 · moments 9–12 · Adapted from benchmark 035 "Explainer Video Kit"
+      // https://motionarray.com/after-effects-templates/explainer-video-18242/ — introduce actor, show the problem, switch to (premature) solutions.
       {
         from: 9, to: 12,
         draw: () => {
@@ -411,8 +411,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("tg", j >= 3, { s: 0.5 }); c.in("dart", j >= 3, { x: -60, y: -20 }, { dl: 0.7 }); c.in("wp", j >= 3, {}, { dl: 1 });
         }
       },
-      // Beat 5 Â· moments 13â€“16 Â· Adapted from benchmark 089 "Git Workflow 1"
-      // https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 â€” a branch appears off the main line, then merges back.
+      // Beat 5 · moments 13–16 · Adapted from benchmark 089 "Git Workflow 1"
+      // https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 — a branch appears off the main line, then merges back.
       {
         from: 13, to: 16,
         draw: () => {
@@ -444,8 +444,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("a1t", j >= 3, { y: -80, s: 0.8 }, { e: "back.out(1.4)" }); c.in("gw", j >= 3, {}, { dl: 0.5 });
         }
       },
-      // Beat 6 Â· moments 17â€“19 Â· Adapted from benchmark 037 "Workflow Dashboard â€“ Interactive Motion Design"
-      // https://dribbble.com/shots/27538364-Workflow-Dashboard-Interactive-Motion-Design â€” tiles load, progress bars fill.
+      // Beat 6 · moments 17–19 · Adapted from benchmark 037 "Workflow Dashboard – Interactive Motion Design"
+      // https://dribbble.com/shots/27538364-Workflow-Dashboard-Interactive-Motion-Design — tiles load, progress bars fill.
       {
         from: 17, to: 19,
         draw: () => {
@@ -480,8 +480,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("le", j >= 2, { y: -10 }, { dl: 0.4 }); c.in("ov", j >= 2, { x: -20 }, { dl: 0.6 });
         }
       },
-      // Beat 7 Â· moments 20â€“22 Â· Adapted from benchmark 126 "Stacked-to-grouped bars"
-      // https://observablehq.com/@d3/stacked-to-grouped-bars â€” segments keep identity while they grow and regroup.
+      // Beat 7 · moments 20–22 · Adapted from benchmark 126 "Stacked-to-grouped bars"
+      // https://observablehq.com/@d3/stacked-to-grouped-bars — segments keep identity while they grow and regroup.
       {
         from: 20, to: 22,
         draw: () => {
@@ -514,8 +514,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("gr", j >= 2, { y: 40 }); c.in("sy", j >= 2, { x: -20 }, { dl: 0.2 }); c.in("ca", j >= 2, { y: 20 }, { dl: 0.4 }); c.in("lz", j >= 2, { x: 40 }, { dl: 0.6 });
         }
       },
-      // Beat 8 Â· moments 23â€“26 Â· Adapted from benchmark 109 "teamwork"
-      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 â€” people appear and assemble into one team.
+      // Beat 8 · moments 23–26 · Adapted from benchmark 109 "teamwork"
+      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 — people appear and assemble into one team.
       {
         from: 23, to: 26,
         draw: () => {
@@ -543,8 +543,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("pl", j >= 3, { y: -20 }); c.in("bc", j >= 3, { s: 0.6 }, { dl: 0.5, e: "back.out(2)" });
         }
       },
-      // Beat 9 Â· moments 27â€“30 Â· Adapted from benchmark 004 "SVG Timeline + ScrollTrigger + Paths"
-      // https://codepen.io/ruru_wang/pen/VwOPzgy â€” successive paths draw and expose connected nodes (here driven by narration, not scroll).
+      // Beat 9 · moments 27–30 · Adapted from benchmark 004 "SVG Timeline + ScrollTrigger + Paths"
+      // https://codepen.io/ruru_wang/pen/VwOPzgy — successive paths draw and expose connected nodes (here driven by narration, not scroll).
       {
         from: 27, to: 30,
         draw: () => {
@@ -579,7 +579,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O1b Â· "THE PROCESS NOBODY WROTE DOWN"  Â·  29 moments Â· 10 beats
+  // W8O1b · "THE PROCESS NOBODY WROTE DOWN"  ·  29 moments · 10 beats
   // Story: a tidy procedure binder opens to reveal hidden machinery; the
   // manager's four-step line; a four-lane swimlane builds itself and its
   // handoffs light up; eight steps, four handoffs, data typed three times;
@@ -602,8 +602,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     const LN = [["Guest", C.navy2, "#e3edf7"], ["Reception", C.green, "#e3f1e9"], ["Revenue", C.orange, "#f8e6dc"], ["Rooms", C.plum, "#ece6f3"]];
     const LY = (i) => 34 + i * 62;
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 081 "Clean Workflow Visualization with Motion Graphics"
-      // https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics â€” a clean card opens to reveal the connected journey inside.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 081 "Clean Workflow Visualization with Motion Graphics"
+      // https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics — a clean card opens to reveal the connected journey inside.
       {
         from: 0, to: 2,
         draw: () => {
@@ -624,8 +624,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("mgr", j >= 2, { x: 30 }); c.in("mb", j >= 2, { s: 0.5 }, { dl: 0.3, e: "back.out(2)" }); c.in("q", j >= 2, { s: 0.5 }, { dl: 0.8 });
         }
       },
-      // Beat 2 Â· moments 3â€“4 Â· Adapted from benchmark 009 "Modern Process Infographic Steps Animation Template"
-      // https://elements.envato.com/steps-infographic-BUNKM3A â€” numbered milestones reveal, then activate one by one.
+      // Beat 2 · moments 3–4 · Adapted from benchmark 009 "Modern Process Infographic Steps Animation Template"
+      // https://elements.envato.com/steps-infographic-BUNKM3A — numbered milestones reveal, then activate one by one.
       {
         from: 3, to: 4,
         draw: () => {
@@ -645,8 +645,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("st", j >= 1, { s: 1.6 }, { e: "back.out(1.6)" }); c.in("aw", j >= 1, { x: 30 }, { dl: 0.4 });
         }
       },
-      // Beat 3 Â· moments 5â€“8 Â· Adapted from benchmark 034 "SaaS Platform & Workflow Motion"
-      // https://dribbble.com/shots/27719724-SaaS-Platform-Workflow-Motion-UI-Concept â€” cards transition between states and re-flow across role lanes.
+      // Beat 3 · moments 5–8 · Adapted from benchmark 034 "SaaS Platform & Workflow Motion"
+      // https://dribbble.com/shots/27719724-SaaS-Platform-Workflow-Motion-UI-Concept — cards transition between states and re-flow across role lanes.
       {
         from: 5, to: 8,
         draw: () => {
@@ -669,8 +669,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           if (j === 2) for (let i = 0; i < 4; i++) c.mv("ln" + i, { x: 6 }, { dl: 0.15 * i, d: 0.4 });
         }
       },
-      // Beat 4 Â· moments 9â€“10 Â· Adapted from benchmark 113 "Infographic Chart Creator"
-      // https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/ â€” counters roll up and columns grow.
+      // Beat 4 · moments 9–10 · Adapted from benchmark 113 "Infographic Chart Creator"
+      // https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/ — counters roll up and columns grow.
       {
         from: 9, to: 10,
         draw: () => {
@@ -689,8 +689,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("wt", j >= 1, { y: 40 }, { e: "power2.out" });
         }
       },
-      // Beat 5 Â· moments 11â€“13 Â· Adapted from benchmark 013 "Workflow Animation"
-      // https://dribbble.com/shots/3791748-Workflow-Animation â€” an event token transfers to the next stage and a notification returns.
+      // Beat 5 · moments 11–13 · Adapted from benchmark 013 "Workflow Animation"
+      // https://dribbble.com/shots/3791748-Workflow-Animation — an event token transfers to the next stage and a notification returns.
       {
         from: 11, to: 13,
         draw: () => {
@@ -715,8 +715,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("wd", j >= 2, { y: -20 }); c.in("gk", j >= 0, { x: -40 }, { dl: 0.4 });
         }
       },
-      // Beat 6 Â· moments 14â€“16 Â· Adapted from benchmark 058 "SVGator animated UI templates" (before/after toggle)
-      // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/ â€” a toggle flips between two states of the same object.
+      // Beat 6 · moments 14–16 · Adapted from benchmark 058 "SVGator animated UI templates" (before/after toggle)
+      // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/ — a toggle flips between two states of the same object.
       {
         from: 14, to: 16,
         draw: () => {
@@ -732,8 +732,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ob", j === 2, { x: 30 });
         }
       },
-      // Beat 7 Â· moments 17â€“18 Â· Adapted from benchmark 030 "Sankey particles generation"
-      // https://observablehq.com/@joaormendes/sankey-animation-particles-generation â€” particles choose weighted routes and travel to destinations.
+      // Beat 7 · moments 17–18 · Adapted from benchmark 030 "Sankey particles generation"
+      // https://observablehq.com/@joaormendes/sankey-animation-particles-generation — particles choose weighted routes and travel to destinations.
       {
         from: 17, to: 18,
         draw: () => {
@@ -759,8 +759,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("el", j >= 0 ? (j >= 1 ? 0 : 1) : 0);
         }
       },
-      // Beat 8 Â· moments 19â€“21 Â· Adapted from benchmark 110 "Animated quadtree"
-      // https://observablehq.com/@d3/animated-quadtree â€” regions subdivide to finer and finer levels of detail.
+      // Beat 8 · moments 19–21 · Adapted from benchmark 110 "Animated quadtree"
+      // https://observablehq.com/@d3/animated-quadtree — regions subdivide to finer and finer levels of detail.
       {
         from: 19, to: 21,
         draw: () => {
@@ -782,14 +782,14 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("sort", j === 2, { s: 0.9 });
         }
       },
-      // Beat 9 Â· moments 22â€“24 Â· Adapted from benchmark 073 "The Trouble With Food Safety Audits" (NYT)
-      // https://www.nytimes.com/interactive/projects/documents/food-safety-peanut-inspection â€” annotated document highlights reveal discrepancies.
+      // Beat 9 · moments 22–24 · Adapted from benchmark 073 "The Trouble With Food Safety Audits" (NYT)
+      // https://www.nytimes.com/interactive/projects/documents/food-safety-peanut-inspection — annotated document highlights reveal discrepancies.
       {
         from: 22, to: 24,
         draw: () => {
           let s = H("ac", R(16, 30, 170, 120, C.white, 10, `stroke="${C.green}" stroke-width="2.4"`) + T(101, 56, "Observed activity", 14, C.green) + E(60, 98, 18, 10, C.white, `stroke="${C.green}" stroke-width="3"`) + O(60, 98, 5, C.green) + doc(96, 76, 34, 44, C.green) + badge(152, 98, 12, C.green));
           s += H("ex", R(214, 30, 170, 120, C.white, 10, `stroke="${C.plum}" stroke-width="2.4" stroke-dasharray="6 4"`) + T(299, 56, "Reported account", 14, C.plum) + person(254, 112, 1.2, C.plum) + bubble(280, 72, 80, 36, "Usually...", { sz: 13, st: C.plum, fg: C.plum, tx: 18 }));
-          s += H("vs", O(200, 90, 16, C.orange) + T(200, 95, "â‰ ", 16, C.white));
+          s += H("vs", O(200, 90, 16, C.orange) + T(200, 95, "≠", 16, C.white));
           s += H("more", chip(200, 178, "Check more cases", { sz: 14, bg: C.navy, st: C.navy, fg: C.white }) + rep(4, (i) => doc(120 + i * 44, 200, 30, 38, C.navy)));
           s += H("mdl", R(40, 30, 320, 150, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + T(200, 54, "Draft as-is model", 15, C.navy) + rep(4, (i) => R(62 + i * 76, 82, 56, 30, C.blue, 5) + (i < 3 ? arrow(118 + i * 76, 97, 136 + i * 76, 97, C.navy, 2) : "")));
           s += H("st0", `<g transform="rotate(-6 120 150)">${R(84, 132, 76, 36, "#fff1b8", 2)}${T(122, 155, "Add check", 12, C.ink)}</g>`);
@@ -807,8 +807,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("nr", j === 1, { y: 10 }, { dl: 1.4 }); c.in("rc", j === 2, { s: 0.6 }, { e: "back.out(1.8)" });
         }
       },
-      // Beat 10 Â· moments 25â€“28 Â· Adapted from benchmark 136 "Project TimeLine"
-      // https://motionarray.com/after-effects-templates/project-timeline-2424919/ â€” a marker advances along time markers.
+      // Beat 10 · moments 25–28 · Adapted from benchmark 136 "Project TimeLine"
+      // https://motionarray.com/after-effects-templates/project-timeline-2424919/ — a marker advances along time markers.
       {
         from: 25, to: 28,
         draw: () => {
@@ -836,7 +836,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O1c Â· "FINDING EVIDENCE THAT PEOPLE CAN TRUST"  Â·  33 moments Â· 10 beats
+  // W8O1c · "FINDING EVIDENCE THAT PEOPLE CAN TRUST"  ·  33 moments · 10 beats
   // Story: the drawn model is challenged by the director; three sincere
   // perspectives; walking one real case end to end; receptionist vs
   // supervisor heard in separate rooms; interviews and observation
@@ -859,8 +859,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Conflicting figures next"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 033 "Animated Planning Dashboard Workflow"
-      // https://dribbble.com/shots/27184988-Animated-Planning-Dashboard-Workflow â€” a character works beside sliding, pulsing panels.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 033 "Animated Planning Dashboard Workflow"
+      // https://dribbble.com/shots/27184988-Animated-Planning-Dashboard-Workflow — a character works beside sliding, pulsing panels.
       {
         from: 0, to: 2,
         draw: () => {
@@ -882,8 +882,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("dir", j >= 2, { x: 40 }); c.in("db", j >= 2, { s: 0.4 }, { dl: 0.4, e: "back.out(2)" }); c.in("bolt", j >= 2, { s: 0.3 }, { dl: 0.7 });
         }
       },
-      // Beat 2 Â· moments 3â€“5 Â· Adapted from benchmark 124 "Project Dashboard"
-      // https://lottiefiles.com/free-animation/project-dashboard-PeJUc2p1iB â€” data panels reveal alongside the collaborators who own them.
+      // Beat 2 · moments 3–5 · Adapted from benchmark 124 "Project Dashboard"
+      // https://lottiefiles.com/free-animation/project-dashboard-PeJUc2p1iB — data panels reveal alongside the collaborators who own them.
       {
         from: 3, to: 5,
         draw: () => {
@@ -904,8 +904,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("sin", j === 1, { y: 14 }); c.in("mega", j >= 2, { y: 30 });
         }
       },
-      // Beat 3 Â· moments 6â€“8 Â· Adapted from benchmark 005 "MotionPath plugin demonstration"
-      // https://gsap.com/docs/v3/Plugins/MotionPathPlugin/ â€” an object travels and turns along an arbitrary SVG path.
+      // Beat 3 · moments 6–8 · Adapted from benchmark 005 "MotionPath plugin demonstration"
+      // https://gsap.com/docs/v3/Plugins/MotionPathPlugin/ — an object travels and turns along an arbitrary SVG path.
       {
         from: 6, to: 8,
         draw: () => {
@@ -927,8 +927,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("wc", j >= 1, { y: -14 }); c.in("gap", j >= 2, { s: 0.6 });
         }
       },
-      // Beat 4 Â· moments 9â€“11 Â· Adapted from benchmark 086 "Workflow by a" (teamwork workflow)
-      // https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm â€” workers appear, each performing their part of the workflow.
+      // Beat 4 · moments 9–11 · Adapted from benchmark 086 "Workflow by a" (teamwork workflow)
+      // https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm — workers appear, each performing their part of the workflow.
       {
         from: 9, to: 11,
         draw: () => {
@@ -945,8 +945,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.mv("rc", j >= 2 ? { y: -26 } : {}, { dl: 0 }); c.mv("sv", j >= 2 ? { y: -26 } : {});
         }
       },
-      // Beat 5 Â· moments 12â€“14 Â· Adapted from benchmark 067 "Idea Flow Animation | Infographic Motion Design"
-      // https://www.behance.net/gallery/247762027/Idea-Flow-Animation-Infographic-Motion-Design â€” orbiting idea nodes connect into structure.
+      // Beat 5 · moments 12–14 · Adapted from benchmark 067 "Idea Flow Animation | Infographic Motion Design"
+      // https://www.behance.net/gallery/247762027/Idea-Flow-Animation-Infographic-Motion-Design — orbiting idea nodes connect into structure.
       {
         from: 12, to: 14,
         draw: () => {
@@ -963,8 +963,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("vq", j === 1, { y: 14 }, { dl: 0.5 }); c.in("fork", j === 2, { y: 14 });
         }
       },
-      // Beat 6 Â· moments 15â€“18 Â· Adapted from benchmark 050 "Learn D3: Animation"
-      // https://observablehq.com/@d3/learn-d3-animation â€” a time series draws progressively with a playback marker.
+      // Beat 6 · moments 15–18 · Adapted from benchmark 050 "Learn D3: Animation"
+      // https://observablehq.com/@d3/learn-d3-animation — a time series draws progressively with a playback marker.
       {
         from: 15, to: 18,
         draw: () => {
@@ -976,7 +976,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           s += H("gp", [[20, 80], [140, 170], [230, 260], [320, 380]].map(([a, b]) => R(a, 140, b - a, 20, "rgba(192,80,42,.28)", 3, `stroke="${C.orange}" stroke-width="1.6" stroke-dasharray="4 3"`)).join("") + T(155, 196, "Unrecorded", 13, C.orange) + T(245, 196, "Unrecorded", 13, C.orange));
           s += H("ph", phone(155, 222, 1, C.orange) + clock(245, 222, 11));
           s += H("lb", `<g class="a-walk">${guest(30, 112, 1)}</g>` + O(30, 150, 6, "none", `stroke="${C.red}" stroke-width="2.4"`) + T(30, 246, "?", 28, C.red));
-          s += H("kt", O(290, 150, 16, "none", `stroke="${C.gold}" stroke-width="4" class="a-pulse"`) + key(290, 70, 1.6) + P("M290 150 C240 260 80 260 36 160", C.red, 2.4, 'stroke-dasharray="5 5"') + chip(180, 278, "Key time â‰  lobby time", { sz: 13, st: C.red, fg: C.red }));
+          s += H("kt", O(290, 150, 16, "none", `stroke="${C.gold}" stroke-width="4" class="a-pulse"`) + key(290, 70, 1.6) + P("M290 150 C240 260 80 260 36 160", C.red, 2.4, 'stroke-dasharray="5 5"') + chip(180, 278, "Key time ≠ lobby time", { sz: 13, st: C.red, fg: C.red }));
           s += H("ai", R(60, 214, 280, 70, C.white, 10, `stroke="${C.red}" stroke-width="2.4"`) + badge(96, 238, 12, C.green) + T(120, 243, "Precise", 15, C.green, "", "start") + badge(96, 266, 12, C.red, false) + T(120, 271, "Incomplete boundary", 15, C.red, "", "start"));
           return s;
         },
@@ -988,8 +988,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ai", j === 3, { y: 30 });
         }
       },
-      // Beat 7 Â· moments 19â€“22 Â· Adapted from benchmark 052 "Data Analysis Animation"
-      // https://lottiefiles.com/free-animation/data-analysis-animation-visualize-insights-effectively-JTyygZuvbP â€” analytics icons reveal and indicators move.
+      // Beat 7 · moments 19–22 · Adapted from benchmark 052 "Data Analysis Animation"
+      // https://lottiefiles.com/free-animation/data-analysis-animation-visualize-insights-effectively-JTyygZuvbP — analytics icons reveal and indicators move.
       {
         from: 19, to: 22,
         draw: () => {
@@ -1008,12 +1008,12 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("sl", j === 2, { y: 14 }, { dl: 0.6 }); c.in("cat", j === 3, { y: 14 });
         }
       },
-      // Beat 8 Â· moments 23â€“25 Â· Adapted from benchmark 129 "Arc tween"
-      // https://observablehq.com/@d3/arc-tween â€” an arc gauge sweeps to a new angular value.
+      // Beat 8 · moments 23–25 · Adapted from benchmark 129 "Arc tween"
+      // https://observablehq.com/@d3/arc-tween — an arc gauge sweeps to a new angular value.
       {
         from: 23, to: 25,
         draw: () => {
-          let s = H("dis", R(20, 40, 160, 80, C.white, 10, `stroke="${C.plum}" stroke-width="2"`) + T(100, 70, "Interviews", 14, C.plum) + T(100, 98, "\"Fast\"", 18, C.plum) + R(220, 40, 160, 80, C.white, 10, `stroke="${C.navy}" stroke-width="2"`) + T(300, 70, "Records", 14, C.navy) + T(300, 98, "\"Slow\"", 18, C.navy) + O(200, 80, 14, C.red) + T(200, 85, "â‰ ", 15, C.white));
+          let s = H("dis", R(20, 40, 160, 80, C.white, 10, `stroke="${C.plum}" stroke-width="2"`) + T(100, 70, "Interviews", 14, C.plum) + T(100, 98, "\"Fast\"", 18, C.plum) + R(220, 40, 160, 80, C.white, 10, `stroke="${C.navy}" stroke-width="2"`) + T(300, 70, "Records", 14, C.navy) + T(300, 98, "\"Slow\"", 18, C.navy) + O(200, 80, 14, C.red) + T(200, 85, "≠", 15, C.white));
           s += H("why", chip(200, 150, "Why do they differ?", { sz: 16, bg: C.orange, st: C.orange, fg: C.white }) + `<g class="a-bob">${lens(200, 222, 28, C.ink)}</g>`);
           const arc = (cx, cy, r, a0, a1) => { const p = (a) => `${(cx + r * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(cy + r * Math.sin(a * Math.PI / 180)).toFixed(1)}`; return `M${p(a0)} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${p(a1)}`; };
           s += H("g1", O(110, 150, 66, C.white, `stroke="${C.navy}" stroke-width="2"`) + P(arc(110, 150, 54, -90, 270), "#e3e9ef", 12) + T(110, 156, "Desk clock", 13, C.navy) + chip(110, 238, "Starts at desk", { sz: 13 }));
@@ -1030,8 +1030,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("fold", j === 2, { y: 30 }); c.in("eye", j === 2, { y: 14 }, { dl: 0.5 });
         }
       },
-      // Beat 9 Â· moments 26â€“29 Â· Adapted from benchmark 015 "Data Workflow Animation"
-      // https://dribbble.com/shots/27247003-Data-Workflow-Animation â€” nodes activate, then data traces along connectors.
+      // Beat 9 · moments 26–29 · Adapted from benchmark 015 "Data Workflow Animation"
+      // https://dribbble.com/shots/27247003-Data-Workflow-Animation — nodes activate, then data traces along connectors.
       {
         from: 26, to: 29,
         draw: () => {
@@ -1055,8 +1055,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("nw", j === 3, { y: 30 });
         }
       },
-      // Beat 10 Â· moments 30â€“32 Â· Adapted from benchmark 075 "Action Security Systems - Infographic & Motion Design"
-      // https://www.behance.net/gallery/104646575/Action-Security-Systems-Infographic-Motion-Design â€” risks reveal, then controls and verification.
+      // Beat 10 · moments 30–32 · Adapted from benchmark 075 "Action Security Systems - Infographic & Motion Design"
+      // https://www.behance.net/gallery/104646575/Action-Security-Systems-Infographic-Motion-Design — risks reveal, then controls and verification.
       {
         from: 30, to: 32,
         draw: () => {
@@ -1065,7 +1065,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           s += H("bn", [[96, 80], [306, 96], [98, 164]].map(([x, y]) => P(`M${x} ${y} l-14 -10`, C.plum, 2.4)).join(""));
           s += H("cr", chip(200, 232, "Withstands questioning", { sz: 16, bg: C.green, st: C.green, fg: C.white }));
           s += H("rd", R(30, 40, 340, 170, C.white, 12, `stroke="${C.green}" stroke-width="2.4"`) + badge(70, 80, 14, C.green) + T(96, 86, "Process understood", 16, C.green, "", "start") + badge(70, 124, 14, C.green) + T(96, 130, "Evidence checked", 16, C.green, "", "start") + R(54, 156, 292, 36, C.blue, 8) + T(200, 180, "Next: measure it", 16, C.navy));
-          s += H("ck", watch(110, 212, 40) + hand(110, 212, 28, C.navy, 6) + watch(290, 212, 40, C.orange) + hand(290, 212, 28, C.orange, 3) + T(200, 220, "â‰ ", 30, C.red) + chip(200, 284, "Conflicting figures?", { sz: 15, st: C.red, fg: C.red }));
+          s += H("ck", watch(110, 212, 40) + hand(110, 212, 28, C.navy, 6) + watch(290, 212, 40, C.orange) + hand(290, 212, 28, C.orange, 3) + T(200, 220, "≠", 30, C.red) + chip(200, 284, "Conflicting figures?", { sz: 15, st: C.red, fg: C.red }));
           return s;
         },
         render: (c, j) => {
@@ -1083,8 +1083,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   addStyles(SCENE_BG);
 })();
 
-// OPER621 Â· Week 8 Â· The Understand Phase â€” animated teaching scenes (round 2, Claude)
-// File: w08-claude-part2.js Â· Lesson 2 Â· Three clocks, three different answers Â· Scenes: W8O2a, W8O2b, W8O2c
+// OPER621 · Week 8 · The Understand Phase — animated teaching scenes (round 2, Claude)
+// File: w08-claude-part2.js · Lesson 2 · Three clocks, three different answers · Scenes: W8O2a, W8O2b, W8O2c
 // Standalone part: defines its own engine and helpers, registers its scenes and appends its own
 // rules (all scoped under .vls-w08-<secId>) into the single shared <style id="vl-sc-w08">.
 // Parts may be loaded in any order or concatenated.
@@ -1351,7 +1351,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     : rep(34, (i) => P(`M${-400 + i * 40} -300 L${-160 + i * 40} 700`, line, 1)));
 
   // ============================================================
-  // W8O2a Â· "WHOSE CLOCK ARE WE USING?"  Â·  33 moments Â· 10 beats
+  // W8O2a · "WHOSE CLOCK ARE WE USING?"  ·  33 moments · 10 beats
   // Story: a stopwatch whose start and stop buttons matter; two rulers
   // over one journey; 21.1 elapsed days vs 4.1 days of work, 17 days
   // outside work split into mailbox, guest documents and payment run;
@@ -1374,8 +1374,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Whose clock runs?"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 131 "Transition end"
-      // https://observablehq.com/@d3/transition-end â€” move, wait for the transition to end, then recolour.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 131 "Transition end"
+      // https://observablehq.com/@d3/transition-end — move, wait for the transition to end, then recolour.
       {
         from: 0, to: 2,
         draw: () => {
@@ -1395,8 +1395,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("mg", j >= 2, { x: 40 }); c.in("bb", j >= 2, { s: 0.4 }, { dl: 0.3, e: "back.out(2)" });
         }
       },
-      // Beat 2 Â· moments 3â€“6 Â· Adapted from benchmark 135 "Timeline by The Creators"
-      // https://motionarray.com/after-effects-templates/timeline/ â€” milestones reveal along a line with a travelling marker.
+      // Beat 2 · moments 3–6 · Adapted from benchmark 135 "Timeline by The Creators"
+      // https://motionarray.com/after-effects-templates/timeline/ — milestones reveal along a line with a travelling marker.
       {
         from: 3, to: 6,
         draw: () => {
@@ -1419,8 +1419,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("fl", j === 3, { y: -20 }); c.in("bd", j === 3, { y: 14 }, { dl: 0.4 });
         }
       },
-      // Beat 3 Â· moments 7â€“10 Â· Adapted from benchmark 038 "Bar Chart Race, Explained"
-      // https://observablehq.com/@d3/bar-chart-race-explained â€” values interpolate, bars grow and a ticker updates.
+      // Beat 3 · moments 7–10 · Adapted from benchmark 038 "Bar Chart Race, Explained"
+      // https://observablehq.com/@d3/bar-chart-race-explained — values interpolate, bars grow and a ticker updates.
       {
         from: 7, to: 10,
         draw: () => {
@@ -1432,7 +1432,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           s += TK("n2", 112, 203, "0", 20, C.green, "start", 'style="opacity:0"');
           s += H("both", chip(260, 196, "Both true", { sz: 16, bg: C.green, st: C.green, fg: C.white }));
           s += H("gap", R(96, 172, 274, 46, "none", 6, `stroke="${C.orange}" stroke-width="2.4" stroke-dasharray="6 5"`) + T(250, 200, "No active work", 14, C.orange));
-          s += H("fm", R(40, 238, 320, 50, C.white, 10, `stroke="${C.navy}" stroke-width="2"`) + T(200, 271, "21.1 âˆ’ 4.1 = 17.0 days", 20, C.navy));
+          s += H("fm", R(40, 238, 320, 50, C.white, 10, `stroke="${C.navy}" stroke-width="2"`) + T(200, 271, "21.1 − 4.1 = 17.0 days", 20, C.navy));
           return s;
         },
         render: (c, j) => {
@@ -1446,8 +1446,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("gap", j >= 3, { s: 0.9 }); c.in("fm", j >= 3, { y: 20 }, { dl: 0.3 });
         }
       },
-      // Beat 4 Â· moments 11â€“12 Â· Adapted from benchmark 040 "Animated treemap"
-      // https://observablehq.com/@d3/animated-treemap â€” blocks resize and relabel as the layout recomputes.
+      // Beat 4 · moments 11–12 · Adapted from benchmark 040 "Animated treemap"
+      // https://observablehq.com/@d3/animated-treemap — blocks resize and relabel as the layout recomputes.
       {
         from: 11, to: 12,
         draw: () => {
@@ -1455,7 +1455,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           s += H("t0", R(20, 30, 190, 190, "#f2c4ae", 10, `stroke="${C.white}" stroke-width="3"`) + R(56, 70, 120, 66, C.white, 6, `stroke="${C.orange}" stroke-width="2"`) + P("M56 70 L116 108 L176 70", C.orange, 2) + T(115, 166, "9 days", 22, C.ink) + T(115, 192, "Shared mailbox", 14, C.ink));
           s += H("t1", R(210, 30, 170, 104, "#c9dcef", 10, `stroke="${C.white}" stroke-width="3"`) + doc(226, 46, 30, 38, C.navy) + T(320, 72, "5 days", 20, C.navy) + T(295, 118, "Guest documents", 13, C.navy));
           s += H("t2", R(210, 134, 170, 86, "#d8e8d0", 10, `stroke="${C.white}" stroke-width="3"`) + coin(240, 160, 11) + T(320, 168, "3 days", 20, C.green) + T(295, 206, "Payment run", 13, C.green));
-          s += H("q", chip(110, 252, "Waste?", { sz: 15, st: C.red, fg: C.red }) + chip(290, 252, "Purpose?", { sz: 15, bg: C.navy, st: C.navy, fg: C.white }) + P("M80 252 H140", C.red, 3) + T(200, 257, "â†’", 18, C.slate) + chip(200, 288, "Investigate each interval", { sz: 13, st: C.navy }));
+          s += H("q", chip(110, 252, "Waste?", { sz: 15, st: C.red, fg: C.red }) + chip(290, 252, "Purpose?", { sz: 15, bg: C.navy, st: C.navy, fg: C.white }) + P("M80 252 H140", C.red, 3) + T(200, 257, "→", 18, C.slate) + chip(200, 288, "Investigate each interval", { sz: 13, st: C.navy }));
           return s;
         },
         render: (c, j) => {
@@ -1464,8 +1464,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("q", j >= 1, { y: 20 });
         }
       },
-      // Beat 5 Â· moments 13â€“15 Â· Adapted from benchmark 108 "Delivery Truck - Road Animation"
-      // https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v â€” a vehicle translates along its route.
+      // Beat 5 · moments 13–15 · Adapted from benchmark 108 "Delivery Truck - Road Animation"
+      // https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v — a vehicle translates along its route.
       {
         from: 13, to: 15,
         draw: () => {
@@ -1485,8 +1485,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("cmp", j === 2, { y: 30 });
         }
       },
-      // Beat 6 Â· moments 16â€“18 Â· Adapted from benchmark 093 "Process-Para"
-      // https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT â€” a ring rotates, waits, then finishes.
+      // Beat 6 · moments 16–18 · Adapted from benchmark 093 "Process-Para"
+      // https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT — a ring rotates, waits, then finishes.
       {
         from: 16, to: 18,
         draw: () => {
@@ -1505,8 +1505,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ff", j === 2, { y: 30 });
         }
       },
-      // Beat 7 Â· moments 19â€“22 Â· Adapted from benchmark 128 "Pie chart update"
-      // https://observablehq.com/@d3/pie-chart-update â€” a donut tweens its sectors between two datasets.
+      // Beat 7 · moments 19–22 · Adapted from benchmark 128 "Pie chart update"
+      // https://observablehq.com/@d3/pie-chart-update — a donut tweens its sectors between two datasets.
       {
         from: 19, to: 22,
         draw: () => {
@@ -1524,8 +1524,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("fel", j === 3, { y: 30 });
         }
       },
-      // Beat 8 Â· moments 23â€“25 Â· Adapted from benchmark 063 "Awwwards SVG lines scroll animation (FEED Agency)"
-      // https://www.awwwards.com/inspiration/svg-lines-scroll-animation-feed-agency â€” lines trace progressively as the view advances.
+      // Beat 8 · moments 23–25 · Adapted from benchmark 063 "Awwwards SVG lines scroll animation (FEED Agency)"
+      // https://www.awwwards.com/inspiration/svg-lines-scroll-animation-feed-agency — lines trace progressively as the view advances.
       {
         from: 23, to: 25,
         draw: () => {
@@ -1543,8 +1543,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("tg", j === 2, { y: -20 });
         }
       },
-      // Beat 9 Â· moments 26â€“28 Â· Adapted from benchmark 137 "Corporate Timeline by HenlyFx"
-      // https://motionarray.com/after-effects-templates/corporate-timeline-1939632/ â€” events reveal one by one along a line.
+      // Beat 9 · moments 26–28 · Adapted from benchmark 137 "Corporate Timeline by HenlyFx"
+      // https://motionarray.com/after-effects-templates/corporate-timeline-1939632/ — events reveal one by one along a line.
       {
         from: 26, to: 28,
         draw: () => {
@@ -1564,8 +1564,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("bf", j === 2, { x: -20 }); c.in("af", j === 2, { x: 30 }, { dl: 0.5 });
         }
       },
-      // Beat 10 Â· moments 29â€“32 Â· Adapted from benchmark 120 "Animated Dashboards"
-      // https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ â€” panels transition between dashboard states.
+      // Beat 10 · moments 29–32 · Adapted from benchmark 120 "Animated Dashboards"
+      // https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ — panels transition between dashboard states.
       {
         from: 29, to: 32,
         draw: () => {
@@ -1590,7 +1590,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O2b Â· "WHEN THE STORY AND THE DATA DISAGREE"  Â·  33 moments Â· 10 beats
+  // W8O2b · "WHEN THE STORY AND THE DATA DISAGREE"  ·  33 moments · 10 beats
   // Story: one bright guest-star over fourteen properties; one case vs a
   // measured population; three stormy evenings that dominate memory; a
   // sample net across quiet, busy and approval arrivals; an average line
@@ -1615,8 +1615,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     const H8 = [3, 6, 8, 7, 5, 3, 2, 1, 1, 2];
     const MAP = [[60, 70], [120, 50], [180, 80], [250, 56], [320, 74], [70, 140], [140, 130], [210, 150], [280, 128], [345, 150], [90, 210], [170, 214], [250, 206], [330, 220]];
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 105 "World map with logistics"
-      // https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy â€” routes trace between hubs on a map.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 105 "World map with logistics"
+      // https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy — routes trace between hubs on a map.
       {
         from: 0, to: 2,
         draw: () => {
@@ -1634,8 +1634,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("tm", j === 2, { x: 30 });
         }
       },
-      // Beat 2 Â· moments 3â€“5 Â· Adapted from benchmark 106 "Supply Chain and logistics"
-      // https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu â€” dispatch, transit and receipt connect across a network.
+      // Beat 2 · moments 3–5 · Adapted from benchmark 106 "Supply Chain and logistics"
+      // https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu — dispatch, transit and receipt connect across a network.
       {
         from: 3, to: 5,
         draw: () => {
@@ -1655,8 +1655,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("worse", j === 2, { y: 14 }, { dl: 1.6 });
         }
       },
-      // Beat 3 Â· moments 6â€“8 Â· Adapted from benchmark 064 "Awwwards Kairon Labs SVG animation"
-      // https://www.awwwards.com/inspiration/svg-animation-on-scroll-https-kaironlabs-com â€” visual states are scrubbed to reveal the next composition (zoom out).
+      // Beat 3 · moments 6–8 · Adapted from benchmark 064 "Awwwards Kairon Labs SVG animation"
+      // https://www.awwwards.com/inspiration/svg-animation-on-scroll-https-kaironlabs-com — visual states are scrubbed to reveal the next composition (zoom out).
       {
         from: 6, to: 8,
         draw: () => {
@@ -1673,8 +1673,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("cmp", j === 2, { y: -20 });
         }
       },
-      // Beat 4 Â· moments 9â€“12 Â· Adapted from benchmark 065 "Awwwards background SVG animation (Henning Tillmann)"
-      // https://www.awwwards.com/inspiration/background-svg-animation-on-scroll-henning-tillmann â€” background elements re-position and re-weight with progress.
+      // Beat 4 · moments 9–12 · Adapted from benchmark 065 "Awwwards background SVG animation (Henning Tillmann)"
+      // https://www.awwwards.com/inspiration/background-svg-animation-on-scroll-henning-tillmann — background elements re-position and re-weight with progress.
       {
         from: 9, to: 12,
         draw: () => {
@@ -1694,8 +1694,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("seek", j === 3, { s: 0.8 });
         }
       },
-      // Beat 5 Â· moments 13â€“16 Â· Adapted from benchmark 027 "Logistic - Warehouse"
-      // https://lottiefiles.com/free-animation/logistic-warehouse-json-animation-2kz8lGzNGD â€” items cycle through intake, holding and dispatch.
+      // Beat 5 · moments 13–16 · Adapted from benchmark 027 "Logistic - Warehouse"
+      // https://lottiefiles.com/free-animation/logistic-warehouse-json-animation-2kz8lGzNGD — items cycle through intake, holding and dispatch.
       {
         from: 13, to: 16,
         draw: () => {
@@ -1714,8 +1714,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("cmp", j === 3, { y: 30 });
         }
       },
-      // Beat 6 Â· moments 17â€“19 Â· Adapted from benchmark 112 "Infographics Pack by ARstudio"
-      // https://motionarray.com/after-effects-templates/infographics-pack-135055/ â€” chart primitives, guides and callouts reveal in sequence.
+      // Beat 6 · moments 17–19 · Adapted from benchmark 112 "Infographics Pack by ARstudio"
+      // https://motionarray.com/after-effects-templates/infographics-pack-135055/ — chart primitives, guides and callouts reveal in sequence.
       {
         from: 17, to: 19,
         draw: () => {
@@ -1734,8 +1734,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("fs", j === 2, { s: 0.6 });
         }
       },
-      // Beat 7 Â· moments 20â€“22 Â· Adapted from benchmark 116 "Infographics by Ruslan Klimovich"
-      // https://motionarray.com/after-effects-templates/infographics-3844461/ â€” statistic graphics build and sequence.
+      // Beat 7 · moments 20–22 · Adapted from benchmark 116 "Infographics by Ruslan Klimovich"
+      // https://motionarray.com/after-effects-templates/infographics-3844461/ — statistic graphics build and sequence.
       {
         from: 20, to: 22,
         draw: () => {
@@ -1752,8 +1752,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("two", j >= 1, { y: -20 }); c.in("act", j === 2, { y: 14 });
         }
       },
-      // Beat 8 Â· moments 23â€“24 Â· Adapted from benchmark 125 "Infographics Dashboard"
-      // https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB â€” a pie arc grows beside a metric graph.
+      // Beat 8 · moments 23–24 · Adapted from benchmark 125 "Infographics Dashboard"
+      // https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB — a pie arc grows beside a metric graph.
       {
         from: 23, to: 24,
         draw: () => {
@@ -1770,8 +1770,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("cur", j === 0 ? 1 : 0); c.in("hs", j === 1, { s: 0.6 }, { dl: 0.6 }); c.mv("cur", j === 1 ? { sy: 0.02, pv: [200, 170] } : {}, { d: 1 });
         }
       },
-      // Beat 9 Â· moments 25â€“28 Â· Adapted from benchmark 094 "Process - Success"
-      // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP â€” an activity transforms into a completed check.
+      // Beat 9 · moments 25–28 · Adapted from benchmark 094 "Process - Success"
+      // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP — an activity transforms into a completed check.
       {
         from: 25, to: 28,
         draw: () => {
@@ -1779,7 +1779,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           s += H("lb", chip(105, 230, "How often", { sz: 15, st: C.navy2, fg: C.navy2 }) + chip(295, 230, "Why it happened", { sz: 15, st: C.orange, fg: C.orange }));
           s += H("ok", badge(200, 128, 22, C.green) + chip(200, 272, "Complementary evidence", { sz: 15, bg: C.green, st: C.green, fg: C.white }));
           s += H("rul", T(30, 82, "Arrival A", 14, C.navy, "", "start") + R(110, 66, 270, 22, C.navy2, 5) + T(30, 132, "Arrival B", 14, C.navy, "", "start") + R(110, 116, 270, 22, C.navy2, 5) + T(30, 182, "Arrival C", 14, C.navy, "", "start") + R(110, 166, 270, 22, C.navy2, 5) + P("M110 50 V200 M380 50 V200", C.green, 3) + chip(200, 240, "Same start, same stop", { sz: 15, bg: C.green, st: C.green, fg: C.white }));
-          s += H("mix", T(30, 82, "Guest 1", 14, C.navy, "", "start") + R(110, 66, 100, 22, C.orange, 5) + T(220, 82, "reception only", 13, C.orange, "", "start") + T(30, 132, "Guest 2", 14, C.navy, "", "start") + R(110, 116, 270, 22, C.navy2, 5) + T(245, 132, "full arrival", 13, C.white) + O(200, 190, 22, C.red) + T(200, 197, "â‰ ", 20, C.white) + chip(200, 250, "Not comparable", { sz: 15, bg: C.red, st: C.red, fg: C.white }));
+          s += H("mix", T(30, 82, "Guest 1", 14, C.navy, "", "start") + R(110, 66, 100, 22, C.orange, 5) + T(220, 82, "reception only", 13, C.orange, "", "start") + T(30, 132, "Guest 2", 14, C.navy, "", "start") + R(110, 116, 270, 22, C.navy2, 5) + T(245, 132, "full arrival", 13, C.white) + O(200, 190, 22, C.red) + T(200, 197, "≠", 20, C.white) + chip(200, 250, "Not comparable", { sz: 15, bg: C.red, st: C.red, fg: C.white }));
           return s;
         },
         render: (c, j) => {
@@ -1789,8 +1789,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("rul", j === 2, { x: -30 }); c.in("mix", j === 3, { x: 30 });
         }
       },
-      // Beat 10 Â· moments 29â€“32 Â· Adapted from benchmark 091 "cro process"
-      // https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to â€” a marker moves across successive business steps.
+      // Beat 10 · moments 29–32 · Adapted from benchmark 091 "cro process"
+      // https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to — a marker moves across successive business steps.
       {
         from: 29, to: 32,
         draw: () => {
@@ -1816,7 +1816,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O2c Â· "TWENTY-THREE MINUTES OR EIGHTY-TWO?"  Â·  33 moments Â· 10 beats
+  // W8O2c · "TWENTY-THREE MINUTES OR EIGHTY-TWO?"  ·  33 moments · 10 beats
   // Story: three dials argue; the traveller's 23 minutes (her rate found
   // by phone in seven); the 12.4-minute system window from booking-open
   // to key; 310 arrivals over fourteen properties and six weeks; the
@@ -1840,8 +1840,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     ];
     const DIAL = (x, y, r, v, col, lab, key) => watch(x, y, r, col) + T(x, y + 10, v, Math.round(r * 0.5), col) + T(x, y + r + 26, lab, 13, col);
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 119 "Infographics V2 by Typoland"
-      // https://motionarray.com/after-effects-templates/infographics-v2-556482/ â€” statistic modules scale in with numeric tweens.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 119 "Infographics V2 by Typoland"
+      // https://motionarray.com/after-effects-templates/infographics-v2-556482/ — statistic modules scale in with numeric tweens.
       {
         from: 0, to: 2,
         draw: () => {
@@ -1859,8 +1859,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           if (j === 1) for (let i = 0; i < 3; i++) c.mv("d" + i, { r: i === 1 ? 0 : i === 0 ? -6 : 6 }, { d: 0.6 });
         }
       },
-      // Beat 2 Â· moments 3â€“5 Â· Adapted from benchmark 022 "Steps Infographic"
-      // https://elements.envato.com/steps-infographic-5NHT2YG â€” steps introduced in sequence.
+      // Beat 2 · moments 3–5 · Adapted from benchmark 022 "Steps Infographic"
+      // https://elements.envato.com/steps-infographic-5NHT2YG — steps introduced in sequence.
       {
         from: 3, to: 5,
         draw: () => {
@@ -1880,8 +1880,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("br", j === 1 ? 1 : 0);
         }
       },
-      // Beat 3 Â· moments 6â€“9 Â· Adapted from benchmark 123 "DashBoard by Amit Prajapati"
-      // https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp â€” an IT dashboard screen comes into focus.
+      // Beat 3 · moments 6–9 · Adapted from benchmark 123 "DashBoard by Amit Prajapati"
+      // https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp — an IT dashboard screen comes into focus.
       {
         from: 6, to: 9,
         draw: () => {
@@ -1901,8 +1901,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("acc", j === 3, { s: 0.5 }, { e: "back.out(2)" });
         }
       },
-      // Beat 4 Â· moments 10â€“11 Â· Adapted from benchmark 031 "Supply chain design animation"
-      // https://www.behance.net/gallery/7392601/Supply-chain-design-animation â€” sites reveal on a planning grid and links calculate.
+      // Beat 4 · moments 10–11 · Adapted from benchmark 031 "Supply chain design animation"
+      // https://www.behance.net/gallery/7392601/Supply-chain-design-animation — sites reveal on a planning grid and links calculate.
       {
         from: 10, to: 11,
         draw: () => {
@@ -1920,15 +1920,15 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("bd", j === 1, { y: 30 });
         }
       },
-      // Beat 5 Â· moments 12â€“14 Â· Adapted from benchmark 039 "Bar Chart Race"
-      // https://observablehq.com/@d3/bar-chart-race â€” keyframes advance and values animate to rank.
+      // Beat 5 · moments 12–14 · Adapted from benchmark 039 "Bar Chart Race"
+      // https://observablehq.com/@d3/bar-chart-race — keyframes advance and values animate to rank.
       {
         from: 12, to: 14,
         draw: () => {
           let s = H("big", watch(110, 140, 82, C.green));
           s += TK("m", 110, 156, "0", 40, C.green, "middle", 'style="opacity:0"');
           s += H("bl", T(110, 248, "mean minutes", 15, C.green));
-          s += H("fm", R(214, 60, 176, 120, C.white, 10, `stroke="${C.navy}" stroke-width="2"`) + T(302, 96, "Total minutes", 14, C.navy) + P("M232 112 H372", C.navy, 2.4) + T(302, 138, "Ã· 310 arrivals", 14, C.navy) + chip(302, 200, "Arithmetic average", { sz: 13, bg: C.navy, st: C.navy, fg: C.white }));
+          s += H("fm", R(214, 60, 176, 120, C.white, 10, `stroke="${C.navy}" stroke-width="2"`) + T(302, 96, "Total minutes", 14, C.navy) + P("M232 112 H372", C.navy, 2.4) + T(302, 138, "÷ 310 arrivals", 14, C.navy) + chip(302, 200, "Arithmetic average", { sz: 13, bg: C.navy, st: C.navy, fg: C.white }));
           s += H("sp", rep(18, (i) => { const v = [30, 45, 52, 60, 66, 70, 74, 78, 82, 85, 90, 96, 104, 112, 125, 140, 160, 185][i]; return O(222 + i * 9.4, 260 - v * 0.9, 4.5, v > 120 ? C.orange : C.navy2); }) + P("M216 186 H392", C.green, 2.4, 'stroke-dasharray="5 4"') + T(388, 180, "82", 13, C.green, "", "end") + chip(304, 280, "Every guest differs", { sz: 13, st: C.orange, fg: C.orange }));
           return s;
         },
@@ -1938,15 +1938,15 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("sp", j === 2, { x: 30 });
         }
       },
-      // Beat 6 Â· moments 15â€“17 Â· Adapted from benchmark 126 "Stacked-to-grouped bars"
-      // https://observablehq.com/@d3/stacked-to-grouped-bars â€” bars reposition between layouts while preserving identity.
+      // Beat 6 · moments 15–17 · Adapted from benchmark 126 "Stacked-to-grouped bars"
+      // https://observablehq.com/@d3/stacked-to-grouped-bars — bars reposition between layouts while preserving identity.
       {
         from: 15, to: 17,
         draw: () => {
           let s = P("M20 210 H380", C.slate, 2);
-          s += H("b0", R(60, 210 - 12.4 * 2, 70, 12.4 * 2, C.navy, 4) + T(95, 200 - 12.4 * 2, "12.4", 16, C.navy) + T(95, 230, "System", 13, C.navy) + T(95, 246, "bookingâ†’key", 11, C.slate));
-          s += H("b1", R(165, 210 - 46, 70, 46, C.orange, 4) + T(200, 156, "23", 16, C.orange) + T(200, 230, "One guest", 13, C.orange) + T(200, 246, "queueâ†’desk", 11, C.slate));
-          s += H("b2", R(270, 210 - 164, 70, 164, C.green, 4) + T(305, 38, "82.0", 16, C.green) + T(305, 230, "310 arrivals", 13, C.green) + T(305, 246, "lobbyâ†’room", 11, C.slate));
+          s += H("b0", R(60, 210 - 12.4 * 2, 70, 12.4 * 2, C.navy, 4) + T(95, 200 - 12.4 * 2, "12.4", 16, C.navy) + T(95, 230, "System", 13, C.navy) + T(95, 246, "booking→key", 11, C.slate));
+          s += H("b1", R(165, 210 - 46, 70, 46, C.orange, 4) + T(200, 156, "23", 16, C.orange) + T(200, 230, "One guest", 13, C.orange) + T(200, 246, "queue→desk", 11, C.slate));
+          s += H("b2", R(270, 210 - 164, 70, 164, C.green, 4) + T(305, 38, "82.0", 16, C.green) + T(305, 230, "310 arrivals", 13, C.green) + T(305, 246, "lobby→room", 11, C.slate));
           s += H("pop", chip(200, 280, "Different boundary, different population", { sz: 12, bg: C.navy, st: C.navy, fg: C.white }));
           s += H("mag", `<g class="a-bob">${lens(305, 120, 30, C.ink)}</g>`);
           return s;
@@ -1958,8 +1958,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("b0", j === 2 ? 0.35 : j >= 0 ? 1 : 0); c.op("b1", j === 2 ? 0.35 : j >= 0 ? 1 : 0);
         }
       },
-      // Beat 7 Â· moments 18â€“22 Â· Adapted from benchmark 025 "Celonis Process Animation update"
-      // https://community.celonis.com/product-updates/what-s-new-in-the-celonis-platform-5560 â€” cases play and aggregate as bubbles at a node.
+      // Beat 7 · moments 18–22 · Adapted from benchmark 025 "Celonis Process Animation update"
+      // https://community.celonis.com/product-updates/what-s-new-in-the-celonis-platform-5560 — cases play and aggregate as bubbles at a node.
       {
         from: 18, to: 22,
         draw: () => {
@@ -1987,15 +1987,15 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("hd", j === 4, { y: 30 });
         }
       },
-      // Beat 8 Â· moments 23â€“26 Â· Adapted from benchmark 035 "Explainer Video Kit"
-      // https://motionarray.com/after-effects-templates/explainer-video-18242/ â€” actor introduced, problem shown, switch to resolution.
+      // Beat 8 · moments 23–26 · Adapted from benchmark 035 "Explainer Video Kit"
+      // https://motionarray.com/after-effects-templates/explainer-video-18242/ — actor introduced, problem shown, switch to resolution.
       {
         from: 23, to: 26,
         draw: () => {
           let s = H("dir", person(80, 160, 2.2, C.plum) + chip(80, 220, "Director", { sz: 14, bg: C.plum, st: C.plum, fg: C.white }) + bubble(140, 40, 240, 64, "Not my department's delay", { sz: 15, st: C.plum, fg: C.plum, tx: 50 }));
           s += H("two", R(150, 120, 230, 60, C.white, 10, `stroke="${C.green}" stroke-width="2"`) + T(265, 146, "Front office:", 14, C.green) + T(265, 166, "how efficient?", 14, C.green) + R(150, 196, 230, 60, C.white, 10, `stroke="${C.orange}" stroke-width="2"`) + T(265, 222, "Programme:", 14, C.orange) + T(265, 242, "whole journey?", 14, C.orange));
           s += H("fair", scale(270, 160, 1.3, C.plum) + chip(270, 250, "Fair concern", { sz: 15, bg: C.plum, st: C.plum, fg: C.white }));
-          s += H("bvb", R(150, 112, 110, 150, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + P("M160 140 V230 M250 140 V230", C.navy, 3) + T(205, 190, "Boundary", 15, C.navy) + R(270, 112, 110, 150, C.white, 10, `stroke="${C.plum}" stroke-width="2.4"`) + person(325, 196, 1.2, C.plum) + T(325, 248, "Accountability", 12, C.plum) + T(265, 190, "â‰ ", 22, C.red));
+          s += H("bvb", R(150, 112, 110, 150, C.white, 10, `stroke="${C.navy}" stroke-width="2.4"`) + P("M160 140 V230 M250 140 V230", C.navy, 3) + T(205, 190, "Boundary", 15, C.navy) + R(270, 112, 110, 150, C.white, 10, `stroke="${C.plum}" stroke-width="2.4"`) + person(325, 196, 1.2, C.plum) + T(325, 248, "Accountability", 12, C.plum) + T(265, 190, "≠", 22, C.red));
           return s;
         },
         render: (c, j) => {
@@ -2003,8 +2003,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("two", j === 1, { x: 30 }); c.in("fair", j === 2, { s: 0.5 }); c.in("bvb", j === 3, { y: 30 });
         }
       },
-      // Beat 9 Â· moments 27â€“31 Â· Adapted from benchmark 072 "Stripe Connect onboarding quickstart"
-      // https://docs.stripe.com/connect/onboarding/quickstart â€” move through checks, then confirm the outcome.
+      // Beat 9 · moments 27–31 · Adapted from benchmark 072 "Stripe Connect onboarding quickstart"
+      // https://docs.stripe.com/connect/onboarding/quickstart — move through checks, then confirm the outcome.
       {
         from: 27, to: 31,
         draw: () => {
@@ -2025,8 +2025,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ans", j === 4, { y: -14 });
         }
       },
-      // Beat 10 Â· moments 32â€“35 Â· Adapted from benchmark 002 "Interactive Computer Assembly Sequence"
-      // https://codepen.io/karlhorning/pen/OJqNMVR â€” components reveal, translate into an assembly and settle.
+      // Beat 10 · moments 32–35 · Adapted from benchmark 002 "Interactive Computer Assembly Sequence"
+      // https://codepen.io/karlhorning/pen/OJqNMVR — components reveal, translate into an assembly and settle.
       {
         from: 32, to: 32,
         draw: () => {
@@ -2051,8 +2051,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   addStyles(SCENE_BG);
 })();
 
-// OPER621 Â· Week 8 Â· The Understand Phase â€” animated teaching scenes (round 2, Claude)
-// File: w08-claude-part3.js Â· Lesson 3 Â· Where the time disappears Â· Scenes: W8O1d, W8O1e, W8O2d
+// OPER621 · Week 8 · The Understand Phase — animated teaching scenes (round 2, Claude)
+// File: w08-claude-part3.js · Lesson 3 · Where the time disappears · Scenes: W8O1d, W8O1e, W8O2d
 // Standalone part: defines its own engine and helpers, registers its scenes and appends its own
 // rules (all scoped under .vls-w08-<secId>) into the single shared <style id="vl-sc-w08">.
 // Parts may be loaded in any order or concatenated.
@@ -2319,12 +2319,12 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     : rep(34, (i) => P(`M${-400 + i * 40} -300 L${-160 + i * 40} 700`, line, 1)));
 
   // ============================================================
-  // W8O1d Â· "WAITING IS NOT WORKING"  Â·  33 moments Â· 10 beats
+  // W8O1d · "WAITING IS NOT WORKING"  ·  33 moments · 10 beats
   // Story: a guest sits still while the clock runs; elapsed time is
   // poured into four labelled jars (work, waiting, rework, checking);
   // the 47-minute approval in 61% of arrivals; a finished desk task that
   // still waits; cases piling up at a handoff; don't assume staffing;
-  // the illustrative 82 â†’ 22 decomposition (never an achieved result);
+  // the illustrative 82 → 22 decomposition (never an achieved result);
   // Qasr's separate 8.1 observed minutes kept apart; necessary checks;
   // and the bridge to "why do these activities exist?".
   // ============================================================
@@ -2343,8 +2343,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     ];
     const JAR = (x, col, lab, k) => R(x - 34, 120, 68, 120, "rgba(255,255,255,.7)", 10, `stroke="${col}" stroke-width="3"`) + T(x, 266, lab, 13, col);
     const beats = [
-      // Beat 1 Â· moments 0â€“3 Â· Adapted from benchmark 096 "Process in cub"
-      // https://lottiefiles.com/free-animation/process-in-cub-9iNG7QP0qC â€” a cube cycles states while the loader keeps turning.
+      // Beat 1 · moments 0–3 · Adapted from benchmark 096 "Process in cub"
+      // https://lottiefiles.com/free-animation/process-in-cub-9iNG7QP0qC — a cube cycles states while the loader keeps turning.
       {
         from: 0, to: 3,
         draw: () => {
@@ -2364,8 +2364,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("bd", j === 3, { s: 1.1 });
         }
       },
-      // Beat 2 Â· moments 4â€“5 Â· Adapted from benchmark 099 "Bottling factory"
-      // https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x â€” bottles advance to a filling station and fill.
+      // Beat 2 · moments 4–5 · Adapted from benchmark 099 "Bottling factory"
+      // https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x — bottles advance to a filling station and fill.
       {
         from: 4, to: 5,
         draw: () => {
@@ -2382,8 +2382,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("q", j === 1, { y: 14 });
         }
       },
-      // Beat 3 Â· moments 6â€“10 Â· Adapted from benchmark 061 "SVGator icon templates"
-      // https://www.svgator.com/animation-templates/icons â€” an icon animates from idle to action to completion.
+      // Beat 3 · moments 6–10 · Adapted from benchmark 061 "SVGator icon templates"
+      // https://www.svgator.com/animation-templates/icons — an icon animates from idle to action to completion.
       {
         from: 6, to: 10,
         draw: () => {
@@ -2400,15 +2400,15 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("eq", j === 4, { s: 0.7 });
         }
       },
-      // Beat 4 Â· moments 11â€“14 Â· Adapted from benchmark 088 "Automated Workflows"
-      // https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK â€” an action triggers, repeats, then completes.
+      // Beat 4 · moments 11–14 · Adapted from benchmark 088 "Automated Workflows"
+      // https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK — an action triggers, repeats, then completes.
       {
         from: 11, to: 14,
         draw: () => {
           let s = H("rate", node(140, 30, 120, 50, "Corporate rate|approval", { sz: 13, st: C.orange, bg: C.peach }));
           s += H("ctx", hotel(40, 150, 90, 110, C.navy) + rep(5, (i) => guest(170 + i * 42, 236, 1.1)) + chip(260, 140, "310 corporate arrivals", { sz: 14, st: C.navy }) + P("M200 90 V118", C.orange, 3, 'stroke-dasharray="4 4"'));
           s += H("st", watch(90, 170, 46, C.orange) + T(90, 180, "47", 26, C.orange) + T(90, 240, "minutes", 13, C.orange));
-          s += H("pct", rep(10, (i) => O(200 + (i % 5) * 36, 150 + Math.floor(i / 5) * 40, 13, i < 6 ? C.orange : "#d5dce3")) + T(272, 250, "â‰ˆ 61% of 310", 14, C.orange));
+          s += H("pct", rep(10, (i) => O(200 + (i % 5) * 36, 150 + Math.floor(i / 5) * 40, 13, i < 6 ? C.orange : "#d5dce3")) + T(272, 250, "≈ 61% of 310", 14, C.orange));
           s += H("dep", node(30, 110, 110, 48, "Reception|done", { sz: 13, st: C.green }) + badge(130, 112, 11, C.green) + P("M140 134 H250", C.slate, 3, 'stroke-dasharray="6 6"') + node(250, 110, 120, 48, "Authorised|decision", { sz: 13, st: C.orange }) + chip(200, 196, "Dependency, not slowness", { sz: 14, bg: C.navy, st: C.navy, fg: C.white }));
           s += H("rd", desk(30, 210, 140) + person(100, 202, 1.5, C.green) + badge(150, 168, 13, C.green) + `<g class="a-bob">${guest(260, 250, 1.4)}</g>` + clock(306, 196, 15) + chip(300, 160, "Still waiting", { sz: 14, st: C.orange, fg: C.orange }));
           return s;
@@ -2420,8 +2420,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("rd", j === 3, { y: 20 });
         }
       },
-      // Beat 5 Â· moments 15â€“18 Â· Adapted from benchmark 028 "Factory Manufacturing Animation Pack"
-      // https://lottiefiles.com/marketplace/factory-manufacturing â€” boxes feed in, pause at an inspection gate, release to packing.
+      // Beat 5 · moments 15–18 · Adapted from benchmark 028 "Factory Manufacturing Animation Pack"
+      // https://lottiefiles.com/marketplace/factory-manufacturing — boxes feed in, pause at an inspection gate, release to packing.
       {
         from: 15, to: 18,
         draw: () => {
@@ -2446,8 +2446,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ns", j === 3, { y: 20 });
         }
       },
-      // Beat 6 Â· moments 19â€“21 Â· Adapted from benchmark 127 "Streamgraph transitions"
-      // https://observablehq.com/@d3/streamgraph-transitions â€” stacked layers morph as their values change.
+      // Beat 6 · moments 19–21 · Adapted from benchmark 127 "Streamgraph transitions"
+      // https://observablehq.com/@d3/streamgraph-transitions — stacked layers morph as their values change.
       {
         from: 19, to: 21,
         draw: () => {
@@ -2468,8 +2468,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           if (j === 0) c.in("s0", false, { sx: 0.05 });
         }
       },
-      // Beat 7 Â· moments 22â€“24 Â· Adapted from benchmark 133 "Path tween"
-      // https://observablehq.com/@d3/path-tween â€” one shape interpolates smoothly into another.
+      // Beat 7 · moments 22–24 · Adapted from benchmark 133 "Path tween"
+      // https://observablehq.com/@d3/path-tween — one shape interpolates smoothly into another.
       {
         from: 22, to: 24,
         draw: () => {
@@ -2486,8 +2486,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("arr", j >= 1, {}); c.in("fl", j === 2, { y: 14 });
         }
       },
-      // Beat 8 Â· moments 25â€“27 Â· Adapted from benchmark 058 "SVGator animated UI templates" (card flip)
-      // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/ â€” two cards flip to show their separate faces.
+      // Beat 8 · moments 25–27 · Adapted from benchmark 058 "SVGator animated UI templates" (card flip)
+      // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/ — two cards flip to show their separate faces.
       {
         from: 25, to: 27,
         draw: () => {
@@ -2502,8 +2502,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("wall", j === 2, { sy: 0.1 });
         }
       },
-      // Beat 9 Â· moments 28â€“30 Â· Adapted from benchmark 021 "Process Infographics"
-      // https://elements.envato.com/process-infographics-FYE5ZGW â€” process steps stage in and the active state advances.
+      // Beat 9 · moments 28–30 · Adapted from benchmark 021 "Process Infographics"
+      // https://elements.envato.com/process-infographics-FYE5ZGW — process steps stage in and the active state advances.
       {
         from: 28, to: 30,
         draw: () => {
@@ -2520,12 +2520,12 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("map", j === 0, { y: 20 }); c.in("chk", j === 1, { y: 20 }); c.in("pq", j === 2, { y: 20 });
         }
       },
-      // Beat 10 Â· moments 31â€“32 Â· Adapted from benchmark 083 "The Process Architectural Motion"
-      // https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion â€” an idea grows into layered structure.
+      // Beat 10 · moments 31–32 · Adapted from benchmark 083 "The Process Architectural Motion"
+      // https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion — an idea grows into layered structure.
       {
         from: 31, to: 32,
         draw: () => {
-          let s = H("cmp", person(90, 150, 2, C.green) + chip(90, 210, "Employee effort", { sz: 14, st: C.green, fg: C.green }) + T(200, 156, "â‰ ", 34, C.red) + guest(300, 150, 2) + chip(300, 210, "Guest experience", { sz: 14, st: C.orange, fg: C.orange }));
+          let s = H("cmp", person(90, 150, 2, C.green) + chip(90, 210, "Employee effort", { sz: 14, st: C.green, fg: C.green }) + T(200, 156, "≠", 34, C.red) + guest(300, 150, 2) + chip(300, 210, "Guest experience", { sz: 14, st: C.orange, fg: C.orange }));
           s += H("why", R(40, 40, 320, 230, C.white, 14, `stroke="${C.navy}" stroke-width="2.4"`) + T(200, 90, "Why does each", 20, C.navy) + T(200, 120, "activity exist?", 20, C.navy) + `<g class="a-bob">${lens(200, 186, 38, C.orange)}</g>`);
           return s;
         },
@@ -2540,7 +2540,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O1e Â· "SYMPTOMS, CAUSES AND NECESSARY CONTROLS"  Â·  31 moments Â· 9 beats
+  // W8O1e · "SYMPTOMS, CAUSES AND NECESSARY CONTROLS"  ·  31 moments · 9 beats
   // Story: a visible delay is only a symptom (a warning light); approval
   // may protect contracts, so removing it can swap one problem for a
   // worse one; three purposes of activity (value, enabling, checking);
@@ -2562,8 +2562,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Innovate keeps controls", "Explain, not just find", "Treat causes, not symptoms"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“3 Â· Adapted from benchmark 075 "Action Security Systems â€” Infographic & Motion Design"
-      // https://www.behance.net/gallery/104646575/Action-Security-Systems-Infographic-Motion-Design â€” risks reveal, then controls and verification.
+      // Beat 1 · moments 0–3 · Adapted from benchmark 075 "Action Security Systems — Infographic & Motion Design"
+      // https://www.behance.net/gallery/104646575/Action-Security-Systems-Infographic-Motion-Design — risks reveal, then controls and verification.
       {
         from: 0, to: 3,
         draw: () => {
@@ -2580,8 +2580,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("pct", j >= 2, { y: 14 }); c.in("sym", j === 3, { y: 14 }); c.in("eng", false);
         }
       },
-      // Beat 2 Â· moments 4â€“6 Â· Adapted from benchmark 095 "contract process"
-      // https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8 â€” a proposal is reviewed and an agreement sealed.
+      // Beat 2 · moments 4–6 · Adapted from benchmark 095 "contract process"
+      // https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8 — a proposal is reviewed and an agreement sealed.
       {
         from: 4, to: 6,
         draw: () => {
@@ -2597,8 +2597,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("rm", j === 2, { y: 30 });
         }
       },
-      // Beat 3 Â· moments 7â€“11 Â· Adapted from benchmark 109 "teamwork"
-      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 â€” people appear one by one and form a team.
+      // Beat 3 · moments 7–11 · Adapted from benchmark 109 "teamwork"
+      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 — people appear one by one and form a team.
       {
         from: 7, to: 11,
         draw: () => {
@@ -2617,8 +2617,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("not", j === 4, { y: 14 });
         }
       },
-      // Beat 4 Â· moments 12â€“12 Â· Adapted from benchmark 041 "Sankey With Animated Gradients"
-      // https://old.observablehq.com/@jarrettmeyer/sankey-with-animated-gradients â€” one flow is highlighted by an animated gradient.
+      // Beat 4 · moments 12–12 · Adapted from benchmark 041 "Sankey With Animated Gradients"
+      // https://old.observablehq.com/@jarrettmeyer/sankey-with-animated-gradients — one flow is highlighted by an animated gradient.
       {
         from: 12, to: 12,
         draw: () => {
@@ -2629,8 +2629,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("ctl", j >= 0, { s: 0.4 }); c.in("dl", j >= 0, { s: 0.6 }, { dl: 0.5 }); }
       },
-      // Beat 5 Â· moments 13â€“16 Â· Adapted from benchmark 089 "Git Workflow 1"
-      // https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 â€” a line branches, then merges back.
+      // Beat 5 · moments 13–16 · Adapted from benchmark 089 "Git Workflow 1"
+      // https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 — a line branches, then merges back.
       {
         from: 13, to: 16,
         draw: () => {
@@ -2649,8 +2649,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ev", j >= 2, { y: 20 }); c.in("hyp", j === 3, { s: 1.5 }, { e: "back.out(1.4)" });
         }
       },
-      // Beat 6 Â· moments 17â€“19 Â· Adapted from benchmark 111 "Hierarchy traversal animated"
-      // https://old.observablehq.com/@d3/hierarchy-traversal-animated â€” nodes are visited one after another down the tree.
+      // Beat 6 · moments 17–19 · Adapted from benchmark 111 "Hierarchy traversal animated"
+      // https://old.observablehq.com/@d3/hierarchy-traversal-animated — nodes are visited one after another down the tree.
       {
         from: 17, to: 19,
         draw: () => {
@@ -2671,8 +2671,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.dr("a3", j >= 2 ? 1 : 0); c.in("l3", j >= 2, { y: -10 }, { dl: 0.3 }); c.in("stop", j === 2, { s: 0.5 }, { dl: 0.6 }); c.in("dig", j === 0, { y: 30 });
         }
       },
-      // Beat 7 Â· moments 20â€“22 Â· Adapted from benchmark 043 "Sankey animation â€” acyclic graph"
-      // https://observablehq.com/@joaormendes/sankey-animation-acyclic-graph â€” particles route along branches from one source.
+      // Beat 7 · moments 20–22 · Adapted from benchmark 043 "Sankey animation — acyclic graph"
+      // https://observablehq.com/@joaormendes/sankey-animation-acyclic-graph — particles route along branches from one source.
       {
         from: 20, to: 22,
         draw: () => {
@@ -2691,8 +2691,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("src", j < 0 ? 0 : 1);
         }
       },
-      // Beat 8 Â· moments 23â€“26 Â· Adapted from benchmark 073 "The Trouble With Food Safety Audits" (NYT)
-      // https://www.nytimes.com/interactive/projects/documents/food-safety-peanut-inspection â€” document evidence highlighted, discrepancy revealed.
+      // Beat 8 · moments 23–26 · Adapted from benchmark 073 "The Trouble With Food Safety Audits" (NYT)
+      // https://www.nytimes.com/interactive/projects/documents/food-safety-peanut-inspection — document evidence highlighted, discrepancy revealed.
       {
         from: 23, to: 26,
         draw: () => {
@@ -2708,8 +2708,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.op("past", j === 3 ? 0 : j < 0 ? 0 : j >= 2 ? 0.5 : 1);
         }
       },
-      // Beat 9 Â· moments 27â€“30 Â· Adapted from benchmark 068 "Design thinking process"
-      // https://www.behance.net/gallery/209502471/Design-thinking-process â€” one stage is emphasised, then the focus moves to the next.
+      // Beat 9 · moments 27–30 · Adapted from benchmark 068 "Design thinking process"
+      // https://www.behance.net/gallery/209502471/Design-thinking-process — one stage is emphasised, then the focus moves to the next.
       {
         from: 27, to: 30,
         draw: () => {
@@ -2733,7 +2733,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O2d Â· "THE BASELINE THAT FUTURE RESULTS MUST BEAT"  Â·  33 moments Â· 10 beats
+  // W8O2d · "THE BASELINE THAT FUTURE RESULTS MUST BEAT"  ·  33 moments · 10 beats
   // Story: findings become usable outputs; a pile of notes is not enough;
   // a validated as-is model (staff confirm it); a baseline that the model
   // alone cannot give; the 82.0-minute mean for 310 arrivals as the
@@ -2756,8 +2756,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Next: resistance"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“3 Â· Adapted from benchmark 002 "Interactive Computer Assembly Sequence"
-      // https://codepen.io/karlhorning/pen/OJqNMVR â€” components reveal and translate into one assembly.
+      // Beat 1 · moments 0–3 · Adapted from benchmark 002 "Interactive Computer Assembly Sequence"
+      // https://codepen.io/karlhorning/pen/OJqNMVR — components reveal and translate into one assembly.
       {
         from: 0, to: 3,
         draw: () => {
@@ -2774,8 +2774,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("sp", j >= 2, { x: -30 }); c.in("mess", j === 3, { s: 0.4 });
         }
       },
-      // Beat 2 Â· moments 4â€“6 Â· Adapted from benchmark 036 "Outline â€” Explainer Kit"
-      // https://motionarray.com/after-effects-templates/outline-explainer-kit-36706/ â€” outlines draw, role cards appear, the scene resolves.
+      // Beat 2 · moments 4–6 · Adapted from benchmark 036 "Outline — Explainer Kit"
+      // https://motionarray.com/after-effects-templates/outline-explainer-kit-36706/ — outlines draw, role cards appear, the scene resolves.
       {
         from: 4, to: 6,
         draw: () => {
@@ -2793,8 +2793,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("val", j === 2, { y: 20 });
         }
       },
-      // Beat 3 Â· moments 7â€“8 Â· Adapted from benchmark 135 "Timeline by The Creators"
-      // https://motionarray.com/after-effects-templates/timeline/ â€” milestones reveal along a line with a travelling marker.
+      // Beat 3 · moments 7–8 · Adapted from benchmark 135 "Timeline by The Creators"
+      // https://motionarray.com/after-effects-templates/timeline/ — milestones reveal along a line with a travelling marker.
       {
         from: 7, to: 8,
         draw: () => {
@@ -2805,8 +2805,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("q", j === 0, { y: -14 }); c.in("m", j === 1, { s: 0.5 }, { e: "back.out(1.8)" }); }
       },
-      // Beat 4 Â· moments 9â€“14 Â· Adapted from benchmark 129 "Arc tween"
-      // https://observablehq.com/@d3/arc-tween â€” a gauge's arc rotates to a new value.
+      // Beat 4 · moments 9–14 · Adapted from benchmark 129 "Arc tween"
+      // https://observablehq.com/@d3/arc-tween — a gauge's arc rotates to a new value.
       {
         from: 9, to: 14,
         draw: () => {
@@ -2816,7 +2816,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           s += H("pm", chip(200, 140, "Programme baseline", { sz: 15, bg: C.green, st: C.green, fg: C.white }));
           s += H("s12", watch(70, 80, 34, C.navy) + T(70, 88, "12.4", 15, C.navy) + chip(70, 134, "Departmental", { sz: 12, st: C.navy }));
           s += H("s23", watch(330, 80, 34, C.orange) + T(330, 88, "23", 17, C.orange) + chip(330, 134, "One guest", { sz: 12, st: C.orange, fg: C.orange }));
-          s += H("ne", T(140, 92, "â‰ ", 26, C.red) + T(260, 92, "â‰ ", 26, C.red));
+          s += H("ne", T(140, 92, "≠", 26, C.red) + T(260, 92, "≠", 26, C.red));
           return s;
         },
         render: (c, j) => {
@@ -2827,14 +2827,14 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("s12", j >= 3, { x: -30 }); c.in("s23", j >= 4, { x: 30 }); c.in("ne", j === 5, { s: 0.4 });
         }
       },
-      // Beat 5 Â· moments 15â€“18 Â· Adapted from benchmark 131 "Transition end"
-      // https://observablehq.com/@d3/transition-end â€” move, await, then change state in a chained sequence.
+      // Beat 5 · moments 15–18 · Adapted from benchmark 131 "Transition end"
+      // https://observablehq.com/@d3/transition-end — move, await, then change state in a chained sequence.
       {
         from: 15, to: 18,
         draw: () => {
           let s = H("cl", chip(200, 34, "Arrival 40% faster!", { sz: 16, bg: C.gold, st: C.amber, fg: C.ink }) + rep(6, (i) => star(60 + i * 56, 74, 7)));
           s += H("bar", T(30, 128, "Before", 13, C.ink, "", "start") + R(110, 114, 270, 22, C.green, 4) + T(30, 172, "After", 13, C.ink, "", "start") + R(110, 158, 162, 22, C.navy2, 4));
-          s += H("diff", R(108, 112, 274, 26, "none", 6, `stroke="${C.green}" stroke-width="2" stroke-dasharray="4 3"`) + T(245, 104, "lobby â†’ room", 12, C.green) + R(108, 156, 166, 26, "none", 6, `stroke="${C.navy2}" stroke-width="2" stroke-dasharray="4 3"`) + T(190, 200, "booking â†’ key", 12, C.navy2) + chip(200, 236, "Different clock?", { sz: 15, bg: C.red, st: C.red, fg: C.white }));
+          s += H("diff", R(108, 112, 274, 26, "none", 6, `stroke="${C.green}" stroke-width="2" stroke-dasharray="4 3"`) + T(245, 104, "lobby → room", 12, C.green) + R(108, 156, 166, 26, "none", 6, `stroke="${C.navy2}" stroke-width="2" stroke-dasharray="4 3"`) + T(190, 200, "booking → key", 12, C.navy2) + chip(200, 236, "Different clock?", { sz: 15, bg: C.red, st: C.red, fg: C.white }));
           s += H("fz", R(20, 210, 360, 80, C.white, 12, `stroke="${C.navy}" stroke-width="2.4"`) + lock(46, 250, 1.3, C.navy) + T(70, 236, "Start event", 12, C.navy, "", "start") + T(70, 256, "End event", 12, C.navy, "", "start") + T(70, 276, "Sampling rules", 12, C.navy, "", "start") + T(220, 236, "Exceptions", 12, C.navy, "", "start") + T(220, 256, "Population", 12, C.navy, "", "start") + T(220, 276, "Conditions", 12, C.navy, "", "start"));
           s += H("eq", chip(200, 186, "Same ruler, both times", { sz: 14, bg: C.green, st: C.green, fg: C.white }));
           return s;
@@ -2846,8 +2846,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("fz", j >= 2, { y: 30 }); c.in("eq", j === 3, { s: 0.6 });
         }
       },
-      // Beat 6 Â· moments 19â€“22 Â· Adapted from benchmark 071 "Celonis process analysis"
-      // https://www.celonis.com/platform/process-analysis â€” observed flow revealed, deviations overlaid in colour.
+      // Beat 6 · moments 19–22 · Adapted from benchmark 071 "Celonis process analysis"
+      // https://www.celonis.com/platform/process-analysis — observed flow revealed, deviations overlaid in colour.
       {
         from: 19, to: 22,
         draw: () => {
@@ -2861,8 +2861,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("ttl", j === 0, { y: 14 }); c.in("rc", j >= 1, { s: 0.6 }); c.in("why", j === 2, { y: 20 }); c.in("pr", j === 3, { y: 20 }); }
       },
-      // Beat 7 Â· moments 23â€“24 Â· Adapted from benchmark 038 "Bar Chart Race, Explained"
-      // https://observablehq.com/@d3/bar-chart-race-explained â€” values interpolate and the bars reorder by rank.
+      // Beat 7 · moments 23–24 · Adapted from benchmark 038 "Bar Chart Race, Explained"
+      // https://observablehq.com/@d3/bar-chart-race-explained — values interpolate and the bars reorder by rank.
       {
         from: 23, to: 24,
         draw: () => {
@@ -2879,8 +2879,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("mem", j === 1, { y: 14 });
         }
       },
-      // Beat 8 Â· moments 25â€“26 Â· Adapted from benchmark 057 "GSAP SVG Research" (plant growth)
-      // https://codepen.io/FabioG/post/svg-animation-research-gsap â€” a stem grows, leaves reveal.
+      // Beat 8 · moments 25–26 · Adapted from benchmark 057 "GSAP SVG Research" (plant growth)
+      // https://codepen.io/FabioG/post/svg-animation-research-gsap — a stem grows, leaves reveal.
       {
         from: 25, to: 26,
         draw: () => {
@@ -2892,8 +2892,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.dr("stem", j >= 0 ? 1 : 0, { d: 1.2 }); c.in("lv", j >= 0, { s: 0.3 }, { dl: 0.8 }); c.in("nr", j === 1, { s: 1.5 }, { e: "back.out(1.4)" }); }
       },
-      // Beat 9 Â· moments 27â€“29 Â· Adapted from benchmark 017 "Design process timeline â€” Animation"
-      // https://dribbble.com/shots/9892691-Design-process-timeline-Animation â€” timeline milestones reveal in order.
+      // Beat 9 · moments 27–29 · Adapted from benchmark 017 "Design process timeline — Animation"
+      // https://dribbble.com/shots/9892691-Design-process-timeline-Animation — timeline milestones reveal in order.
       {
         from: 27, to: 29,
         draw: () => {
@@ -2901,13 +2901,13 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           let s = "";
           L.forEach((t, i) => { s += H("p" + i, node(8 + i * 98, 40, 88, 52, t, { sz: 13, st: i === 0 ? C.green : i === 3 ? C.plum : C.navy, bg: i === 0 ? C.mint : C.white })); if (i < 3) s += darrow("pa" + i, 96 + i * 98, 66, 104 + i * 98, 66, C.navy, 2.4); });
           s += H("arc", P("M52 96 C52 190 348 190 348 96", C.green, 3, 'stroke-dasharray="6 5" class="a-flow"') + chip(200, 196, "Same baseline", { sz: 14, bg: C.green, st: C.green, fg: C.white }));
-          s += H("cmp", R(30, 220, 340, 64, C.white, 10, `stroke="${C.plum}" stroke-width="2.4"`) + T(60, 258, "Proposal", 14, C.slate, "", "start") + T(200, 258, "â‰ ", 20, C.red) + T(240, 250, "Comparable", 13, C.plum, "", "start") + T(240, 270, "measurement", 13, C.plum, "", "start"));
+          s += H("cmp", R(30, 220, 340, 64, C.white, 10, `stroke="${C.plum}" stroke-width="2.4"`) + T(60, 258, "Proposal", 14, C.slate, "", "start") + T(200, 258, "≠", 20, C.red) + T(240, 250, "Comparable", 13, C.plum, "", "start") + T(240, 270, "measurement", 13, C.plum, "", "start"));
           return s;
         },
         render: (c, j) => { c.seq("p", 4, j < 0 ? 0 : j === 0 ? 2 : 4, { y: -14 }); c.in("arc", j >= 1, {}); c.in("cmp", j === 2, { y: 20 }); }
       },
-      // Beat 10 Â· moments 30â€“32 Â· Adapted from benchmark 074 "Awwwards scroll animations â€” Ember House"
-      // https://www.awwwards.com/inspiration/scroll-animations â€” a statement reveals, then transitions to supporting proof.
+      // Beat 10 · moments 30–32 · Adapted from benchmark 074 "Awwwards scroll animations — Ember House"
+      // https://www.awwwards.com/inspiration/scroll-animations — a statement reveals, then transitions to supporting proof.
       {
         from: 30, to: 32,
         draw: () => {
@@ -2927,8 +2927,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   addStyles(SCENE_BG);
 })();
 
-// OPER621 Â· Week 8 Â· The Understand Phase â€” animated teaching scenes (round 2, Claude)
-// File: w08-claude-part4.js Â· Lesson 4 Â· When the numbers become personal Â· Scenes: W8O3a, W8O3b, W8O3c
+// OPER621 · Week 8 · The Understand Phase — animated teaching scenes (round 2, Claude)
+// File: w08-claude-part4.js · Lesson 4 · When the numbers become personal · Scenes: W8O3a, W8O3b, W8O3c
 // Standalone part: defines its own engine and helpers, registers its scenes and appends its own
 // rules (all scoped under .vls-w08-<secId>) into the single shared <style id="vl-sc-w08">.
 // Parts may be loaded in any order or concatenated.
@@ -3195,7 +3195,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
     : rep(34, (i) => P(`M${-400 + i * 40} -300 L${-160 + i * 40} 700`, line, 1)));
 
   // ============================================================
-  // W8O3a Â· "WHY MEASURING A PROCESS FEELS THREATENING"  Â·  33 moments Â· 10 beats
+  // W8O3a · "WHY MEASURING A PROCESS FEELS THREATENING"  ·  33 moments · 10 beats
   // Story: a defensible number is not yet an accepted one; the director
   // who knows how hard reception works meets the 82.0-minute figure and
   // reaches for the 12.4; his fear of being blamed for the whole journey
@@ -3218,8 +3218,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Next: building acceptance"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“1 Â· Adapted from benchmark 062 "SVGator motion graphics assets"
-      // https://www.svgator.com/animation-templates/assets â€” an element reveals, is emphasised, then exits.
+      // Beat 1 · moments 0–1 · Adapted from benchmark 062 "SVGator motion graphics assets"
+      // https://www.svgator.com/animation-templates/assets — an element reveals, is emphasised, then exits.
       {
         from: 0, to: 1,
         draw: () => {
@@ -3230,8 +3230,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("num", j >= 0, { s: 0.6 }); c.in("acc", j === 0, { x: 30 }, { dl: 0.6 }); c.in("sens", j === 1, { y: 20 }); }
       },
-      // Beat 2 Â· moments 2â€“4 Â· Adapted from benchmark 016 "Product Workflow Animation & UI Motion Design"
-      // https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design â€” screens transition and active controls highlight.
+      // Beat 2 · moments 2–4 · Adapted from benchmark 016 "Product Workflow Animation & UI Motion Design"
+      // https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design — screens transition and active controls highlight.
       {
         from: 2, to: 4,
         draw: () => {
@@ -3243,14 +3243,14 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("yrs", j >= 0 && j < 2, { y: -14 }); c.in("busy", j === 1, { x: 30 }); c.in("scr", j === 2, { s: 0.7 }); }
       },
-      // Beat 3 Â· moments 5â€“7 Â· Adapted from benchmark 049 "Workflow Dashboard UI Motion Concept"
-      // https://dribbble.com/shots/27719715-SaaS-Dashboard-Workflow-UI-Motion-Concept â€” cards reveal, panels reorganise, one KPI is highlighted.
+      // Beat 3 · moments 5–7 · Adapted from benchmark 049 "Workflow Dashboard UI Motion Concept"
+      // https://dribbble.com/shots/27719715-SaaS-Dashboard-Workflow-UI-Motion-Concept — cards reveal, panels reorganise, one KPI is highlighted.
       {
         from: 5, to: 7,
         draw: () => {
           let s = K("dir", person(70, 200, 1.9, C.plum));
           s += H("obj", bubble(120, 40, 260, 56, "Includes other teams' delays", { sz: 15, st: C.plum, fg: C.plum, tx: 30 }));
-          s += H("cards", R(150, 130, 100, 100, C.white, 12, `stroke="${C.green}" stroke-width="2.4"`) + T(200, 186, "82.0", 22, C.green) + T(200, 212, "lobbyâ†’room", 11, C.green) + R(270, 130, 100, 100, C.white, 12, `stroke="${C.navy}" stroke-width="2.4"`) + T(320, 186, "12.4", 22, C.navy) + T(320, 212, "bookingâ†’key", 11, C.navy));
+          s += H("cards", R(150, 130, 100, 100, C.white, 12, `stroke="${C.green}" stroke-width="2.4"`) + T(200, 186, "82.0", 22, C.green) + T(200, 212, "lobby→room", 11, C.green) + R(270, 130, 100, 100, C.white, 12, `stroke="${C.navy}" stroke-width="2.4"`) + T(320, 186, "12.4", 22, C.navy) + T(320, 212, "booking→key", 11, C.navy));
           s += H("pick", R(264, 124, 112, 112, "none", 14, `stroke="${C.gold}" stroke-width="4" class="a-pulse"`) + F("M120 196 Q200 260 280 236", "none") + P("M110 190 Q190 270 270 236", C.plum, 2.6, 'stroke-dasharray="5 4"') + head(270, 236, -20, C.plum) + chip(320, 270, "His preference", { sz: 13, st: C.plum, fg: C.plum }));
           s += H("why", R(140, 120, 240, 120, C.white, 12, `stroke="${C.navy}" stroke-width="2.4"`) + T(260, 160, "Defensive?", 18, C.slate) + P("M196 154 H324", C.red, 3) + T(260, 206, "Or a real worry?", 17, C.navy));
           return s;
@@ -3260,8 +3260,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("why", j === 2, { s: 0.7 });
         }
       },
-      // Beat 4 Â· moments 8â€“10 Â· Adapted from benchmark 042 "Animated Sankey"
-      // https://old.observablehq.com/@chekos/animated-sankey â€” branches reveal and link emphasis changes.
+      // Beat 4 · moments 8–10 · Adapted from benchmark 042 "Animated Sankey"
+      // https://old.observablehq.com/@chekos/animated-sankey — branches reveal and link emphasis changes.
       {
         from: 8, to: 10,
         draw: () => {
@@ -3280,8 +3280,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("pv", j === 2, { s: 0.8 });
         }
       },
-      // Beat 5 Â· moments 11â€“14 Â· Adapted from benchmark 066 "Awwwards Mubasic scroll animation"
-      // https://www.awwwards.com/inspiration/scroll-animation â€” shapes reveal in stages as the story advances.
+      // Beat 5 · moments 11–14 · Adapted from benchmark 066 "Awwwards Mubasic scroll animation"
+      // https://www.awwwards.com/inspiration/scroll-animation — shapes reveal in stages as the story advances.
       {
         from: 11, to: 14,
         draw: () => {
@@ -3298,8 +3298,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("ct", j === 2, { y: 20 }); c.in("vis", j === 3, { s: 0.8 });
         }
       },
-      // Beat 6 Â· moments 15â€“18 Â· Adapted from benchmark 023 "Celonis Process Explorer animation"
-      // https://help.celonis.com/cpm46/en/process-components â€” cases move along the graph and pause at a node.
+      // Beat 6 · moments 15–18 · Adapted from benchmark 023 "Celonis Process Explorer animation"
+      // https://help.celonis.com/cpm46/en/process-components — cases move along the graph and pause at a node.
       {
         from: 15, to: 18,
         draw: () => {
@@ -3317,8 +3317,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("n", j === 1, { s: 0.6 }); c.in("arg", j === 2, { x: -20 }); c.in("hid", j === 3, { y: 20 });
         }
       },
-      // Beat 7 Â· moments 19â€“20 Â· Adapted from benchmark 070 "SAP Signavio Transformation HUB"
-      // https://www.signavio.com/wiki/ â€” a process owner, gates and an improvement loop are introduced.
+      // Beat 7 · moments 19–20 · Adapted from benchmark 070 "SAP Signavio Transformation HUB"
+      // https://www.signavio.com/wiki/ — a process owner, gates and an improvement loop are introduced.
       {
         from: 19, to: 20,
         draw: () => {
@@ -3329,8 +3329,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("tug", j === 0, { y: 20 }); c.in("own", j === 1, { y: -30 }); }
       },
-      // Beat 8 Â· moments 21â€“24 Â· Adapted from benchmark 121 "Dashboard by RAKIBUZZAMAN"
-      // https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP â€” a chart fills and one metric is highlighted.
+      // Beat 8 · moments 21–24 · Adapted from benchmark 121 "Dashboard by RAKIBUZZAMAN"
+      // https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP — a chart fills and one metric is highlighted.
       {
         from: 21, to: 24,
         draw: () => {
@@ -3346,12 +3346,12 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("new", j === 1, { x: 30 }); c.in("nd", j === 2, { y: 20 }); c.in("ndt", j === 2, { y: -20 }); c.in("ex", j === 3, { s: 0.8 });
         }
       },
-      // Beat 9 Â· moments 25â€“28 Â· Adapted from benchmark 018 "Motion Graphics: Design Thinking Process"
-      // https://www.behance.net/gallery/108659899/Motion-Graphics-Design-Thinking-Process â€” an eight-scene explainer advancing stage by stage.
+      // Beat 9 · moments 25–28 · Adapted from benchmark 018 "Motion Graphics: Design Thinking Process"
+      // https://www.behance.net/gallery/108659899/Motion-Graphics-Design-Thinking-Process — an eight-scene explainer advancing stage by stage.
       {
         from: 25, to: 28,
         draw: () => {
-          let s = H("exp", person(70, 200, 1.6, C.navy) + R(130, 50, 250, 120, C.white, 12, `stroke="${C.navy}" stroke-width="2.4"`) + T(255, 84, "Department figure", 13, C.navy) + T(255, 110, "â‰ ", 18, C.red) + T(255, 136, "Guest's journey", 13, C.orange) + chip(255, 200, "Explain the measure", { sz: 14, bg: C.navy, st: C.navy, fg: C.white }));
+          let s = H("exp", person(70, 200, 1.6, C.navy) + R(130, 50, 250, 120, C.white, 12, `stroke="${C.navy}" stroke-width="2.4"`) + T(255, 84, "Department figure", 13, C.navy) + T(255, 110, "≠", 18, C.red) + T(255, 136, "Guest's journey", 13, C.orange) + chip(255, 200, "Explain the measure", { sz: 14, bg: C.navy, st: C.navy, fg: C.white }));
           s += H("use", doc(150, 40, 100, 130, C.green, C.white, 0) + T(200, 70, "Use of data", 13, C.green) + tick(180, 104, 0.8) + T(214, 108, "Improve", 12, C.green) + cross(180, 138, 0.6, C.red) + T(214, 142, "Blame", 12, C.red) + chip(200, 200, "Said up front", { sz: 14, bg: C.green, st: C.green, fg: C.white }));
           s += H("tr", rep(3, (i) => person(60 + i * 40, 230, 1.2, C.green)) + P("M180 220 C230 160 260 160 300 140", C.green, 3) + head(300, 140, -30, C.green) + doc(300, 90, 60, 74, C.navy) + T(330, 180, "Real model", 13, C.navy) + chip(110, 80, "Trust", { sz: 18, bg: C.green, st: C.green, fg: C.white }));
           s += H("fr", rep(3, (i) => person(60 + i * 40, 230, 1.2, C.slate)) + R(30, 150, 140, 40, C.slate, 6) + T(100, 176, "Silence", 15, C.white) + doc(260, 80, 80, 100, C.green) + tick(300, 120, 1.4) + T(300, 200, "All fine!", 15, C.green) + chip(300, 240, "Weakness hidden", { sz: 13, bg: C.red, st: C.red, fg: C.white }));
@@ -3359,8 +3359,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("exp", j === 0, { y: 20 }); c.in("use", j === 1, { s: 0.6 }); c.in("tr", j === 2, { x: -20 }); c.in("fr", j === 3, { x: 20 }); }
       },
-      // Beat 10 Â· moments 29â€“32 Â· Adapted from benchmark 054 "Animated Process Infographic with Geometric Circles and Arrows"
-      // https://elements.envato.com/business-strategy-round-infographic-4-steps-templa-ZS2NQ92 â€” arcs reveal and progress clockwise.
+      // Beat 10 · moments 29–32 · Adapted from benchmark 054 "Animated Process Infographic with Geometric Circles and Arrows"
+      // https://elements.envato.com/business-strategy-round-infographic-4-steps-templa-ZS2NQ92 — arcs reveal and progress clockwise.
       {
         from: 29, to: 32,
         draw: () => {
@@ -3382,7 +3382,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O3b Â· "BUILDING A BASELINE PEOPLE WILL ACCEPT"  Â·  35 moments Â· 10 beats
+  // W8O3b · "BUILDING A BASELINE PEOPLE WILL ACCEPT"  ·  35 moments · 10 beats
   // Story: repeating 82 won't convince; start with purpose (process, not
   // people); honour promises or disclosure stops; reconcile 12.4 and 82.0
   // as different questions; share the model with frontline staff before
@@ -3405,8 +3405,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Informed agreement", "No personal accusation", "Concerns shape governance"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 033 "Animated Planning Dashboard Workflow"
-      // https://dribbble.com/shots/27184988-Animated-Planning-Dashboard-Workflow â€” panels slide and pulse as a character works.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 033 "Animated Planning Dashboard Workflow"
+      // https://dribbble.com/shots/27184988-Animated-Planning-Dashboard-Workflow — panels slide and pulse as a character works.
       {
         from: 0, to: 2,
         draw: () => {
@@ -3418,8 +3418,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("tt", j === 0, { y: -14 }); c.in("pr", j === 1, { s: 0.5 }); c.in("rp", j === 2, { y: -14 }); }
       },
-      // Beat 2 Â· moments 3â€“5 Â· Adapted from benchmark 058 "SVGator animated UI templates"
-      // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/ â€” a toggle flips between two states; a card flips.
+      // Beat 2 · moments 3–5 · Adapted from benchmark 058 "SVGator animated UI templates"
+      // https://www.svgator.com/blog/animated-ui-templates-you-can-customize/ — a toggle flips between two states; a card flips.
       {
         from: 3, to: 5,
         draw: () => {
@@ -3434,8 +3434,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("op", j === 2, { y: 20 });
         }
       },
-      // Beat 3 Â· moments 6â€“8 Â· Adapted from benchmark 072 "Stripe Connect onboarding quickstart"
-      // https://docs.stripe.com/connect/onboarding/quickstart â€” move through verification checks to a confirmed outcome.
+      // Beat 3 · moments 6–8 · Adapted from benchmark 072 "Stripe Connect onboarding quickstart"
+      // https://docs.stripe.com/connect/onboarding/quickstart — move through verification checks to a confirmed outcome.
       {
         from: 6, to: 8,
         draw: () => {
@@ -3446,8 +3446,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("pm", j >= 0, { x: -20 }); c.op("pm", j < 0 ? 0 : j === 2 ? 0 : 1); c.in("rp", j === 1, { x: 30 }); c.in("br", j === 2, { s: 0.85 }); }
       },
-      // Beat 4 Â· moments 9â€“14 Â· Adapted from benchmark 126 "Stacked-to-grouped bars"
-      // https://observablehq.com/@d3/stacked-to-grouped-bars â€” bars reposition between layouts while keeping identity.
+      // Beat 4 · moments 9–14 · Adapted from benchmark 126 "Stacked-to-grouped bars"
+      // https://observablehq.com/@d3/stacked-to-grouped-bars — bars reposition between layouts while keeping identity.
       {
         from: 9, to: 14,
         draw: () => {
@@ -3465,8 +3465,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("keep", j >= 4, { y: -20 }); c.in("both", j === 5, { s: 0.6 });
         }
       },
-      // Beat 5 Â· moments 15â€“19 Â· Adapted from benchmark 034 "SaaS Platform & Workflow Motion"
-      // https://dribbble.com/shots/27719724-SaaS-Platform-Workflow-Motion-UI-Concept â€” cards transition between states and the hierarchy reflows.
+      // Beat 5 · moments 15–19 · Adapted from benchmark 034 "SaaS Platform & Workflow Motion"
+      // https://dribbble.com/shots/27719724-SaaS-Platform-Workflow-Motion-UI-Concept — cards transition between states and the hierarchy reflows.
       {
         from: 15, to: 19,
         draw: () => {
@@ -3484,8 +3484,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.mv("mdl", j === 2 ? { y: 0 } : {});
         }
       },
-      // Beat 6 Â· moments 20â€“22 Â· Adapted from benchmark 040 "Animated treemap"
-      // https://observablehq.com/@d3/animated-treemap â€” blocks resize within a stable layout.
+      // Beat 6 · moments 20–22 · Adapted from benchmark 040 "Animated treemap"
+      // https://observablehq.com/@d3/animated-treemap — blocks resize within a stable layout.
       {
         from: 20, to: 22,
         draw: () => {
@@ -3496,8 +3496,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("smp", j <= 1 && j >= 0, { y: -14 }); c.op("smp", j === 2 ? 0 : j >= 0 ? 1 : 0); c.in("nm", j === 1, { y: 20 }); c.in("ap", j === 2, { s: 0.85 }); }
       },
-      // Beat 7 Â· moments 23â€“26 Â· Adapted from benchmark 031 "Supply chain design animation"
-      // https://www.behance.net/gallery/7392601/Supply-chain-design-animation â€” sites reveal on a grid, links calculate, networks overlay.
+      // Beat 7 · moments 23–26 · Adapted from benchmark 031 "Supply chain design animation"
+      // https://www.behance.net/gallery/7392601/Supply-chain-design-animation — sites reveal on a grid, links calculate, networks overlay.
       {
         from: 23, to: 26,
         draw: () => {
@@ -3510,8 +3510,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("q", j === 0, { y: 20 }); c.in("lv", j >= 1, { y: 14 }); c.in("ow", j === 2, { y: -30 }); c.in("gr", j === 3, { y: 20 }); c.op("lv", j === 3 ? 0 : j >= 1 ? 1 : 0); }
       },
-      // Beat 8 Â· moments 27â€“29 Â· Adapted from benchmark 137 "Corporate Timeline by HenlyFx"
-      // https://motionarray.com/after-effects-templates/corporate-timeline-1939632/ â€” events reveal one by one with text transitions.
+      // Beat 8 · moments 27–29 · Adapted from benchmark 137 "Corporate Timeline by HenlyFx"
+      // https://motionarray.com/after-effects-templates/corporate-timeline-1939632/ — events reveal one by one with text transitions.
       {
         from: 27, to: 29,
         draw: () => {
@@ -3522,8 +3522,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("ag", j >= 0 && j < 2, { y: -20 }); c.in("df", j === 1, { s: 0.6 }); c.in("nr", j === 2, { s: 0.85 }); }
       },
-      // Beat 9 Â· moments 30â€“32 Â· Adapted from benchmark 067 "Idea Flow Animation | Infographic Motion Design"
-      // https://www.behance.net/gallery/247762027/Idea-Flow-Animation-Infographic-Motion-Design â€” orbiting ideas connect into one structure.
+      // Beat 9 · moments 30–32 · Adapted from benchmark 067 "Idea Flow Animation | Infographic Motion Design"
+      // https://www.behance.net/gallery/247762027/Idea-Flow-Animation-Infographic-Motion-Design — orbiting ideas connect into one structure.
       {
         from: 30, to: 32,
         draw: () => {
@@ -3534,8 +3534,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("rec", j >= 0 && j < 2, { x: -20 }); c.in("acc", j === 1, { x: 20 }); c.in("orb", j === 2, { s: 0.6 }); }
       },
-      // Beat 10 Â· moments 33â€“34 Â· Adapted from benchmark 086 "Workflow by a"
-      // https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm â€” teamwork: workers revealed performing workflow actions together.
+      // Beat 10 · moments 33–34 · Adapted from benchmark 086 "Workflow by a"
+      // https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm — teamwork: workers revealed performing workflow actions together.
       {
         from: 33, to: 34,
         draw: () => {
@@ -3552,7 +3552,7 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
   }
 
   // ============================================================
-  // W8O3c Â· "THE DECISION, THE FORUM AND THE NEXT PHASE"  Â·  35 moments Â· 10 beats
+  // W8O3c · "THE DECISION, THE FORUM AND THE NEXT PHASE"  ·  35 moments · 10 beats
   // Story: the sponsor's review; 12.4 vs 82.0 vs 23 in their places; the
   // decision (82.0 subject to validation) without blaming reception; an
   // end-to-end owner for the 47-minute dependency; the five Understand
@@ -3575,8 +3575,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
       "Today, then better", "No improvement claimed", "A defensible start"
     ];
     const beats = [
-      // Beat 1 Â· moments 0â€“2 Â· Adapted from benchmark 024 "Celonis Process Explorer map"
-      // https://help.celonis.com/cpm47/en/process-explorer â€” activity nodes expand, edges thicken, metric switches.
+      // Beat 1 · moments 0–2 · Adapted from benchmark 024 "Celonis Process Explorer map"
+      // https://help.celonis.com/cpm47/en/process-explorer — activity nodes expand, edges thicken, metric switches.
       {
         from: 0, to: 2,
         draw: () => {
@@ -3587,8 +3587,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("rec", j === 0, { y: -14 }); c.in("fun", j === 1, { y: -20 }); c.in("rv", j === 2, { y: 20 }); }
       },
-      // Beat 2 Â· moments 3â€“6 Â· Adapted from benchmark 120 "Animated Dashboards"
-      // https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ â€” dashboard panels transition one to the next.
+      // Beat 2 · moments 3–6 · Adapted from benchmark 120 "Animated Dashboards"
+      // https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ — dashboard panels transition one to the next.
       {
         from: 3, to: 6,
         draw: () => {
@@ -3606,8 +3606,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("st", j === 3, { y: 10 });
         }
       },
-      // Beat 3 Â· moments 7â€“8 Â· Adapted from benchmark 094 "Process â€” Success"
-      // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP â€” an activity transforms into a confirming check.
+      // Beat 3 · moments 7–8 · Adapted from benchmark 094 "Process — Success"
+      // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP — an activity transforms into a confirming check.
       {
         from: 7, to: 8,
         draw: () => {
@@ -3617,8 +3617,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("dec", j >= 0, { s: 0.4 }, { e: "back.out(1.6)" }); c.mv("dec", j === 1 ? { x: -60, s: 0.8 } : {}); c.in("nb", j === 1, { x: 40 }); }
       },
-      // Beat 4 Â· moments 9â€“11 Â· Adapted from benchmark 092 "process connecting"
-      // https://lottiefiles.com/free-animation/process-fmpDUgNx8K â€” connections draw and join.
+      // Beat 4 · moments 9–11 · Adapted from benchmark 092 "process connecting"
+      // https://lottiefiles.com/free-animation/process-fmpDUgNx8K — connections draw and join.
       {
         from: 9, to: 11,
         draw: () => {
@@ -3631,8 +3631,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { for (let i = 0; i < 3; i++) c.dr("w" + i, j >= 0 ? 1 : 0, { dl: 0.2 * i }); c.in("ap", j === 1, { y: 20 }); c.in("cn", j === 2, { y: 20 }); }
       },
-      // Beat 5 Â· moments 12â€“18 Â· Adapted from benchmark 100 "3D Statistics Factory"
-      // https://lottiefiles.com/free-animation/3d-statistics-factory-lRiHNeU9Y4 â€” isometric equipment staged, output emerging.
+      // Beat 5 · moments 12–18 · Adapted from benchmark 100 "3D Statistics Factory"
+      // https://lottiefiles.com/free-animation/3d-statistics-factory-lRiHNeU9Y4 — isometric equipment staged, output emerging.
       {
         from: 12, to: 18,
         draw: () => {
@@ -3649,8 +3649,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
           c.in("nyi", j === 6, { s: 1.5 }, { e: "back.out(1.4)" });
         }
       },
-      // Beat 6 Â· moments 19â€“22 Â· Adapted from benchmark 090 "Multi-Step Icon Animation"
-      // https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU â€” steps activate one after another, connectors traced.
+      // Beat 6 · moments 19–22 · Adapted from benchmark 090 "Multi-Step Icon Animation"
+      // https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU — steps activate one after another, connectors traced.
       {
         from: 19, to: 22,
         draw: () => {
@@ -3662,8 +3662,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("tg", j === 0 || j === 1, { y: -20 }); c.op("tg", j === 1 ? 0.35 : j === 0 ? 1 : 0); c.in("wf", j === 1, { y: 20 }); c.in("oq", j >= 2, { y: -20 }); c.in("hn", j === 3, { y: 20 }); }
       },
-      // Beat 7 Â· moments 23â€“26 Â· Adapted from benchmark 081 "Clean Workflow Visualization with Motion Graphics"
-      // https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics â€” journey steps connected by transitions.
+      // Beat 7 · moments 23–26 · Adapted from benchmark 081 "Clean Workflow Visualization with Motion Graphics"
+      // https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics — journey steps connected by transitions.
       {
         from: 23, to: 26,
         draw: () => {
@@ -3675,8 +3675,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("lap", j === 0, { y: 20 }); c.in("fr", j >= 1, { y: -20 }); c.in("df", j === 2, { y: 20 }); c.in("bc", j === 3, { y: 20 }); c.op("fru", j === 1 ? 1 : 0); }
       },
-      // Beat 8 Â· moments 27â€“28 Â· Adapted from benchmark 109 "teamwork"
-      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 â€” people join one by one to form a team.
+      // Beat 8 · moments 27–28 · Adapted from benchmark 109 "teamwork"
+      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 — people join one by one to form a team.
       {
         from: 27, to: 28,
         draw: () => {
@@ -3689,8 +3689,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("c0", j >= 0, { x: -30 }); c.in("c1", j >= 0, { x: 30 }, { dl: 0.3 }); c.in("t2", j === 0, { y: -14 }); c.in("sv", j === 1, { s: 0.5 }); }
       },
-      // Beat 9 Â· moments 29â€“30 Â· Adapted from benchmark 123 "DashBoard by Amit Prajapati"
-      // https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp â€” a dashboard screen comes into focus.
+      // Beat 9 · moments 29–30 · Adapted from benchmark 123 "DashBoard by Amit Prajapati"
+      // https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp — a dashboard screen comes into focus.
       {
         from: 29, to: 30,
         draw: () => {
@@ -3701,8 +3701,8 @@ ${s} .a-walk{animation:vlsw08Walk 2.4s ease-in-out infinite}
         },
         render: (c, j) => { c.in("vl", j >= 0, { s: 0.8 }); c.in("sep", j === 0, { y: 20 }); c.in("jd", j === 1, { y: 20 }); }
       },
-      // Beat 10 Â· moments 31â€“34 Â· Adapted from benchmark 136 "Project TimeLine"
-      // https://motionarray.com/after-effects-templates/project-timeline-2424919/ â€” the view advances along time markers.
+      // Beat 10 · moments 31–34 · Adapted from benchmark 136 "Project TimeLine"
+      // https://motionarray.com/after-effects-templates/project-timeline-2424919/ — the view advances along time markers.
       {
         from: 31, to: 34,
         draw: () => {
