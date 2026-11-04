@@ -15,7 +15,7 @@
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="scenes.css?v=26"><link rel="stylesheet" href="visual-v25.css?v=36"><link rel="stylesheet" href="s2/s2.css?v=2">
+<link rel="stylesheet" href="scenes.css?v=26"><link rel="stylesheet" href="visual-v25.css?v=36"><link rel="stylesheet" href="s2/s2.css?v=3">
 <style>
 /* Narrated presentation: the stage plays like a video; one Pause/Continue control. */
 :root{
@@ -107,7 +107,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 </style>
 <link rel="stylesheet" href="week1-design.css?v=4">
 <link rel="stylesheet" href="weeks-design.css?v=2">
-<link rel="stylesheet" href="qa-fixes.css?v=7">
+<link rel="stylesheet" href="qa-fixes.css?v=8">
 </head>
 <body>
 <header id="siteHeader">
@@ -362,13 +362,13 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script src="lab/content.js?v=25"></script>
 <script src="lab/style-notebook.js?v=31"></script>
 <script src="lab/style-journey.js?v=31"></script>
-<script src="lab/style-board.js?v=3"></script>
-<script src="lab/style-motion.js?v=3"></script><script src="weeks/week10/cinematics.js?v=34"></script><script src="weeks/week10/w10-scenes.js?v=12"></script><script>window.__wkWrite(["scenes-week.js?v=" + (window.WEEK === 3 ? "11" : "10")]);</script>
+<script src="lab/style-board.js?v=4"></script>
+<script src="lab/style-motion.js?v=3"></script><script src="weeks/week10/cinematics.js?v=34"></script><script src="weeks/week10/w10-scenes.js?v=12"></script><script>window.__wkWrite(["scenes-week.js?v=" + ([3, 6, 12].includes(window.WEEK) ? "11" : "10")]);</script>
 <script>window.__wkWrite(["moments.js" + (window.WEEK === 1 ? "?v=9" : "")]);</script>
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=5\"><" + "/script>"); }); document.write("<script src=\"player.js?v=48\"><" + "/script>"); }
+  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=" + (s === "s2/s2-ui.js" ? "6" : "5") + "\"><" + "/script>"); }); document.write("<script src=\"player.js?v=48\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();

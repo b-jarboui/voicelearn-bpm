@@ -243,3 +243,64 @@ html[data-week] .stage.look-board .st-next.primary span { color:#fff; }
 /* Fresh-explanation highlight boxes use solid process ink: their labels need
    white ink rather than the base renderer's blanket dark-text rule. */
 html[data-week] .player .look.vb-root:not([data-w10s]) svg.dg text[fill*="--dg-dark"] { fill:#fff; }
+
+/* Round 5: retain the Notebook paper and Motion stage, with authored colours.
+   Filtering the entire drawing weakens text and changes status meanings. */
+.w10s-host[data-look="board"] svg * { filter: none !important; }
+html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) {
+  color-scheme: light;
+}
+html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-mount {
+  filter: none;
+  overflow: hidden;
+  contain: paint;
+  isolation: isolate;
+}
+html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-mount > * {
+  min-height: 0;
+}
+/* Pale neutral ink is suitable for construction lines, not small labels. */
+html[data-week] .w10s-host:is([data-look="notebook"],[data-look="motion"]) svg text:is(
+  [fill="#7d8a97"], [fill="#6d7f94"], [fill="#94a3b8"], [fill="#9fb4c7"]
+) { fill: #455965; }
+html[data-week] .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w6-hot {
+  animation: none; filter: none;
+}
+html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-text .s {
+  color: #405669; opacity: 1;
+}
+html[data-week] .player .w10s-host[data-look="motion"]::before {
+  height: 5px; background: #175caa;
+}
+html[data-week] .player .w10s-host[data-look="motion"] .w10s-text .k { background: #175caa; }
+/* Fresh explanations: keep text paired with the actual diagram surface.
+   Motion's blanket text rule previously put dark ink on a dark highlight. */
+html[data-week] .player .look.vm-root:not([data-w10s]) svg.dg {
+  --dg-box: var(--vm-soft); --dg-line: var(--vm-muted); --dg-soft: var(--vm-muted);
+  --dg-hi: var(--vm-blue); --dg-dark: var(--vm-on);
+  --dg-good: var(--vm-good); --dg-bad: var(--vm-bad);
+  color: var(--vm-ink);
+}
+html[data-week] .player .look.vm-root:not([data-w10s]) svg.dg text { fill: currentColor; }
+html[data-week] .player .look.vm-root:not([data-w10s]) svg.dg text[fill*="--dg-dark"] { fill: var(--dg-dark); }
+html[data-week] .player .look.vm-root:not([data-w10s]) svg.dg text[fill*="--dg-hi"] { fill: var(--dg-hi); }
+html[data-week] .player .look.vm-root:not([data-w10s]) svg.dg text[fill*="--dg-soft"] { fill: var(--dg-soft); }
+html[data-week] .player .look.vl-notebook:not([data-w10s]) svg.dg {
+  --dg-box: #354851; --dg-line: #bacbd2; --dg-soft: #dce7e9;
+  --dg-hi: #9acdec; --dg-dark: #172f40; --dg-good: #85e3b2; --dg-bad: #ff9c9c;
+  color: #f7f3e9;
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-inner {
+    flex-direction: row; align-items: center; gap: 16px; padding-right: 8px;
+  }
+  html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-mount {
+    flex: 1 1 60%; height: 100%; min-width: 0;
+  }
+  html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-text {
+    flex: 0 1 36%; min-height: 0; max-height: 100%; overflow: auto; padding: 8px;
+  }
+  html[data-week] .player .w10s-host:is([data-look="notebook"],[data-look="motion"]) .w10s-text .m {
+    font-size: 16px; line-height: 1.45;
+  }
+}

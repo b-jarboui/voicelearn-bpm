@@ -2027,10 +2027,28 @@ body .player .look.vb-root {
   function markerRole(el, color, fillColor) {
     // Prefer the nearest named teaching element, not a whole scene's prose.
     for (let n = el; n && n.tagName.toLowerCase() !== "svg"; n = n.parentElement) {
-      const key = ["data-k","data-h","data-prop","data-name"].map(a=>n.getAttribute(a)||"").join(" ").toLowerCase();
-      if (/problem|risk|bad|fail|error|delay|backlog|block|queue|bottleneck|reject|alarm|waste|issue|broken|wait|gap|warn|stuck/.test(key)) return "problem";
-      if (/customer|guest|client|visitor/.test(key)) return "customer";
-      if (/good|done|ready|success|approve|complete|solved|benefit|correct|happy|tick|checkmark/.test(key)) return "good";
+      const explicit = n.getAttribute("data-vl-role");
+      if (MARKERS[explicit]) return explicit;
+      // Week 14 names the ink of sustained gains explicitly (fG/sG).
+      // Its heartbeat paths have no separate keyed wrapper or adjacent badge.
+      if (n.matches(".fG,.sG") && n.closest('[class^="vls-w14-"]')) return "good";
+      const key = ["data-k","data-h","data-prop","data-name","data-id","id","class"].map(a=>n.getAttribute(a)||"").join(" ").toLowerCase();
+      if (/bi-ok|bi-open/.test(key)) return "good";
+      if (/bi-bad|bi-warn|bi-lock/.test(key)) return "problem";
+      if (/problem|risk|bad|fail|error|delay|backlog|block|queue|bottleneck|reject|alarm|waste|issue|broken|wait|gap|warn|stuck|incorrect|incomplete|unhappy|unsustainable|not-ready/.test(key)) return "problem";
+      if (/customer|guest|client|visitor|traveller|traveler/.test(key)) return "customer";
+      if (/good|positive|done|ready|success|approve|complete|solved|benefit|correct|happy|tick|checkmark|tested|resolved/.test(key)) return "good";
+      // Several weekly engines use short keys and unkeyed labelled groups.
+      // Read only a small, local group, never an entire shot's teaching text.
+      if (n.tagName.toLowerCase() === "g" && n.childElementCount <= 8) {
+        const label = n.textContent.trim().toLowerCase();
+        if (label.length > 0 && label.length < 85) {
+          if (/\b(problem|risk|failed|failure|error|delay|backlog|bottleneck|rejected|waste|broken|waiting|unhappy)\b/.test(label)) return "problem";
+          if (/\b(customer|guest|client|visitor|traveller|traveler)s?\b/.test(label)) return "customer";
+          if (/\b(approved|ready|success|successful|completed|solved|benefits?|improved|sustainable|realize value)\b/.test(label)) return "good";
+          if (/\b(technology works|achieve it|keep (?:it|the gain) alive)\b/.test(label)) return "good";
+        }
+      }
     }
     // Explicit red status marks remain problems. Decorative warm/green colours
     // become process blue unless the element has an explicit teaching role.
@@ -2045,6 +2063,8 @@ body .player .look.vb-root {
   }
   function dressScene(mount) {
     installCSS();
+    // The opening protagonist has an abbreviated key and no adjacent name.
+    mount.querySelectorAll('.vls-w01-W1INTRO [data-k="i0g"]').forEach(el=>el.setAttribute("data-vl-role","customer"));
     const host = mount.closest(".w10s-host");
     if (host && !host.querySelector(".vb-legend")) {
       const legend = html("div","vb-legend");
@@ -2086,6 +2106,11 @@ body .player .look.vb-root {
       const hasStroke = src.stroke !== "none" && src.stroke !== "transparent";
       const color = rgb(hasStroke ? src.stroke : src.fill);
       let role = markerRole(el,color,rgb(src.fill));
+      // The Week 2 badge engine nests its tick inside a separate keyed group.
+      if (role === "process" && el.matches("circle.bdg,circle.vtc")) {
+        const [r,g,b]=rgb(src.fill);
+        if (g>r*1.35&&g>b*1.12) role="good";
+      }
       // The weekly badge helper emits adjacent circle + white tick/cross, rather
       // than a named group. Keep both strokes in the same positive/problem ink.
       const whiteStroke=/^(#fff(?:fff)?|white)$/i.test(el.getAttribute("stroke")||"");
@@ -2097,7 +2122,7 @@ body .player .look.vb-root {
       const [ink,tint] = MARKERS[role];
       let fill = hasFill ? tint : "none", stroke = hasStroke ? ink : "none";
       let width = hasStroke ? "1.7px" : "0px";
-      if (isText) { fill="#202f39";stroke="none"; }
+      if (isText) { fill=role === "process" ? "#202f39" : ink;stroke="none"; }
       else {
         const box = el.ownerSVGElement?.viewBox.baseVal;
         const bg = el.tagName === "rect" && box && +el.getAttribute("width") >= box.width * .86 && +el.getAttribute("height") >= box.height * .72;

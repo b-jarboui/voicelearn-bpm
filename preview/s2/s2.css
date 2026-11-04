@@ -1013,3 +1013,57 @@
 .s2-rate-ready { border-left-color: var(--s2-success); }
 @media (prefers-reduced-motion: reduce) { .s2-rate-bar span { transition: none; } }
 .s2-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Round 5: case pages use document flow, independent of the home-card grid. */
+html[data-week] #main .s2-page .card {
+  display: block;
+  padding: clamp(16px, 2.4vw, 28px);
+  min-width: 0;
+}
+html[data-week] #main .s2-page p { margin-bottom: 13px; }
+html[data-week] #main .s2-page p:last-child { margin-bottom: 0; }
+html[data-week] #main .s2-page .eyebrow { margin-bottom: 8px; }
+html[data-week] #main .s2-page .s2-situation p { margin-bottom: 16px; }
+.s2-page { overflow-wrap: break-word; }
+.s2-situation { max-width: 74ch; }
+.s2-page :is(.s2-exhibit, .s2-case-again) .scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--s2-muted) var(--s2-soft);
+}
+.s2-page .scroll:focus-visible { outline: 3px solid var(--s2-accent); outline-offset: -3px; }
+.s2-page :is(.s2-exhibit, .s2-case-again) table { font-size: 15px; line-height: 1.55; }
+.s2-page :is(.s2-exhibit, .s2-case-again) :is(th, td) { overflow-wrap: normal; word-break: normal; }
+.s2-page :is(.s2-exhibit, .s2-case-again) th { color: var(--s2-text); }
+.s2-page :is(.s2-exhibit, .s2-case-again) tbody tr:nth-child(even) { background: var(--s2-soft); }
+.s2-page .s2-table-hint { color: var(--s2-muted); font-size: 14px; line-height: 1.5; }
+.s2-page .s2-word-count { display: grid; gap: 4px; font-size: 14px; line-height: 1.5; }
+.s2-save-state { display: flex; align-items: baseline; gap: 7px; }
+.s2-save-state::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.s2-word-count[data-save-state="saved"] .s2-save-state { color: var(--s2-success); }
+.s2-word-count[data-save-state="error"] .s2-save-state { color: var(--s2-warning); font-weight: 700; }
+.s2-page .s2-writing textarea { min-height: 240px; height: clamp(240px, 36dvh, 380px); }
+.s2-page .s2-writing textarea::placeholder { opacity: 1; }
+.s2-page .s2-writing:focus-within { border-color: var(--s2-accent); }
+.s2-page #s2-actions .s2-provider-group.s2-no-key .s2-fb {
+  opacity: 1;
+  color: var(--s2-muted);
+  background: var(--s2-soft);
+  border: 1px dashed var(--s2-muted);
+}
+.s2-page #s2-actions .s2-settings-link { line-height: 1.5; }
+.s2-page :is(.s2-actions-help, .s2-privacy, .s2-review-meta) { font-size: 14px; line-height: 1.6; }
+.s2-page .s2-local .card { border-left-color: var(--s2-border); }
+.s2-page .s2-chip { border-radius: 8px; font-size: 14px; }
+.s2-page :is(.s2-chip-addressed,.s2-chip-supported,.s2-chip-defensible) {
+  color: var(--s2-success); border-color: currentColor;
+}
+.s2-page :is(.s2-chip-partial,.s2-chip-missing,.s2-chip-defensible_but_under_supported,
+  .s2-chip-weak_causal_connection,.s2-chip-unsupported_assumption,.s2-chip-contradicted_by_case) {
+  color: var(--s2-warning); border-color: currentColor;
+}
+.s2-page .s2-review-item { min-width: 0; }
+.s2-page .s2-quote { margin-left: 0; margin-right: 0; }
+.s2-page .s2-history-items .s2-review { padding: clamp(12px, 2vw, 22px); }
+@media (orientation: landscape) and (max-height: 500px) {
+  .s2-page .s2-writing textarea { height: 180px; min-height: 180px; }
+}

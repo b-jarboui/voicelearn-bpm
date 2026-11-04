@@ -129,7 +129,7 @@
         if (tf) {
           if (n.style.transform) n.style.transform = "";
           v.x = st.x; v.y = st.y; v.rotation = st.r; v.scaleX = st.sx; v.scaleY = st.sy;
-          if (st.ox !== undefined) v.svgOrigin = st.ox + " " + st.oy;
+          if (st.ox !== undefined) { v.svgOrigin = st.ox + " " + st.oy; v.smoothOrigin = false; }
           else v.transformOrigin = st.org || "50% 50%";
         }
         if (p.o !== undefined) v.opacity = p.o;
@@ -320,16 +320,16 @@
         const done = k < 7;
         left += G(`a-st a-st${k + 1}`, O(x, y, 14, C.white, `stroke="${done ? C.navy : C.slate}" stroke-width="3"`) + T(x, y + 5, k + 1, 14, done ? C.navy : C.slate));
       });
-      left += G("a-g9", O(127, 225, 21, "none", `stroke="${C.green}" stroke-width="4"`));
-      left += G("a-g10", O(45, 225, 21, "none", `stroke="${C.green}" stroke-width="4"`));
+      left += G("a-g9", O(127, 225, 21, "none", `stroke="${C.green}" stroke-width="4"`), 'data-vl-role="good"');
+      left += G("a-g10", O(45, 225, 21, "none", `stroke="${C.green}" stroke-width="4"`), 'data-vl-role="good"');
       left += G("a-st8", O(210, 225, 27, C.orange, 'class="vw-pulse" opacity=".3"') + O(210, 225, 20, C.orange) + T(210, 231, "8", 18, C.white));
       left += G("a-l5", T(375, 88, "INNOVATE", 14, C.navy));
       left += G("a-l6", T(375, 259, "PEOPLE", 14, C.navy));
       left += G("a-l7", T(293, 259, "DEVELOP", 14, C.navy));
-      left += G("a-l8", T(210, 197, "IMPLEMENT", 16, C.orange, 'class="hl"'));
-      left += G("a-l9", T(127, 252, "REALIZE", 14, C.green) + T(127, 278, "VALUE", 14, C.green));
-      left += G("a-l10", T(12, 162, "SUSTAINABLE", 14, C.green, "", "start") + T(12, 188, "PERFORMANCE", 14, C.green, "", "start"));
-      left += G("a-flag", P("M133 211 V158", C.ink, 3) + R(133, 158, 36, 22, "rgba(255,255,255,.7)", 2, `stroke="${C.green}" stroke-width="2.5" stroke-dasharray="4 4"`));
+      left += G("a-l8", T(210, 174, "IMPLEMENT", 16, C.navy, 'class="hl"'));
+      left += G("a-l9", T(127, 266, "REALIZE", 14, C.green) + T(127, 284, "VALUE", 14, C.green), 'data-vl-role="good"');
+      left += G("a-l10", T(12, 154, "SUSTAINABLE", 14, C.green, "", "start") + T(12, 172, "PERFORMANCE", 14, C.green, "", "start"), 'data-vl-role="good"');
+      left += G("a-flag", P("M133 211 V132", C.ink, 3) + R(133, 132, 36, 22, "rgba(255,255,255,.7)", 2, `stroke="${C.green}" stroke-width="2.5" stroke-dasharray="4 4"`));
       left += G("a-live", chip(210, 264, "LIVE", 14, C.white, C.orange));
       left += G("a-tram", R(-17, -11, 34, 22, C.navy, 8) + R(-11, -6, 22, 9, C.blue, 3) + O(-9, 12, 3, C.ink) + O(9, 12, 3, C.ink));
 
@@ -396,14 +396,8 @@
       a.to(".a-st8", { s: b === 3 ? 1.22 : 1, e: "back" });
       a.to(".a-st7", { s: b === 0 && half ? 1.25 : 1 });
       a.vis(".a-trail", b === 4, { dr: b === 4 ? 1 : 0 });
-      const lab = (k) => {
-        if (k === 8) return b === 0 || b === 3 || b >= 12 ? 1 : 0.55;
-        if (k === 5 || k === 6) return b === 4 || (b === 3 && half) ? 1 : 0.25;
-        if (k === 7) return b === 4 || b === 3 || (b === 0 && half) ? 1 : 0.3;
-        if (k === 9) return b === 3 || b >= 12 ? 1 : 0.3;
-        return b >= 13 ? 1 : 0.3;
-      };
-      [5, 6, 7, 8, 9, 10].forEach((k) => a.to(".a-l" + k, { o: lab(k), s: (b === 4 && (k === 5 || k === 6 || k === 7)) ? 1.08 : 1 }));
+      // The active station and scale provide emphasis; phase names stay legible.
+      [5, 6, 7, 8, 9, 10].forEach((k) => a.to(".a-l" + k, { o: 1, s: (b === 4 && (k === 5 || k === 6 || k === 7)) ? 1.08 : 1 }));
       a.vis(".a-flag", b === 12 && half || b >= 13, { y: b >= 13 ? 0 : 12 });
       a.vis(".a-live", b === 13 || b === 14, { s: b === 13 ? 1 : 0.9, e: "back" });
       a.vis(".a-g9", b === 13 && half || b === 14, { s: b === 14 ? 1.1 : 1 });

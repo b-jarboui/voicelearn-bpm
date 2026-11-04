@@ -2,7 +2,7 @@
   "use strict";
 
   const S2 = {};
-  let host = null, active = null, timer = null, running = null;
+  let host = null, active = null, timer = null, running = null, tableObserver = null;
   const P = () => window.S2Providers;
   const L = () => window.S2Local;
   const data = () => window.S2_DATA?.[host?.week];
@@ -49,10 +49,22 @@
   }
 
   function a11yScroll() {
+    tableObserver?.disconnect();
+    const updateHint = target => {
+      const hint = target.previousElementSibling;
+      if (hint?.classList.contains("s2-table-hint")) hint.hidden = target.scrollWidth <= target.clientWidth + 1;
+    };
+    tableObserver = window.ResizeObserver
+      ? new ResizeObserver(entries => entries.forEach(({target}) => updateHint(target))) : null;
     document.getElementById("main")?.querySelectorAll(".scroll").forEach(el => {
       el.tabIndex = 0;
       el.setAttribute("role", "region");
       el.setAttribute("aria-label", "Table. Scroll sideways to see all columns.");
+      updateHint(el);
+      tableObserver?.observe(el);
+    });
+    document.getElementById("main")?.querySelectorAll(".s2-read-case").forEach(details => {
+      details.addEventListener("toggle", () => details.querySelectorAll(".scroll").forEach(updateHint));
     });
   }
 
@@ -100,16 +112,24 @@
     const n = words(active.textarea.value);
     const count = active.root.querySelector("#s2-count");
     if (!count) return;
-    let text = `${n} ${n === 1 ? "word" : "words"} - `;
-    text += active.saved === false
+    const pending = active.textarea.value !== active.lastSaved;
+    const state = active.saved === false ? "error" : pending ? "saving" : "saved";
+    let text = `${n} ${n === 1 ? "word" : "words"}`;
+    const saveText = active.saved === false
       ? "Not saved: your browser blocks storage."
-      : "saved on this device";
+      : pending ? "Saving on this device…" : "Saved on this device";
     if (active.c === 2) {
       const hint = n < 400 ? "A little short so far" :
         n <= 600 ? "In the target range" : "Longer than the target";
       text += `. The target is 400 to 600 words. ${hint}.`;
     }
-    count.textContent = text;
+    if (!count.querySelector(".s2-save-state")) {
+      count.innerHTML = '<span class="s2-count-text"></span><span class="s2-save-state" role="status" aria-live="polite"></span>';
+    }
+    count.querySelector(".s2-count-text").textContent = text;
+    const save = count.querySelector(".s2-save-state");
+    if (save.textContent !== saveText) save.textContent = saveText;
+    count.dataset.saveState = state;
     if (active.tooFew && n >= (active.c === 2 ? 120 : 20)) {
       active.tooFew = false;
       const notice = active.root.querySelector("#s2-notice");
@@ -262,6 +282,7 @@
     if (!safeArray(cd?.exhibit).length) return "";
     return `<section class="s2-exhibit">
       <h3>${esc(cd.exhibitTitle || "Case exhibit")}</h3>
+      <p class="s2-table-hint" hidden>Scroll sideways to see all columns →</p>
       ${L().tableHtml(cd.exhibit)}
     </section>`;
   }

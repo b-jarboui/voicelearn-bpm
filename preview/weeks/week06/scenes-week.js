@@ -336,9 +336,9 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
       // simpler explicit composition (keeps transform off animated nodes)
       const marina = at(46, 238, rv(0, "rise", I.bldg(64, 120, COL.navy)));
       const s =
-        rect(205, 24, 188, 266, COL.white, 16, { stroke: COL.mist, "stroke-width": 2 }) +
+        rv(3, "fade", rect(205, 24, 188, 266, COL.white, 16, { stroke: COL.mist, "stroke-width": 2 })) +
         marina + tx(46, 262, "Qasr Marina", 15, COL.navy) +
-        at(175, 245, grp({ class: "w6-m tv" }, I.guest(COL.orange))) +
+        at(175, 245, grp({ class: "w6-m tv", "data-vl-role": "customer" }, I.guest(COL.orange))) +
         rv(1, "left", card(90, 92, 108, 32, "Revenue", { col: COL.sky, size: 14 })) +
         rv(1, "left", card(90, 136, 108, 32, "Reception", { col: COL.sky, size: 14 })) +
         rv(1, "left", card(90, 180, 108, 32, "Housekeeping", { col: COL.sky, size: 14 })) +
