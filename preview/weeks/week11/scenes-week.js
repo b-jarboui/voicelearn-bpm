@@ -1,5 +1,5 @@
-// OPER621 Â· Week 11 Â· The Develop Phase â€” animated teaching scenes, version 2
-// File: w11-claude-v2-part1.js  Â·  Scenes: W11O1a, W11O1b, W11O1c, W11O3a
+// OPER621 · Week 11 · The Develop Phase — animated teaching scenes, version 2
+// File: w11-claude-v2-part1.js  ·  Scenes: W11O1a, W11O1b, W11O1c, W11O3a
 // Rebuilt from the narration-to-animation content audit: every narration line
 // maps to one named shot family (benchmark template noted beside each family)
 // whose state shows what that sentence says on Qasr's corporate-rate booking.
@@ -280,10 +280,10 @@ function shotScene(cfg) {
 }
 
 // =====================================================================
-// SHOT FAMILY: RULES â€” evaluate the agreement vs. forward an approval
-// Benchmark template: "Workflow AI Animation" (Dribbble 26275497) â€” data
+// SHOT FAMILY: RULES — evaluate the agreement vs. forward an approval
+// Benchmark template: "Workflow AI Animation" (Dribbble 26275497) — data
 // advances through stages; plus "Automated Workflows" (LottieFiles
-// XR2hxXOdEK) â€” trigger, evaluate, complete.
+// XR2hxXOdEK) — trigger, evaluate, complete.
 // =====================================================================
 function F_RULES(p) {
   const f = pfx(p);
@@ -355,8 +355,8 @@ function F_RULES(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: QUEUE â€” approval queue, clock, night shift, 06:00 deadline
-// Benchmark template: "Bottling factory" (LottieFiles 53Q3SoGu0x) â€”
+// SHOT FAMILY: QUEUE — approval queue, clock, night shift, 06:00 deadline
+// Benchmark template: "Bottling factory" (LottieFiles 53Q3SoGu0x) —
 // items advance to a station and wait; plus "Process-Para" ring timer.
 // =====================================================================
 function F_QUEUE(p) {
@@ -422,10 +422,10 @@ function F_QUEUE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: PIPE â€” approved design passes through concrete
+// SHOT FAMILY: PIPE — approved design passes through concrete
 // deliverables before the Implement door unlocks
 // Benchmark template: "Multi-Step Icon Animation" (LottieFiles
-// uAM7js17jU) â€” activate one step after another; plus "Interactive
+// uAM7js17jU) — activate one step after another; plus "Interactive
 // Computer Assembly Sequence" (CodePen OJqNMVR).
 // =====================================================================
 function F_PIPE(p, ST) {
@@ -489,9 +489,9 @@ function F_PIPE(p, ST) {
 }
 
 // =====================================================================
-// SHOT FAMILY: UPGRADE â€” supported settings carry over, a custom
+// SHOT FAMILY: UPGRADE — supported settings carry over, a custom
 // extension breaks when the vendor ships a new version
-// Benchmark template: "Git Workflow 1" (LottieFiles G6eTYjLVJ5) â€”
+// Benchmark template: "Git Workflow 1" (LottieFiles G6eTYjLVJ5) —
 // branch, merge and reconnect; plus "Process - Success" check draw.
 // =====================================================================
 function F_UPGRADE(p) {
@@ -537,10 +537,10 @@ function F_UPGRADE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: SPLIT â€” 100 corporate arrivals sort into 71 resolved and
+// SHOT FAMILY: SPLIT — 100 corporate arrivals sort into 71 resolved and
 // 29 on the old approval path (booked within 24 hours)
 // Benchmark template: "Sankey animation - acyclic graph" (Observable
-// @joaormendes) + "Stacked-to-grouped bars" (Observable @d3) â€” units keep
+// @joaormendes) + "Stacked-to-grouped bars" (Observable @d3) — units keep
 // their identity while regrouping.
 // =====================================================================
 function F_SPLIT(p) {
@@ -590,9 +590,9 @@ function F_SPLIT(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: LEDGER â€” three options as columns: initial cost bars to
+// SHOT FAMILY: LEDGER — three options as columns: initial cost bars to
 // true scale, then rows of continuing obligations (unknowns stay "?")
-// Benchmark template: "Infographic Chart Creator" (Motion Array 36176) â€”
+// Benchmark template: "Infographic Chart Creator" (Motion Array 36176) —
 // grow columns, update labels; plus "Stacked-to-grouped bars".
 // =====================================================================
 function F_LEDGER(p) {
@@ -652,11 +652,11 @@ function F_LEDGER(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: DEV â€” approved design vs. delivered process, red
+// SHOT FAMILY: DEV — approved design vs. delivered process, red
 // difference markers, a deviation record and the business owner's stamp
-// Benchmark template: "contract process" (LottieFiles tnM3xY0cM8) â€”
+// Benchmark template: "contract process" (LottieFiles tnM3xY0cM8) —
 // proposal, agreement and approval states; plus "The Trouble With Food
-// Safety Audits" (NYT) â€” annotated document callouts.
+// Safety Audits" (NYT) — annotated document callouts.
 // =====================================================================
 const DEV_A = [["Booking", "made"], ["Rules", "evaluate"], ["Rate set", "overnight"], ["Guest:", "no wait"]];
 const DEV_HUMAN = [["Booking", "made"], ["Human", "approval"], ["Approval", "queue"], ["Guest", "waits"]];
@@ -675,7 +675,7 @@ function F_DEV(p) {
         s += f.K("A" + i, R(x, 34, 86, 48, C.white, 7, `stroke="${C.green}" stroke-width="2"`) + f.TK(`A${i}a`, x + 43, 54, "", 12.5, C.green) + f.TK(`A${i}b`, x + 43, 71, "", 12.5, C.green));
         s += f.H("B" + i, R(x, 124, 86, 48, C.white, 7, `stroke="${C.navy}" stroke-width="2"`) + f.TK(`B${i}a`, x + 43, 144, "", 12.5, C.navy) + f.TK(`B${i}b`, x + 43, 161, "", 12.5, C.navy));
         s += f.H("X" + i, R(x - 2, 122, 90, 52, "none", 8, `stroke="${C.red}" stroke-width="3"`));
-        s += f.H("m" + i, O(x + 43, 103, 11, C.red) + T(x + 43, 108, "â‰ ", 15, C.white));
+        s += f.H("m" + i, O(x + 43, 103, 11, C.red) + T(x + 43, 108, "≠", 15, C.white));
         s += f.H("g" + i, R(x - 3, 31, 92, 54, "none", 9, `stroke="${C.red}" stroke-width="3" stroke-dasharray="5 3"`) + O(x + 80, 36, 9, C.red) + T(x + 80, 41, "!", 13, C.white));
         if (i < 3) s += P(`M${x + 86} 58 h10`, C.green, 2) + f.H("ab" + i, P(`M${x + 86} 148 h10`, C.navy, 2));
       });
@@ -717,9 +717,9 @@ function F_DEV(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: CAP â€” one delivery team, a seven-month calendar, the
+// SHOT FAMILY: CAP — one delivery team, a seven-month calendar, the
 // rate-project block and the January regulation (size not quantified)
-// Benchmark template: "Project TimeLine" (Motion Array 2424919) â€”
+// Benchmark template: "Project TimeLine" (Motion Array 2424919) —
 // advance along time markers.
 // =====================================================================
 function F_CAP(p) {
@@ -759,9 +759,9 @@ function F_CAP(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: HAND â€” reception hands a booking case to the revenue
+// SHOT FAMILY: HAND — reception hands a booking case to the revenue
 // office; the decision travels back to the employee serving the guest
-// Benchmark template: "Workflow Animation" (Dribbble 3791748) â€” reveal
+// Benchmark template: "Workflow Animation" (Dribbble 3791748) — reveal
 // action, transfer trigger, show notification; plus inspiration-board
 // #10 "The Physical Handoff".
 // =====================================================================
@@ -811,11 +811,11 @@ function F_HAND(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: TEST â€” feed realistic cases into the operating process,
+// SHOT FAMILY: TEST — feed realistic cases into the operating process,
 // compare expected vs observed, log and close defects
-// Benchmark template: "Process - Success" (LottieFiles EhFVqZgUPP) â€”
+// Benchmark template: "Process - Success" (LottieFiles EhFVqZgUPP) —
 // activity transforms into a check; plus "Dashboard" (LottieFiles
-// M05MmlnoOP) â€” fill graph, highlight metric.
+// M05MmlnoOP) — fill graph, highlight metric.
 // =====================================================================
 function F_TEST(p) {
   const f = pfx(p);
@@ -880,10 +880,10 @@ function F_TEST(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: EXC â€” the normal path, the exception branch, an owner
+// SHOT FAMILY: EXC — the normal path, the exception branch, an owner
 // who investigates the cause, return to normal or removal of needless work
 // Benchmark template: "Celonis Process Explorer animation"
-// (help.celonis.com) â€” variants branching off the happy path; plus "Git
+// (help.celonis.com) — variants branching off the happy path; plus "Git
 // Workflow 1" branch-and-merge.
 // =====================================================================
 function F_EXC(p) {
@@ -941,10 +941,10 @@ function F_EXC(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: ROUTES â€” buy, configure, extend, build as four product
+// SHOT FAMILY: ROUTES — buy, configure, extend, build as four product
 // cards whose illustrations change state (Flip-style)
 // Benchmark template: "Product Workflow Animation & UI Motion Design"
-// (Dribbble 27577799) â€” shift between product states.
+// (Dribbble 27577799) — shift between product states.
 // =====================================================================
 function F_ROUTES(p) {
   const f = pfx(p);
@@ -1002,10 +1002,10 @@ function F_ROUTES(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: TIERS â€” core, supporting and management processes and the
+// SHOT FAMILY: TIERS — core, supporting and management processes and the
 // development route each one tends to deserve
 // Benchmark template: "Animated treemap" (Observable @d3/animated-treemap)
-// â€” areas keep identity while emphasis changes.
+// — areas keep identity while emphasis changes.
 // =====================================================================
 function F_TIERS(p) {
   const f = pfx(p);
@@ -1035,9 +1035,9 @@ function F_TIERS(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: PHASE â€” the ten-phase BPM framework, Develop is phase 7
+// SHOT FAMILY: PHASE — the ten-phase BPM framework, Develop is phase 7
 // Benchmark template: "Corporate Timeline by HenlyFx" (Motion Array
-// 1939632) â€” reveal events one by one.
+// 1939632) — reveal events one by one.
 // =====================================================================
 function F_PHASE(p) {
   const f = pfx(p);
@@ -1074,7 +1074,7 @@ function F_PHASE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: DASH â€” exception evidence and monitoring after go-live
+// SHOT FAMILY: DASH — exception evidence and monitoring after go-live
 // Benchmark template: "Animated line chart lesson" (Observable
 // @d3/learn-d3-animation) + "Infographics Dashboard" (LottieFiles).
 // =====================================================================
@@ -1108,9 +1108,9 @@ function F_DASH(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: CHECK â€” a card whose items are confirmed one by one
+// SHOT FAMILY: CHECK — a card whose items are confirmed one by one
 // Benchmark template: "Infographics Pack by ARstudio" (Motion Array
-// 135055) â€” reveal list primitives and callouts.
+// 135055) — reveal list primitives and callouts.
 // =====================================================================
 function F_CHECK(p) {
   const f = pfx(p);
@@ -1153,8 +1153,8 @@ function F_CHECK(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: COMPARE â€” the same frame, two states side by side
-// Benchmark template: "The Pinned Before-and-After" â€” The Pudding,
+// SHOT FAMILY: COMPARE — the same frame, two states side by side
+// Benchmark template: "The Pinned Before-and-After" — The Pudding,
 // Responsive Scrollytelling (pudding.cool/process/responsive-scrollytelling).
 // =====================================================================
 function F_COMPARE(p) {
@@ -1186,10 +1186,10 @@ function F_COMPARE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: GOV â€” a business rule, its named owner and the authorised
+// SHOT FAMILY: GOV — a business rule, its named owner and the authorised
 // change route; informal edits are blocked
 // Benchmark template: "Hierarchy traversal animated" (Observable
-// @d3/hierarchy-traversal-animated) â€” visit one node then the next.
+// @d3/hierarchy-traversal-animated) — visit one node then the next.
 // =====================================================================
 function F_GOV(p) {
   const f = pfx(p);
@@ -1222,10 +1222,10 @@ function F_GOV(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: STACK â€” isometric exploded capability stack: a paper
+// SHOT FAMILY: STACK — isometric exploded capability stack: a paper
 // design gains interfaces, rules, procedures, exception path, test evidence
 // Benchmark template: "The Process Architectural Motion" (Behance
-// 194096661) â€” build and revise successive layers; plus inspiration-board
+// 194096661) — build and revise successive layers; plus inspiration-board
 // #26 "Exploded process mechanism".
 // =====================================================================
 function F_STACK(p) {
@@ -1274,11 +1274,11 @@ function F_STACK(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: KIT â€” Develop packs a handover kit; the case latches and
+// SHOT FAMILY: KIT — Develop packs a handover kit; the case latches and
 // crosses into Implement toward 14 properties
 // Benchmark template: "Creative Design Workflow Animation" (Dribbble
-// 27476599) â€” assemble shapes and refine; plus "World map with
-// logistics" (LottieFiles qA3cpn3zMy) â€” trace routes between hubs.
+// 27476599) — assemble shapes and refine; plus "World map with
+// logistics" (LottieFiles qA3cpn3zMy) — trace routes between hubs.
 // =====================================================================
 function F_KIT(p) {
   const f = pfx(p);
@@ -1340,13 +1340,13 @@ function F_KIT(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: FORUM â€” the "Automating the Exception" discussion board
+// SHOT FAMILY: FORUM — the "Automating the Exception" discussion board
 // Benchmark template: "Clean Workflow Visualization with Motion Graphics"
-// (Dribbble 27600376) â€” connect journey steps with transitions.
+// (Dribbble 27600376) — connect journey steps with transitions.
 // =====================================================================
 function F_FORUM(p) {
   const f = pfx(p);
-  const ROWS = ["Unfamiliar organisation", "Configure or customise?", "Should the exception remain?", "Jeston, Chapter 19", "Post by mid-week", "Challenge two classmates", "Assessment 4 Â· Week 14"];
+  const ROWS = ["Unfamiliar organisation", "Configure or customise?", "Should the exception remain?", "Jeston, Chapter 19", "Post by mid-week", "Challenge two classmates", "Assessment 4 · Week 14"];
   const ic = (r, x, y) => [
     R(x - 9, y - 12, 18, 20, C.slate, 2) + R(x - 5, y - 8, 4, 4, C.white) + R(x + 1, y - 8, 4, 4, C.white) + R(x - 5, y - 1, 4, 4, C.white) + R(x + 1, y - 1, 4, 4, C.white),
     R(x - 12, y - 8, 24, 14, "#c9d6e6", 7) + O(x + 5, y - 1, 6, C.navy),
@@ -1384,13 +1384,13 @@ const ST_DEV = [
 const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
 
 // =====================================================================
-// W11O1a Â· From a process design to an operating capability (30 lines)
+// W11O1a · From a process design to an operating capability (30 lines)
 // Shots: PIPE, PHASE, QUEUE, RULES, STACK, EXC, TEST, HAND, CHECK, ROUTES
 // =====================================================================
 {
   const id = "W11O1a";
   const plan = [
-    ["pipe", { tok: "d", nb: "Design â†’ operation" }, "Design to operation"],
+    ["pipe", { tok: "d", nb: "Design → operation" }, "Design to operation"],
     ["phase", { done: 6, nb: { t: "Investigated, then redesigned", c: "N" } }, "The journey so far"],
     ["pipe", { tok: "d", spon: 1, nb: { t: "Serve every property?", c: "P" } }, "The sponsor's question"],
     ["pipe", { big: 1, conf: 1, nb: { t: "A diagram can't run", c: "O" } }, "Diagrams don't operate"],
@@ -1430,7 +1430,7 @@ const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
 }
 
 // =====================================================================
-// W11O1b Â· Four ways to deliver the same capability (29 lines)
+// W11O1b · Four ways to deliver the same capability (29 lines)
 // Shots: PIPE, RULES, TEST, ROUTES, UPGRADE, TIERS, CHECK, DEV
 // =====================================================================
 {
@@ -1449,7 +1449,7 @@ const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
     ["routes", { f: 1, tg: 1, lk: 1, nb: { t: "Code unchanged", c: "G" } }, "Configure settings"],
     ["rules", { fw: 1, env: "rev", ev: 0, hl: "fw", nl: { t: "Configured routing", c: "G" } }, "Route approvals"],
     ["upgrade", { cfg: 1, tg: 1, up: 1, cfg2: 1, nd: { t: "Settings carry over", c: "G" } }, "Upgrades stay easier"],
-    ["rules", { fw: 1, env: "rev", xc: 1, hl: "fw", nt: { t: "Not evaluated", c: "R" }, nr: { t: "Routing â‰  deciding", c: "O" } }, "Routing isn't evaluating"],
+    ["rules", { fw: 1, env: "rev", xc: 1, hl: "fw", nt: { t: "Not evaluated", c: "R" }, nr: { t: "Routing ≠ deciding", c: "O" } }, "Routing isn't evaluating"],
     ["routes", { f: 2, plug: 1, nb: "Adds what's missing" }, "Extend the product"],
     ["rules", { gear: 1, tok: "out", fw: 1, fx: 1, hl: "ev", nt: { t: "Rules component", c: "A" } }, "Rules evaluate agreements"],
     ["upgrade", { ext: 1, up: 1, ext2: 1, nd: { t: "Upgrade exposure", c: "R" } }, "Fit versus upkeep"],
@@ -1476,7 +1476,7 @@ const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
 }
 
 // =====================================================================
-// W11O1c Â· When the software starts changing the design (28 lines)
+// W11O1c · When the software starts changing the design (28 lines)
 // Shots: DEV, CHECK, RULES, QUEUE, COMPARE, LEDGER, UPGRADE
 // =====================================================================
 {
@@ -1521,7 +1521,7 @@ const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
 }
 
 // =====================================================================
-// W11O3a Â· Vendor C fits â€” but not quite (27 lines)
+// W11O3a · Vendor C fits — but not quite (27 lines)
 // Shots: CHECK, RULES, QUEUE, UPGRADE, SPLIT, DEV, COMPARE, LEDGER
 // =====================================================================
 {
@@ -1540,7 +1540,7 @@ const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
     ["rules", { fw: 1, env: "rev", ev: 0, hl: "fw", open: 1, nb: { t: "Case kept open", c: "O" } }, "Vendor C routes requests"],
     ["rules", { fw: 1, env: "rev", xc: 1, hl: "fw", nt: { t: "Cannot evaluate", c: "R" } }, "It cannot evaluate"],
     ["rules", { fw: 1, fok: 1, env: "rev", xc: 1, nr: { t: "Partial process fit", c: "O" } }, "Partial process fit"],
-    ["rules", { fw: 1, env: "rev", tok: "out", nr: { t: "Moving â‰  deciding", c: "O" } }, "Moving isn't deciding"],
+    ["rules", { fw: 1, env: "rev", tok: "out", nr: { t: "Moving ≠ deciding", c: "O" } }, "Moving isn't deciding"],
     ["queue", { night: 1, n: 7, clk: { t: "Night queue", c: "P" }, nt: { t: "Every request routed", c: "P" } }, "Configure night routing"],
     ["queue", { night: 1, n: 7, d: 7, min: 0, clk: { t: "Cleared by 06:00", c: "G" } }, "Only if cleared in time"],
     ["queue", { n: 7, d: 7, g: "ok", nt: { t: "No wait, still manual", c: "O" } }, "Wait gone, rule missing"],
@@ -1567,8 +1567,8 @@ const Q4 = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
 addStyles(SCENE_BG);
 })();
 
-// OPER621 Â· Week 11 Â· The Develop Phase â€” animated teaching scenes, version 2
-// File: w11-claude-v2-part2.js  Â·  Scenes: W11O3b, W11O3c, W11O2a, W11O2b
+// OPER621 · Week 11 · The Develop Phase — animated teaching scenes, version 2
+// File: w11-claude-v2-part2.js  ·  Scenes: W11O3b, W11O3c, W11O2a, W11O2b
 // Rebuilt from the narration-to-animation content audit: every narration line
 // maps to one named shot family (benchmark template noted beside each family)
 // whose state shows what that sentence says on Qasr's corporate-rate booking.
@@ -1849,10 +1849,10 @@ function shotScene(cfg) {
 }
 
 // =====================================================================
-// SHOT FAMILY: RULES â€” evaluate the agreement vs. forward an approval
-// Benchmark template: "Workflow AI Animation" (Dribbble 26275497) â€” data
+// SHOT FAMILY: RULES — evaluate the agreement vs. forward an approval
+// Benchmark template: "Workflow AI Animation" (Dribbble 26275497) — data
 // advances through stages; plus "Automated Workflows" (LottieFiles
-// XR2hxXOdEK) â€” trigger, evaluate, complete.
+// XR2hxXOdEK) — trigger, evaluate, complete.
 // =====================================================================
 function F_RULES(p) {
   const f = pfx(p);
@@ -1924,8 +1924,8 @@ function F_RULES(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: QUEUE â€” approval queue, clock, night shift, 06:00 deadline
-// Benchmark template: "Bottling factory" (LottieFiles 53Q3SoGu0x) â€”
+// SHOT FAMILY: QUEUE — approval queue, clock, night shift, 06:00 deadline
+// Benchmark template: "Bottling factory" (LottieFiles 53Q3SoGu0x) —
 // items advance to a station and wait; plus "Process-Para" ring timer.
 // =====================================================================
 function F_QUEUE(p) {
@@ -1991,10 +1991,10 @@ function F_QUEUE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: PIPE â€” approved design passes through concrete
+// SHOT FAMILY: PIPE — approved design passes through concrete
 // deliverables before the Implement door unlocks
 // Benchmark template: "Multi-Step Icon Animation" (LottieFiles
-// uAM7js17jU) â€” activate one step after another; plus "Interactive
+// uAM7js17jU) — activate one step after another; plus "Interactive
 // Computer Assembly Sequence" (CodePen OJqNMVR).
 // =====================================================================
 function F_PIPE(p, ST) {
@@ -2058,9 +2058,9 @@ function F_PIPE(p, ST) {
 }
 
 // =====================================================================
-// SHOT FAMILY: UPGRADE â€” supported settings carry over, a custom
+// SHOT FAMILY: UPGRADE — supported settings carry over, a custom
 // extension breaks when the vendor ships a new version
-// Benchmark template: "Git Workflow 1" (LottieFiles G6eTYjLVJ5) â€”
+// Benchmark template: "Git Workflow 1" (LottieFiles G6eTYjLVJ5) —
 // branch, merge and reconnect; plus "Process - Success" check draw.
 // =====================================================================
 function F_UPGRADE(p) {
@@ -2106,10 +2106,10 @@ function F_UPGRADE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: SPLIT â€” 100 corporate arrivals sort into 71 resolved and
+// SHOT FAMILY: SPLIT — 100 corporate arrivals sort into 71 resolved and
 // 29 on the old approval path (booked within 24 hours)
 // Benchmark template: "Sankey animation - acyclic graph" (Observable
-// @joaormendes) + "Stacked-to-grouped bars" (Observable @d3) â€” units keep
+// @joaormendes) + "Stacked-to-grouped bars" (Observable @d3) — units keep
 // their identity while regrouping.
 // =====================================================================
 function F_SPLIT(p) {
@@ -2159,9 +2159,9 @@ function F_SPLIT(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: LEDGER â€” three options as columns: initial cost bars to
+// SHOT FAMILY: LEDGER — three options as columns: initial cost bars to
 // true scale, then rows of continuing obligations (unknowns stay "?")
-// Benchmark template: "Infographic Chart Creator" (Motion Array 36176) â€”
+// Benchmark template: "Infographic Chart Creator" (Motion Array 36176) —
 // grow columns, update labels; plus "Stacked-to-grouped bars".
 // =====================================================================
 function F_LEDGER(p) {
@@ -2221,11 +2221,11 @@ function F_LEDGER(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: DEV â€” approved design vs. delivered process, red
+// SHOT FAMILY: DEV — approved design vs. delivered process, red
 // difference markers, a deviation record and the business owner's stamp
-// Benchmark template: "contract process" (LottieFiles tnM3xY0cM8) â€”
+// Benchmark template: "contract process" (LottieFiles tnM3xY0cM8) —
 // proposal, agreement and approval states; plus "The Trouble With Food
-// Safety Audits" (NYT) â€” annotated document callouts.
+// Safety Audits" (NYT) — annotated document callouts.
 // =====================================================================
 const DEV_A = [["Booking", "made"], ["Rules", "evaluate"], ["Rate set", "overnight"], ["Guest:", "no wait"]];
 const DEV_HUMAN = [["Booking", "made"], ["Human", "approval"], ["Approval", "queue"], ["Guest", "waits"]];
@@ -2244,7 +2244,7 @@ function F_DEV(p) {
         s += f.K("A" + i, R(x, 34, 86, 48, C.white, 7, `stroke="${C.green}" stroke-width="2"`) + f.TK(`A${i}a`, x + 43, 54, "", 12.5, C.green) + f.TK(`A${i}b`, x + 43, 71, "", 12.5, C.green));
         s += f.H("B" + i, R(x, 124, 86, 48, C.white, 7, `stroke="${C.navy}" stroke-width="2"`) + f.TK(`B${i}a`, x + 43, 144, "", 12.5, C.navy) + f.TK(`B${i}b`, x + 43, 161, "", 12.5, C.navy));
         s += f.H("X" + i, R(x - 2, 122, 90, 52, "none", 8, `stroke="${C.red}" stroke-width="3"`));
-        s += f.H("m" + i, O(x + 43, 103, 11, C.red) + T(x + 43, 108, "â‰ ", 15, C.white));
+        s += f.H("m" + i, O(x + 43, 103, 11, C.red) + T(x + 43, 108, "≠", 15, C.white));
         s += f.H("g" + i, R(x - 3, 31, 92, 54, "none", 9, `stroke="${C.red}" stroke-width="3" stroke-dasharray="5 3"`) + O(x + 80, 36, 9, C.red) + T(x + 80, 41, "!", 13, C.white));
         if (i < 3) s += P(`M${x + 86} 58 h10`, C.green, 2) + f.H("ab" + i, P(`M${x + 86} 148 h10`, C.navy, 2));
       });
@@ -2286,9 +2286,9 @@ function F_DEV(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: CAP â€” one delivery team, a seven-month calendar, the
+// SHOT FAMILY: CAP — one delivery team, a seven-month calendar, the
 // rate-project block and the January regulation (size not quantified)
-// Benchmark template: "Project TimeLine" (Motion Array 2424919) â€”
+// Benchmark template: "Project TimeLine" (Motion Array 2424919) —
 // advance along time markers.
 // =====================================================================
 function F_CAP(p) {
@@ -2328,9 +2328,9 @@ function F_CAP(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: HAND â€” reception hands a booking case to the revenue
+// SHOT FAMILY: HAND — reception hands a booking case to the revenue
 // office; the decision travels back to the employee serving the guest
-// Benchmark template: "Workflow Animation" (Dribbble 3791748) â€” reveal
+// Benchmark template: "Workflow Animation" (Dribbble 3791748) — reveal
 // action, transfer trigger, show notification; plus inspiration-board
 // #10 "The Physical Handoff".
 // =====================================================================
@@ -2380,11 +2380,11 @@ function F_HAND(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: TEST â€” feed realistic cases into the operating process,
+// SHOT FAMILY: TEST — feed realistic cases into the operating process,
 // compare expected vs observed, log and close defects
-// Benchmark template: "Process - Success" (LottieFiles EhFVqZgUPP) â€”
+// Benchmark template: "Process - Success" (LottieFiles EhFVqZgUPP) —
 // activity transforms into a check; plus "Dashboard" (LottieFiles
-// M05MmlnoOP) â€” fill graph, highlight metric.
+// M05MmlnoOP) — fill graph, highlight metric.
 // =====================================================================
 function F_TEST(p) {
   const f = pfx(p);
@@ -2449,10 +2449,10 @@ function F_TEST(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: EXC â€” the normal path, the exception branch, an owner
+// SHOT FAMILY: EXC — the normal path, the exception branch, an owner
 // who investigates the cause, return to normal or removal of needless work
 // Benchmark template: "Celonis Process Explorer animation"
-// (help.celonis.com) â€” variants branching off the happy path; plus "Git
+// (help.celonis.com) — variants branching off the happy path; plus "Git
 // Workflow 1" branch-and-merge.
 // =====================================================================
 function F_EXC(p) {
@@ -2510,10 +2510,10 @@ function F_EXC(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: ROUTES â€” buy, configure, extend, build as four product
+// SHOT FAMILY: ROUTES — buy, configure, extend, build as four product
 // cards whose illustrations change state (Flip-style)
 // Benchmark template: "Product Workflow Animation & UI Motion Design"
-// (Dribbble 27577799) â€” shift between product states.
+// (Dribbble 27577799) — shift between product states.
 // =====================================================================
 function F_ROUTES(p) {
   const f = pfx(p);
@@ -2571,10 +2571,10 @@ function F_ROUTES(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: TIERS â€” core, supporting and management processes and the
+// SHOT FAMILY: TIERS — core, supporting and management processes and the
 // development route each one tends to deserve
 // Benchmark template: "Animated treemap" (Observable @d3/animated-treemap)
-// â€” areas keep identity while emphasis changes.
+// — areas keep identity while emphasis changes.
 // =====================================================================
 function F_TIERS(p) {
   const f = pfx(p);
@@ -2604,9 +2604,9 @@ function F_TIERS(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: PHASE â€” the ten-phase BPM framework, Develop is phase 7
+// SHOT FAMILY: PHASE — the ten-phase BPM framework, Develop is phase 7
 // Benchmark template: "Corporate Timeline by HenlyFx" (Motion Array
-// 1939632) â€” reveal events one by one.
+// 1939632) — reveal events one by one.
 // =====================================================================
 function F_PHASE(p) {
   const f = pfx(p);
@@ -2643,7 +2643,7 @@ function F_PHASE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: DASH â€” exception evidence and monitoring after go-live
+// SHOT FAMILY: DASH — exception evidence and monitoring after go-live
 // Benchmark template: "Animated line chart lesson" (Observable
 // @d3/learn-d3-animation) + "Infographics Dashboard" (LottieFiles).
 // =====================================================================
@@ -2677,9 +2677,9 @@ function F_DASH(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: CHECK â€” a card whose items are confirmed one by one
+// SHOT FAMILY: CHECK — a card whose items are confirmed one by one
 // Benchmark template: "Infographics Pack by ARstudio" (Motion Array
-// 135055) â€” reveal list primitives and callouts.
+// 135055) — reveal list primitives and callouts.
 // =====================================================================
 function F_CHECK(p) {
   const f = pfx(p);
@@ -2722,8 +2722,8 @@ function F_CHECK(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: COMPARE â€” the same frame, two states side by side
-// Benchmark template: "The Pinned Before-and-After" â€” The Pudding,
+// SHOT FAMILY: COMPARE — the same frame, two states side by side
+// Benchmark template: "The Pinned Before-and-After" — The Pudding,
 // Responsive Scrollytelling (pudding.cool/process/responsive-scrollytelling).
 // =====================================================================
 function F_COMPARE(p) {
@@ -2755,10 +2755,10 @@ function F_COMPARE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: GOV â€” a business rule, its named owner and the authorised
+// SHOT FAMILY: GOV — a business rule, its named owner and the authorised
 // change route; informal edits are blocked
 // Benchmark template: "Hierarchy traversal animated" (Observable
-// @d3/hierarchy-traversal-animated) â€” visit one node then the next.
+// @d3/hierarchy-traversal-animated) — visit one node then the next.
 // =====================================================================
 function F_GOV(p) {
   const f = pfx(p);
@@ -2791,10 +2791,10 @@ function F_GOV(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: STACK â€” isometric exploded capability stack: a paper
+// SHOT FAMILY: STACK — isometric exploded capability stack: a paper
 // design gains interfaces, rules, procedures, exception path, test evidence
 // Benchmark template: "The Process Architectural Motion" (Behance
-// 194096661) â€” build and revise successive layers; plus inspiration-board
+// 194096661) — build and revise successive layers; plus inspiration-board
 // #26 "Exploded process mechanism".
 // =====================================================================
 function F_STACK(p) {
@@ -2843,11 +2843,11 @@ function F_STACK(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: KIT â€” Develop packs a handover kit; the case latches and
+// SHOT FAMILY: KIT — Develop packs a handover kit; the case latches and
 // crosses into Implement toward 14 properties
 // Benchmark template: "Creative Design Workflow Animation" (Dribbble
-// 27476599) â€” assemble shapes and refine; plus "World map with
-// logistics" (LottieFiles qA3cpn3zMy) â€” trace routes between hubs.
+// 27476599) — assemble shapes and refine; plus "World map with
+// logistics" (LottieFiles qA3cpn3zMy) — trace routes between hubs.
 // =====================================================================
 function F_KIT(p) {
   const f = pfx(p);
@@ -2909,13 +2909,13 @@ function F_KIT(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: FORUM â€” the "Automating the Exception" discussion board
+// SHOT FAMILY: FORUM — the "Automating the Exception" discussion board
 // Benchmark template: "Clean Workflow Visualization with Motion Graphics"
-// (Dribbble 27600376) â€” connect journey steps with transitions.
+// (Dribbble 27600376) — connect journey steps with transitions.
 // =====================================================================
 function F_FORUM(p) {
   const f = pfx(p);
-  const ROWS = ["Unfamiliar organisation", "Configure or customise?", "Should the exception remain?", "Jeston, Chapter 19", "Post by mid-week", "Challenge two classmates", "Assessment 4 Â· Week 14"];
+  const ROWS = ["Unfamiliar organisation", "Configure or customise?", "Should the exception remain?", "Jeston, Chapter 19", "Post by mid-week", "Challenge two classmates", "Assessment 4 · Week 14"];
   const ic = (r, x, y) => [
     R(x - 9, y - 12, 18, 20, C.slate, 2) + R(x - 5, y - 8, 4, 4, C.white) + R(x + 1, y - 8, 4, 4, C.white) + R(x - 5, y - 1, 4, 4, C.white) + R(x + 1, y - 1, 4, 4, C.white),
     R(x - 12, y - 8, 24, 14, "#c9d6e6", 7) + O(x + 5, y - 1, 6, C.navy),
@@ -2946,7 +2946,7 @@ const Q4b = (a, b, c) => [1, 2, 3, 4].map((y) => ["Year " + y, a, b, c]);
 const TIME = ["Time", "3 weeks", "6 weeks", "4 months"];
 
 // =====================================================================
-// W11O3b Â· Three options, three different futures (28 lines)
+// W11O3b · Three options, three different futures (28 lines)
 // Shots: LEDGER, RULES, UPGRADE, QUEUE, SPLIT, DEV, CHECK, CAP
 // =====================================================================
 {
@@ -2956,7 +2956,7 @@ const TIME = ["Time", "3 weeks", "6 weeks", "4 months"];
     ["rules", { fw: 1, fok: 1, env: "rev", xc: 1, nr: { t: "Routes, can't evaluate", c: "R" } }, "Routes, can't evaluate"],
     ["ledger", { bars: 1, rows: [TIME, ["Fit", "71% covered", "Manual", "Full design"]] }, "Cost, speed, fit"],
     ["ledger", { rows: [["Receives", "Rate lookup", "Night queue", "Auto rules"]], nb: { t: "Not just quotations", c: "N" } }, "What Qasr receives"],
-    ["upgrade", { cfg: 1, tg: 1, np: { t: "AED 180,000 Â· 6 weeks", c: "N" }, na: { t: "No custom code", c: "G" } }, "Configure: AED 180,000"],
+    ["upgrade", { cfg: 1, tg: 1, np: { t: "AED 180,000 · 6 weeks", c: "N" }, na: { t: "No custom code", c: "G" } }, "Configure: AED 180,000"],
     ["queue", { night: 1, n: 6, d: 3, clk: { t: "Overnight work", c: "P" } }, "Revenue office overnight"],
     ["queue", { night: 1, n: 6, d: 6, min: 0, g: "ok", clk: { t: "All done by 06:00", c: "G" } }, "Done before 06:00"],
     ["queue", { night: 1, n: 6, d: 6, st: 3, cal: 1, nt: { t: "Human approval, every arrival", c: "P" } }, "Two extra shifts"],
@@ -2990,7 +2990,7 @@ const TIME = ["Time", "3 weeks", "6 weeks", "4 months"];
 }
 
 // =====================================================================
-// W11O3c Â· The four-year decision (29 lines)
+// W11O3c · The four-year decision (29 lines)
 // Shots: LEDGER, DEV, QUEUE, RULES, UPGRADE, SPLIT, CAP, TIERS, COMPARE, CHECK
 // =====================================================================
 {
@@ -3037,7 +3037,7 @@ const TIME = ["Time", "3 weeks", "6 weeks", "4 months"];
 }
 
 // =====================================================================
-// W11O2a Â· What happens when the normal path fails? (29 lines)
+// W11O2a · What happens when the normal path fails? (29 lines)
 // Shots: SPLIT, EXC, HAND, QUEUE, DASH, CHECK, PHASE, TEST
 // =====================================================================
 {
@@ -3082,7 +3082,7 @@ const TIME = ["Time", "3 weeks", "6 weeks", "4 months"];
 }
 
 // =====================================================================
-// W11O2b Â· Testing the cases nobody wants to demonstrate (28 lines)
+// W11O2b · Testing the cases nobody wants to demonstrate (28 lines)
 // Shots: CHECK, TEST, SPLIT, QUEUE, HAND, PHASE
 // =====================================================================
 {
@@ -3130,8 +3130,8 @@ const TIME = ["Time", "3 weeks", "6 weeks", "4 months"];
 addStyles(SCENE_BG);
 })();
 
-// OPER621 Â· Week 11 Â· The Develop Phase â€” animated teaching scenes, version 2
-// File: w11-claude-v2-part3.js  Â·  Scenes: W11O2c, W11O3d, W11O3e, W11O3f
+// OPER621 · Week 11 · The Develop Phase — animated teaching scenes, version 2
+// File: w11-claude-v2-part3.js  ·  Scenes: W11O2c, W11O3d, W11O3e, W11O3f
 // Rebuilt from the narration-to-animation content audit: every narration line
 // maps to one named shot family (benchmark template noted beside each family)
 // whose state shows what that sentence says on Qasr's corporate-rate booking.
@@ -3412,10 +3412,10 @@ function shotScene(cfg) {
 }
 
 // =====================================================================
-// SHOT FAMILY: RULES â€” evaluate the agreement vs. forward an approval
-// Benchmark template: "Workflow AI Animation" (Dribbble 26275497) â€” data
+// SHOT FAMILY: RULES — evaluate the agreement vs. forward an approval
+// Benchmark template: "Workflow AI Animation" (Dribbble 26275497) — data
 // advances through stages; plus "Automated Workflows" (LottieFiles
-// XR2hxXOdEK) â€” trigger, evaluate, complete.
+// XR2hxXOdEK) — trigger, evaluate, complete.
 // =====================================================================
 function F_RULES(p) {
   const f = pfx(p);
@@ -3487,8 +3487,8 @@ function F_RULES(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: QUEUE â€” approval queue, clock, night shift, 06:00 deadline
-// Benchmark template: "Bottling factory" (LottieFiles 53Q3SoGu0x) â€”
+// SHOT FAMILY: QUEUE — approval queue, clock, night shift, 06:00 deadline
+// Benchmark template: "Bottling factory" (LottieFiles 53Q3SoGu0x) —
 // items advance to a station and wait; plus "Process-Para" ring timer.
 // =====================================================================
 function F_QUEUE(p) {
@@ -3554,10 +3554,10 @@ function F_QUEUE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: PIPE â€” approved design passes through concrete
+// SHOT FAMILY: PIPE — approved design passes through concrete
 // deliverables before the Implement door unlocks
 // Benchmark template: "Multi-Step Icon Animation" (LottieFiles
-// uAM7js17jU) â€” activate one step after another; plus "Interactive
+// uAM7js17jU) — activate one step after another; plus "Interactive
 // Computer Assembly Sequence" (CodePen OJqNMVR).
 // =====================================================================
 function F_PIPE(p, ST) {
@@ -3621,9 +3621,9 @@ function F_PIPE(p, ST) {
 }
 
 // =====================================================================
-// SHOT FAMILY: UPGRADE â€” supported settings carry over, a custom
+// SHOT FAMILY: UPGRADE — supported settings carry over, a custom
 // extension breaks when the vendor ships a new version
-// Benchmark template: "Git Workflow 1" (LottieFiles G6eTYjLVJ5) â€”
+// Benchmark template: "Git Workflow 1" (LottieFiles G6eTYjLVJ5) —
 // branch, merge and reconnect; plus "Process - Success" check draw.
 // =====================================================================
 function F_UPGRADE(p) {
@@ -3669,10 +3669,10 @@ function F_UPGRADE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: SPLIT â€” 100 corporate arrivals sort into 71 resolved and
+// SHOT FAMILY: SPLIT — 100 corporate arrivals sort into 71 resolved and
 // 29 on the old approval path (booked within 24 hours)
 // Benchmark template: "Sankey animation - acyclic graph" (Observable
-// @joaormendes) + "Stacked-to-grouped bars" (Observable @d3) â€” units keep
+// @joaormendes) + "Stacked-to-grouped bars" (Observable @d3) — units keep
 // their identity while regrouping.
 // =====================================================================
 function F_SPLIT(p) {
@@ -3722,9 +3722,9 @@ function F_SPLIT(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: LEDGER â€” three options as columns: initial cost bars to
+// SHOT FAMILY: LEDGER — three options as columns: initial cost bars to
 // true scale, then rows of continuing obligations (unknowns stay "?")
-// Benchmark template: "Infographic Chart Creator" (Motion Array 36176) â€”
+// Benchmark template: "Infographic Chart Creator" (Motion Array 36176) —
 // grow columns, update labels; plus "Stacked-to-grouped bars".
 // =====================================================================
 function F_LEDGER(p) {
@@ -3784,11 +3784,11 @@ function F_LEDGER(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: DEV â€” approved design vs. delivered process, red
+// SHOT FAMILY: DEV — approved design vs. delivered process, red
 // difference markers, a deviation record and the business owner's stamp
-// Benchmark template: "contract process" (LottieFiles tnM3xY0cM8) â€”
+// Benchmark template: "contract process" (LottieFiles tnM3xY0cM8) —
 // proposal, agreement and approval states; plus "The Trouble With Food
-// Safety Audits" (NYT) â€” annotated document callouts.
+// Safety Audits" (NYT) — annotated document callouts.
 // =====================================================================
 const DEV_A = [["Booking", "made"], ["Rules", "evaluate"], ["Rate set", "overnight"], ["Guest:", "no wait"]];
 const DEV_HUMAN = [["Booking", "made"], ["Human", "approval"], ["Approval", "queue"], ["Guest", "waits"]];
@@ -3807,7 +3807,7 @@ function F_DEV(p) {
         s += f.K("A" + i, R(x, 34, 86, 48, C.white, 7, `stroke="${C.green}" stroke-width="2"`) + f.TK(`A${i}a`, x + 43, 54, "", 12.5, C.green) + f.TK(`A${i}b`, x + 43, 71, "", 12.5, C.green));
         s += f.H("B" + i, R(x, 124, 86, 48, C.white, 7, `stroke="${C.navy}" stroke-width="2"`) + f.TK(`B${i}a`, x + 43, 144, "", 12.5, C.navy) + f.TK(`B${i}b`, x + 43, 161, "", 12.5, C.navy));
         s += f.H("X" + i, R(x - 2, 122, 90, 52, "none", 8, `stroke="${C.red}" stroke-width="3"`));
-        s += f.H("m" + i, O(x + 43, 103, 11, C.red) + T(x + 43, 108, "â‰ ", 15, C.white));
+        s += f.H("m" + i, O(x + 43, 103, 11, C.red) + T(x + 43, 108, "≠", 15, C.white));
         s += f.H("g" + i, R(x - 3, 31, 92, 54, "none", 9, `stroke="${C.red}" stroke-width="3" stroke-dasharray="5 3"`) + O(x + 80, 36, 9, C.red) + T(x + 80, 41, "!", 13, C.white));
         if (i < 3) s += P(`M${x + 86} 58 h10`, C.green, 2) + f.H("ab" + i, P(`M${x + 86} 148 h10`, C.navy, 2));
       });
@@ -3849,9 +3849,9 @@ function F_DEV(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: CAP â€” one delivery team, a seven-month calendar, the
+// SHOT FAMILY: CAP — one delivery team, a seven-month calendar, the
 // rate-project block and the January regulation (size not quantified)
-// Benchmark template: "Project TimeLine" (Motion Array 2424919) â€”
+// Benchmark template: "Project TimeLine" (Motion Array 2424919) —
 // advance along time markers.
 // =====================================================================
 function F_CAP(p) {
@@ -3891,9 +3891,9 @@ function F_CAP(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: HAND â€” reception hands a booking case to the revenue
+// SHOT FAMILY: HAND — reception hands a booking case to the revenue
 // office; the decision travels back to the employee serving the guest
-// Benchmark template: "Workflow Animation" (Dribbble 3791748) â€” reveal
+// Benchmark template: "Workflow Animation" (Dribbble 3791748) — reveal
 // action, transfer trigger, show notification; plus inspiration-board
 // #10 "The Physical Handoff".
 // =====================================================================
@@ -3943,11 +3943,11 @@ function F_HAND(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: TEST â€” feed realistic cases into the operating process,
+// SHOT FAMILY: TEST — feed realistic cases into the operating process,
 // compare expected vs observed, log and close defects
-// Benchmark template: "Process - Success" (LottieFiles EhFVqZgUPP) â€”
+// Benchmark template: "Process - Success" (LottieFiles EhFVqZgUPP) —
 // activity transforms into a check; plus "Dashboard" (LottieFiles
-// M05MmlnoOP) â€” fill graph, highlight metric.
+// M05MmlnoOP) — fill graph, highlight metric.
 // =====================================================================
 function F_TEST(p) {
   const f = pfx(p);
@@ -4012,10 +4012,10 @@ function F_TEST(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: EXC â€” the normal path, the exception branch, an owner
+// SHOT FAMILY: EXC — the normal path, the exception branch, an owner
 // who investigates the cause, return to normal or removal of needless work
 // Benchmark template: "Celonis Process Explorer animation"
-// (help.celonis.com) â€” variants branching off the happy path; plus "Git
+// (help.celonis.com) — variants branching off the happy path; plus "Git
 // Workflow 1" branch-and-merge.
 // =====================================================================
 function F_EXC(p) {
@@ -4073,10 +4073,10 @@ function F_EXC(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: ROUTES â€” buy, configure, extend, build as four product
+// SHOT FAMILY: ROUTES — buy, configure, extend, build as four product
 // cards whose illustrations change state (Flip-style)
 // Benchmark template: "Product Workflow Animation & UI Motion Design"
-// (Dribbble 27577799) â€” shift between product states.
+// (Dribbble 27577799) — shift between product states.
 // =====================================================================
 function F_ROUTES(p) {
   const f = pfx(p);
@@ -4134,10 +4134,10 @@ function F_ROUTES(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: TIERS â€” core, supporting and management processes and the
+// SHOT FAMILY: TIERS — core, supporting and management processes and the
 // development route each one tends to deserve
 // Benchmark template: "Animated treemap" (Observable @d3/animated-treemap)
-// â€” areas keep identity while emphasis changes.
+// — areas keep identity while emphasis changes.
 // =====================================================================
 function F_TIERS(p) {
   const f = pfx(p);
@@ -4167,9 +4167,9 @@ function F_TIERS(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: PHASE â€” the ten-phase BPM framework, Develop is phase 7
+// SHOT FAMILY: PHASE — the ten-phase BPM framework, Develop is phase 7
 // Benchmark template: "Corporate Timeline by HenlyFx" (Motion Array
-// 1939632) â€” reveal events one by one.
+// 1939632) — reveal events one by one.
 // =====================================================================
 function F_PHASE(p) {
   const f = pfx(p);
@@ -4206,7 +4206,7 @@ function F_PHASE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: DASH â€” exception evidence and monitoring after go-live
+// SHOT FAMILY: DASH — exception evidence and monitoring after go-live
 // Benchmark template: "Animated line chart lesson" (Observable
 // @d3/learn-d3-animation) + "Infographics Dashboard" (LottieFiles).
 // =====================================================================
@@ -4240,9 +4240,9 @@ function F_DASH(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: CHECK â€” a card whose items are confirmed one by one
+// SHOT FAMILY: CHECK — a card whose items are confirmed one by one
 // Benchmark template: "Infographics Pack by ARstudio" (Motion Array
-// 135055) â€” reveal list primitives and callouts.
+// 135055) — reveal list primitives and callouts.
 // =====================================================================
 function F_CHECK(p) {
   const f = pfx(p);
@@ -4285,8 +4285,8 @@ function F_CHECK(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: COMPARE â€” the same frame, two states side by side
-// Benchmark template: "The Pinned Before-and-After" â€” The Pudding,
+// SHOT FAMILY: COMPARE — the same frame, two states side by side
+// Benchmark template: "The Pinned Before-and-After" — The Pudding,
 // Responsive Scrollytelling (pudding.cool/process/responsive-scrollytelling).
 // =====================================================================
 function F_COMPARE(p) {
@@ -4318,10 +4318,10 @@ function F_COMPARE(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: GOV â€” a business rule, its named owner and the authorised
+// SHOT FAMILY: GOV — a business rule, its named owner and the authorised
 // change route; informal edits are blocked
 // Benchmark template: "Hierarchy traversal animated" (Observable
-// @d3/hierarchy-traversal-animated) â€” visit one node then the next.
+// @d3/hierarchy-traversal-animated) — visit one node then the next.
 // =====================================================================
 function F_GOV(p) {
   const f = pfx(p);
@@ -4354,10 +4354,10 @@ function F_GOV(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: STACK â€” isometric exploded capability stack: a paper
+// SHOT FAMILY: STACK — isometric exploded capability stack: a paper
 // design gains interfaces, rules, procedures, exception path, test evidence
 // Benchmark template: "The Process Architectural Motion" (Behance
-// 194096661) â€” build and revise successive layers; plus inspiration-board
+// 194096661) — build and revise successive layers; plus inspiration-board
 // #26 "Exploded process mechanism".
 // =====================================================================
 function F_STACK(p) {
@@ -4406,11 +4406,11 @@ function F_STACK(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: KIT â€” Develop packs a handover kit; the case latches and
+// SHOT FAMILY: KIT — Develop packs a handover kit; the case latches and
 // crosses into Implement toward 14 properties
 // Benchmark template: "Creative Design Workflow Animation" (Dribbble
-// 27476599) â€” assemble shapes and refine; plus "World map with
-// logistics" (LottieFiles qA3cpn3zMy) â€” trace routes between hubs.
+// 27476599) — assemble shapes and refine; plus "World map with
+// logistics" (LottieFiles qA3cpn3zMy) — trace routes between hubs.
 // =====================================================================
 function F_KIT(p) {
   const f = pfx(p);
@@ -4472,13 +4472,13 @@ function F_KIT(p) {
 }
 
 // =====================================================================
-// SHOT FAMILY: FORUM â€” the "Automating the Exception" discussion board
+// SHOT FAMILY: FORUM — the "Automating the Exception" discussion board
 // Benchmark template: "Clean Workflow Visualization with Motion Graphics"
-// (Dribbble 27600376) â€” connect journey steps with transitions.
+// (Dribbble 27600376) — connect journey steps with transitions.
 // =====================================================================
 function F_FORUM(p) {
   const f = pfx(p);
-  const ROWS = ["Unfamiliar organisation", "Configure or customise?", "Should the exception remain?", "Jeston, Chapter 19", "Post by mid-week", "Challenge two classmates", "Assessment 4 Â· Week 14"];
+  const ROWS = ["Unfamiliar organisation", "Configure or customise?", "Should the exception remain?", "Jeston, Chapter 19", "Post by mid-week", "Challenge two classmates", "Assessment 4 · Week 14"];
   const ic = (r, x, y) => [
     R(x - 9, y - 12, 18, 20, C.slate, 2) + R(x - 5, y - 8, 4, 4, C.white) + R(x + 1, y - 8, 4, 4, C.white) + R(x - 5, y - 1, 4, 4, C.white) + R(x + 1, y - 1, 4, 4, C.white),
     R(x - 12, y - 8, 24, 14, "#c9d6e6", 7) + O(x + 5, y - 1, 6, C.navy),
@@ -4519,7 +4519,7 @@ const ST_MAN = [
   { ic: "sup", l: ["Support", "route"], col: C.plum }];
 
 // =====================================================================
-// W11O2c Â· The manual half of the new process (30 lines)
+// W11O2c · The manual half of the new process (30 lines)
 // Shots: HAND, CHECK, EXC, RULES, PHASE, GOV, COMPARE, PIPE, LEDGER
 // =====================================================================
 {
@@ -4565,7 +4565,7 @@ const ST_MAN = [
 }
 
 // =====================================================================
-// W11O3d Â· The cost of changing the process â€” and of not changing it (28)
+// W11O3d · The cost of changing the process — and of not changing it (28)
 // Shots: LEDGER, CHECK, UPGRADE, QUEUE, RULES, SPLIT, DEV, COMPARE
 // =====================================================================
 {
@@ -4611,7 +4611,7 @@ const ST_MAN = [
 }
 
 // =====================================================================
-// W11O3e Â· Defending Qasr's build decision (28 lines)
+// W11O3e · Defending Qasr's build decision (28 lines)
 // Shots: CHECK, DEV, QUEUE, RULES, LEDGER, UPGRADE, SPLIT, CAP, KIT
 // =====================================================================
 {
@@ -4624,11 +4624,11 @@ const ST_MAN = [
     ["rules", { night: 1, tok: "out", nt: { t: "Settled before arrival", c: "G" } }, "Resolved before arrival"],
     ["rules", { xc: 1, tok: "dia", nt: { t: "Capability gap", c: "R" } }, "The capability gap"],
     ["ledger", { rows: [["Means", "New process", "Settings", "Add-on"]], nb: { t: "Three possible responses", c: "N" } }, "Three responses"],
-    ["upgrade", { cfg: 1, tg: 1, np: { t: "AED 180,000 Â· 6 weeks", c: "N" }, na: { t: "No custom code", c: "G" } }, "Configure: AED 180,000"],
+    ["upgrade", { cfg: 1, tg: 1, np: { t: "AED 180,000 · 6 weeks", c: "N" }, na: { t: "No custom code", c: "G" } }, "Configure: AED 180,000"],
     ["queue", { night: 1, n: 6, d: 3, st: 3, cal: 1 }, "Two extra shifts"],
     ["queue", { night: 1, n: 6, d: 6, st: 3, min: 0, clk: { t: "Cleared by 06:00", c: "G" }, nt: { t: "Still not automatic", c: "O" } }, "Only if cleared"],
     ["dev", { b: 1, B: DEV_CONFIG, ch: [1, 2], own: 1, st: "q", log: ["Manual approval stays", "Acceptable departure?"] }, "Acceptable departure?"],
-    ["rules", { gear: 1, tok: "out", nl: { t: "AED 540,000 Â· 4 months", c: "A" } }, "Extend: AED 540,000"],
+    ["rules", { gear: 1, tok: "out", nl: { t: "AED 540,000 · 4 months", c: "A" } }, "Extend: AED 540,000"],
     ["queue", { n: 4, d: 4, calX: 1, g: "ok", clk: { t: "Matches the design", c: "G" } }, "No wait, no shifts"],
     ["upgrade", { ext: 1, lt: 1, up: 1, ext2: 1 }, "Upgrade exposure"],
     ["upgrade", { ext: 1, up: 1, ext2: 1, tk: 1 }, "Cost unquantified"],
@@ -4655,7 +4655,7 @@ const ST_MAN = [
 }
 
 // =====================================================================
-// W11O3f Â· From Develop to Implement â€” and your forum (30 lines)
+// W11O3f · From Develop to Implement — and your forum (30 lines)
 // Shots: PIPE, KIT, EXC, HAND, COMPARE, FORUM
 // =====================================================================
 {
@@ -4695,7 +4695,7 @@ const ST_MAN = [
   ];
   VL_SCENES[id] = shotScene({
     id, bg: "#eef2f4", plan,
-    desc: "Develop packs a handover kit â€” systems, rules, interfaces, procedures, an exception catalogue, a tested handover, rule owners, change control and support â€” closes it, carries test evidence into Implement toward fourteen properties, and introduces the Automating the Exception forum.",
+    desc: "Develop packs a handover kit — systems, rules, interfaces, procedures, an exception catalogue, a tested handover, rule owners, change control and support — closes it, carries test evidence into Implement toward fourteen properties, and introduces the Automating the Exception forum.",
     shots: { pipe: F_PIPE("pp_", ST_KIT), kit: F_KIT("kt_"), exc: F_EXC("ex_"), hand: F_HAND("ha_"), compare: F_COMPARE("cp_"), forum: F_FORUM("fo_") }
   });
   SCENE_BG.push([id, "#eef2f4"]);
