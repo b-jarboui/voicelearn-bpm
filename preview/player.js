@@ -10,7 +10,8 @@
   const LOS = Object.keys(A.outcomes), SECS = Object.keys(A.sections), CLOS = Object.keys(A.clos);
   const allQ = {}; A.bank.forEach((q) => (allQ[q.id] = q));
   let FAST = false; // QA only: switched on from the console with __vl.fast(true); never from the URL, never saved
-  const lessonSecs = (l) => C.lessons[l].sections.map((s) => s.sec).filter(Boolean);
+  // Only assessed parts: an intro/outro may carry a scene id (e.g. W1INTRO) that has no questions and no outcome.
+  const lessonSecs = (l) => C.lessons[l].sections.map((s) => s.sec).filter((s) => s && A.sections[s]);
   const plain = (s) => String(s).replace(/\|/g, " ");
   const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
   const smooth = () => (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
@@ -27,7 +28,7 @@
   const WK = window.WEEK || 1; // progress and history are stored per week
   const KEY = `voicelearn.oper621.w${WK}.v1`;
   // Each part is followed by its own short check; the lesson result then judges all of them together.
-  const lessonPlan = (l) => C.lessons[l].sections.flatMap((x, s) => x.sec ? [{ kind: "sec", l, s }, { kind: "quiz", l, round: 0, qs: null, sec: x.sec }] : [{ kind: "sec", l, s }]).concat([{ kind: "result", l, round: 0 }]);
+  const lessonPlan = (l) => C.lessons[l].sections.flatMap((x, s) => x.sec && A.sections[x.sec] ? [{ kind: "sec", l, s }, { kind: "quiz", l, round: 0, qs: null, sec: x.sec }] : [{ kind: "sec", l, s }]).concat([{ kind: "result", l, round: 0 }]);
   const fresh = () => ({ seed: Math.random().toString(36).slice(2), queue: lessonPlan(0), idx: 0, part: "main", sent: 0, q: 0, used: {}, hist: [], rounds: {}, lessons: {}, flags: {}, rev: {} });
   let P;
   try { P = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
@@ -657,7 +658,7 @@
       P.lessons[id] = { first: prev.first ?? score, rounds: st.round + 1, passed: st.verdict === "pass", flagged: flagged.length > 0 };
       save();
     }
-    const names = (a) => a.map((s) => A.sections[s].name.toLowerCase());
+    const names = (a) => a.filter((s) => A.sections[s]).map((s) => A.sections[s].name.toLowerCase());
     const join = (a) => a.length > 1 ? a.slice(0, -1).join(", ") + " and " + a[a.length - 1] : a[0] || "";
     const say = [`You answered ${c} out of ${n}. That is ${pct(score)} percent.`];
     if(st.verdict === "deferred")say.push("Some questions are saved for later. They are not counted as wrong. Return to them from Home before completing this week.");
