@@ -1,6 +1,6 @@
 // FILE: w14-claude-v2-part1.js
-// OPER621 Â· Business Process Management Â· Week 14 Â· The Sustainable Performance Phase
-// Animated teaching scenes â€” Claude v2 rebuild â€” PART 1 of 4 â€” sections: W14O2b, W14O1d, W14O2c
+// OPER621 · Business Process Management · Week 14 · The Sustainable Performance Phase
+// Animated teaching scenes — Claude v2 rebuild — PART 1 of 4 — sections: W14O2b, W14O1d, W14O2c
 // Lowest audit scores first: W14O2b (1.9), W14O1d (2.0), W14O2c (2.1) (GPT-6 content audit).
 //
 // CONTRACT (unchanged): window.VL_SCENES = window.VL_SCENES || {};
@@ -501,7 +501,7 @@
   }
 
   /* ==================================================================
-     W14O2b Â· NOBODY DID ANYTHING WRONG  (audit 1.9/10 -> rebuilt first)
+     W14O2b · NOBODY DID ANYTHING WRONG  (audit 1.9/10 -> rebuilt first)
      25 narration lines -> 10 visuals. Every line states one literal idea:
      the four documented changes are separate stations, their effect is ONE
      combined +13 band (never split), +2 stays unexplained, controls are kept.
@@ -509,7 +509,7 @@
   (function () {
     var P = [];
 
-    /* V1 Â· lines 0-2 â€” three weaknesses -> diligent staff -> blame vs system
+    /* V1 · lines 0-2 — three weaknesses -> diligent staff -> blame vs system
        Template: https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 (people appear one by one)
        + https://dribbble.com/shots/26275497-Workflow-AI-Animation (inputs feeding one stage) */
     P.push({
@@ -543,7 +543,7 @@
       }
     });
 
-    /* V2 Â· lines 3-6 â€” documented arrival evidence drawn left to right, +15, sustained
+    /* V2 · lines 3-6 — documented arrival evidence drawn left to right, +15, sustained
        Template: https://observablehq.com/@d3/learn-d3-animation (time series drawn progressively) */
     function X(m) { return 60 + m / 22 * 260; }
     function Y(v) { return 230 - (v - 20) / 22 * 160; }
@@ -571,7 +571,7 @@
       }
     });
 
-    /* V3 Â· lines 7-8 â€” the passport station drops into the guest route; it is a compliance control
+    /* V3 · lines 7-8 — the passport station drops into the guest route; it is a compliance control
        Template: https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8 (proposal -> agreement states) */
     function road(y, x0, x1) { return rect(x0, y - 7, x1 - x0, 14, "fL", { rx: 7 }) + line(x0 + 8, y, x1 - 8, y, "sM", { "stroke-width": 2, "stroke-dasharray": "8 8" }); }
     P.push({
@@ -589,7 +589,7 @@
       on: function (A) { A.walk(".n-gst", [[24, 170], [318, 170]], 6, { loop: true, rest: 0.25 }); }
     });
 
-    /* V4 Â· lines 9-10 â€” waiver limit counts down 400 -> 150 (kept: audit MATCH); discretion shrinks, time impact unknown
+    /* V4 · lines 9-10 — waiver limit counts down 400 -> 150 (kept: audit MATCH); discretion shrinks, time impact unknown
        Template: https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/ (counter + bar update) */
     P.push({
       svg: function () {
@@ -607,7 +607,7 @@
       }
     });
 
-    /* V5 Â· lines 11-12 â€” a new loyalty interaction; desks reinstated at two of fourteen properties
+    /* V5 · lines 11-12 — a new loyalty interaction; desks reinstated at two of fourteen properties
        Template: https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy (network of sites, two highlighted) */
     P.push({
       svg: function () {
@@ -627,7 +627,7 @@
       }
     });
 
-    /* V6 Â· lines 13-14 â€” four locally approved stations; their effect is ONE +13 band (+2 unexplained) â€” kept MATCH
+    /* V6 · lines 13-14 — four locally approved stations; their effect is ONE +13 band (+2 unexplained) — kept MATCH
        Template: https://observablehq.com/@d3/stacked-to-grouped-bars (separate items regrouped into one stack) */
     P.push({
       svg: function () {
@@ -646,7 +646,7 @@
       on: function (A) { A.cls(".cardsG", "dim", A.k >= 1); }
     });
 
-    /* V7 Â· lines 15-16 â€” four decision lanes, each locally optimised; the guest crosses every boundary
+    /* V7 · lines 15-16 — four decision lanes, each locally optimised; the guest crosses every boundary
        Template: https://dribbble.com/shots/3791748-Workflow-Animation (handoffs between actors) */
     var V7P = [[20, 79]];
     (function () { for (var i = 0; i < 4; i++) V7P.push([118 + i * 34 + 15, 40 + i * 52 + 33]); V7P.push([238, 40 + 3 * 52 + 33]); })();
@@ -672,7 +672,7 @@
       }
     });
 
-    /* V8 Â· lines 17-18 â€” reasonable then, costly now; keep the control, remove waiting and duplication
+    /* V8 · lines 17-18 — reasonable then, costly now; keep the control, remove waiting and duplication
        Template: https://observablehq.com/@d3/arc-tween (gauge needle moves to a new value) */
     function gauge(cx, cy, n) {
       return path("M" + (cx - 46) + " " + cy + " A46 46 0 0 1 " + cx + " " + (cy - 46), "sG f0", { "stroke-width": 12 }) +
@@ -703,7 +703,7 @@
       }
     });
 
-    /* V9 Â· lines 19-21 â€” owner promoted away; director absorbs it with 13 reports; analyst keeps reporting, nobody discusses
+    /* V9 · lines 19-21 — owner promoted away; director absorbs it with 13 reports; analyst keeps reporting, nobody discusses
        Template: https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer- (illustrated narrative vignettes) */
     P.push({
       svg: function () {
@@ -722,7 +722,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-own", [[96, 222], [180, 222], [252, 222]], 2.2, {}); }
     });
 
-    /* V10 Â· lines 22-24 â€” no deliberate neglect; intentions vs outcomes; next: read, then act
+    /* V10 · lines 22-24 — no deliberate neglect; intentions vs outcomes; next: read, then act
        Template: https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP (activity resolves into a check) */
     P.push({
       svg: function () {
@@ -732,7 +732,7 @@
           noB(230, 236, 10) + TX(300, 238, "Gaps between", 14, "fO") + TX(64, 238, "System parts", 14, "fM");
         var b = card(10, 40, 150, 210, "pg") + card(200, 40, 150, 210, "po") + TX(85, 66, "Good intentions", 15, "fG") + TX(275, 66, "System outcome", 15, "fO");
         for (i = 0; i < 4; i++) b += okB(52 + (i % 2) * 66, 108 + Math.floor(i / 2) * 58, 16);
-        b += TX(275, 150, "39", 52, "fO") + TX(275, 180, "minutes", 16, "fO") + TX(180, 152, "â‰ ", 40, "fN") + TX(85, 230, "All reasonable", 14, "fG") + TX(275, 230, "Not acceptable", 14, "fO");
+        b += TX(275, 150, "39", 52, "fO") + TX(275, 180, "minutes", 16, "fO") + TX(180, 152, "≠", 40, "fN") + TX(85, 230, "All reasonable", 14, "fG") + TX(275, 230, "Not acceptable", 14, "fO");
         var c = card(20, 70, 100, 130, "p") + icon("chart", 70, 110, 1.6) + icon("eye", 70, 168, 1.2) + arrow(130, 135, 196, 135, "sG", 4) +
           card(206, 84, 130, 102, "g") + icon("gavel", 238, 126, 1.2, "fW") + TX(271, 140, "Decide, act", 18, "nh fW") +
           chip(180, 232, "Read, then act", "n", 16);
@@ -747,7 +747,7 @@
         [0, 0, "Three known weaknesses"], [0, 1, "Everyone acts reasonably"], [0, 2, "Blame isn't diagnosis"],
         [1, 0, "Delivered: 24 minutes"], [1, 1, "Month 22: 39"], [1, 2, "Fifteen minutes added"], [1, 3, "Sustained, not isolated"],
         [2, 0, "Passport re-verification added"], [2, 1, "Compliance must stay"],
-        [3, 0, "Waiver: AED 400 â†’ 150"], [3, 1, "Time impact unknown"],
+        [3, 0, "Waiver: AED 400 → 150"], [3, 1, "Time impact unknown"],
         [4, 0, "Loyalty prompt added"], [4, 1, "Desks at two properties"],
         [5, 0, "Combined effect unchecked"], [5, 1, "13 of 15 minutes"],
         [6, 0, "Nobody coordinates boundaries"], [6, 1, "Guest feels everything"],
@@ -759,14 +759,14 @@
   })();
 
   /* ==================================================================
-     W14O1d Â· FROM ONE PROJECT TO A SELF-IMPROVING ORGANISATION  (audit 2.0/10)
+     W14O1d · FROM ONE PROJECT TO A SELF-IMPROVING ORGANISATION  (audit 2.0/10)
      31 lines -> 11 visuals. No tree metaphor: literal capability pictures.
      Qasr is never shown as already mature; every Qasr future is stamped PROPOSED.
      ================================================================== */
   (function () {
     var P = [];
 
-    /* V1 Â· lines 0-2 â€” the journey so far; beyond arrival time; programme after programme vs built-in capability
+    /* V1 · lines 0-2 — the journey so far; beyond arrival time; programme after programme vs built-in capability
        Template: https://motionarray.com/after-effects-templates/project-timeline-2424919/ (marker advancing along milestones) */
     P.push({
       svg: function () {
@@ -787,7 +787,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-tk", [[30, 150], [84, 150], [180, 150], [290, 150]], 3, {}); }
     });
 
-    /* V2 Â· lines 3-5 â€” honest, single-scale evidence bars 82 -> 24 -> 39, then the three documented weaknesses
+    /* V2 · lines 3-5 — honest, single-scale evidence bars 82 -> 24 -> 39, then the three documented weaknesses
        Template: https://motionarray.com/after-effects-templates/infographics-pack-135055/ (bars + callouts) */
     P.push({
       svg: function () {
@@ -800,7 +800,7 @@
       }
     });
 
-    /* V3 Â· lines 6-8 â€” two different achievements; performance as everyday duty; outcome, owner, trigger
+    /* V3 · lines 6-8 — two different achievements; performance as everyday duty; outcome, owner, trigger
        Template: https://lottiefiles.com/free-animation/project-dashboard-PeJUc2p1iB (dashboard rows + people) */
     P.push({
       svg: function () {
@@ -823,7 +823,7 @@
       }
     });
 
-    /* V4 Â· lines 9-10 â€” people change roles; knowledge stays in procedures, measures and decision rights
+    /* V4 · lines 9-10 — people change roles; knowledge stays in procedures, measures and decision rights
        Template: https://www.behance.net/gallery/53752435/Motion-Design-Process (production stages handed on) */
     P.push({
       svg: function () {
@@ -841,7 +841,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-lv", [[100, 196], [200, 196], [304, 196]], 2.6, {}); }
     });
 
-    /* V5 Â· lines 11-14 â€” internal skills; a centre of excellence supplies methods; it is not an approval gate
+    /* V5 · lines 11-14 — internal skills; a centre of excellence supplies methods; it is not an approval gate
        Template: https://old.observablehq.com/@d3/hierarchy-traversal-animated (hub-to-node visits) */
     P.push({
       svg: function () {
@@ -866,7 +866,7 @@
       }
     });
 
-    /* V6 Â· lines 15-16 â€” the maturity ladder; dependable practices outweigh projects and diagrams
+    /* V6 · lines 15-16 — the maturity ladder; dependable practices outweigh projects and diagrams
        Template: https://motionarray.com/after-effects-templates/infographics-v2-556482/ (scaled statistic modules) */
     P.push({
       svg: function () {
@@ -890,7 +890,7 @@
       }
     });
 
-    /* V7 Â· lines 17-18 â€” the test: another process fails; managers diagnose it without a new programme
+    /* V7 · lines 17-18 — the test: another process fails; managers diagnose it without a new programme
        Template: https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK (trigger -> repeated actions -> complete) */
     P.push({
       svg: function () {
@@ -907,7 +907,7 @@
       }
     });
 
-    /* V8 Â· lines 19-22 â€” phase ten is not an endpoint; evidence returns to earlier phases; conditions change; keep controls
+    /* V8 · lines 19-22 — phase ten is not an endpoint; evidence returns to earlier phases; conditions change; keep controls
        Template: https://codepen.io/WebGuyJeff/pen/rNdmqdO (numbered steps with an active state) */
     var PH = [["Organization", "Strategy"], ["Process", "Architecture"], ["Launch Pad"], ["Understand"], ["Innovate"], ["People"], ["Develop"], ["Implement"], ["Realize Value"], ["Sustainable", "Performance"]];
     function tiles(back) {
@@ -938,7 +938,7 @@
       on: function (A) { A.cls(".tilesG", "dim", A.k >= 2); }
     });
 
-    /* V9 Â· lines 23-26 â€” Qasr: PROPOSED ownership; not implemented; investigate adoption and changes; measure, don't announce
+    /* V9 · lines 23-26 — Qasr: PROPOSED ownership; not implemented; investigate adoption and changes; measure, don't announce
        Template: https://motionarray.com/after-effects-templates/corporate-timeline-1939632/ (milestone cards revealed one by one) */
     function stampP(x, y, s, txt, v) { var w = tw(txt, 16 * s) + 24; return G("", rect(x - w / 2, y - s * 16, w, s * 32, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + s * 6, txt, 16 * s, (v === "sG" ? "fG" : "fO") + " nh"), { transform: "rotate(-8 " + x + " " + y + ")" }); }
     P.push({
@@ -964,7 +964,7 @@
     });
     function Y2(v) { return 220 - (v - 20) / 22 * 110; }
 
-    /* V10 Â· lines 27-30 â€” the forum: a different organisation; mechanism, cost, peers; capacity to keep improving; a shared, enduring responsibility
+    /* V10 · lines 27-30 — the forum: a different organisation; mechanism, cost, peers; capacity to keep improving; a shared, enduring responsibility
        Template: https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics (journey cards with transitions) */
     P.push({
       svg: function () {
@@ -1009,7 +1009,7 @@
   })();
 
   /* ==================================================================
-     W14O2c Â· THE DIFFERENCE BETWEEN REPORTING AND MANAGING  (audit 2.1/10)
+     W14O2c · THE DIFFERENCE BETWEEN REPORTING AND MANAGING  (audit 2.1/10)
      27 lines -> 9 visuals: the reporting pipeline that keeps running, the
      empty review chair, the meeting that decides, thresholds, follow-through.
      ================================================================== */
@@ -1017,7 +1017,7 @@
     var P = [];
     function road(y, x0, x1) { return rect(x0, y - 7, x1 - x0, 14, "fL", { rx: 7 }) + line(x0 + 8, y, x1 - 8, y, "sM", { "stroke-width": 2, "stroke-dasharray": "8 8" }); }
 
-    /* V1 Â· lines 0-2 â€” unchecked changes; accurate data, lost gains; a reassuring screen over stalled gears
+    /* V1 · lines 0-2 — unchecked changes; accurate data, lost gains; a reassuring screen over stalled gears
        Template: https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ (dashboard panels transition) */
     P.push({
       svg: function () {
@@ -1036,7 +1036,7 @@
       on: function (A) { if (A.k === 1) A.num(".cv", 39, { from: 24, dur: 2 }); }
     });
 
-    /* V2 Â· lines 3-6 â€” analyst -> operations pack -> page four; last discussed at 28; reported, not prevented (kept MATCH ideas)
+    /* V2 · lines 3-6 — analyst -> operations pack -> page four; last discussed at 28; reported, not prevented (kept MATCH ideas)
        Template: https://lottiefiles.com/free-animation/data-factory-animation-I6dMAfEyrl (inputs fed through a pipeline) */
     function Yc(v) { return 220 - (v - 20) / 22 * 130; }
     P.push({
@@ -1062,7 +1062,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-sh", [[110, 140], [180, 120], [252, 140]], 1.8, { loop: true }); }
     });
 
-    /* V3 Â· lines 7-8 â€” what reporting does vs what managing does; a token follows the managing path through
+    /* V3 · lines 7-8 — what reporting does vs what managing does; a token follows the managing path through
        Template: https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design (state-to-state product flow) */
     P.push({
       svg: function () {
@@ -1080,7 +1080,7 @@
       on: function (A) { if (A.k >= 1) A.walk(".n-mt", [[342, 72], [342, 222], [342, 222]], 2.6, { loop: true }); }
     });
 
-    /* V4 Â· lines 9-10 â€” the thermometer works; nobody adjusts the cooling; measuring isn't fixing
+    /* V4 · lines 9-10 — the thermometer works; nobody adjusts the cooling; measuring isn't fixing
        Template: https://observablehq.com/@d3/transition-end (move, wait, recolour in sequence) */
     P.push({
       svg: function () {
@@ -1097,7 +1097,7 @@
       on: function (A) { A.bar(".merc", "height", A.k === 0 ? 100 : 128, { y0: 216, from: A.fresh ? 64 : undefined, dur: 2.4 }); }
     });
 
-    /* V5 Â· lines 11-14 â€” don't blame the analyst; who reviews? owner promoted, unreplaced; director with 13 reports
+    /* V5 · lines 11-14 — don't blame the analyst; who reviews? owner promoted, unreplaced; director with 13 reports
        Template: https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm (workers and workflow actions revealed) */
     P.push({
       svg: function () {
@@ -1116,7 +1116,7 @@
       on: function (A) { if (A.k === 2) A.walk(".n-ow5", [[110, 214], [200, 214], [290, 214]], 2.2, {}); }
     });
 
-    /* V6 Â· lines 15-18 â€” the agreed monthly meeting; decisions not recitals; three review questions; examine the accumulated changes
+    /* V6 · lines 15-18 — the agreed monthly meeting; decisions not recitals; three review questions; examine the accumulated changes
        Template: https://dribbble.com/shots/27247003-Data-Workflow-Animation (nodes and links activate in sequence) */
     P.push({
       svg: function () {
@@ -1144,7 +1144,7 @@
       }
     });
 
-    /* V7 Â· lines 19-20 â€” ordinary variation vs real deterioration; the boundary agreed beforehand
+    /* V7 · lines 19-20 — ordinary variation vs real deterioration; the boundary agreed beforehand
        Template: https://observablehq.com/@d3/streamgraph-transitions (a band with a series moving through it) */
     P.push({
       svg: function () {
@@ -1163,7 +1163,7 @@
       }
     });
 
-    /* V8 Â· lines 21-22 â€” follow up: check the effect; if still poor, rethink the explanation
+    /* V8 · lines 21-22 — follow up: check the effect; if still poor, rethink the explanation
        Template: https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 (branch, merge, reconnect) */
     P.push({
       svg: function () {
@@ -1178,7 +1178,7 @@
       }
     });
 
-    /* V9 Â· lines 23-26 â€” no giant dashboard; a few measures, discussed; behaviour, not production; next: four signals
+    /* V9 · lines 23-26 — no giant dashboard; a few measures, discussed; behaviour, not production; next: four signals
        Template: https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB (dashboard metric emphasis) */
     P.push({
       svg: function () {
@@ -1223,8 +1223,8 @@
 // END FILE: w14-claude-v2-part1.js
 
 // FILE: w14-claude-v2-part2.js
-// OPER621 Â· Business Process Management Â· Week 14 Â· The Sustainable Performance Phase
-// Animated teaching scenes â€” Claude v2 rebuild â€” PART 2 of 4 â€” sections: W14O1c, W14O3c, W14O3a
+// OPER621 · Business Process Management · Week 14 · The Sustainable Performance Phase
+// Animated teaching scenes — Claude v2 rebuild — PART 2 of 4 — sections: W14O1c, W14O3c, W14O3a
 // Next: W14O1c (2.5), W14O3c (2.5), W14O3a (2.6) (GPT-6 content audit).
 //
 // CONTRACT (unchanged): window.VL_SCENES = window.VL_SCENES || {};
@@ -1725,7 +1725,7 @@
   }
 
   /* ==================================================================
-     W14O1c Â· SETTING THE TRIGGER BEFORE THE TREND TURNS  (audit 2.5/10)
+     W14O1c · SETTING THE TRIGGER BEFORE THE TREND TURNS  (audit 2.5/10)
      27 lines -> 9 visuals. The threshold arithmetic is shown step by step on a
      number line; every Qasr threshold is stamped PROPOSED; triggers start an
      investigation, never an automatic solution.
@@ -1734,7 +1734,7 @@
     var P = [];
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
 
-    /* V1 Â· lines 0-2 â€” four signals; investigate rather than record; without an agreed response, everyone waits
+    /* V1 · lines 0-2 — four signals; investigate rather than record; without an agreed response, everyone waits
        Template: https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP (graph fills, metric highlighted) */
     P.push({
       svg: function () {
@@ -1758,7 +1758,7 @@
       on: function (A) { if (A.k === 2) A.loop(function (t) { var n = A.q(".n-hand"); setT(n, 180, 160, 1, (t * 140) % 360); }); }
     });
 
-    /* V2 Â· lines 3-4 â€” anatomy of a trigger: a measure crosses a pre-agreed boundary; the trip-wire reaches a named owner
+    /* V2 · lines 3-4 — anatomy of a trigger: a measure crosses a pre-agreed boundary; the trip-wire reaches a named owner
        Template: https://lottiefiles.com/free-animation/business-solution-pNyNfkcRsa (control panel + moving parts) */
     P.push({
       svg: function () {
@@ -1774,7 +1774,7 @@
       }
     });
 
-    /* V3 Â· lines 5-8 â€” 24 delivered; PROPOSED 10% rule; 24 + 2.4 = 26.4; 39 is above, so the owner reports (kept MATCH)
+    /* V3 · lines 5-8 — 24 delivered; PROPOSED 10% rule; 24 + 2.4 = 26.4; 39 is above, so the owner reports (kept MATCH)
        Template: https://motionarray.com/after-effects-templates/infographics-elements-789489/ (shapes and data revealed) */
     function NX(v) { return 30 + (v - 20) / 22 * 300; }
     P.push({
@@ -1793,7 +1793,7 @@
       }
     });
 
-    /* V4 Â· lines 9-10 â€” one deterioration, several possible causes: the trigger does not pick the solution; managers choose what to investigate
+    /* V4 · lines 9-10 — one deterioration, several possible causes: the trigger does not pick the solution; managers choose what to investigate
        Template: https://observablehq.com/@d3/animated-quadtree (a region split into candidate cells) */
     P.push({
       svg: function () {
@@ -1810,7 +1810,7 @@
       }
     });
 
-    /* V5 Â· lines 11-14 â€” kiosks carry the design; 65 -> 48 of every 100 guests; PROPOSED 5-point rule -> 60; 48 is far beyond
+    /* V5 · lines 11-14 — kiosks carry the design; 65 -> 48 of every 100 guests; PROPOSED 5-point rule -> 60; 48 is far beyond
        Template: https://motionarray.com/after-effects-templates/infographics-for-everything-2593374/ (full-frame statistic) */
     function KY(v) { return 230 - (v - 40) / 30 * 170; }
     P.push({
@@ -1836,7 +1836,7 @@
       }
     });
 
-    /* V6 Â· lines 15-16 â€” the timing changes with the maths; points, not percent (kept MATCH)
+    /* V6 · lines 15-16 — the timing changes with the maths; points, not percent (kept MATCH)
        Template: https://observablehq.com/@d3/easing-animations (same motion, different timing) */
     P.push({
       svg: function () {
@@ -1848,13 +1848,13 @@
         s += path(d, "sN f0", { "stroke-width": 3 });
         s += line(30, SY(61.75), 330, SY(61.75), "sM", { "stroke-width": 2, "stroke-dasharray": "5 5" }) + line(30, SY(60), 330, SY(60), "sO", { "stroke-width": 2.6, "stroke-dasharray": "5 5" });
         s += R("0-0", "pop", icon("flag", 212, SY(61.75) - 18, 1, "fM") + chip(108, SY(61.75) - 18, "Wrong: 61.75", "pm", 13) + icon("flag", 294, SY(60) - 18, 1) + chip(214, SY(60) + 22, "Right: 60", "o", 13));
-        s += R("1", "pop", card(40, 40, 280, 160, "p") + TX(64, 92, "65 âˆ’ 5 points = 60", 20, "fG s") + okB(304, 84, 12) +
-          TX(64, 150, "65 Ã— 0.95 = 61.75", 20, "fM s") + noB(304, 142, 12) + TX(180, 184, "Not 5% of 65", 14, "fO"));
+        s += R("1", "pop", card(40, 40, 280, 160, "p") + TX(64, 92, "65 − 5 points = 60", 20, "fG s") + okB(304, 84, 12) +
+          TX(64, 150, "65 × 0.95 = 61.75", 20, "fM s") + noB(304, 142, 12) + TX(180, 184, "Not 5% of 65", 14, "fO"));
         return tag("Points, not percent", "pm") + s;
       }
     });
 
-    /* V7 Â· lines 17-20 â€” two more triggers: exceptions above the designed range -> phase 5; unregistered variant -> architecture review; check registration first
+    /* V7 · lines 17-20 — two more triggers: exceptions above the designed range -> phase 5; unregistered variant -> architecture review; check registration first
        Template: https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 (branch appears off the main line) */
     P.push({
       svg: function () {
@@ -1873,7 +1873,7 @@
       }
     });
 
-    /* V8 Â· lines 21-22 â€” useful only with owner, response and check; otherwise the alert sinks into the report pile
+    /* V8 · lines 21-22 — useful only with owner, response and check; otherwise the alert sinks into the report pile
        Template: https://lottiefiles.com/free-animation/3d-isometric-factory-process-TJAlBgYcXw (robotic sequence of stations) */
     P.push({
       svg: function () {
@@ -1892,7 +1892,7 @@
       on: function (A) { if (A.k >= 1) A.walk(".n-al", [[180, 50], [180, 150], [180, 168]], 2, { ease: "out" }); }
     });
 
-    /* V9 Â· lines 23-26 â€” both PROPOSED boundaries exceeded by month 22; proposal, not history; agree while healthy; next: the owner's loop
+    /* V9 · lines 23-26 — both PROPOSED boundaries exceeded by month 22; proposal, not history; agree while healthy; next: the owner's loop
        Template: https://lottiefiles.com/free-animation/deliver-better-optimized-lottie-json-animation-Qgvgddnv8J (dashboard intro, outcome emphasised) */
     P.push({
       svg: function () {
@@ -1900,7 +1900,7 @@
           TX(92, 140, "39", 48, "fO") + TX(92, 170, "boundary 26.4", 14, "fN") + TX(268, 140, "48%", 44, "fO") + TX(268, 170, "boundary 60%", 14, "fN") +
           noB(150, 210, 12) + noB(326, 210, 12) + TX(80, 214, "Boundary crossed", 13, "fO") + TX(256, 214, "Boundary crossed", 13, "fO");
         var b = R("1-1", "stamp", stampW(180, 128, "PROPOSED RULES", "sO", -6)) + R("1-1", "up", chip(180, 254, "Not Qasr history", "o", 14));
-        var c = card(10, 40, 164, 210, "pg") + circ(50, 76, 16, "fD") + TX(92, 76, "Healthy period", 14, "fG s") + TX(92, 132, "24 Â· 65%", 22, "fG") +
+        var c = card(10, 40, 164, 210, "pg") + circ(50, 76, 16, "fD") + TX(92, 76, "Healthy period", 14, "fG s") + TX(92, 132, "24 · 65%", 22, "fG") +
           person(66, 214, 1.1, "G") + person(118, 214, 1.1, "N") + rect(70, 190, 44, 8, "fD", { rx: 4 }) + TX(92, 240, "Agree now", 15, "fG") +
           card(186, 40, 164, 210, "pm") + path("M222 84 a16 16 0 0 1 30 -8 a14 14 0 0 1 26 6 a12 12 0 0 1 -2 24 h-50 a12 12 0 0 1 -4 -22 Z", "fM") +
           TX(268, 132, "Crisis talks", 15, "fM") + person(240, 214, 1.1, "M") + person(296, 214, 1.1, "M") + noB(330, 60, 12) + TX(268, 240, "Negotiate later", 14, "fM");
@@ -1919,7 +1919,7 @@
         [1, 0, "A pre-agreed boundary"], [1, 1, "Evidence meets responsibility"],
         [2, 0, "Delivered: 24 minutes"], [2, 1, "Proposed: 10% rule"], [2, 2, "24 + 2.4 = 26.4"], [2, 3, "Crossed: report it"],
         [3, 0, "No automatic solution"], [3, 1, "Managers choose investigation"],
-        [4, 0, "Kiosks carry the design"], [4, 1, "Adoption 65 â†’ 48"], [4, 2, "Five points below"], [4, 3, "Boundary at 60"],
+        [4, 0, "Kiosks carry the design"], [4, 1, "Adoption 65 → 48"], [4, 2, "Five points below"], [4, 3, "Boundary at 60"],
         [5, 0, "Timing depends on maths"], [5, 1, "Points, not percent"],
         [6, 0, "Two more triggers"], [6, 1, "Revisit phase five"], [6, 2, "Unregistered: architecture review"], [6, 3, "Check registration first"],
         [7, 0, "Owner, response, check"], [7, 1, "Otherwise lost in reports"],
@@ -1929,7 +1929,7 @@
   })();
 
   /* ==================================================================
-     W14O3c Â· THE HANDOVER THAT MAKES ACCOUNTABILITY REAL  (audit 2.5/10)
+     W14O3c · THE HANDOVER THAT MAKES ACCOUNTABILITY REAL  (audit 2.5/10)
      27 lines -> 9 visuals. Literal transfer: programme -> line management,
      named recipient + date, written obligations, authority, defects with
      owners and dates. Qasr's restored owner is stamped PROPOSED throughout.
@@ -1938,7 +1938,7 @@
     var P = [];
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
 
-    /* V1 Â· lines 0-2 â€” changes flow through governed routes; the programme team leaves; who protects the process now?
+    /* V1 · lines 0-2 — changes flow through governed routes; the programme team leaves; who protects the process now?
        Template: https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu (dispatch -> transit -> receipt) */
     P.push({
       svg: function () {
@@ -1958,7 +1958,7 @@
       on: function (A) { if (A.k === 1) A.walk(".n-tm", [[150, 214], [210, 214], [262, 214]], 3, {}); }
     });
 
-    /* V2 Â· lines 3-5 â€” 24 then 39; the role must survive people moving
+    /* V2 · lines 3-5 — 24 then 39; the role must survive people moving
        Template: https://motionarray.com/after-effects-templates/flat-infographics-17982/ (charts animated into place) */
     P.push({
       svg: function () {
@@ -1974,7 +1974,7 @@
       }
     });
 
-    /* V3 Â· lines 6-8 â€” owner promoted to the Marina; director absorbs it with 13 reports; the role must outlast the person
+    /* V3 · lines 6-8 — owner promoted to the Marina; director absorbs it with 13 reports; the role must outlast the person
        Template: https://old.observablehq.com/@d3/hierarchy-traversal-animated (node-to-node movement in a hierarchy) */
     P.push({
       svg: function () {
@@ -1992,7 +1992,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-po3", [[79, 204], [180, 214], [281, 214]], 2.4, {}); }
     });
 
-    /* V4 Â· lines 9-11 â€” programme -> line management; named recipient + agreed date; obligations written down
+    /* V4 · lines 9-11 — programme -> line management; named recipient + agreed date; obligations written down
        Template: https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8 (proposal becomes signed agreement) */
     P.push({
       svg: function () {
@@ -2009,7 +2009,7 @@
       on: function (A) { if (A.k <= 1) A.walk(".n-bx", [[140, 130], [200, 130], [232, 130]], 2.4, { loop: true }); }
     });
 
-    /* V5 Â· lines 12-14 â€” the process enters the recipient's own objectives; reporting without review; meeting + named responder
+    /* V5 · lines 12-14 — the process enters the recipient's own objectives; reporting without review; meeting + named responder
        Template: https://lottiefiles.com/free-animation/workflow-Jt52qpU9fj (workflow glyph cycles through stages) */
     P.push({
       svg: function () {
@@ -2029,7 +2029,7 @@
       }
     });
 
-    /* V6 Â· lines 15-16 â€” authority links the functions; without it, a problem bounces between closed doors
+    /* V6 · lines 15-16 — authority links the functions; without it, a problem bounces between closed doors
        Template: https://lottiefiles.com/free-animation/supply-chain-and-shipping-Gd8ZsVZpXq (shipment advancing through nodes) */
     var DOORS = [["Front desk", 62, 70], ["Room cleaning", 298, 70], ["Systems team", 62, 196], ["Finance team", 298, 196]];
     P.push({
@@ -2045,7 +2045,7 @@
       on: function (A) { if (A.k >= 1) A.walk(".n-pb6", [[112, 134], [250, 134], [112, 134]], 2.4, { loop: true }); }
     });
 
-    /* V7 Â· lines 17-20 â€” open defects get an owner and a date; the case has no Qasr defect inventory; what a sound transfer holds
+    /* V7 · lines 17-20 — open defects get an owner and a date; the case has no Qasr defect inventory; what a sound transfer holds
        Template: https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU (steps activate one after another) */
     P.push({
       svg: function () {
@@ -2065,7 +2065,7 @@
       }
     });
 
-    /* V8 Â· lines 21-22 â€” the handover carries the change rules; individually approved changes later added 13 minutes
+    /* V8 · lines 21-22 — the handover carries the change rules; individually approved changes later added 13 minutes
        Template: https://observablehq.com/@joaormendes/sankey-animation-particles-generation (flows merging into one band) */
     P.push({
       svg: function () {
@@ -2079,7 +2079,7 @@
       }
     });
 
-    /* V9 Â· lines 23-26 â€” decisions, not documents; it runs without the programme; Qasr's owner is only PROPOSED; next: diagnose
+    /* V9 · lines 23-26 — decisions, not documents; it runs without the programme; Qasr's owner is only PROPOSED; next: diagnose
        Template: https://lottiefiles.com/free-animation/logistics-trucks-DHvuLcYVdQ (delivery arrives at destination) */
     P.push({
       svg: function () {
@@ -2115,7 +2115,7 @@
   })();
 
   /* ==================================================================
-     W14O3a Â· MEASURE, REVIEW, IMPROVE, EMBED: THE OWNER'S LOOP  (audit 2.6/10)
+     W14O3a · MEASURE, REVIEW, IMPROVE, EMBED: THE OWNER'S LOOP  (audit 2.6/10)
      27 lines -> 8 visuals. Each loop stage gets its own concrete scene
      (a stage tracker on top shows where we are); an evidence card physically
      travels Measure -> Review -> Improve -> Embed -> Measure again.
@@ -2134,7 +2134,7 @@
     }
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
 
-    /* V1 Â· lines 0-2 â€” triggers warn early; the owner turns signals into a monthly routine; regular decisions, not crises
+    /* V1 · lines 0-2 — triggers warn early; the owner turns signals into a monthly routine; regular decisions, not crises
        Template: https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT (rotate, wait, finish) */
     P.push({
       svg: function () {
@@ -2154,7 +2154,7 @@
       }
     });
 
-    /* V2 Â· lines 3-6 â€” 24, then 39 and 48%; the figures alone cannot act; a named owner connects the whole journey
+    /* V2 · lines 3-6 — 24, then 39 and 48%; the figures alone cannot act; a named owner connects the whole journey
        Template: https://motionarray.com/after-effects-templates/infographics-3844461/ (statistic graphics in sequence) */
     P.push({
       svg: function () {
@@ -2170,7 +2170,7 @@
       }
     });
 
-    /* V3 Â· lines 7-10 â€” STEP 1 MEASURE: reliable evidence about outcome and operation; reporting already exists; add three signals; three verdicts
+    /* V3 · lines 7-10 — STEP 1 MEASURE: reliable evidence about outcome and operation; reporting already exists; add three signals; three verdicts
        Template: https://dribbble.com/shots/26275497-Workflow-AI-Animation (data ingested, cleaned, visualised) */
     P.push({
       svg: function () {
@@ -2191,7 +2191,7 @@
       }
     });
 
-    /* V4 Â· lines 11-14 â€” STEP 2 REVIEW: interpret and decide; seven months without review; size, cause, consequence; name investigators
+    /* V4 · lines 11-14 — STEP 2 REVIEW: interpret and decide; seven months without review; size, cause, consequence; name investigators
        Template: https://dribbble.com/shots/3791748-Workflow-Animation (trigger handed to the next actor) */
     P.push({
       svg: function () {
@@ -2215,7 +2215,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-ev", [[20, 160], [130, 160], [130, 160]], 1.8, {}); }
     });
 
-    /* V5 Â· lines 15-18 â€” STEP 3 IMPROVE: fix the evidenced problem; examine the combined +13; controls can stay; same rule, better flow
+    /* V5 · lines 15-18 — STEP 3 IMPROVE: fix the evidenced problem; examine the combined +13; controls can stay; same rule, better flow
        Template: https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x (items advance; one station holds) */
     P.push({
       svg: function () {
@@ -2237,7 +2237,7 @@
     });
     function road(y, x0, x1) { return rect(x0, y - 7, x1 - x0, 14, "fL", { rx: 7 }) + line(x0 + 8, y, x1 - 8, y, "sM", { "stroke-width": 2, "stroke-dasharray": "8 8" }); }
 
-    /* V6 Â· lines 19-20 â€” STEP 4 EMBED: into instructions, roles and training; otherwise old habits return
+    /* V6 · lines 19-20 — STEP 4 EMBED: into instructions, roles and training; otherwise old habits return
        Template: https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation (sketch refined into product) */
     P.push({
       svg: function () {
@@ -2255,7 +2255,7 @@
       on: function (A) { if (A.k >= 1) A.walk(".n-hb", [[40, 146], [120, 146], [160, 168], [200, 196], [330, 206]], 4, { loop: true }); }
     });
 
-    /* V7 Â· lines 21-22 â€” measure again: a new side effect appears; the loop repeats as normal management
+    /* V7 · lines 21-22 — measure again: a new side effect appears; the loop repeats as normal management
        Template: https://observablehq.com/@d3/path-tween (a path re-shaped between states) */
     P.push({
       svg: function () {
@@ -2272,7 +2272,7 @@
       on: function (A) { if (A.k >= 1) A.walk(".n-lt", ringPts(180, 146, 76, 40), 5, { loop: true }); }
     });
 
-    /* V8 Â· lines 23-26 â€” the hub is empty; PROPOSED: restore a named owner with authority, review time, follow-through; staff raise problems; next: govern changes
+    /* V8 · lines 23-26 — the hub is empty; PROPOSED: restore a named owner with authority, review time, follow-through; staff raise problems; next: govern changes
        Template: https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 (people join one by one) */
     P.push({
       svg: function () {
@@ -2311,8 +2311,8 @@
 // END FILE: w14-claude-v2-part2.js
 
 // FILE: w14-claude-v2-part3.js
-// OPER621 Â· Business Process Management Â· Week 14 Â· The Sustainable Performance Phase
-// Animated teaching scenes â€” Claude v2 rebuild â€” PART 3 of 4 â€” sections: W14O2a, W14O3b, W14O3d
+// OPER621 · Business Process Management · Week 14 · The Sustainable Performance Phase
+// Animated teaching scenes — Claude v2 rebuild — PART 3 of 4 — sections: W14O2a, W14O3b, W14O3d
 // Next: W14O2a (2.8), W14O3b (2.8), W14O3d (2.9) (GPT-6 content audit).
 //
 // CONTRACT (unchanged): window.VL_SCENES = window.VL_SCENES || {};
@@ -2813,7 +2813,7 @@
   }
 
   /* ==================================================================
-     W14O2a Â· FIVE WAYS A GOOD PROCESS QUIETLY DETERIORATES  (audit 2.8/10)
+     W14O2a · FIVE WAYS A GOOD PROCESS QUIETLY DETERIORATES  (audit 2.8/10)
      28 lines -> 8 visuals. One visual per mechanism; each is labelled
      QASR EVIDENCE (ownership, measures, local changes) or GENERAL RISK
      (informal retraining, organisational change) so nothing is over-claimed.
@@ -2824,7 +2824,7 @@
     function road(y, x0, x1) { return rect(x0, y - 7, x1 - x0, 14, "fL", { rx: 7 }) + line(x0 + 8, y, x1 - 8, y, "sM", { "stroke-width": 2, "stroke-dasharray": "8 8" }); }
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
 
-    /* V1 Â· lines 0-2 â€” management must continue; diligent staff, slipping results; look at the arrangements, not the people
+    /* V1 · lines 0-2 — management must continue; diligent staff, slipping results; look at the arrangements, not the people
        Template: https://www.behance.net/gallery/190390491/Creative-process-Motion-design-creative-project (object moved through iterations) */
     P.push({
       svg: function () {
@@ -2842,7 +2842,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-pt1", [[236, 214], [290, 214], [310, 214]], 2.4, {}); }
     });
 
-    /* V2 Â· lines 3-6 â€” drift is a gradual gap from the achieved level; many small steps, no cliff; 82 -> 24, then 39
+    /* V2 · lines 3-6 — drift is a gradual gap from the achieved level; many small steps, no cliff; 82 -> 24, then 39
        Template: https://observablehq.com/@d3/streamgraph-transitions (area morphing over time) */
     P.push({
       svg: function () {
@@ -2858,7 +2858,7 @@
       }
     });
 
-    /* V3 Â· lines 7-10 â€” MECHANISM 1 (Qasr evidence): the owner moves in the org chart; the director absorbs it; boundary problems linger
+    /* V3 · lines 7-10 — MECHANISM 1 (Qasr evidence): the owner moves in the org chart; the director absorbs it; boundary problems linger
        Template: https://old.observablehq.com/@d3/hierarchy-traversal-animated (hierarchy nodes visited in turn) */
     P.push({
       svg: function () {
@@ -2887,7 +2887,7 @@
       }
     });
 
-    /* V4 Â· lines 11-14 â€” MECHANISM 2 (Qasr evidence): the measure unplugged from decisions; page four; last discussed at 28; interpret and respond
+    /* V4 · lines 11-14 — MECHANISM 2 (Qasr evidence): the measure unplugged from decisions; page four; last discussed at 28; interpret and respond
        Template: https://dribbble.com/shots/27247003-Data-Workflow-Animation (links activate between nodes) */
     P.push({
       svg: function () {
@@ -2909,9 +2909,9 @@
       }
     });
 
-    /* V5 Â· lines 15-18 â€” MECHANISM 3 (Qasr evidence): local changes pile onto one route; the four documented stations; +13 of 15; locally fine, end-to-end worse
+    /* V5 · lines 15-18 — MECHANISM 3 (Qasr evidence): local changes pile onto one route; the four documented stations; +13 of 15; locally fine, end-to-end worse
        Template: https://lottiefiles.com/free-animation/business-solution-pNyNfkcRsa (boxes on a conveyor) */
-    var STN = [["passport", "Passport", "check"], ["coin", "Waiver", "limit"], ["star", "Loyalty", "prompt"], ["desk", "Heritage", "desks Ã—2"]];
+    var STN = [["passport", "Passport", "check"], ["coin", "Waiver", "limit"], ["star", "Loyalty", "prompt"], ["desk", "Heritage", "desks ×2"]];
     P.push({
       svg: function () {
         var s = mech("3", "Local changes") + tag("Qasr evidence", "pm");
@@ -2927,7 +2927,7 @@
       }
     });
 
-    /* V6 Â· lines 19-22 â€” MECHANISM 4 (general risk): turnover and informal retraining; shortcuts taught; faster now, inconsistent later; POSSIBLE, NOT PROVEN
+    /* V6 · lines 19-22 — MECHANISM 4 (general risk): turnover and informal retraining; shortcuts taught; faster now, inconsistent later; POSSIBLE, NOT PROVEN
        Template: https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics (journey steps connected by transitions) */
     P.push({
       svg: function () {
@@ -2949,7 +2949,7 @@
       }
     });
 
-    /* V7 Â· lines 23-24 â€” MECHANISM 5 (general risk): the organisation changes but the process stays frozen; reshape the design to fit
+    /* V7 · lines 23-24 — MECHANISM 5 (general risk): the organisation changes but the process stays frozen; reshape the design to fit
        Template: https://observablehq.com/@d3/shape-tweening (one shape transformed into another) */
     P.push({
       svg: function () {
@@ -2968,7 +2968,7 @@
       }
     });
 
-    /* V8 Â· lines 25-27 â€” the mechanisms reinforce each other; a management system, not reminders; next: reasonable parts, poor whole
+    /* V8 · lines 25-27 — the mechanisms reinforce each other; a management system, not reminders; next: reasonable parts, poor whole
        Template: https://lottiefiles.com/free-animation/process-in-cub-9iNG7QP0qC (interlocking states cycling) */
     P.push({
       svg: function () {
@@ -3002,7 +3002,7 @@
   })();
 
   /* ==================================================================
-     W14O3b Â· GOVERNING CHANGES WITHOUT BLOCKING IMPROVEMENT  (audit 2.8/10)
+     W14O3b · GOVERNING CHANGES WITHOUT BLOCKING IMPROVEMENT  (audit 2.8/10)
      27 lines -> 9 visuals. The four slide routes are shown as four distinct
      procedures with their own actors and evidence: owner + log + quarterly
      aggregate; owner + affected functions + modelled effect; owner + risk
@@ -3014,7 +3014,7 @@
     function route(n, name) { return chip(12 + chipW("Route " + n + ": " + name, 14) / 2, 48, "Route " + n + ": " + name, "n", 14); }
     function road(y, x0, x1) { return rect(x0, y - 7, x1 - x0, 14, "fL", { rx: 7 }) + line(x0 + 8, y, x1 - 8, y, "sM", { "stroke-width": 2, "stroke-dasharray": "8 8" }); }
 
-    /* V1 Â· lines 0-2 â€” the owner's loop; one heavy gate makes every change queue; balance flexibility and accountability
+    /* V1 · lines 0-2 — the owner's loop; one heavy gate makes every change queue; balance flexibility and accountability
        Template: https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to (movement across business steps) */
     P.push({
       svg: function () {
@@ -3032,7 +3032,7 @@
       on: function (A) { if (A.k >= 2) A.turn(".n-bm", 180, 118, 0, { from: A.fresh || A.k === 2 ? -8 : undefined, dur: 2.2, ease: "back" }); }
     });
 
-    /* V2 Â· lines 3-6 â€” four separate approvals; together +13 of 15; each had a reason; nobody approved the whole journey
+    /* V2 · lines 3-6 — four separate approvals; together +13 of 15; each had a reason; nobody approved the whole journey
        Template: https://motionarray.com/after-effects-templates/infographics-pack-100132/ (one metric element at a time) */
     var CH = [["passport", "Passport", "Regulation"], ["coin", "Waiver", "Finance control"], ["star", "Loyalty", "Local concern"], ["desk", "Desks", "Local concern"]];
     P.push({
@@ -3054,7 +3054,7 @@
       on: function (A) { A.cls(".chG", "dim", A.k === 1); if (A.k === 3) A.walk(".n-gj", [[20, 200], [330, 200]], 4, { loop: true }); }
     });
 
-    /* V3 Â· lines 7-8 â€” what governance defines: who approves, what evidence, when to consult widely; scrutiny rises with significance
+    /* V3 · lines 7-8 — what governance defines: who approves, what evidence, when to consult widely; scrutiny rises with significance
        Template: https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/ (columns grow, axis updates) */
     P.push({
       svg: function () {
@@ -3076,7 +3076,7 @@
       }
     });
 
-    /* V4 Â· lines 9-12 â€” ROUTE 1: below materiality; owner decides and logs; no committee needed; logged changes reviewed together each quarter
+    /* V4 · lines 9-12 — ROUTE 1: below materiality; owner decides and logs; no committee needed; logged changes reviewed together each quarter
        Template: https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm (worker actions in sequence) */
     P.push({
       svg: function () {
@@ -3098,7 +3098,7 @@
       }
     });
 
-    /* V5 Â· lines 13-16 â€” ROUTE 2: changes touching the end-to-end measure; owner + affected functions state the modelled effect; estimate first; hidden guest waiting
+    /* V5 · lines 13-16 — ROUTE 2: changes touching the end-to-end measure; owner + affected functions state the modelled effect; estimate first; hidden guest waiting
        Template: https://observablehq.com/@d3/learn-d3-animation (series drawn, projection added) */
     P.push({
       svg: function () {
@@ -3119,7 +3119,7 @@
       on: function (A) { if (A.k === 3) A.walk(".n-hg", [[20, 190], [330, 190]], 5, { loop: true }); }
     });
 
-    /* V6 Â· lines 17-20 â€” ROUTE 3: controls added after incidents; owner + risk test "is the risk live?" and "cheapest control?"; passport: examine, don't remove; comply with less disruption
+    /* V6 · lines 17-20 — ROUTE 3: controls added after incidents; owner + risk test "is the risk live?" and "cheapest control?"; passport: examine, don't remove; comply with less disruption
        Template: https://observablehq.com/@d3/pie-chart-update (two datasets compared by tweening) */
     P.push({
       svg: function () {
@@ -3138,7 +3138,7 @@
       on: function (A) { A.qa(".qd").forEach(function (d, i) { d.style.opacity = A.k === 3 && i >= 2 ? "0" : "1"; d.style.transitionDelay = (i * 120) + "ms"; }); }
     });
 
-    /* V7 Â· lines 21-22 â€” ROUTE 4: boundary changes alter what the process covers; steering group sends them back to phase three, Launch Pad
+    /* V7 · lines 21-22 — ROUTE 4: boundary changes alter what the process covers; steering group sends them back to phase three, Launch Pad
        Template: https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion (structure grows and is revised) */
     P.push({
       svg: function () {
@@ -3153,7 +3153,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-bd", [[0, 0], [60, 0], [120, 0]], 1.8, {}); }
     });
 
-    /* V8 Â· lines 23-24 â€” PROPOSED routes, not something Qasr already applied; the log stops silent accumulation
+    /* V8 · lines 23-24 — PROPOSED routes, not something Qasr already applied; the log stops silent accumulation
        Template: https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP (activity resolves into a verified state) */
     P.push({
       svg: function () {
@@ -3167,7 +3167,7 @@
       }
     });
 
-    /* V9 Â· lines 25-26 â€” governance doesn't freeze the process; each opportunity gets the right route while benefits stay protected
+    /* V9 · lines 25-26 — governance doesn't freeze the process; each opportunity gets the right route while benefits stay protected
        Template: https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu (items routed to destinations) */
     P.push({
       svg: function () {
@@ -3199,7 +3199,7 @@
   })();
 
   /* ==================================================================
-     W14O3d Â· ONE INTERVENTION, FOUR CANDIDATES, ONE DEFENSIBLE CHOICE  (audit 2.9/10)
+     W14O3d · ONE INTERVENTION, FOUR CANDIDATES, ONE DEFENSIBLE CHOICE  (audit 2.9/10)
      29 lines -> 9 visuals. An evidence-weighted comparison replaces the
      key-and-lock: each candidate is tested against what Exhibit 14 shows;
      the choice is "most defensible", never "guaranteed", and stays PROPOSED.
@@ -3210,7 +3210,7 @@
     function meter(x, y, w, f, c) { return rect(x, y, w, 12, "fL sM", { rx: 6, "stroke-width": 1 }) + (f > 0 ? rect(x, y, w * f, 12, c || "fG", { rx: 6 }) : ""); }
     var CAND = [["Renew training", "person"], ["Remove steps", "scissors"], ["More reporting", "chart"], ["Restore ownership", "key"]];
 
-    /* V1 Â· lines 0-2 â€” what we found; leadership can fund one priority; two rules: no invented causes, respect requirements
+    /* V1 · lines 0-2 — what we found; leadership can fund one priority; two rules: no invented causes, respect requirements
        Template: https://lottiefiles.com/free-animation/project-dashboard-PeJUc2p1iB (analysis board with people) */
     P.push({
       svg: function () {
@@ -3227,7 +3227,7 @@
       }
     });
 
-    /* V2 Â· lines 3-6 â€” the evidence: 24 -> 39 (kept MATCH); kiosk 65 -> 48; +13 of 15; owner gone while reports continue
+    /* V2 · lines 3-6 — the evidence: 24 -> 39 (kept MATCH); kiosk 65 -> 48; +13 of 15; owner gone while reports continue
        Template: https://observablehq.com/@d3/stacked-to-grouped-bars (same marks regrouped per question) */
     P.push({
       svg: function () {
@@ -3241,7 +3241,7 @@
       }
     });
 
-    /* V3 Â· lines 7-8 â€” a decision exercise, not approved actions; the four candidates turn over
+    /* V3 · lines 7-8 — a decision exercise, not approved actions; the four candidates turn over
        Template: https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design (cards flip between states) */
     P.push({
       svg: function () {
@@ -3257,7 +3257,7 @@
       }
     });
 
-    /* V4 Â· lines 9-12 â€” test 1: training has no evidence of a knowledge cause; test 2: removing steps tempts, but passport is regulatory
+    /* V4 · lines 9-12 — test 1: training has no evidence of a knowledge cause; test 2: removing steps tempts, but passport is regulatory
        Template: https://motionarray.com/after-effects-templates/infographics-pack-135055/ (callouts + meters) */
     P.push({
       svg: function () {
@@ -3271,7 +3271,7 @@
       }
     });
 
-    /* V5 Â· lines 13-16 â€” test 3: reporting already exists, discussion stopped; test 4: ownership fills the documented gap and anchors the rest
+    /* V5 · lines 13-16 — test 3: reporting already exists, discussion stopped; test 4: ownership fills the documented gap and anchors the rest
        Template: https://lottiefiles.com/free-animation/3d-statistics-factory-lRiHNeU9Y4 (equipment staged, output emphasised) */
     P.push({
       svg: function () {
@@ -3282,12 +3282,12 @@
         var b = card(14, 152, 332, 104, "pg") + icon("key", 42, 186, 1.1) + TX(66, 180, "Restore ownership", 16, "fG s") +
           TX(66, 206, "Documented gap", 13, "fM s") + meter(66, 216, 180, 1, "fG") + okB(326, 172, 11);
         var c = card(14, 152, 332, 104, "g") + person(52, 238, 1.3, "W") + TX(66, 168, "Named owner", 13, "nh fW");
-        ["Organise reviews", "Investigate adoption", "Evaluate changes"].forEach(function (t, j) { c += R("3", "l", TX(96, 180 + j * 26, "â€¢ " + t, 15, "nh fW s")); });
+        ["Organise reviews", "Investigate adoption", "Evaluate changes"].forEach(function (t, j) { c += R("3", "l", TX(96, 180 + j * 26, "• " + t, 15, "nh fW s")); });
         return R("0-3", "f", a) + R("2-2", "l", b) + R("3", "pop", c);
       }
     });
 
-    /* V6 Â· lines 17-18 â€” most defensible, but not guaranteed to restore arrival time; it builds the capacity to diagnose
+    /* V6 · lines 17-18 — most defensible, but not guaranteed to restore arrival time; it builds the capacity to diagnose
        Template: https://observablehq.com/@d3/arc-tween (value tweened to a new angle) */
     P.push({
       svg: function () {
@@ -3304,7 +3304,7 @@
       }
     });
 
-    /* V7 Â· lines 19-22 â€” making it operational: authority across 14 properties; a recurring review; test the four changes together; 13 explained vs 2 open
+    /* V7 · lines 19-22 — making it operational: authority across 14 properties; a recurring review; test the four changes together; 13 explained vs 2 open
        Template: https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy (hub connected to many sites) */
     P.push({
       svg: function () {
@@ -3323,11 +3323,11 @@
       }
     });
 
-    /* V8 Â· lines 23-24 â€” investigate kiosk decline without assuming resistance; measure afterwards to see if it worked
+    /* V8 · lines 23-24 — investigate kiosk decline without assuming resistance; measure afterwards to see if it worked
        Template: https://observablehq.com/@d3/animated-quadtree (space split into candidate regions) */
     P.push({
       svg: function () {
-        var a = card(14, 70, 110, 120, "po") + icon("kiosk", 69, 116, 1.8) + TX(69, 172, "65% â†’ 48%", 15, "fO");
+        var a = card(14, 70, 110, 120, "po") + icon("kiosk", 69, 116, 1.8) + TX(69, 172, "65% → 48%", 15, "fO");
         [["Kiosk usability?", 80], ["Guest choice?", 126], ["Process design?", 172]].forEach(function (q, j) { a += arrow(128, 130, 180, q[1], "sM", 2.4) + R("0", "l", chip(256, q[1], q[0], "pm", 14)); });
         a += chip(180, 236, "Resistance assumed", "po", 14) + strike(100, 236, 260, 236) + TX(180, 54, "Possible mechanisms", 14, "fM");
         var b = line(30, 220, 330, 220, "sN", { "stroke-width": 2 }) + rect(60, 220 - 39 * 3.6, 64, 39 * 3.6, "fO", { rx: 5 }) + TX(92, 220 - 39 * 3.6 - 8, "39", 20, "fO") + TX(92, 240, "Before action", 14, "fN") +
@@ -3337,7 +3337,7 @@
       }
     });
 
-    /* V9 Â· lines 25-28 â€” capability over one quick fix; ready for future changes; the PROPOSED choice; next: continuous improvement
+    /* V9 · lines 25-28 — capability over one quick fix; ready for future changes; the PROPOSED choice; next: continuous improvement
        Template: https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK (action repeats, then completes) */
     P.push({
       svg: function () {
@@ -3366,7 +3366,7 @@
       panels: P,
       lines: [
         [0, 0, "What we found"], [0, 1, "One priority only"], [0, 2, "Evidence and requirements"],
-        [1, 0, "Arrival: 24 â†’ 39"], [1, 1, "Kiosk: 65 â†’ 48"], [1, 2, "13 of 15 minutes"], [1, 3, "Owner gone, reports continue"],
+        [1, 0, "Arrival: 24 → 39"], [1, 1, "Kiosk: 65 → 48"], [1, 2, "13 of 15 minutes"], [1, 3, "Owner gone, reports continue"],
         [2, 0, "Exercise, not approved"], [2, 1, "Four candidates"],
         [3, 0, "Training: no evidence"], [3, 1, "Undemonstrated cause"], [3, 2, "Removing steps tempts"], [3, 3, "Passport is regulatory"],
         [4, 0, "Reports already monthly"], [4, 1, "Discussion stopped"], [4, 2, "Ownership fills gap"], [4, 3, "Owner's three tasks"],
@@ -3382,8 +3382,8 @@
 // END FILE: w14-claude-v2-part3.js
 
 // FILE: w14-claude-v2-part4.js
-// OPER621 Â· Business Process Management Â· Week 14 Â· The Sustainable Performance Phase
-// Animated teaching scenes â€” Claude v2 rebuild â€” PART 4 of 4 â€” sections: W14O1a, W14O2d, W14O1b
+// OPER621 · Business Process Management · Week 14 · The Sustainable Performance Phase
+// Animated teaching scenes — Claude v2 rebuild — PART 4 of 4 — sections: W14O1a, W14O2d, W14O1b
 // Highest of the low: W14O1a (3.2), W14O2d (3.3), W14O1b (4.1) (GPT-6 content audit).
 //
 // CONTRACT (unchanged): window.VL_SCENES = window.VL_SCENES || {};
@@ -3884,7 +3884,7 @@
   }
 
   /* ==================================================================
-     W14O1a Â· PHASE TEN: WHEN BPM BECOMES MANAGEMENT  (audit 3.2/10)
+     W14O1a · PHASE TEN: WHEN BPM BECOMES MANAGEMENT  (audit 3.2/10)
      29 lines -> 9 visuals. Literal: the Qasr journey, the ten numbered
      phases with phase 9 -> 10 and the return route, honest single-scale
      Qasr bars, the programme vs continuing responsibility, a causal loop.
@@ -3905,7 +3905,7 @@
     }
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
 
-    /* V1 Â· lines 0-1 â€” Week 14: after the programme has finished; the Qasr journey so far
+    /* V1 · lines 0-1 — Week 14: after the programme has finished; the Qasr journey so far
        Template: https://motionarray.com/after-effects-templates/timeline/ (milestones revealed with a travelling marker) */
     P.push({
       svg: function () {
@@ -3922,7 +3922,7 @@
       on: function (A) { if (A.k >= 1) A.walk(".n-jt", [[50, 150], [140, 150], [230, 150], [316, 150]], 3.4, {}); }
     });
 
-    /* V2 Â· lines 2-4 â€” from achieving to keeping it alive; the project ends while the process slips; celebrated, then rising again
+    /* V2 · lines 2-4 — from achieving to keeping it alive; the project ends while the process slips; celebrated, then rising again
        Template: https://motionarray.com/after-effects-templates/corporate-timeline-77666/ (milestone transitions along a path) */
     P.push({
       svg: function () {
@@ -3938,7 +3938,7 @@
       }
     });
 
-    /* V3 Â· lines 5-8 â€” the ten phases; phase 9 Realize Value leads to 10; evidence, not announcements; hold benefits while things change
+    /* V3 · lines 5-8 — the ten phases; phase 9 Realize Value leads to 10; evidence, not announcements; hold benefits while things change
        Template: https://codepen.io/WebGuyJeff/pen/rNdmqdO (numbered steps, active state) */
     P.push({
       svg: function () {
@@ -3955,7 +3955,7 @@
       on: function (A) { A.cls(".tg9", "dim", A.k >= 2); A.op(".tg9", A.k === 1 ? 0 : 1); }
     });
 
-    /* V4 Â· lines 9-10 â€” illustration: a restaurant improves speed under a supervising team; the team leaves - who protects it?
+    /* V4 · lines 9-10 — illustration: a restaurant improves speed under a supervising team; the team leaves - who protects it?
        Template: https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6 (team members appear and leave) */
     P.push({
       svg: function () {
@@ -3967,7 +3967,7 @@
       },
     });
 
-    /* V5 Â· lines 11-14 â€” Qasr on one honest scale: 82 baseline; 24 at month 5 across 14 properties; no guarantee; 39 at month 22
+    /* V5 · lines 11-14 — Qasr on one honest scale: 82 baseline; 24 at month 5 across 14 properties; no guarantee; 39 at month 22
        Template: https://observablehq.com/@d3/learn-d3-animation (values revealed left to right) */
     P.push({
       svg: function () {
@@ -3981,7 +3981,7 @@
       }
     });
 
-    /* V6 Â· lines 15-17 â€” the gain was real; check the management arrangements; BPM moves into normal management
+    /* V6 · lines 15-17 — the gain was real; check the management arrangements; BPM moves into normal management
        Template: https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion (structure built, scaffold removed) */
     P.push({
       svg: function () {
@@ -3997,7 +3997,7 @@
       on: function (A) { if (A.k === 2) A.walk(".n-scf", [[0, 0], [0, -12], [0, -24]], 1.8, {}); else A.pos(".n-scf", 0, 0); A.op(".n-scf", A.k === 2 ? 0.6 : 1); }
     });
 
-    /* V7 Â· lines 18-22 â€” programme vs continuing duty; an accountable owner stays; authority; regular evidence review; an unused report protects nothing (kept MATCH)
+    /* V7 · lines 18-22 — programme vs continuing duty; an accountable owner stays; authority; regular evidence review; an unused report protects nothing (kept MATCH)
        Template: https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design (feature states shown in turn) */
     P.push({
       svg: function () {
@@ -4020,7 +4020,7 @@
       }
     });
 
-    /* V8 Â· lines 23-24 â€” a causal loop: evidence -> review -> decision -> improve -> embed -> measured again; embedded means no supervision needed
+    /* V8 · lines 23-24 — a causal loop: evidence -> review -> decision -> improve -> embed -> measured again; embedded means no supervision needed
        Template: https://dribbble.com/shots/26275497-Workflow-AI-Animation (data advanced through stages) */
     P.push({
       svg: function () {
@@ -4034,7 +4034,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-art", ringPts(180, 146, 50, 48), 6, { loop: true }); }
     });
 
-    /* V9 Â· lines 25-28 â€” phase ten is not "the end"; evidence returns to strategy, architecture, scope or design; continuous disciplines; next: why decay?
+    /* V9 · lines 25-28 — phase ten is not "the end"; evidence returns to strategy, architecture, scope or design; continuous disciplines; next: why decay?
        Template: https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 (branch back to an earlier commit) */
     P.push({
       svg: function () {
@@ -4070,7 +4070,7 @@
   })();
 
   /* ==================================================================
-     W14O2d Â· EXHIBIT 14: TWENTY-TWO MONTHS OF GRADUAL DECAY  (audit 3.3/10)
+     W14O2d · EXHIBIT 14: TWENTY-TWO MONTHS OF GRADUAL DECAY  (audit 3.3/10)
      27 lines -> 8 visuals. One honest scale for every arrival figure, kiosk
      figures on their own scale, documented facts kept apart from inference,
      one combined +13 (never split), +2 unexplained.
@@ -4079,7 +4079,7 @@
     var P = [];
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
 
-    /* V1 Â· lines 0-2 â€” three protections; documented evidence vs possible explanations; explain without blaming
+    /* V1 · lines 0-2 — three protections; documented evidence vs possible explanations; explain without blaming
        Template: https://motionarray.com/after-effects-templates/infographics-pack-135055/ (callout columns) */
     P.push({
       svg: function () {
@@ -4095,7 +4095,7 @@
       }
     });
 
-    /* V2 Â· lines 3-6 â€” one honest scale: 14 properties, 82 baseline, 24 at month 5, 28 / 61% at month 13, 39 / 48% at month 22 (kept MATCH)
+    /* V2 · lines 3-6 — one honest scale: 14 properties, 82 baseline, 24 at month 5, 28 / 61% at month 13, 39 / 48% at month 22 (kept MATCH)
        Template: https://observablehq.com/@d3/learn-d3-animation (series built point by point) */
     P.push({
       svg: function () {
@@ -4109,7 +4109,7 @@
       }
     });
 
-    /* V3 Â· lines 7-10 â€” rising in each of the last six months; kiosk -17 points; decline shown, cause not; examine arrangements first
+    /* V3 · lines 7-10 — rising in each of the last six months; kiosk -17 points; decline shown, cause not; examine arrangements first
        Template: https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/ (dates scroll and settle) */
     P.push({
       svg: function () {
@@ -4117,7 +4117,7 @@
         for (m = 17; m <= 22; m++) { var x = 40 + (m - 17) * 56; a += R("0", "up", path("M" + (x - 12) + " 176 l12 -18 l12 18", "sO f0", { "stroke-width": 4, "stroke-linecap": "round", "stroke-linejoin": "round" })) + TX(x, 224, "M" + m, 14, "fN"); }
         a += chip(180, 100, "Rose every month", "o", 15) + TX(180, 254, "Last six months", 14, "fN");
         var b = bars({ x: 60, base: 232, h: 150, max: 70, bw: 64, gap: 40, fs: 22, items: [{ v: 65, t: "65%", l: "Month 5", r: "1", c: "fG" }, { v: 61, t: "61%", l: "Month 13", r: "1", c: "fO" }, { v: 48, t: "48%", l: "Month 22", r: "1", c: "fO" }] });
-        b += line(342, 232 - 65 / 70 * 150, 342, 232 - 48 / 70 * 150, "sO", { "stroke-width": 3 }) + TX(338, 80, "âˆ’17 points", 14, "fO e") + TX(110, 56, "Kiosk adoption", 14, "fN");
+        b += line(342, 232 - 65 / 70 * 150, 342, 232 - 48 / 70 * 150, "sO", { "stroke-width": 3 }) + TX(338, 80, "−17 points", 14, "fO e") + TX(110, 56, "Kiosk adoption", 14, "fN");
         var c = card(10, 50, 164, 180, "pg") + TX(92, 80, "What happened", 15, "fG") + icon("chart", 92, 140, 2, "sO") + okB(152, 58, 12) + TX(92, 206, "Established fact", 14, "fG") +
           card(186, 50, 164, 180, "pm") + TX(268, 80, "Why it happened", 15, "fM") + qB(268, 140, 26) + TX(268, 206, "Not proven", 14, "fM");
         var d = card(14, 50, 150, 70, "p") + TX(89, 80, "Ownership", 14, "fN") + TX(89, 100, "arrangements", 13, "fN") + card(14, 140, 150, 70, "p") + TX(89, 170, "Approved", 14, "fN") + TX(89, 190, "changes", 13, "fN") +
@@ -4127,7 +4127,7 @@
       }
     });
 
-    /* V4 Â· lines 11-14 â€” owner promoted nine months before month 22; no replacement, director with 13 reports; a plausible gap; not personal blame
+    /* V4 · lines 11-14 — owner promoted nine months before month 22; no replacement, director with 13 reports; a plausible gap; not personal blame
        Template: https://motionarray.com/after-effects-templates/corporate-timeline-255459/ (events placed on a timeline, focus shifts) */
     P.push({
       svg: function () {
@@ -4146,7 +4146,7 @@
       on: function (A) { if (A.k === 0) A.walk(".n-pr4", [[80, 150], [160, 110], [250, 100]], 2.4, {}); }
     });
 
-    /* V5 Â· lines 15-18 â€” page four, monthly (kept MATCH); last discussed seven months ago at 28; the loop breaks at review; use, not production
+    /* V5 · lines 15-18 — page four, monthly (kept MATCH); last discussed seven months ago at 28; the loop breaks at review; use, not production
        Template: https://lottiefiles.com/free-animation/process-fmpDUgNx8K (connections drawn and joined) */
     P.push({
       svg: function () {
@@ -4166,9 +4166,9 @@
       }
     });
 
-    /* V6 Â· lines 19-22 â€” four approved changes after rollout; what each was; together 13 of 15; examine, don't condemn
+    /* V6 · lines 19-22 — four approved changes after rollout; what each was; together 13 of 15; examine, don't condemn
        Template: https://observablehq.com/@joaormendes/sankey-animation-particles-generation (flows merge into one) */
-    var CH = [["passport", "Passport", "re-verification"], ["coin", "Waiver limit", "AED 400 â†’ 150"], ["star", "Loyalty", "enrolment prompt"], ["desk", "Permanent desk", "two heritage hotels"]];
+    var CH = [["passport", "Passport", "re-verification"], ["coin", "Waiver limit", "AED 400 → 150"], ["star", "Loyalty", "enrolment prompt"], ["desk", "Permanent desk", "two heritage hotels"]];
     P.push({
       svg: function () {
         var a = line(30, 210, 330, 210, "sN", { "stroke-width": 3 }) + circ(60, 210, 8, "fG") + TX(60, 236, "Month 5", 14, "fG") + circ(310, 210, 8, "fO") + TX(310, 236, "Month 22", 14, "fO") +
@@ -4189,7 +4189,7 @@
       }
     });
 
-    /* V7 Â· lines 23-24 â€” two minutes unexplained (kept MATCH: no staff blame); no per-change split exists
+    /* V7 · lines 23-24 — two minutes unexplained (kept MATCH: no staff blame); no per-change split exists
        Template: https://observablehq.com/@d3/path-tween (one shape cut, then restored) */
     P.push({
       svg: function () {
@@ -4202,7 +4202,7 @@
       }
     });
 
-    /* V8 Â· lines 25-26 â€” the four-part diagnosis assembles; next: choose a priority that respects regulation
+    /* V8 · lines 25-26 — the four-part diagnosis assembles; next: choose a priority that respects regulation
        Template: https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP (parts resolve into a verified whole) */
     P.push({
       svg: function () {
@@ -4236,7 +4236,7 @@
   })();
 
   /* ==================================================================
-     W14O1b Â· FOUR SIGNALS THAT THE GAIN IS SLIPPING  (audit 4.1/10)
+     W14O1b · FOUR SIGNALS THAT THE GAIN IS SLIPPING  (audit 4.1/10)
      26 lines -> 8 visuals. Each signal gets its own large single-purpose
      instrument: honest-scale arrival bars, an adoption share bar, an
      exception histogram with a designed range, and a variant register.
@@ -4246,7 +4246,7 @@
     function stampW(x, y, txt, v, rot) { var w = tw(txt, 15) + 26; return G("", rect(x - w / 2, y - 15, w, 30, "f0 " + (v || "sO"), { rx: 6, "stroke-width": 3 }) + TX(x, y + 5.5, txt, 15, "nh " + (v === "sG" ? "fG" : "fO")), { transform: "rotate(" + (rot === undefined ? -7 : rot) + " " + x + " " + y + ")" }); }
     function road(y, x0, x1) { return rect(x0, y - 7, x1 - x0, 14, "fL", { rx: 7 }) + line(x0 + 8, y, x1 - 8, y, "sM", { "stroke-width": 2, "stroke-dasharray": "8 8" }); }
 
-    /* V1 Â· lines 0-2 â€” producing a report vs using it; four early-warning signals; too many measures bury the one you need
+    /* V1 · lines 0-2 — producing a report vs using it; four early-warning signals; too many measures bury the one you need
        Template: https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp (dashboard brought into focus) */
     P.push({
       svg: function () {
@@ -4267,7 +4267,7 @@
       on: function (A) { if (A.k === 0) A.turn(".n-lev", 281, 124, 50, { from: 0, dur: 1.4, ease: "back" }); }
     });
 
-    /* V2 Â· lines 3-6 â€” honest scale 82 -> 24 (kept MATCH), then 39; one measure for the whole journey; waiting hides between departments
+    /* V2 · lines 3-6 — honest scale 82 -> 24 (kept MATCH), then 39; one measure for the whole journey; waiting hides between departments
        Template: https://motionarray.com/after-effects-templates/infographics-v2-556482/ (statistic modules scaled in) */
     P.push({
       svg: function () {
@@ -4283,7 +4283,7 @@
       }
     });
 
-    /* V3 Â· lines 7-8 â€” PROPOSED: investigate when more than 10% worse; 24 + 10% = 26.4, and month 22 is 39 (kept MATCH)
+    /* V3 · lines 7-8 — PROPOSED: investigate when more than 10% worse; 24 + 10% = 26.4, and month 22 is 39 (kept MATCH)
        Template: https://motionarray.com/after-effects-templates/infographics-elements-789489/ (data revealed into shapes) */
     P.push({
       svg: function () {
@@ -4296,7 +4296,7 @@
       }
     });
 
-    /* V4 Â· lines 9-11 â€” adoption is the share using the redesign (kept MATCH); 65 -> 61 -> 48 (kept MATCH); 17 points fewer users, fewer benefits
+    /* V4 · lines 9-11 — adoption is the share using the redesign (kept MATCH); 65 -> 61 -> 48 (kept MATCH); 17 points fewer users, fewer benefits
        Template: https://observablehq.com/@d3/pie-chart-update (share tweened between datasets) */
     P.push({
       svg: function () {
@@ -4305,7 +4305,7 @@
         s += R("1", "up", [["Month 5", 65, "fG"], ["Month 13", 61, "fO"], ["Month 22", 48, "fO"]].map(function (m) { return line(30 + 3 * m[1], 86, 30 + 3 * m[1], 144, m[2] === "fG" ? "sG" : "sO", { "stroke-width": 2.4 }); }).join("") +
           TX(213, 160, "61", 13, "fO") + TX(174, 82, "48", 13, "fO"));
         s += R("2", "pop", line(174, 200, 225, 200, "sO", { "stroke-width": 3 }) + line(174, 194, 174, 206, "sO", { "stroke-width": 3 }) + line(225, 194, 225, 206, "sO", { "stroke-width": 3 }) +
-          chip(110, 228, "âˆ’17 points", "o", 14) + icon("clock", 256, 228, 1) + TX(330, 234, "Benefit shrinks", 13, "fO e") + G("rise", icon("spark", 288, 210, 0.6)));
+          chip(110, 228, "−17 points", "o", 14) + icon("clock", 256, 228, 1) + TX(330, 234, "Benefit shrinks", 13, "fO e") + G("rise", icon("spark", 288, 210, 0.6)));
         return tag("Qasr evidence", "pm") + s;
       },
       on: function (A) {
@@ -4316,15 +4316,15 @@
       }
     });
 
-    /* V5 Â· lines 12-14 â€” PROPOSED trigger: 5 points below the plateau = 60; points are a direct difference; reading it right avoids a late investigation
+    /* V5 · lines 12-14 — PROPOSED trigger: 5 points below the plateau = 60; points are a direct difference; reading it right avoids a late investigation
        Template: https://observablehq.com/@d3/easing-animations (same path, different timing) */
     P.push({
       svg: function () {
         var a = line(70, 60, 70, 236, "sN", { "stroke-width": 3 }) + line(70, 80, 300, 80, "sG", { "stroke-width": 2.6, "stroke-dasharray": "7 5" }) + TX(310, 85, "65", 16, "fG s") + TX(80, 74, "Rollout plateau", 13, "fG s") +
           R("0", "l", line(70, 128, 300, 128, "sO", { "stroke-width": 3 }) + TX(310, 133, "60", 16, "fO s") + chip(180, 152, "Investigate below", "o", 14)) + arrow(56, 84, 56, 124, "sO", 3) + TX(48, 108, "5", 15, "fO e") +
           R("0", "stamp", stampW(200, 204, "PROPOSED TRIGGER", "sO", -4));
-        var b = card(30, 52, 300, 90, "pg") + TX(180, 92, "65 âˆ’ 5 points = 60", 22, "fG") + TX(180, 122, "Direct difference", 14, "fG") +
-          card(30, 152, 300, 90, "pm") + TX(180, 192, "65 âˆ’ 5% of 65 = 61.75", 19, "fM") + TX(180, 222, "Relative change", 14, "fM") + okB(318, 60, 11) + noB(318, 160, 11);
+        var b = card(30, 52, 300, 90, "pg") + TX(180, 92, "65 − 5 points = 60", 22, "fG") + TX(180, 122, "Direct difference", 14, "fG") +
+          card(30, 152, 300, 90, "pm") + TX(180, 192, "65 − 5% of 65 = 61.75", 19, "fM") + TX(180, 222, "Relative change", 14, "fM") + okB(318, 60, 11) + noB(318, 160, 11);
         var c = line(30, 120, 330, 120, "sN", { "stroke-width": 3 }) + TX(30, 104, "65", 15, "fG s") + arrow(300, 136, 336, 136, "sO", 2.6) +
           icon("flag", 140, 98, 1.2, "fG") + TX(140, 150, "At 60", 15, "fG") + chip(140, 180, "Investigate now", "g", 13) +
           icon("flag", 286, 98, 1.2, "fM") + TX(286, 150, "Misread rule", 15, "fM") + chip(276, 180, "Too late", "pm", 13) + WK("adot", 30, 120, circ(0, 0, 8, "fO"));
@@ -4333,7 +4333,7 @@
       on: function (A) { if (A.k === 2) A.walk(".n-adot", [[30, 120], [330, 120]], 4, { loop: true }); }
     });
 
-    /* V6 Â· lines 15-18 â€” exceptions leave the normal path (kept MATCH); beyond the designed range; illustration: manual fixes; investigate the pattern
+    /* V6 · lines 15-18 — exceptions leave the normal path (kept MATCH); beyond the designed range; illustration: manual fixes; investigate the pattern
        Template: https://lottiefiles.com/free-animation/3d-camera-factory-2I4Nonw7Ad (items progress, some diverted) */
     P.push({
       svg: function () {
@@ -4357,7 +4357,7 @@
       }
     });
 
-    /* V7 Â· lines 19-22 â€” an unregistered variant; even one matters (kept MATCH); desks at two heritage properties need visibility; registration not established
+    /* V7 · lines 19-22 — an unregistered variant; even one matters (kept MATCH); desks at two heritage properties need visibility; registration not established
        Template: https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5 (a branch splits from the main line) */
     P.push({
       svg: function () {
@@ -4377,7 +4377,7 @@
       }
     });
 
-    /* V8 Â· lines 23-25 â€” read the four signals together against the delivered design; a named owner reviews and acts; next: set triggers (kept MATCH)
+    /* V8 · lines 23-25 — read the four signals together against the delivered design; a named owner reviews and acts; next: set triggers (kept MATCH)
        Template: https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ (panels combined into one dashboard) */
     P.push({
       svg: function () {
@@ -4398,9 +4398,9 @@
       panels: P,
       lines: [
         [0, 0, "Report versus use"], [0, 1, "Signals that warn early"], [0, 2, "Don't measure everything"],
-        [1, 0, "Arrival: 82 â†’ 24"], [1, 1, "Month 22: 39"], [1, 2, "Whole guest journey"], [1, 3, "Waiting hides between"],
+        [1, 0, "Arrival: 82 → 24"], [1, 1, "Month 22: 39"], [1, 2, "Whole guest journey"], [1, 3, "Waiting hides between"],
         [2, 0, "Proposed: 10% rule"], [2, 1, "Boundary: 26.4 minutes"],
-        [3, 0, "Adoption: who uses it"], [3, 1, "Kiosk: 65 â†’ 48"], [3, 2, "Fewer users, fewer benefits"],
+        [3, 0, "Adoption: who uses it"], [3, 1, "Kiosk: 65 → 48"], [3, 2, "Fewer users, fewer benefits"],
         [4, 0, "Trigger: 5 points"], [4, 1, "Points, not percent"], [4, 2, "Avoid late investigation"],
         [5, 0, "Exceptions leave path"], [5, 1, "Beyond designed range"], [5, 2, "Illustrative: manual fixes"], [5, 3, "Investigate the pattern"],
         [6, 0, "Unregistered variant"], [6, 1, "Unknown can't be assessed"], [6, 2, "Desks at two properties"], [6, 3, "Registration not established"],
