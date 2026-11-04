@@ -1,5 +1,5 @@
 // FILE w07-claude-v2-part1.js
-// OPER621 Â· Week 7 Â· The Launch Pad Phase â€” animated teaching scenes v2, part 1 of 4 (O1a, O1b, O1c).
+// OPER621 · Week 7 · The Launch Pad Phase — animated teaching scenes v2, part 1 of 4 (O1a, O1b, O1c).
 // Standalone: defines every helper it uses, registers its own scenes, appends its own rules to <style id="vl-sc-w07">.
 // Parts 1-4 load in any order. Rebuilt from the GPT-6 content audit: every narration line now has its own visible
 // state change, and every section is split into 8-11 distinct shots (a new visual every 2-5 lines).
@@ -531,12 +531,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   };
 
   // =====================================================================
-  // O1a â€” Why the Launch Pad matters (31 lines, 10 shots). Audit score 4.5 -> rebuilt.
+  // O1a — Why the Launch Pad matters (31 lines, 10 shots). Audit score 4.5 -> rebuilt.
   // From the course timeline to Qasr's headquarters and network, the queue of problems at one team, the
   // framework phases, the Dubai road map, the commitment card, the measure, Understand, and you.
   // =====================================================================
   section("O1a", "Why the Launch Pad matters", 31, [0, 2, 4, 6, 8, 10, 12, 14, 16, 19, 21, 23, 25, 27, 29], [
-    // Template 137 Â· Corporate Timeline by HenlyFx (Motion Array) â€” https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
+    // Template 137 · Corporate Timeline by HenlyFx (Motion Array) — https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
     // Adapted: "reveal events one by one" -> a marker runs along the course weeks to Week 7's open question,
     // then the earlier milestones light up as the two things already learned.
     { ref: U[137], cap: "Week 7 begins", n: 2,
@@ -553,7 +553,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
       },
       steps: ["+h0 +tl +Mk Mk@1 +q", "-h0 +h1 +a +b"] },
 
-    // Template 105 Â· World map with logistics (LottieFiles) â€” https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy
+    // Template 105 · World map with logistics (LottieFiles) — https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy
     // Adapted: "trace routes between hubs" -> Qasr HQ is the hub, fourteen hotels are the nodes, guests travel the
     // routes; then the routes break and both the guest's face and the performance line fall.
     { ref: U[105], cap: "Inside Qasr Hospitality", n: 3,
@@ -574,7 +574,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -hql hq.s=0.45 tb.o=0 +Lr +ht +Mg1 Mg1@1 +Mg2 Mg2@1 +Mg3 Mg3@1 +lc",
         "-h1 +h2 -lc Lr.o=0.35 -Mg1 -Mg2 -Mg3 +br +fx"] },
 
-    // Template 085 Â· Creative process Motion design creative project (Behance) â€” https://www.behance.net/gallery/190390491/Creative-process-Motion-design-creative-project
+    // Template 085 · Creative process Motion design creative project (Behance) — https://www.behance.net/gallery/190390491/Creative-process-Motion-design-creative-project
     // Adapted: "move the idea through iterations" -> the board already holds strategy and a process map; another
     // diagram is drawn, the question stays; then every department head pushes an urgent bubble.
     { ref: U[85], cap: "The steering question", n: 3,
@@ -593,7 +593,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 +d2 +qq",
         "-h1 +h2 -qq bd.o=0.3 d2.o=0.3 +u0 +u1 +u2 +u3"] },
 
-    // Template 099 Â· Bottling factory (LottieFiles) â€” https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x
+    // Template 099 · Bottling factory (LottieFiles) — https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x
     // Adapted: "advance bottles to the filling station and hold" -> every process waits on the belt for the single
     // delivery-team station; the six-month clock runs; a poor pick drains capacity and outputs nothing.
     { ref: U[99], cap: "One team, six months", n: 3,
@@ -614,7 +614,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -qt +ck +Lck",
         "-h1 +h2 b5.x=96 b5.o=0 +pk Lck.d=0.15 +bt +H1 H1.sx=0.15 +ot"] },
 
-    // Template 135 Â· Timeline by The Creators (Motion Array) â€” https://motionarray.com/after-effects-templates/timeline/
+    // Template 135 · Timeline by The Creators (Motion Array) — https://motionarray.com/after-effects-templates/timeline/
     // Adapted: "reveal milestones and media" -> the launch pad rocket docks on phase three of the framework strip;
     // phases one and two light up with their weeks; both point at an empty project slot.
     { ref: U[135], cap: "The framework so far", n: 5,
@@ -636,7 +636,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h2 +h3 -q1 +p2 +q2",
         "-h3 +h4 -q2 +La +Lb +sl +Lc"] },
 
-    // Template 108 Â· Delivery Truck - Road Animation (LottieFiles) â€” https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v
+    // Template 108 · Delivery Truck - Road Animation (LottieFiles) — https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v
     // Adapted: "translate the truck along a route" -> a road map with every road lit but no destination; a pin drops,
     // one route is drawn within the fuel available; the pin becomes a commitment card.
     { ref: U[108], cap: "Map without destination", n: 3,
@@ -654,7 +654,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 +pn +Lrt +fu car.x=230 car.y=-70",
         "-h1 +h2 -pn +cm"] },
 
-    // Template 115 Â· Infographics For Everything (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-for-everything-2593374/
+    // Template 115 · Infographics For Everything (Motion Array) — https://motionarray.com/after-effects-templates/infographics-for-everything-2593374/
     // Adapted: "bring the graphic and text into view" -> the commitment card's four fields fill in; the card is then
     // lifted onto pillars of support; one pillar (the sponsor who cannot resolve disputes) cracks.
     { ref: U[115], cap: "What the commitment needs", n: 3,
@@ -671,7 +671,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 cd.y=-10 +pl",
         "-h1 +h2 -pl +sp +cr"] },
 
-    // Template 129 Â· Arc tween (Observable) â€” https://observablehq.com/@d3/arc-tween
+    // Template 129 · Arc tween (Observable) — https://observablehq.com/@d3/arc-tween
     // Adapted: "rotate the arc endpoint to a new value" -> a finished project with a blank gauge; the gauge gains a
     // scale and its needle is fixed at a baseline before any wrench touches the process; one problem is chosen.
     { ref: U[129], cap: "Evidence before redesign", n: 3,
@@ -689,7 +689,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -tr -ga +sc +nd nd.r=-38 +wr",
         "-h1 +h2 -sc -nd -wr +pb"] },
 
-    // Template 138 Â· Scrolling Timeline (Motion Array) â€” https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
+    // Template 138 · Scrolling Timeline (Motion Array) — https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
     // Adapted: "scroll the dates and settle on an event" -> the framework scrolls on to Understand, carrying one
     // agreed area; a lens opens the process to show delays; then the two jobs of the Launch Pad are named.
     { ref: U[138], cap: "Preparing for Understand", n: 3,
@@ -708,7 +708,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -Ma -ag +zm",
         "-h1 +h2 -zm +w"] },
 
-    // Template 140 Â· Corporate Timeline by MotionTores (Motion Array) â€” https://motionarray.com/after-effects-templates/corporate-timeline-77666/
+    // Template 140 · Corporate Timeline by MotionTores (Motion Array) — https://motionarray.com/after-effects-templates/corporate-timeline-77666/
     // Adapted: "transition milestones along a path with typography" -> threads run from the steering group to the
     // four lesson stops; the path ends at you, defending the decision; the idea then becomes a launch-ready project.
     { ref: U[140], cap: "Your week ahead", n: 3,
@@ -726,13 +726,13 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O1b â€” The five decisions that make a project possible (31 lines, 10 shots). Audit score 4.6 -> rebuilt.
+  // O1b — The five decisions that make a project possible (31 lines, 10 shots). Audit score 4.6 -> rebuilt.
   // Each decision is shown through Qasr's own example: two proposals, the criteria, the reception-only boundary,
   // the proposed scope, the people, the measures, the benefits and risks, and why all five must be written down.
   // =====================================================================
   const dTrack = (k, n) => G(k, 200, 368, [1, 2, 3, 4, 5].map((i) => Ci(150 + (i - 1) * 25, 368, 9, i <= n ? C.green : C.paper, C.green, 2.5) + Gl(150 + (i - 1) * 25, 373, String(i), 12, i <= n ? C.paper : C.green)).join(""));
   section("O1b", "The five decisions", 31, [0, 2, 4, 6, 8, 10, 13, 15, 17, 19, 21, 23, 25, 27, 29], [
-    // Template 100 Â· 3D Statistics Factory (LottieFiles) â€” https://lottiefiles.com/free-animation/3d-statistics-factory-lRiHNeU9Y4
+    // Template 100 · 3D Statistics Factory (LottieFiles) — https://lottiefiles.com/free-animation/3d-statistics-factory-lRiHNeU9Y4
     // Adapted: "stage the equipment, then the output" -> the steering group switches the programme to GO; the board
     // watches for output, but the commitment card that should define it is still blank.
     { ref: U[100], cap: "The programme must begin", n: 2,
@@ -743,7 +743,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("cd", 290, 200, R(206, 96, 168, 200, 16, C.paper, C.orange, 3.5, 'stroke-dasharray="9 6"') + qB(290, 180, 30) + T2(290, 250, "COMMITMENT", "UNDEFINED", { c: C.orange })),
       steps: ["+h0 +tb +lt", "-h0 +h1 -tb -lt +bd +cd"] },
 
-    // Template 079 Â· Product Workflow Animation & UI Motion Design (Dribbble) â€” https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design
+    // Template 079 · Product Workflow Animation & UI Motion Design (Dribbble) — https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design
     // Adapted: "shift between product states" -> the programme director's guest-arrival card, the Week 1 traveller behind
     // it, the finance director's billing card with its damaged relationships, then the two cards meet as decision one.
     { ref: U[79], cap: "Decision 1: which process", n: 4,
@@ -756,7 +756,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("d1", 200, 250, R(116, 226, 168, 50, 25, C.orange) + T(200, 258, "DECISION ONE", { c: C.paper, nh: true })) + dTrack("tk", 1),
       steps: ["+h0 +pa", "-h0 +h1 +tv", "-h1 +h2 -tv +pb +hs", "-h2 +h3 -tv -hs +d1 +tk"] },
 
-    // Template 113 Â· Infographic Chart Creator (Motion Array) â€” https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
+    // Template 113 · Infographic Chart Creator (Motion Array) — https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
     // Adapted: "grow columns, update the axis and labels" -> the four criteria appear as tiles, then two imagined
     // candidates grow their four columns: a big-benefit option blocked by dependencies, and an easy but trivial one.
     { ref: U[113], cap: "Criteria for choosing", n: 3,
@@ -778,7 +778,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -t0 -t1 -t2 -t3 +ax +A0 +A1 +A2 +A3 +chn",
         "-h1 +h2 -A0 -A1 -A2 -A3 -chn +Z0 +Z1 +Z2 +Z3 +nz"] },
 
-    // Template 078 Â· Data Workflow Animation (Dribbble) â€” https://dribbble.com/shots/27247003-Data-Workflow-Animation
+    // Template 078 · Data Workflow Animation (Dribbble) — https://dribbble.com/shots/27247003-Data-Workflow-Animation
     // Adapted: "activate nodes and links in sequence" -> the arrival steps appear, a reception-only box is drawn, a
     // rate error is born at booking and travels into the box as a delay, then start, end and handoffs are marked.
     { ref: U[78], cap: "Decision 2: the boundary", n: 4,
@@ -803,7 +803,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 n0.o=1 +Me Me@1 +dl +ou",
         "-h2 +h3 -Me -dl -ou -nb n1.o=1 n3.o=1 n4.o=1 +fs +fe +hd"] },
 
-    // Template 090 Â· Multi-Step Icon Animation (LottieFiles) â€” https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
+    // Template 090 · Multi-Step Icon Animation (LottieFiles) — https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
     // Adapted: "activate one step after another" -> the proposed scope capsule lights from booking to the first bill;
     // the later stay, checkout and post-stay steps sit outside; promises beyond the capsule pop.
     { ref: U[90], cap: "The proposed boundary", n: 3,
@@ -816,7 +816,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("pout", 200, 280, [120, 280].map((x) => Ci(x, 216, 15, C.orange, "", 0, 'opacity=".75"') + xx(x, 216, 0.9, C.paper, 3)).join("") + T(200, 362, "NOT DELIVERABLE HERE", { c: C.orange })),
       steps: ["+h0 +ca ca.y=70", "-h0 +h1 +cb ca.y=0", "-h1 +h2 +pin +pout"] },
 
-    // Template 109 Â· teamwork (LottieFiles) â€” https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6
+    // Template 109 · teamwork (LottieFiles) — https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6
     // Adapted: "add people and reveal the team" -> Reservations blocks the booking step, the table has an empty seat
     // for whoever can settle it, then the three kinds of people fill their places as decision three.
     { ref: U[109], cap: "Decision 3: the people", n: 3,
@@ -828,7 +828,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           G("r" + i, 70 + i * 130, 210, person(70 + i * 130, 200, 1.8, c) + (i === 0 ? crown(70, 158, 1.1) : i === 1 ? gear(222, 162, 10, C.navy) : person(360, 214, 1.1, c)) + T2(70 + i * 130, 276, a, b, { z: 17, c }))).join("") + dTrack("tk", 3),
       steps: ["+h0 +rb", "-h0 +h1 -rb +tb", "-h1 +h2 -tb +r0 +r1 +r2 +tk"] },
 
-    // Template 076 Â· Workflow Animation (Dribbble) â€” https://dribbble.com/shots/3791748-Workflow-Animation
+    // Template 076 · Workflow Animation (Dribbble) — https://dribbble.com/shots/3791748-Workflow-Animation
     // Adapted: "reveal the action, transfer the trigger, show the notification" -> each role triggers something
     // different: the sponsor's key opens a barrier while the owner's gauge runs on; front-line staff expose the hidden
     // exceptions; the customer's voice flags an internal shortcut that hurts the guest.
@@ -840,12 +840,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("ib", 200, 210, Fi("M20 170H380V370H20Z", C.blue, 'opacity=".6"') + Fi("M150 170L180 110L210 130L240 100L270 170Z", C.paper, `stroke="${C.navy}" stroke-width="3"`) +
           Fi("M120 170L270 170L310 260L250 340L150 330L100 250Z", C.pale, `stroke="${C.navy}" stroke-width="3" stroke-dasharray="7 5"`) +
           T(70, 156, "MANAGERS SEE", { a: "start", z: 17, c: C.navy }) + [[170, 220], [230, 250], [190, 300]].map(([x, y]) => exB(x, y, 13)).join("") +
-          person(340, 220, 1.5, C.green) + bub(336, 140, 70, 40, C.green) + Gl(336, 148, "â€¦", 22, C.green) + T(200, 362, "FRONT-LINE EMPLOYEES KNOW", { z: 17, c: C.green })) +
+          person(340, 220, 1.5, C.green) + bub(336, 140, 70, 40, C.green) + Gl(336, 148, "…", 22, C.green) + T(200, 362, "FRONT-LINE EMPLOYEES KNOW", { z: 17, c: C.green })) +
         G("cu", 200, 210, gear(90, 160, 34, C.navy) + T2(90, 230, "SIMPLER", "INSIDE", { c: C.navy }) + arr(150, 160, 230, 160, C.navy, 4) + face(290, 160, 38, C.orange, -1) + T2(290, 230, "WORSE FOR", "THE GUEST", { c: C.orange }) +
           person(200, 316, 1.5, C.green) + flag(226, 302, 1.1, C.orange) + T(92, 330, "CUSTOMER REP", { c: C.green })),
       steps: ["+h0 +sp +ow", "-h0 +h1 -sp -ow +ib", "-h1 +h2 -ib +cu"] },
 
-    // Template 119 Â· Infographics V2 by Typoland (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-v2-556482/
+    // Template 119 · Infographics V2 by Typoland (Motion Array) — https://motionarray.com/after-effects-templates/infographics-v2-556482/
     // Adapted: "reveal statistic modules" -> an unproven trophy, a promise with an unknown starting bar, the four
     // measurement modules (decision four), and a before/after pair on one ruler.
     { ref: U[119], cap: "Decision 4: measures", n: 4,
@@ -865,7 +865,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -pr +m0 +m1 +m2 +m3 +tk",
         "-h2 +h3 -m0 -m1 -m2 -m3 -tk +cp +B0 +B1"] },
 
-    // Template 108 Â· Delivery Truck - Road Animation (LottieFiles) â€” https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v
+    // Template 108 · Delivery Truck - Road Animation (LottieFiles) — https://lottiefiles.com/free-animation/delivery-truck-road-animation-K9xyRiku9v
     // Adapted: "translate the truck along the route" -> the project heads for its expected benefit (decision five);
     // then two named risks land on the road: disconnected systems and departmental opposition.
     { ref: U[108], cap: "Decision 5: benefits, risks", n: 2,
@@ -876,7 +876,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("o2", 300, 250, person(316, 250, 1.6, C.orange) + Pa("M292 254L340 266M292 266L340 254", C.paper, 4) + T2(316, 310, "DEPARTMENT", "OPPOSITION", { z: 17, c: C.orange })) + dTrack("tk", 5),
       steps: ["+h0 +rd +Mt Mt@0.75 +tk", "-h0 +h1 Mt@0.2 +o1 +o2"] },
 
-    // Template 083 Â· The Process Architectural Motion (Behance) â€” https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
+    // Template 083 · The Process Architectural Motion (Behance) — https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
     // Adapted: "build and revise successive layers" -> the five decisions form one arch that cracks when a stone is
     // missing; people leave with different pictures of the agreement; the written document holds all five.
     { ref: U[83], cap: "All five, written down", n: 3,
@@ -895,12 +895,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O1c â€” What a completed Launch Pad must deliver (33 lines, 10 shots). Audit score 4.5 -> rebuilt.
+  // O1c — What a completed Launch Pad must deliver (33 lines, 10 shots). Audit score 4.5 -> rebuilt.
   // The handover document is built item by item, each with its own picture: the meetings, the deck that
   // nobody owns, the vague note, the boundary, the two roles, the people, the measure, the risks, the handover.
   // =====================================================================
   section("O1c", "What a Launch Pad delivers", 33, [0, 2, 4, 6, 8, 11, 13, 16, 18, 20, 22, 24, 26, 28, 31], [
-    // Template 139 Â· Corporate Timeline by Zargones (Motion Array) â€” https://motionarray.com/after-effects-templates/corporate-timeline-255459/
+    // Template 139 · Corporate Timeline by Zargones (Motion Array) — https://motionarray.com/after-effects-templates/corporate-timeline-255459/
     // Adapted: "introduce events and shift focus" -> meeting dates pile up at headquarters, the director asks what
     // was agreed, and the focus shifts to a thick deck of ambitions with no owner on any of them.
     { ref: U[139], cap: "After many meetings", n: 3,
@@ -919,7 +919,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -hq -cl +dr +mg",
         "-h1 +h2 -dr -mg +dk"] },
 
-    // Template 122 Â· Dashboard by Weblodge (LottieFiles) â€” https://lottiefiles.com/free-animation/deliver-better-optimized-lottie-json-animation-Qgvgddnv8J
+    // Template 122 · Dashboard by Weblodge (LottieFiles) — https://lottiefiles.com/free-animation/deliver-better-optimized-lottie-json-animation-Qgvgddnv8J
     // Adapted: "introduce the UI and emphasise the outcome" -> the deck compresses into one usable page that slides to
     // the next team; then a defined process is set beside a tangle of conflicting intentions.
     { ref: U[122], cap: "A usable document", n: 2,
@@ -933,7 +933,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           Pa("M230 120C300 90 360 200 280 190S220 260 330 250M240 240C260 150 350 140 360 110M250 100C330 160 230 200 350 270", C.orange, 3.5) + noB(368, 92, 13) + T2(296, 320, "CONFLICTING", "INTENTIONS", { c: C.orange })),
       steps: ["+h0 +pg +Lgo +ah +tm", "-h0 +h1 -pg -Lgo -ah -tm +df +cf"] },
 
-    // Template 133 Â· Path tween (Observable) â€” https://observablehq.com/@d3/path-tween
+    // Template 133 · Path tween (Observable) — https://observablehq.com/@d3/path-tween
     // Adapted: "sample the paths and morph the geometry" -> the vague note, the lens finding nothing to aim at,
     // then the shapeless cloud collapsing into one named process card with its reason attached.
     { ref: U[133], cap: "Vague will not do", n: 3,
@@ -945,7 +945,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("cd", 200, 190, R(70, 92, 260, 168, 16, C.paper, C.green, 4) + CAND[0](140, 170, 1.8) + T2(250, 160, "GUEST", "ARRIVAL", { z: 22, c: C.green }) + pill(200, 300, "WHY IT COMES FIRST", C.green, C.green)),
       steps: ["+h0 +nt", "-h0 +h1 nt.o=0.25 +ls", "-h1 +h2 -nt -ls +cl cl.s=0.1 cl.o=0 +cd"] },
 
-    // Template 090 Â· Multi-Step Icon Animation (LottieFiles) â€” https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
+    // Template 090 · Multi-Step Icon Animation (LottieFiles) — https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
     // Adapted: "activate one step after another" -> a vertical step stack from booking to the first night's bill, with
     // start and end flags; the excluded steps sit outside; a written exclusion list stops scope creep.
     { ref: U[90], cap: "Where it begins, ends", n: 4,
@@ -969,7 +969,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +o0 +o1",
         "-h2 +h3 -o0 -o1 +wl +Mc0 Mc0@0.7 +Mc1 Mc1@0.85 +Mc2 Mc2@0.7"] },
 
-    // Template 104 Â· Logistics Trucks (LottieFiles) â€” https://lottiefiles.com/free-animation/logistics-trucks-DHvuLcYVdQ
+    // Template 104 · Logistics Trucks (LottieFiles) — https://lottiefiles.com/free-animation/logistics-trucks-DHvuLcYVdQ
     // Adapted: "move the truck and the delivery marker" -> two role cards share a goal; the sponsor lifts the barrier
     // the team truck cannot pass; the truck's trip (the project) ends, but the owner keeps running the depot.
     { ref: U[104], cap: "Sponsor and owner", n: 5,
@@ -991,7 +991,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h2 +h3 cs.o=0.3 co.o=1 -Lky Mt@1 +pe +dp",
         "-h3 +h4 co.o=0.25 +fd -dp"] },
 
-    // Template 113 Â· Infographic Chart Creator (Motion Array) â€” https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
+    // Template 113 · Infographic Chart Creator (Motion Array) — https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
     // Adapted: "grow columns, update the axis and labels" -> four departments hold pieces of one problem; their
     // influence and interest columns grow; then a list of names is replaced by an engagement plan.
     { ref: U[113], cap: "Who takes part", n: 4,
@@ -1014,7 +1014,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -pz -d0 -d1 -d2 -d3 +ax +B0 +B4 +B1 +B5 +B2 +B6 +B3 +B7",
         "-h2 +h3 -ax -B0 -B1 -B2 -B3 -B4 -B5 -B6 -B7 +ls +ar +pl"] },
 
-    // Template 128 Â· Pie chart update (Observable) â€” https://observablehq.com/@d3/pie-chart-update
+    // Template 128 · Pie chart update (Observable) — https://observablehq.com/@d3/pie-chart-update
     // Adapted: "tween the sector angles between datasets" -> the announced promise, a donut whose sectors are still
     // unknown, the four measurement entries, and an invented sector being painted in and struck out.
     { ref: U[128], cap: "Measure, then target", n: 4,
@@ -1031,7 +1031,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -dn -jg +r0 +r1 +r2 +r3",
         "-h2 +h3 -r0 -r1 -r2 -r3 +fk"] },
 
-    // Template 132 Â· Easing Animations (Observable) â€” https://observablehq.com/@d3/easing-animations
+    // Template 132 · Easing Animations (Observable) — https://observablehq.com/@d3/easing-animations
     // Adapted: "replay motions with varied timing" -> benefits wait at the finish line behind named risks; two
     // departments then move at different speeds so the decision gate stays shut; the sponsor sees where to step in.
     { ref: U[132], cap: "Name the risks", n: 3,
@@ -1047,7 +1047,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 tr.o=0.35 +ln +Ma Ma@0.75 +Mb Mb@0.25 +cl +tf",
         "-h1 +h2 -cl +sp"] },
 
-    // Template 088 Â· Automated Workflows (LottieFiles) â€” https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK
+    // Template 088 · Automated Workflows (LottieFiles) — https://lottiefiles.com/free-animation/automated-workflows-XR2hxXOdEK
     // Adapted: "trigger repeated actions and complete" -> the practical page (not the glossy report) triggers the
     // Understand investigation; meanwhile four candidates still wait for the one delivery team.
     { ref: U[88], cap: "A practical handover", n: 3,
@@ -1063,7 +1063,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -gl -pp +iv",
         "-h1 +h2 -iv +cc"] },
 
-    // Template 116 Â· Infographics by Ruslan Klimovich (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-3844461/
+    // Template 116 · Infographics by Ruslan Klimovich (Motion Array) — https://motionarray.com/after-effects-templates/infographics-3844461/
     // Adapted: "sequence statistic graphics" -> four candidate doors for the next lesson; then the closing test:
     // the impressive document fades and the investigation it enables lights up.
     { ref: U[116], cap: "What success means", n: 2,
@@ -1079,7 +1079,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
 })();
 
 // FILE w07-claude-v2-part2.js
-// OPER621 Â· Week 7 Â· The Launch Pad Phase â€” animated teaching scenes v2, part 2 of 4 (O2a, O2b, O2c).
+// OPER621 · Week 7 · The Launch Pad Phase — animated teaching scenes v2, part 2 of 4 (O2a, O2b, O2c).
 // Standalone: defines every helper it uses, registers its own scenes, appends its own rules to <style id="vl-sc-w07">.
 // Parts 1-4 load in any order. Rebuilt from the GPT-6 content audit: every narration line now has its own visible
 // state change, and every section is split into 8-11 distinct shots (a new visual every 2-5 lines).
@@ -1611,12 +1611,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   };
 
   // =====================================================================
-  // O2a â€” Choosing a process that matters and can be delivered (29 lines, 9 shots). Audit score 5.2 -> rebuilt.
+  // O2a — Choosing a process that matters and can be delivered (29 lines, 9 shots). Audit score 5.2 -> rebuilt.
   // Kept from the matched moments: one ruler for every candidate, value at the centre, the sponsor who acts,
   // the trapped team, and "one strong bar cannot cancel a missing one". Every other line gets a new picture.
   // =====================================================================
   section("O2a", "A process that matters", 29, [0, 2, 4, 6, 8, 11, 13, 15, 16, 18, 20, 22, 25, 27], [
-    // Template 098 Â· Factory (LottieFiles) â€” https://lottiefiles.com/free-animation/factory-4XJZcnPgAb
+    // Template 098 · Factory (LottieFiles) — https://lottiefiles.com/free-animation/factory-4XJZcnPgAb
     // Adapted: "animate output and an environmental signal" -> a capacity tank with one outlet; real proposals queue
     // up; one team and a six-month clock; the team cannot split into four.
     { ref: U[98], cap: "Limited delivery capacity", n: 4,
@@ -1632,7 +1632,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +tm",
         "-h2 +h3 +ar"] },
 
-    // Template 114 Â· Infographics Pack by JVARTS STUDIO (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-pack-100132/
+    // Template 114 · Infographics Pack by JVARTS STUDIO (Motion Array) — https://motionarray.com/after-effects-templates/infographics-pack-100132/
     // Adapted: "reveal the selected metric element" -> a severity dial pinned at maximum is not a ticket to be first; the
     // problem's demands on authority, knowledge and time overshoot the team's line; then one ruler marks every card.
     { ref: U[114], cap: "Serious is not enough", n: 3,
@@ -1648,7 +1648,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           [0, 1, 2, 3].map((i) => Gs(57 + i * 96, 236, 0.7, target(-24, 0, 12, C.green) + Pa("M-6 6A10 10 0 0 1 14 6", C.navy, 3) + person(28, 4, 0.5, C.gold))).join("") + T(200, 290, "ONE RULER, EVERY CARD", { c: C.green })),
       steps: ["+h0 +dl", "-h0 +h1 -dl +ax +B0 +B1 +B2", "-h1 +h2 -ax -B0 -B1 -B2 +rl"] },
 
-    // Template 111 Â· Hierarchy traversal animated (Observable) â€” https://old.observablehq.com/@d3/hierarchy-traversal-animated
+    // Template 111 · Hierarchy traversal animated (Observable) — https://old.observablehq.com/@d3/hierarchy-traversal-animated
     // Adapted: "visit one node then the next" -> the target sits at the centre; Qasr's three objectives are visited one by
     // one; a noisy complaint misses; a proposal is linked to an objective instead of to someone's frustration.
     { ref: U[111], cap: "Strategic value", n: 4,
@@ -1661,7 +1661,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           face(330, 330, 20, C.orange, -1) + noB(354, 312, 10) + T(384, 372, "PERSONAL FRUSTRATION", { a: "end", z: 17, c: C.orange })),
       steps: ["+h0 +tg", "-h0 +h1 +o0 +o1 +o2", "-h1 +h2 o2.o=0 +mg", "-h2 +h3 -mg +lk"] },
 
-    // Template 104 Â· Logistics Trucks (LottieFiles) â€” https://lottiefiles.com/free-animation/logistics-trucks-DHvuLcYVdQ
+    // Template 104 · Logistics Trucks (LottieFiles) — https://lottiefiles.com/free-animation/logistics-trucks-DHvuLcYVdQ
     // Adapted: "move the truck and the delivery marker" -> can the team truck reach the prize? A wall of systems that must
     // be replaced blocks the big prize; a shorter road reaches a real prize and the confidence meter rises.
     { ref: U[104], cap: "Can we deliver it?", n: 4,
@@ -1679,7 +1679,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +wl",
         "-h2 +h3 rd.o=0.35 sv.o=0.35 wl.o=0.35 Mt.o=0.35 +r2 +Mu Mu@1 +cf"] },
 
-    // Template 113 Â· Infographic Chart Creator (Motion Array) â€” https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
+    // Template 113 · Infographic Chart Creator (Motion Array) — https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
     // Adapted: "grow columns, update the axis" -> an easy option grows a tall delivery column but almost no value column;
     // then the axes become importance by feasibility, with the sweet spot top-right.
     { ref: U[113], cap: "Importance and feasibility", n: 2,
@@ -1691,7 +1691,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           [[110, 120, C.orange], [320, 290, C.gold], [290, 160, C.green], [150, 270, C.navy]].map(([x, y, c]) => Ci(x, y, 13, c, C.paper, 3)).join("") + okB(310, 150, 10)),
       steps: ["+h0 +ez +B0 +B1", "-h0 +h1 -ez -B0 -B1 +pl"] },
 
-    // Template 089 Â· Git Workflow 1 (LottieFiles) â€” https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
+    // Template 089 · Git Workflow 1 (LottieFiles) — https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
     // Adapted: "branch, merge and reconnect" -> the merge needs someone with rights: Reservations and Finance must agree on
     // shared information; without a sponsor the team is squeezed between them; a nameplate alone does not merge anything.
     { ref: U[89], cap: "A sponsor who acts", n: 4,
@@ -1706,7 +1706,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           [["TIME", (x, y) => clock(x, y, 16, C.green, 90)], ["AUTHORITY", (x, y) => keyI(x, y, 1)], ["SUPPORT", (x, y) => person(x, y + 6, 0.8, C.green)]].map(([s, f], i) => f(226, 110 + i * 60) + T(244, 116 + i * 60, "REAL " + s, { a: "start", z: 17, c: C.green })).join("")),
       steps: ["+h0 +gt", "-h0 +h1 -gt +mg", "-h1 +h2 -mg +tp", "-h2 +h3 -tp +tt"] },
 
-    // Template 120 Â· Animated Dashboards (LottieFiles) â€” https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
+    // Template 120 · Animated Dashboards (LottieFiles) — https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
     // Adapted: "transition between dashboard panels" -> stakeholders recognise a rising result; the board prefers evidence
     // to a glossy deck; noise and publicity are struck out; the result must show inside the six-month window.
     { ref: U[120], cap: "Results people can see", n: 4,
@@ -1720,7 +1720,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           flag(304, 212, 1.4, C.green) + T(200, 290, "SIX-MONTH WINDOW", { c: C.navy }) + T2(304, 140, "OUTCOME", "DEMONSTRATED", { z: 17, c: C.green })),
       steps: ["+h0 +db", "-h0 +h1 -db +ev", "-h1 +h2 -ev +nz", "-h2 +h3 -nz +tl"] },
 
-    // Template 116 Â· Infographics by Ruslan Klimovich (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-3844461/
+    // Template 116 · Infographics by Ruslan Klimovich (Motion Array) — https://motionarray.com/after-effects-templates/infographics-3844461/
     // Adapted: "sequence statistic graphics" -> one candidate's four bars: the tallest cannot fill the empty sponsor slot;
     // then two candidates are compared by risk: big value without a sponsor versus smaller value with committed leadership.
     { ref: U[116], cap: "Criteria work together", n: 2,
@@ -1733,7 +1733,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           Gs(104, 340, 1, Pa("M-30 6A30 30 0 0 1 30 6", C.blue, 10) + Pa("M0 6L22 -14", C.orange, 4)) + Gs(296, 340, 1, Pa("M-30 6A30 30 0 0 1 30 6", C.blue, 10) + Pa("M0 6L-22 -14", C.green, 4))),
       steps: ["+h0 +ax +B0 +B1 +B2 +B3", "-h0 +h1 -ax -B0 -B1 -B2 -B3 +cp"] },
 
-    // Template 095 Â· contract process (LottieFiles) â€” https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8
+    // Template 095 · contract process (LottieFiles) — https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8
     // Adapted: "reveal the proposal and the agreement" -> the podium of an obvious ranking is struck out and a written
     // ledger of trade-offs replaces it; then the four real candidates are dealt for the next section.
     { ref: U[95], cap: "Record the trade-offs", n: 2,
@@ -1747,12 +1747,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O2b â€” Qasr's four competing candidates (29 lines, 9 shots). Audit score 4.6 -> rebuilt.
+  // O2b — Qasr's four competing candidates (29 lines, 9 shots). Audit score 4.6 -> rebuilt.
   // Each candidate gets its own shots built from the narration's evidence: the guest's arrival, the lost corporate
   // accounts and the opposed director, the January deadline without a sponsor, and the volume of room releases.
   // =====================================================================
   section("O2b", "Qasr's four candidates", 29, [0, 2, 4, 6, 8, 10, 12, 15, 17, 19, 21, 23, 25, 27], [
-    // Template 079 Â· Product Workflow Animation & UI Motion Design (Dribbble) â€” https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design
+    // Template 079 · Product Workflow Animation & UI Motion Design (Dribbble) — https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design
     // Adapted: "shift between product states" -> four proposal cards, each held by its manager; the director's evidence
     // lens passes over all four; the cards give way to the two tests every argument must pass.
     { ref: U[79], cap: "Four proposals", n: 3,
@@ -1774,7 +1774,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 +Ml Ml@1 +ev",
         "-h1 +h2 -Ml -ev -c0 -c1 -c2 -c3 +bal"] },
 
-    // Template 081 Â· Clean Workflow Visualization with Motion Graphics (Dribbble) â€” https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics
+    // Template 081 · Clean Workflow Visualization with Motion Graphics (Dribbble) — https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics
     // Adapted: "connect journey steps with transitions" -> the guest walks up to the hotel (first impression), waits at
     // reception between two conflicting screens, then the camera pulls back to the departments that feed reception.
     { ref: U[81], cap: "Candidate: guest arrival", n: 3,
@@ -1782,7 +1782,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("ht", 290, 200, hotel(290, 196, 4.4, C.navy) + star(352, 96, 12) + star(228, 110, 9) + T(280, 334, "QASR HOTEL ENTRANCE", { c: C.navy })) +
         Mv("Mg", [[30, 270], [190, 270]], person(0, 0, 1.6, C.green) + suit(26, 10, 0.9)) +
         G("rc", 200, 220, desk(200, 250, 220, C.navy) + person(200, 232, 1.4, C.navy) + scr(120, 196, 64, 44, C.ink) + scr(280, 196, 64, 44, C.ink) + coin(120, 194, 11) + coin(280, 194, 11, C.orange) +
-          Gl(200, 160, "â‰ ", 34, C.orange) + clock(338, 120, 18, C.orange, 210)) +
+          Gl(200, 160, "≠", 34, C.orange) + clock(338, 120, 18, C.orange, 210)) +
         G("q", 60, 300, [40, 80, 120].map((x, i) => person(x, 316, 1.1, i ? C.navy : C.green)).join("") + T(30, 366, "TIRED GUESTS QUEUE", { a: "start", c: C.orange })) +
         G("dp", 200, 200, [[60, 100, C.orange, JI.book, "RESERVATIONS", "TEAM"], [60, 200, C.navy, JI.room, "HOUSEKEEPING", "TEAM"], [60, 300, C.gold, JI.bill, "FINANCE", "TEAM"]].map(([x, y, c, f, a, b]) =>
           node(x - 20, y, 22, c, f(x - 20, y)) + T2(x + 12, y - 4, a, b, { a: "start", z: 17, c }) + arr(x + 130, y, 268, 200 + (y - 200) * 0.15, c, 3.5)).join("") +
@@ -1792,7 +1792,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -ht -Mg +rc +q",
         "-h1 +h2 -rc -q +dp"] },
 
-    // Template 089 Â· Git Workflow 1 (LottieFiles) â€” https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
+    // Template 089 · Git Workflow 1 (LottieFiles) — https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
     // Adapted: "branch, merge and reconnect" -> the departmental branches merge into one guest journey, merge conflicts
     // appear on responsibility, authority and scope; then a sponsor volunteers and the director recommends.
     { ref: U[89], cap: "Guest arrival's case", n: 3,
@@ -1808,7 +1808,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 br.o=0.25 +cf",
         "-h1 +h2 -br -cf +sp +rd +cmp"] },
 
-    // Template 130 Â· Animated line chart lesson (Observable) â€” https://observablehq.com/@d3/learn-d3-animation
+    // Template 130 · Animated line chart lesson (Observable) — https://observablehq.com/@d3/learn-d3-animation
     // Adapted: "trace a time series" -> two corporate accounts are stamped LOST, the revenue line traces their fall,
     // then a shield shows the future revenue an improvement might protect.
     { ref: U[130], cap: "Candidate: corporate billing", n: 3,
@@ -1825,7 +1825,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -ac +ax +Ld +tg",
         "-h1 +h2 -tg +Lu +sh"] },
 
-    // Template 131 Â· Transition end (Observable) â€” https://observablehq.com/@d3/transition-end
+    // Template 131 · Transition end (Observable) — https://observablehq.com/@d3/transition-end
     // Adapted: "move, await, then recolour" -> the opposing director blocks the move; the heavy value weight lands, but
     // the team token waits instead of moving automatically.
     { ref: U[131], cap: "Billing's missing support", n: 2,
@@ -1837,7 +1837,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         Ln("Lw", "M160 210H246", C.navy, 4, 'stroke-dasharray="7 6"') + G("hold", 204, 186, R(194, 186, 8, 26, 2, C.orange) + R(208, 186, 8, 26, 2, C.orange)),
       steps: ["+h0 +op +ch", "-h0 +h1 -op -ch +wt +tm +Lw +hold"] },
 
-    // Template 136 Â· Project TimeLine (Motion Array) â€” https://motionarray.com/after-effects-templates/project-timeline-2424919/
+    // Template 136 · Project TimeLine (Motion Array) — https://motionarray.com/after-effects-templates/project-timeline-2424919/
     // Adapted: "advance along the time markers" -> the digital guest record arrives, the timeline runs to a January
     // regulatory deadline that flips the switch from optional to mandatory, and the sponsor seat is empty.
     { ref: U[136], cap: "Candidate: digital record", n: 3,
@@ -1853,7 +1853,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -cd +tl +Mn Mn@1 +sw",
         "-h1 +h2 -tl -Mn -sw +al +es"] },
 
-    // Template 087 Â· Workflow by Muammar Faiq (LottieFiles) â€” https://lottiefiles.com/free-animation/workflow-Jt52qpU9fj
+    // Template 087 · Workflow by Muammar Faiq (LottieFiles) — https://lottiefiles.com/free-animation/workflow-Jt52qpU9fj
     // Adapted: "cycle the stages of the workflow glyph" -> the mandatory work card gets its leader slot; the question
     // splits into two separate stages; a parallel compliance cycle keeps running beside the BPM choice.
     { ref: U[87], cap: "Obligation versus choice", n: 3,
@@ -1861,7 +1861,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("mw", 200, 200, R(70, 80, 260, 190, 16, C.paper, C.orange, 4) + CAND[2](140, 150, 1.6) + lockI(140, 226, 1.1, C.orange) + chairE(260, 176, 1.5, C.orange) + T(260, 246, "LEADER SLOT", { c: C.orange }) +
           T(200, 316, "LIMITED RESOURCES", { c: C.navy }) + coin(100, 350, 8) + coin(122, 350, 8)) +
         G("fk", 200, 200, R(20, 90, 170, 200, 16, C.paper, C.green, 3.5) + CAND[0](105, 150, 1.3) + T2(105, 220, "WHICH BPM", "PROJECT?", { c: C.green }) +
-          R(210, 90, 170, 200, 16, C.paper, C.orange, 3.5) + cal(295, 150, 1.4, C.orange) + T2(295, 220, "MEET THE", "DEADLINE", { c: C.orange }) + Gl(200, 200, "â‰ ", 30, C.navy)) +
+          R(210, 90, 170, 200, 16, C.paper, C.orange, 3.5) + cal(295, 150, 1.4, C.orange) + T2(295, 220, "MEET THE", "DEADLINE", { c: C.orange }) + Gl(200, 200, "≠", 30, C.navy)) +
         G("tk", 200, 220, Pa("M30 170H370", C.green, 8) + Pa("M30 280H370", C.orange, 8) + CAND[0](110, 170, 1) + CAND[2](110, 280, 1) +
           T(30, 150, "BPM PROGRAMME", { a: "start", c: C.green }) + T(30, 324, "COMPLIANCE RESPONSE", { a: "start", c: C.orange }) +
           Mv("Mx", [[150, 170], [340, 170]], Ci(0, 0, 9, C.green)) + Mv("My", [[150, 280], [340, 280]], Ci(0, 0, 9, C.orange)) + cal(330, 250, 0.7, C.orange)),
@@ -1870,7 +1870,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -mw +fk",
         "-h1 +h2 -fk +tk +Mx Mx@1 +My My@0.8"] },
 
-    // Template 097 Â· Business Solution conveyor (LottieFiles) â€” https://lottiefiles.com/free-animation/business-solution-pNyNfkcRsa
+    // Template 097 · Business Solution conveyor (LottieFiles) — https://lottiefiles.com/free-animation/business-solution-pNyNfkcRsa
     // Adapted: "move boxes on the conveyor, rotate the gear, repeat" -> rooms ride the housekeeping belt in volume; a slow
     // belt keeps guests waiting; the contained scope and neutral sponsor are weighed against the others' benefits.
     { ref: U[97], cap: "Candidate: room release", n: 5,
@@ -1892,7 +1892,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h2 +h3 -ez +sc +bm bm.r=6",
         "-h3 +h4 -sc +tp"] },
 
-    // Template 126 Â· Stacked-to-grouped bars (Observable) â€” https://observablehq.com/@d3/stacked-to-grouped-bars
+    // Template 126 · Stacked-to-grouped bars (Observable) — https://observablehq.com/@d3/stacked-to-grouped-bars
     // Adapted: "reposition bars while preserving identity" -> the complaint pile and the size ruler are rejected;
     // the four candidates regroup as four different profiles; a loud argument is set against a complete case.
     { ref: U[126], cap: "Four different profiles", n: 4,
@@ -1904,7 +1904,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           const x = i % 2 ? 204 : 12, y = i < 2 ? 70 : 214;
           return G("p" + i, x + 88, y + 64, R(x, y, 184, 130, 16, C.paper, CCOL[i], 3.5) + CAND[i](x + 40, y + 40, 1.1) + f(x + 140, y + 40) + T2(x + 92, y + 92, a, b, { z: 17, c: C.ink }));
         }).join("") +
-        G("ac", 200, 210, mega(100, 190, 2.6, C.orange) + T2(100, 290, "STRONG", "ARGUMENT", { c: C.orange }) + Gl(200, 204, "â‰ ", 40, C.navy) +
+        G("ac", 200, 210, mega(100, 190, 2.6, C.orange) + T2(100, 290, "STRONG", "ARGUMENT", { c: C.orange }) + Gl(200, 204, "≠", 40, C.navy) +
           R(244, 110, 112, 150, 10, C.paper, C.green, 3.5) + [0, 1, 2, 3].map((i) => okB(270, 138 + i * 32, 10) + Pa(`M286 ${138 + i * 32}H340`, C.green, 3)).join("") + T2(300, 290, "COMPLETE", "BUSINESS CASE", { c: C.green })),
       steps: [
         "+h0 +ct +B0 +B1 +B2 +B3",
@@ -1914,7 +1914,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O2c â€” Making a defensible first choice (30 lines, 8 shots). Audit score 4.5 -> rebuilt.
+  // O2c — Making a defensible first choice (30 lines, 8 shots). Audit score 4.5 -> rebuilt.
   // Arguments become a decision: one shared criteria grid, then each candidate gets its own test picture,
   // followed by what is deferred and why, and the written decision record.
   // =====================================================================
@@ -1923,13 +1923,13 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
     m: (x, y) => Ci(x, y, 13, C.gold) + Pa(`M${x - 7} ${y + 1}q3.5 -6 7 0t7 0`, C.paper, 3), "!": (x, y) => exB(x, y, 13)
   };
   section("O2c", "A defensible first choice", 30, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28], [
-    // Template 103 Â· Data Factory Animation (LottieFiles) â€” https://lottiefiles.com/free-animation/data-factory-animation-I6dMAfEyrl
+    // Template 103 · Data Factory Animation (LottieFiles) — https://lottiefiles.com/free-animation/data-factory-animation-I6dMAfEyrl
     // Adapted: "feed inputs, output converted leads" -> arguments are fed into the funnel and must come out as one
     // decision; then the four inputs are named: two favourites, a deadline and a contained fix.
     { ref: U[103], cap: "Arguments to decision", n: 3,
       svg: () => hl("h0", "ARGUMENTS INTO A DECISION", C.navy) + hl("h1", "TWO FAVOURITES CLASH", C.orange) + hl("h2", "DEADLINE AND CONTAINED SCOPE", C.navy) +
         G("fn", 200, 190, Fi("M86 120H314L230 230V270H170V230Z", C.pale, `stroke="${C.navy}" stroke-width="3" stroke-linejoin="round"`) +
-          [[110, 80], [170, 64], [230, 72], [290, 84], [140, 100], [260, 104]].map(([x, y], i) => bub(x, y, 46, 28, CCOL[i % 4]) + Gl(x, y + 6, "â€¦", 18, CCOL[i % 4])).join("") +
+          [[110, 80], [170, 64], [230, 72], [290, 84], [140, 100], [260, 104]].map(([x, y], i) => bub(x, y, 46, 28, CCOL[i % 4]) + Gl(x, y + 6, "…", 18, CCOL[i % 4])).join("") +
           R(140, 286, 120, 50, 12, C.green) + T(200, 318, "ONE DECISION", { c: C.paper, nh: true })) +
         [[0, 92, 210, "GUEST", "ARRIVAL"], [1, 308, 210, "CORPORATE", "BILLING"], [2, 92, 110, "DIGITAL", "RECORD"], [3, 308, 110, "ROOM", "RELEASE"]].map(([i, x, y, a, b]) =>
           G("c" + i, x, y, R(x - 86, y - 38, 172, 76, 14, C.paper, CCOL[i], 3.5) + CAND[i](x - 52, y, 0.95) + T2(x - 18, y - 4, a, b, { a: "start", z: 17, c: C.ink }))).join("") +
@@ -1942,7 +1942,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -fn +c0 +c1 +pd +fr +tug",
         "-h1 +h2 +c2 +c3 +dl +ct"] },
 
-    // Template 118 Â· Flat Infographics by zevs (Motion Array) â€” https://motionarray.com/after-effects-templates/flat-infographics-17982/
+    // Template 118 · Flat Infographics by zevs (Motion Array) — https://motionarray.com/after-effects-templates/flat-infographics-17982/
     // Adapted: "animate charts into place" -> the loudest voice is struck out, the four-by-four criteria grid
     // assembles, each cell takes a judgement with its evidence clip, and fog shows where a score would mislead.
     { ref: U[118], cap: "One shared framework", n: 4,
@@ -1966,7 +1966,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +r0 +r1 +r2 +r3 +clip",
         "-h2 +h3 -clip +fog +sc"] },
 
-    // Template â€” Workflow path (CodePen, cited in the content audit) â€” https://codepen.io/WebGuyJeff/pen/rNdmqdO
+    // Template — Workflow path (CodePen, cited in the content audit) — https://codepen.io/WebGuyJeff/pen/rNdmqdO
     // Adapted: the audit's "slide value and delivery cards onto a balanced scale" -> billing's two lost accounts
     // load the value pan; the delivery pan holds only a question; four unknowns are listed; then risks pop.
     { ref: "https://codepen.io/WebGuyJeff/pen/rNdmqdO", cap: "Weighing billing", n: 4,
@@ -1988,7 +1988,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -ld -lv +u0 +u1 +u2 +u3",
         "-h2 +h3 +w0 +w1 +w2 +w3"] },
 
-    // Template 102 Â· 3D Isometric Factory Process (LottieFiles) â€” https://lottiefiles.com/free-animation/3d-isometric-factory-process-TJAlBgYcXw
+    // Template 102 · 3D Isometric Factory Process (LottieFiles) — https://lottiefiles.com/free-animation/3d-isometric-factory-process-TJAlBgYcXw
     // Adapted: "sequence the robotic activity" -> one contained housekeeping cell, then the same small gain repeated
     // across every property, then the question of the only team, then the credibility cost of an easy win.
     { ref: U[102], cap: "Weighing room release", n: 4,
@@ -2008,7 +2008,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -hs -H0 -hl +tm +Lt +rr",
         "-h2 +h3 -tm -Lt -rr +tp +cr +nd"] },
 
-    // Template 093 Â· Process-Para (LottieFiles) â€” https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT
+    // Template 093 · Process-Para (LottieFiles) — https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT
     // Adapted: "rotate, wait, finish" -> a countdown ring to January locks the obligation; a higher score cannot
     // unlock it; a separate workstream still needs a sponsor; the selection door does not open onto "ignore".
     { ref: U[93], cap: "Mandatory, not optional", n: 4,
@@ -2029,7 +2029,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +ln +es",
         "-h2 +h3 -sb -ln -es +dr"] },
 
-    // Template 077 Â· Workflow AI Animation (Dribbble) â€” https://dribbble.com/shots/26275497-Workflow-AI-Animation
+    // Template 077 · Workflow AI Animation (Dribbble) — https://dribbble.com/shots/26275497-Workflow-AI-Animation
     // Adapted: "advance data through stages" -> guest arrival's evidence flows through stages: visible impact
     // across departments, the link back to weeks 5 and 6, the conditional sponsor test, then measures and cooperation.
     { ref: U[77], cap: "Weighing guest arrival", n: 4,
@@ -2049,7 +2049,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -ch +cd",
         "-h2 +h3 -cd +mc"] },
 
-    // Template 107 Â· Supply Chain and Shipping (LottieFiles) â€” https://lottiefiles.com/free-animation/supply-chain-and-shipping-Gd8ZsVZpXq
+    // Template 107 · Supply Chain and Shipping (LottieFiles) — https://lottiefiles.com/free-animation/supply-chain-and-shipping-Gd8ZsVZpXq
     // Adapted: "advance the shipment through nodes" -> each candidate that is not chosen is routed somewhere explicit:
     // billing is acknowledged and deferred with a reason and a date; room release stays on the board; the record goes to compliance.
     { ref: U[107], cap: "Deferred, with reasons", n: 3,
@@ -2067,7 +2067,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -ga bc.o=0 +fr +lt",
         "-h1 +h2 -bc -fr -lt +bd"] },
 
-    // Template 121 Â· Dashboard by RAKIBUZZAMAN (LottieFiles) â€” https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP
+    // Template 121 · Dashboard by RAKIBUZZAMAN (LottieFiles) — https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP
     // Adapted: "fill the graph and highlight the metric" -> the decision record fills row by row; the other problems
     // stay on the dashboard; the next lesson's two panels preview; every option keeps its plus and minus.
     { ref: U[121], cap: "The decision record", n: 4,
@@ -2092,7 +2092,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
 })();
 
 // FILE w07-claude-v2-part3.js
-// OPER621 Â· Week 7 Â· The Launch Pad Phase â€” animated teaching scenes v2, part 3 of 4 (O3a, O3b, O3c).
+// OPER621 · Week 7 · The Launch Pad Phase — animated teaching scenes v2, part 3 of 4 (O3a, O3b, O3c).
 // Standalone: defines every helper it uses, registers its own scenes, appends its own rules to <style id="vl-sc-w07">.
 // Parts 1-4 load in any order. Rebuilt from the GPT-6 content audit: every narration line now has its own visible
 // state change, and every section is split into 8-11 distinct shots (a new visual every 2-5 lines).
@@ -2624,12 +2624,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   };
 
   // =====================================================================
-  // O3a â€” Drawing a boundary that solves the problem (29 lines, 10 shots). Audit score 4.8 -> rebuilt.
+  // O3a — Drawing a boundary that solves the problem (29 lines, 10 shots). Audit score 4.8 -> rebuilt.
   // The reception-only proposal, the wrong rate that starts upstream, symptom versus cause, the wider journey
   // boundary with its start and end, Reservations' objection, and the documented boundary.
   // =====================================================================
   section("O3a", "Drawing the boundary", 29, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 25, 27], [
-    // Template 091 Â· cro process (LottieFiles) â€” https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to
+    // Template 091 · cro process (LottieFiles) — https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to
     // Adapted: "move across the business steps" -> the chosen card gets its pin, then a CONDITIONAL tag and an empty
     // lens, then two flags with question marks slide along the journey looking for its start and end.
     { ref: U[91], cap: "Guest arrival chosen", n: 3,
@@ -2642,7 +2642,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("lb", 200, 300, T(84, 300, "STARTS WHERE?", { c: C.green }) + T(320, 300, "ENDS WHERE?", { c: C.green })),
       steps: ["+h0 +cd", "-h0 +h1 +cn +ln cd.x=-60", "-h1 +h2 -cd -cn -ln +jr +Ms Ms@1 +Me Me@1 +lb"] },
 
-    // Template 099 Â· Bottling factory (LottieFiles) â€” https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x
+    // Template 099 · Bottling factory (LottieFiles) — https://lottiefiles.com/free-animation/bottling-factory-53Q3SoGu0x
     // Adapted: "advance bottles to the station and hold" -> guests queue at the reception station; the front-desk staff
     // see it every day; a tight dashed box around reception shows why that boundary looks easy to manage.
     { ref: U[99], cap: "Reception only?", n: 3,
@@ -2655,7 +2655,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         ["ORGANISE", "MEASURE", "COMPLETE"].map((s, i) => G("k" + i, 90, 300 + i * 30, okB(30, 300 + i * 30, 11) + T(50, 306 + i * 30, "EASY TO " + s, { a: "start", z: 17, c: C.green }))).join(""),
       steps: ["+h0 +dk +qu +fm", "-h0 +h1 -fm -qu +st", "-h1 +h2 -st -qu +bx +k0 +k1 +k2"] },
 
-    // Template 076 Â· Workflow Animation (Dribbble) â€” https://dribbble.com/shots/3791748-Workflow-Animation
+    // Template 076 · Workflow Animation (Dribbble) — https://dribbble.com/shots/3791748-Workflow-Animation
     // Adapted: "reveal the action, transfer the trigger, show the notification" -> the booking is made far away, the rate
     // travels to the hotel, the confirmation and the screen disagree, and the receptionist's fix leaves the cause untouched.
     { ref: U[76], cap: "A wrong rate arrives", n: 3,
@@ -2664,13 +2664,13 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         Ln("Lp", "M120 190C180 120 240 120 300 180", C.navy, 4, 'stroke-dasharray="8 7"') +
         Mv("Mr", [[120, 190], [210, 140], [300, 180]], coin(0, 0, 12)) +
         G("ht", 320, 200, hotel(330, 196, 2.4, C.navy) + T2(330, 268, "THE HOTEL", "DAYS LATER", { c: C.navy })) +
-        G("cf", 200, 220, person(80, 240, 1.8, C.green) + doc(130, 232, 1.4, C.green, 2) + coin(130, 248, 12, C.green) + Gl(200, 228, "â‰ ", 46, C.orange) +
+        G("cf", 200, 220, person(80, 240, 1.8, C.green) + doc(130, 232, 1.4, C.green, 2) + coin(130, 248, 12, C.green) + Gl(200, 228, "≠", 46, C.orange) +
           scr(300, 214, 110, 80, C.ink) + coin(300, 210, 18, C.orange) + T2(130, 310, "CONFIRMED", "RATE", { c: C.green }) + T2(300, 310, "SYSTEM", "RATE", { c: C.orange })) +
         G("fx", 200, 220, person(300, 300, 1.4, C.navy) + Pa("M320 266L346 236", C.navy, 6) + R(342, 222, 16, 16, 3, C.pale, C.navy, 2) + okB(330, 176, 12) +
           scr(80, 150, 90, 64, C.ink) + qB(80, 146, 16) + T2(80, 230, "CAUSE", "UNKNOWN", { c: C.orange }) + T(300, 352, "RATE CORRECTED", { c: C.navy })),
       steps: ["+h0 +bk +Lp +Mr Mr@1 +ht", "-h0 +h1 -bk -Lp -Mr -ht +cf", "-h1 +h2 cf.o=0.2 +fx"] },
 
-    // Template 092 Â· process connecting (LottieFiles) â€” https://lottiefiles.com/free-animation/process-fmpDUgNx8K
+    // Template 092 · process connecting (LottieFiles) — https://lottiefiles.com/free-animation/process-fmpDUgNx8K
     // Adapted: "draw and join the connections" -> a spotlight falls on reception where the symptom shows, then a line
     // is drawn back through the departments to where the cause sits.
     { ref: U[92], cap: "Symptom is not cause", n: 2,
@@ -2681,7 +2681,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         Ln("Lt", "M336 250C300 160 120 160 60 222", C.navy, 4) + G("cz", 56, 160, lens(56, 160, 22, C.navy) + T2(96, 150, "CAUSE", "UPSTREAM", { a: "start", c: C.navy })),
       steps: ["+h0 +dp +sp", "-h0 +h1 +Lt +cz"] },
 
-    // Template 078 Â· Data Workflow Animation (Dribbble) â€” https://dribbble.com/shots/27247003-Data-Workflow-Animation
+    // Template 078 · Data Workflow Animation (Dribbble) — https://dribbble.com/shots/27247003-Data-Workflow-Animation
     // Adapted: "activate nodes and links in sequence" -> the boundary widens to follow the journey across handoffs,
     // then the start event and the end event are planted.
     { ref: U[78], cap: "Follow the journey", n: 3,
@@ -2696,7 +2696,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
       },
       steps: ["+h0 +n0 +n1 +n2 +n3 +n4 +Lf +bw", "-h0 +h1 +fs", "-h1 +h2 +fe"] },
 
-    // Template 137 Â· Corporate Timeline by HenlyFx (Motion Array) â€” https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
+    // Template 137 · Corporate Timeline by HenlyFx (Motion Array) — https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
     // Adapted: "reveal events one by one" -> the five functions take their places under the journey, then the whole
     // stay is laid out as a timeline where only the first segment is in scope, and the rest greys out.
     { ref: U[137], cap: "Inside, and outside", n: 3,
@@ -2709,7 +2709,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           node([90, 200, 316][i], 280, 20, C.navy, f([90, 200, 316][i], 280)) + noB([106, 216, 332][i], 264, 9) + T2([90, 200, 316][i], 322, a, b, { z: 17, c: C.navy })).join("")),
       steps: ["+h0 +fn", "-h0 +h1 -fn +tl", "-h1 +h2 +ou"] },
 
-    // Template 084 Â· Process - What is a Motion Designer? (Behance) â€” https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer-
+    // Template 084 · Process - What is a Motion Designer? (Behance) — https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer-
     // Adapted: "reveal the concept and advance illustrative beats" -> Reservations steps in, plants its flag on booking,
     // the director weighs responsibility and workload, then asks what excluding booking would do to the known problems.
     { ref: U[84], cap: "Reservations objects", n: 4,
@@ -2723,7 +2723,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           R(230, 90, 150, 180, 12, C.paper, C.orange, 3) + [0, 1, 2].map((i) => noB(256, 130 + i * 48, 11) + Pa(`M276 ${130 + i * 48}H360`, C.ink, 3)).join("") + T2(305, 300, "DOCUMENTED", "PROBLEMS STAY", { z: 17, c: C.orange })),
       steps: ["+h0 +rm", "-h0 +h1 +bn +fl", "-h1 +h2 -bn -fl rm.o=0.35 +dr", "-h2 +h3 -rm -dr +ex"] },
 
-    // Template 126 Â· Stacked-to-grouped bars (Observable) â€” https://observablehq.com/@d3/stacked-to-grouped-bars
+    // Template 126 · Stacked-to-grouped bars (Observable) — https://observablehq.com/@d3/stacked-to-grouped-bars
     // Adapted: "reposition the bars, preserving identity" -> Reservations' activities are a stack; only the booking
     // handoff layer moves across into the project group; then coverage and capacity are weighed.
     { ref: U[126], cap: "Handoff, not department", n: 3,
@@ -2738,7 +2738,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           person(290, 96, 0.9, C.navy) + person(318, 96, 0.9, C.navy) + T2(300, 164, "DELIVERY", "CAPACITY", { c: C.navy })),
       steps: ["+h0 +ev", "-h0 +h1 -ev +st +s0 +s1 +s2 +s3 +s4 +hf +pj hf.x=192 hf.y=40 s0.x=192 s0.y=40", "-h1 +h2 -st -hf -pj +sc"] },
 
-    // Template 133 Â· Path tween (Observable) â€” https://observablehq.com/@d3/path-tween
+    // Template 133 · Path tween (Observable) — https://observablehq.com/@d3/path-tween
     // Adapted: "morph one path into another" -> a boundary lasso too tight around reception and one too loose around the
     // whole stay, then the lasso settles on the meaningful, manageable shape.
     { ref: U[133], cap: "Neither narrow nor broad", n: 2,
@@ -2752,7 +2752,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
       },
       steps: ["+h0 +nd +na +br", "-h0 +h1 -na -br +ok"] },
 
-    // Template 095 Â· contract process (LottieFiles) â€” https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8
+    // Template 095 · contract process (LottieFiles) — https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8
     // Adapted: "reveal the proposal and the agreement" -> the boundary record fills five rows, the steering group's
     // discuss, challenge and approve marks land on it, then the people whose commitment matters gather round.
     { ref: U[95], cap: "Document the boundary", n: 3,
@@ -2765,14 +2765,14 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O3b â€” The people who can make the project succeed (29 lines, 10 shots). Audit score 4.3 -> rebuilt.
+  // O3b — The people who can make the project succeed (29 lines, 10 shots). Audit score 4.3 -> rebuilt.
   // Named Qasr stakeholders are placed in their own quadrant shots (sponsor, finance director, owner, legal team,
   // front-desk staff, external auditor), then sponsor versus owner, front-line knowledge and the coalition.
   // =====================================================================
   const miniMap = (x, y, hi, c) => [0, 1, 2, 3].map((q) => R(x + (q % 2) * 48, y + Math.floor(q / 2) * 48, 44, 44, 6, q === hi ? c : C.pale, q === hi ? c : C.navy, 2)).join("") +
     arr(x - 8, y + 96, x - 8, y - 6, C.navy, 2.5) + arr(x - 8, y + 100, x + 100, y + 100, C.navy, 2.5);
   section("O3b", "People who make it work", 29, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28], [
-    // Template 082 Â· Motion Design Process (Behance) â€” https://www.behance.net/gallery/53752435/Motion-Design-Process
+    // Template 082 · Motion Design Process (Behance) — https://www.behance.net/gallery/53752435/Motion-Design-Process
     // Adapted: "show production stages and the team working on them" -> the approved diagram sits above closed
     // department doors; then the project bar crosses four columns where each manager sees it from a different place.
     { ref: U[82], cap: "Diagram versus support", n: 3,
@@ -2792,7 +2792,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -sh -dr +cols +Lp +m0 +m1 +m2 +m3",
         "-h1 +h2 +bw +bh m1.o=0.3 m3.o=0.3"] },
 
-    // Template 084 Â· Process - What is a Motion Designer? (Behance) â€” https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer-
+    // Template 084 · Process - What is a Motion Designer? (Behance) — https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer-
     // Adapted: "reveal the concept and advance illustrative beats" -> four short vignettes: the director reads each
     // position, the approval stamp fails to move people, the two-way definition, then decisions versus knowledge.
     { ref: U[84], cap: "Who is a stakeholder", n: 4,
@@ -2812,7 +2812,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -v1 +v2",
         "-h2 +h3 +v3"] },
 
-    // Template 110 Â· Animated quadtree (Observable) â€” https://observablehq.com/@d3/animated-quadtree
+    // Template 110 · Animated quadtree (Observable) — https://observablehq.com/@d3/animated-quadtree
     // Adapted: "add a point, subdivide the region, repeat" -> named stakeholders drop onto the influence-interest
     // plane, then the plane subdivides into four regions, each with its own way of engaging people.
     { ref: U[110], cap: "Influence and interest", n: 2,
@@ -2829,7 +2829,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "+h0 +ax +pS +pF +pO +pL +pD +pA",
         "-h0 +h1 +qd pS.o=0.25 pF.o=0.25 pO.o=0.25 pL.o=0.25 pD.o=0.25 pA.o=0.25"] },
 
-    // Template 120 Â· Animated Dashboards (LottieFiles) â€” https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
+    // Template 120 · Animated Dashboards (LottieFiles) — https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
     // Adapted: "transition between dashboard panels" -> the mini-map highlights one panel and the full panel opens:
     // three reserved seats at the decision table fill with the sponsor, the finance director and the process owner.
     { ref: U[120], cap: "Manage closely", n: 2,
@@ -2843,7 +2843,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("db", 200, 336, R(58, 316, 284, 44, 22, C.green) + T(200, 344, "SCOPE AND BENEFITS", { c: C.paper, nh: true })),
       steps: ["+h0 +mm +e0 +e1 +e2 +dz", "-h0 +h1 -e0 -e1 -e2 +s0 +s1 +s2 -dz +db"] },
 
-    // Template 114 Â· Infographics Pack by JVARTS STUDIO (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-pack-100132/
+    // Template 114 · Infographics Pack by JVARTS STUDIO (Motion Array) — https://motionarray.com/after-effects-templates/infographics-pack-100132/
     // Adapted: "reveal the selected metric element" -> the keep-satisfied panel: an influential person whose key
     // opens a barrier only when one appears, then the legal team receiving short, occasional updates.
     { ref: U[114], cap: "Keep satisfied", n: 2,
@@ -2861,7 +2861,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "+h0 +mm +Lr +tm +wl +vip +Lk",
         "-h0 +h1 -vip -Lk -wl -Lr -tm +lg +Me0 Me0@1 +Me1 Me1@0.55 +Me2 Me2@0.12 +lb"] },
 
-    // Template 123 Â· DashBoard by Amit Prajapati (LottieFiles) â€” https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp
+    // Template 123 · DashBoard by Amit Prajapati (LottieFiles) — https://lottiefiles.com/free-animation/dashboard-krY5yHjJRp
     // Adapted: "bring the dashboard screen into focus" -> the keep-informed panel: interested staff receive
     // information and raise hands to contribute; then the front-desk staff test both the current and the new process.
     { ref: U[123], cap: "Keep informed", n: 2,
@@ -2875,7 +2875,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("t1", 360, 200, okB(358, 166, 13)) + G("t2", 360, 296, okB(358, 264, 13)),
       steps: ["+h0 +mm +st", "-h0 +h1 -st +ts +t1 +t2"] },
 
-    // Template 130 Â· Animated line chart lesson (Observable) â€” https://observablehq.com/@d3/learn-d3-animation
+    // Template 130 · Animated line chart lesson (Observable) — https://observablehq.com/@d3/learn-d3-animation
     // Adapted: "trace a time series left to right" -> as the project timeline advances, the external auditor's
     // position is traced across the map; the map then refuses verdict stickers and turns into an engagement plan.
     { ref: U[130], cap: "Monitor, then review", n: 4,
@@ -2898,7 +2898,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -tl -Mt -au +sk",
         "-h2 +h3 -sk +pl"] },
 
-    // Template 136 Â· Project TimeLine (Motion Array) â€” https://motionarray.com/after-effects-templates/project-timeline-2424919/
+    // Template 136 · Project TimeLine (Motion Array) — https://motionarray.com/after-effects-templates/project-timeline-2424919/
     // Adapted: "advance along time markers" -> sponsor and owner side by side, the sponsor's shield over the
     // project, then the timeline runs past the project's end with only the owner still on it, and benefits fade without one.
     { ref: U[136], cap: "Sponsor and owner", n: 4,
@@ -2919,7 +2919,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -pr ow.o=1 sp.o=0.3 +tl +Mo Mo@1",
         "-h2 +h3 -tl -Mo +gr +Ld +x ow.o=0.3"] },
 
-    // Template 081 Â· Clean Workflow Visualization with Motion Graphics (Dribbble) â€” https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics
+    // Template 081 · Clean Workflow Visualization with Motion Graphics (Dribbble) — https://dribbble.com/shots/27600376-Clean-Workflow-Visualization-with-Motion-Graphics
     // Adapted: "connect journey steps with transitions" -> four front-line experts each own one step of the journey,
     // the written procedure is laid against the real path, and the guest's view is added as its own step.
     { ref: U[81], cap: "Front-line knowledge", n: 3,
@@ -2930,7 +2930,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         }).join("") +
         G("pd", 200, 200, doc(56, 120, 1.4, C.navy, 4) + T(84, 92, "WRITTEN PROCEDURE", { a: "start", c: C.navy }) + Pa("M90 140H360", C.navy, 4) + arr(340, 140, 370, 140, C.navy, 4)) +
         Ln("Lre", "M90 250C140 200 170 320 220 250S300 190 370 260", C.orange, 5) +
-        G("rl", 200, 300, T(200, 330, "WHAT REALLY HAPPENS", { c: C.orange }) + person(56, 262, 1.3, C.orange) + bub(56, 200, 52, 34, C.orange) + Gl(56, 208, "â€¦", 20, C.orange)) +
+        G("rl", 200, 300, T(200, 330, "WHAT REALLY HAPPENS", { c: C.orange }) + person(56, 262, 1.3, C.orange) + bub(56, 200, 52, 34, C.orange) + Gl(56, 208, "…", 20, C.orange)) +
         G("gv", 200, 220, gear(110, 176, 30, C.navy) + T(110, 250, "FASTER INSIDE", { c: C.navy }) + arr(160, 176, 236, 176, C.navy, 4) +
           face(290, 176, 34, C.orange, -1) + T(290, 250, "WORSE FOR GUEST", { c: C.orange }) + person(200, 314, 1.3, C.green) + flag(226, 300, 1, C.green) + T(200, 368, "CUSTOMER VOICE", { c: C.green })),
       steps: [
@@ -2938,7 +2938,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 -e0 -e1 -e2 -e3 +pd +Lre +rl",
         "-h1 +h2 -pd -Lre -rl +gv"] },
 
-    // Template 134 Â· Shape tweening (Observable) â€” https://observablehq.com/@d3/shape-tweening
+    // Template 134 · Shape tweening (Observable) — https://observablehq.com/@d3/shape-tweening
     // Adapted: "transform a source polygon to a target" -> three corners (authority, knowledge, customer) are joined
     // into one triangle, the triangle keeps circulating, then splits along the line of a coming disagreement.
     { ref: U[134], cap: "Building the coalition", n: 3,
@@ -2958,12 +2958,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O3c â€” Turning disagreement into an agreed commitment (30 lines, 10 shots). Audit score 4.2 -> rebuilt.
+  // O3c — Turning disagreement into an agreed commitment (30 lines, 10 shots). Audit score 4.2 -> rebuilt.
   // Every move in the dispute gets its own picture: the two positions, the two weak responses (an order,
   // a removal), tracing the handoff, joint ownership, the other functions, escalation, objections, the record.
   // =====================================================================
   section("O3c", "Disagreement to commitment", 30, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28], [
-    // Template 111 Â· Hierarchy traversal animated (Observable) â€” https://old.observablehq.com/@d3/hierarchy-traversal-animated
+    // Template 111 · Hierarchy traversal animated (Observable) — https://old.observablehq.com/@d3/hierarchy-traversal-animated
     // Adapted: "visit one node then the next" -> the camera visits the director, then Reservations, then the front desk,
     // each node lighting up with its own position.
     { ref: U[111], cap: "Two managers disagree", n: 3,
@@ -2983,7 +2983,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h0 +h1 +Lt1 +bk +ln +bq ~bolt",
         "-h1 +h2 -ln +Mr Mr@1 +ba +ex"] },
 
-    // Template 092 Â· process connecting (LottieFiles) â€” https://lottiefiles.com/free-animation/process-fmpDUgNx8K
+    // Template 092 · process connecting (LottieFiles) — https://lottiefiles.com/free-animation/process-fmpDUgNx8K
     // Adapted: "draw and join connections" -> both concerns stay standing (each gets a check), then a connection is
     // drawn straight through the walls that separate the departments.
     { ref: U[92], cap: "Both have a point", n: 2,
@@ -3002,7 +3002,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "+h0 +pref +cA +cB +nx",
         "-h0 +h1 -pref -cA -cB -nx +silo +Lbr +Mg Mg@1 +bl"] },
 
-    // Template 131 Â· Transition end (Observable) â€” https://observablehq.com/@d3/transition-end
+    // Template 131 · Transition end (Observable) — https://observablehq.com/@d3/transition-end
     // Adapted: "move the circle, await, then recolour" -> the order lands, everyone waits, and the team recolours
     // grey: formal agreement with resentment, low participation and the problem still there.
     { ref: U[131], cap: "Weak response: order", n: 2,
@@ -3019,7 +3019,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "+h0 +res +dir +gav gav.r=-18 +why",
         "-h0 +h1 -dir -gav -why +cl +r0 +r1 +r2 res.x=-4"] },
 
-    // Template 106 Â· Supply Chain and logistics (LottieFiles) â€” https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu
+    // Template 106 · Supply Chain and logistics (LottieFiles) — https://lottiefiles.com/free-animation/supply-chain-and-logistics-8PtoYRCbiu
     // Adapted: "connect dispatch, transit and receipt" -> booking information is dispatched from Reservations to the
     // improvement team; cutting Reservations out cuts the supply line and the information never arrives.
     { ref: U[106], cap: "Weak response: removal", n: 2,
@@ -3036,7 +3036,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "+h0 +rs +LpA +LpB +Md Md@0.85 +tm +sc",
         "-h0 +h1 -LpB Md@0.32 rs.o=0.4 sc.r=-30 sc.o=0.3 +lk +ln +lb"] },
 
-    // Template 076 Â· Workflow Animation (Dribbble) â€” https://dribbble.com/shots/3791748-Workflow-Animation
+    // Template 076 · Workflow Animation (Dribbble) — https://dribbble.com/shots/3791748-Workflow-Animation
     // Adapted: "reveal the action, transfer the trigger, show the notification" -> the rate packet is traced from
     // booking to check-in; three questions pin to the handoffs; blame arrows are withdrawn; changes wait.
     { ref: U[76], cap: "Follow the evidence", n: 4,
@@ -3059,7 +3059,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -q1 -q2 -q3 +bl",
         "-h2 +h3 -bl +lnv +wr"] },
 
-    // Template 083 Â· The Process Architectural Motion (Behance) â€” https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
+    // Template 083 · The Process Architectural Motion (Behance) — https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
     // Adapted: "build and revise successive layers" -> Reservations is a stack of activity layers; only the booking
     // handoff layer is tied into the project as a joint owner, every other layer stays outside the scope.
     { ref: U[83], cap: "Joint owners", n: 2,
@@ -3076,7 +3076,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "+h0 +st +pj +Lj +kn +jo +nr",
         "-h0 +h1 +bk +ou -nr"] },
 
-    // Template 086 Â· Workflow by a (LottieFiles) â€” https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
+    // Template 086 · Workflow by a (LottieFiles) — https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
     // Adapted: "reveal workers and workflow actions" -> lanes for each function appear one by one, their
     // information tokens travel to check-in, Finance joins at the bill, and every lane receives a clear task.
     { ref: U[86], cap: "More functions join", n: 4,
@@ -3098,7 +3098,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +bd l0.o=0.4 l1.o=0.4 l2.o=0.4 l3.o=0.4",
         "-h2 +h3 l0.o=1 l1.o=1 l2.o=1 l3.o=1 +ok0 +ok1 +ok2 +ok3 +ok4"] },
 
-    // Template 091 Â· cro process (LottieFiles) â€” https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to
+    // Template 091 · cro process (LottieFiles) — https://lottiefiles.com/free-animation/cro-process-RaUu5ps2to
     // Adapted: "move across business steps" -> an unresolved issue climbs the escalation route from operational
     // discussion to a recorded commitment, with the owner and the employees placed at the steps they affect.
     { ref: U[91], cap: "Who decides when stuck", n: 4,
@@ -3111,7 +3111,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           G("cl", 340, 340, person(318, 352, 0.9, C.orange) + person(362, 352, 0.9, C.navy) + Fi("M336 322L344 334H338L346 344", C.orange)) +
           G("sp", 372, 166, person(372, 176, 1, C.green) + crown(372, 148, 0.75)) +
           G("ow", 372, 96, person(372, 106, 1, C.navy) + gear(392, 84, 7, C.navy)) + Ln("Lo", "M372 128V150", C.navy, 3, 'stroke-dasharray="3 4"') +
-          G("em", 300, 318, bub(330, 296, 44, 28, C.navy, C.paper, -1) + Gl(330, 303, "â€¦", 20, C.navy) + bub(374, 296, 40, 28, C.navy, C.paper, 1) + Gl(374, 303, "â€¦", 20, C.navy) +
+          G("em", 300, 318, bub(330, 296, 44, 28, C.navy, C.paper, -1) + Gl(330, 303, "…", 20, C.navy) + bub(374, 296, 40, 28, C.navy, C.paper, 1) + Gl(374, 303, "…", 20, C.navy) +
             person(330, 350, 0.9, C.green) + person(374, 350, 0.9, C.green));
       },
       steps: [
@@ -3120,7 +3120,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +p3 Mx@1 +ow +Lo",
         "-h2 +h3 -cl +em *p0"] },
 
-    // Template 080 Â· Creative Design Workflow Animation (Dribbble) â€” https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
+    // Template 080 · Creative Design Workflow Animation (Dribbble) — https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
     // Adapted: "assemble shapes and refine the composition" -> an objection reveals a missing piece of the plan,
     // the gap is patched, and every objection is answered with a reply and a check.
     { ref: U[80], cap: "Objections improve it", n: 2,
@@ -3133,7 +3133,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("rp", 120, 300, okB(104, 150, 14) + arr(170, 290, 112, 270, C.green, 3.5) + T(20, 352, "OBJECTION ANSWERED", { a: "start", c: C.green })),
       steps: ["+h0 +pl +hole +ob *hole", "-h0 +h1 =hole +pt +rp"] },
 
-    // Template 112 Â· Infographics Pack by ARstudio (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-pack-135055/
+    // Template 112 · Infographics Pack by ARstudio (Motion Array) — https://motionarray.com/after-effects-templates/infographics-pack-135055/
     // Adapted: "reveal chart primitives and labels" -> the commitment record fills row by row, the open-concerns box
     // opens, the original positions sign anyway, a later expansion bounces off the record, and measures come next.
     { ref: U[112], cap: "Record the commitment", n: 5,
@@ -3158,7 +3158,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
 })();
 
 // FILE w07-claude-v2-part4.js
-// OPER621 Â· Week 7 Â· The Launch Pad Phase â€” animated teaching scenes v2, part 4 of 4 (O3d, O3e, O3f).
+// OPER621 · Week 7 · The Launch Pad Phase — animated teaching scenes v2, part 4 of 4 (O3d, O3e, O3f).
 // Standalone: defines every helper it uses, registers its own scenes, appends its own rules to <style id="vl-sc-w07">.
 // Parts 1-4 load in any order. Rebuilt from the GPT-6 content audit: every narration line now has its own visible
 // state change, and every section is split into 8-11 distinct shots (a new visual every 2-5 lines).
@@ -3690,14 +3690,14 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   };
 
   // =====================================================================
-  // O3d â€” Establishing the baseline before redesign (31 lines, 10 shots). Audit score 5.5 -> rebuilt.
+  // O3d — Establishing the baseline before redesign (31 lines, 10 shots). Audit score 5.5 -> rebuilt.
   // Kept from the matched moments: the baseline gauge, the precise percentage, two hotels disagreeing, the verified
   // baseline, the intended target, the owner and the reporter. Every weak or mismatched line gets a new picture.
   // =====================================================================
   const waffle = (x0, y0, cell, pick) => Array.from({ length: 100 }, (_, i) => { const c = pick(i); return Ci(x0 + (i % 10) * cell, y0 + Math.floor(i / 10) * cell, cell * 0.36, c === "hole" ? C.paper : c, c === "hole" ? C.navy : "", c === "hole" ? 1.5 : 0, c === "hole" ? 'stroke-dasharray="2 2"' : ""); }).join("");
   const corr = (i) => (i * 37 + 11) % 100 < 22, miss = (i) => (i * 53 + 7) % 100 < 10;
   section("O3d", "Baseline before redesign", 31, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 21, 23, 25, 27, 28, 30], [
-    // Template 094 Â· Process - Success (LottieFiles) â€” https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
+    // Template 094 · Process - Success (LottieFiles) — https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
     // Adapted: "transform the activity into a check" -> the trophy waits behind a question; the three things already
     // settled turn into checks; the finance director flips the conversation from intentions to evidence.
     { ref: U[94], cap: "Recognising real improvement", n: 3,
@@ -3709,7 +3709,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           arr(246, 150, 274, 150, C.green, 4) + R(280, 90, 110, 120, 12, C.paper, C.green, 3.5) + Pa("M296 160L320 140L344 146L376 104", C.green, 4) + T2(335, 186, "HARD", "EVIDENCE", { z: 17, c: C.green })),
       steps: ["+h0 +tr", "-h0 +h1 -tr +k0 +k1 +k2", "-h1 +h2 -k0 -k1 -k2 +fd"] },
 
-    // Template 125 Â· Infographics Dashboard (LottieFiles) â€” https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB
+    // Template 125 · Infographics Dashboard (LottieFiles) — https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB
     // Adapted: "grow the pie arc and the metric graph" -> the proposed metric (fewer rate corrections at check-in), why it
     // matters to guests and staff, and the empty 'today' column that makes any later result unprovable.
     { ref: U[125], cap: "The proposed measure", n: 3,
@@ -3718,37 +3718,37 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           arr(330, 150, 330, 260, C.green, 6) + T2(330, 296, "FEWER", "CORRECTIONS", { c: C.green })) +
         G("im", 200, 220, face(100, 170, 36, C.orange, -1) + T2(100, 236, "GUEST", "FRUSTRATION", { c: C.orange }) + doc(290, 160, 1.6, C.navy, 4) + doc(310, 176, 1.6, C.navy, 4) + T2(300, 236, "EXTRA RECEPTION", "WORK", { z: 17, c: C.navy })) +
         G("bc", 200, 220, Pa("M40 300H360", C.navy, 3) + R(80, 120, 90, 180, 10, "none", C.orange, 3, 'stroke-dasharray="7 5"') + Gl(125, 226, "?", 50, C.orange) + R(230, 180, 90, 120, 10, C.green, "", 0, 'opacity=".55"') +
-          T2(125, 334, "TODAY", "UNKNOWN", { c: C.orange }) + T2(275, 334, "LATER", "RESULT", { c: C.green }) + Gl(200, 214, "â‰ ", 30, C.navy) + qB(200, 170, 14)),
+          T2(125, 334, "TODAY", "UNKNOWN", { c: C.orange }) + T2(275, 334, "LATER", "RESULT", { c: C.green }) + Gl(200, 214, "≠", 30, C.navy) + qB(200, 170, 14)),
       steps: ["+h0 +dk", "-h0 +h1 -dk +im", "-h1 +h2 -dk -im +bc"] },
 
-    // Template 121 Â· Dashboard by RAKIBUZZAMAN (LottieFiles) â€” https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP
+    // Template 121 · Dashboard by RAKIBUZZAMAN (LottieFiles) — https://lottiefiles.com/free-animation/dashboard-M05MmlnoOP
     // Adapted: "fill the graph and highlight the metric" -> a baseline gauge is filled before redesign starts; the manager's
     // report arrives as second-hand staff remarks; the word "frequently" has no number on the gauge.
     { ref: U[121], cap: "A baseline first", n: 3,
       svg: () => hl("h0", "BASELINE BEFORE REDESIGN", C.navy) + hl("h1", "WHAT STAFF HAVE SAID", C.orange) + hl("h2", "NOT A FREQUENCY", C.orange) +
         G("tb", 120, 200, R(96, 70, 48, 260, 24, C.paper, C.navy, 3.5) + R(104, 200, 32, 122, 16, C.green) + Pa("M84 200H156", C.navy, 4) + T2(270, 196, "MEASURED", "BEFORE REDESIGN", { c: C.navy }) +
           wrench(300, 290, 1.4, C.navy) + lockI(340, 300, 1, C.orange) + T(296, 352, "REDESIGN WAITS", { c: C.orange })) +
-        G("hs", 200, 220, person(300, 270, 2, C.orange) + T2(300, 342, "FRONT-DESK", "MANAGER", { c: C.orange }) + [60, 110, 160].map((x, i) => person(x, 300, 1.2, C.navy) + bub(x, 240, 44, 30, C.navy) + Gl(x, 248, "â€¦", 18, C.navy)).join("") +
+        G("hs", 200, 220, person(300, 270, 2, C.orange) + T2(300, 342, "FRONT-DESK", "MANAGER", { c: C.orange }) + [60, 110, 160].map((x, i) => person(x, 300, 1.2, C.navy) + bub(x, 240, 44, 30, C.navy) + Gl(x, 248, "…", 18, C.navy)).join("") +
           arr(184, 266, 266, 250, C.orange, 3, 'stroke-dasharray="5 5"')) +
         G("fq", 200, 210, bub(130, 150, 210, 64, C.orange) + T2(130, 146, "\u201CIT HAPPENS", "FREQUENTLY\u201D", { c: C.orange }) +
           R(250, 220, 120, 90, 12, C.ink) + Gl(310, 280, "?%", 40, C.gold) + noB(370, 214, 14) + T2(130, 290, "A POSSIBLE", "PROBLEM", { c: C.navy })),
       steps: ["+h0 +tb", "-h0 +h1 tb.o=0 +hs", "-h1 +h2 -hs +fq"] },
 
-    // Template 112 Â· Infographics Pack by ARstudio (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-pack-135055/
+    // Template 112 · Infographics Pack by ARstudio (Motion Array) — https://motionarray.com/after-effects-templates/infographics-pack-135055/
     // Adapted: "reveal chart primitives and labels" -> one calculation for every hotel, a hundred check-ins as a unit
     // chart with the fraction beside it, the two definitions it needs, and two hotels disagreeing on the same case.
     { ref: U[112], cap: "A precise measure", n: 4,
       svg: () => hl("h0", "SAME CALCULATION, EVERY HOTEL", C.navy) + hl("h1", "CHECK-INS WITHOUT CORRECTION", C.green) + hl("h2", "DEFINE BOTH TERMS", C.navy) + hl("h3", "SAME CASE, TWO ANSWERS", C.orange) +
         G("ht", 200, 200, [80, 200, 320].map((x) => hotel(x, 180, 2.2, C.navy) + R(x - 20, 246, 40, 48, 6, C.ink) + R(x - 14, 252, 28, 12, 2, C.pale) + Gl(x, 286, "%", 16, C.paper)).join("") + T(200, 340, "ONE SHARED FORMULA", { c: C.navy })) +
         G("wf", 120, 200, waffle(30, 90, 20, (i) => (corr(i) ? C.orange : C.green)) + T2(120, 304, "ILLUSTRATIVE", "CHECK-INS", { z: 17, c: C.navy })) +
-        G("fr", 310, 200, pill(310, 130, "NO CORRECTION", C.green, C.green) + Pa("M236 180H384", C.ink, 3) + pill(310, 226, "ALL CHECK-INS", C.navy, C.navy) + Gl(310, 290, "Ã— 100 = %", 22, C.ink)) +
+        G("fr", 310, 200, pill(310, 130, "NO CORRECTION", C.green, C.green) + Pa("M236 180H384", C.ink, 3) + pill(310, 226, "ALL CHECK-INS", C.navy, C.navy) + Gl(310, 290, "× 100 = %", 22, C.ink)) +
         G("df", 200, 220, R(20, 90, 360, 90, 14, C.paper, C.orange, 3) + qB(52, 135, 14) + T(78, 141, "WHAT IS A CORRECTION?", { a: "start", z: 17, c: C.orange }) +
           R(20, 210, 360, 90, 14, C.paper, C.navy, 3) + qB(52, 255, 14) + T(78, 261, "WHICH CHECK-INS COUNT?", { a: "start", z: 17, c: C.navy })) +
-        G("tw", 200, 210, hotel(80, 170, 2.2, C.navy) + Ci(80, 270, 20, C.green) + ck(81, 271, 1, C.paper, 4) + T2(80, 320, "HOTEL A:", "NO CORRECTION", { z: 17, c: C.green }) + Gl(200, 230, "â‰ ", 50, C.orange) +
+        G("tw", 200, 210, hotel(80, 170, 2.2, C.navy) + Ci(80, 270, 20, C.green) + ck(81, 271, 1, C.paper, 4) + T2(80, 320, "HOTEL A:", "NO CORRECTION", { z: 17, c: C.green }) + Gl(200, 230, "≠", 50, C.orange) +
           hotel(320, 170, 2.2, C.navy) + Ci(320, 270, 20, C.orange) + xx(320, 270, 1, C.paper, 4) + T2(320, 320, "HOTEL B:", "CORRECTION", { z: 17, c: C.orange }) + doc(200, 130, 1.3, C.navy, 3) + T(200, 90, "ONE GUEST CASE", { z: 17, c: C.navy })),
       steps: ["+h0 +ht", "-h0 +h1 -ht +wf +fr", "-h1 +h2 -wf -fr +df", "-h2 +h3 -df +tw"] },
 
-    // Template 110 Â· Animated quadtree (Observable) â€” https://observablehq.com/@d3/animated-quadtree
+    // Template 110 · Animated quadtree (Observable) — https://observablehq.com/@d3/animated-quadtree
     // Adapted: "add points, subdivide the region" -> the record cabinet is opened before any target, a defined period is
     // carved out and filled with enough transactions, and each property's sheet is checked against the same columns.
     { ref: U[110], cap: "Check the records", n: 3,
@@ -3761,7 +3761,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           (i === 2 ? qB(x, 292, 14) : okB(x, 292, 14))).join("") + T(200, 346, "SAME FIELDS, SAME RULES", { c: C.navy })),
       steps: ["+h0 +cb", "-h0 +h1 -cb +pd", "-h1 +h2 -pd +cs"] },
 
-    // Template 134 Â· Shape tweening (Observable) â€” https://observablehq.com/@d3/shape-tweening
+    // Template 134 · Shape tweening (Observable) — https://observablehq.com/@d3/shape-tweening
     // Adapted: "transform the source shape into the target" -> a unit chart with holes produces a polished-looking
     // percentage that is cracked; a collection method fills the holes; the dashed baseline marker becomes solid.
     { ref: U[134], cap: "Reliable or misleading", n: 3,
@@ -3776,7 +3776,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("bv", 280, 290, R(240, 260, 80, 64, 8, C.paper, C.navy, 3) + [0, 1].map((i) => ck(262, 280 + i * 22, 0.55, C.green, 3) + Pa(`M276 ${280 + i * 22}H306`, C.navy, 3)).join("") + T2(280, 350, "UNTIL GATHERED", "AND CHECKED", { z: 17, c: C.navy })),
       steps: ["+h0 +wh +pc", "-h0 +h1 -wh -pc +fl +cm", "-h1 +h2 -fl -cm +bl +bu +bv"] },
 
-    // Template 129 Â· Arc tween (Observable) â€” https://observablehq.com/@d3/arc-tween
+    // Template 129 · Arc tween (Observable) — https://observablehq.com/@d3/arc-tween
     // Adapted: "rotate the arc endpoint to a new value" -> the managers agree where the target sits on the gauge; the
     // target stays dashed (intended) beside the solid baseline (shown); three inputs set where it lands.
     { ref: U[129], cap: "Set a realistic target", n: 3,
@@ -3790,7 +3790,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           f(50, 120 + i * 80) + T(80, 126 + i * 80, s, { a: "start", z: 17, c: C.ink }) + arr(330, 120 + i * 80, 360, 200, C.green, 2.5)).join("") + Ci(370, 210, 16, C.paper, C.green, 3, 'stroke-dasharray="4 3"') + Ci(370, 210, 6, C.green)),
       steps: ["+h0 +ga +nd nd.r=110 +tg", "-h0 +h1 -tg +cp", "-h1 +h2 -cp -ga -nd +in"] },
 
-    // Template 093 Â· Process-Para (LottieFiles) â€” https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT
+    // Template 093 · Process-Para (LottieFiles) — https://lottiefiles.com/free-animation/process-para-qujCEQ2AKT
     // Adapted: "rotate, wait, finish" -> the reporting cycle turns on a calendar with a named reporter; the process owner
     // stands above it, accountable for the result the cycle reports.
     { ref: U[93], cap: "Reporting the figures", n: 2,
@@ -3801,7 +3801,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           person(290, 170, 1.6, C.navy) + doc(330, 186, 1, C.navy, 3) + T2(296, 238, "REPORTER:", "EVIDENCE READY", { z: 17, c: C.navy }) + arr(130, 290, 270, 290, C.green, 3) + T(200, 330, "FIGURES FLOW UP", { c: C.green })),
       steps: ["+h0 +cy", "-h0 +h1 -cy +ow"] },
 
-    // Template 127 Â· Streamgraph transitions (Observable) â€” https://observablehq.com/@d3/streamgraph-transitions
+    // Template 127 · Streamgraph transitions (Observable) — https://observablehq.com/@d3/streamgraph-transitions
     // Adapted: "morph the series areas over time" -> the correction count can fall because the recording changed or because
     // guests are better off; the complaint and delay series are added to tell the two apart.
     { ref: U[127], cap: "Does the guest benefit?", n: 2,
@@ -3812,13 +3812,13 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           T(40, 186, "GUEST COMPLAINTS", { a: "start", z: 17, c: C.orange }) + T(220, 196, "ARRIVAL DELAYS", { a: "start", z: 17, c: C.gold }) + face(340, 140, 26, C.green, 1) + okB(370, 110, 12)),
       steps: ["+h0 +rl", "-h0 +h1 -rl +sg"] },
 
-    // Template 139 Â· Corporate Timeline by Zargones (Motion Array) â€” https://motionarray.com/after-effects-templates/corporate-timeline-255459/
+    // Template 139 · Corporate Timeline by Zargones (Motion Array) — https://motionarray.com/after-effects-templates/corporate-timeline-255459/
     // Adapted: "introduce events and shift focus" -> defining a measure is not an improvement; the honest test waits at
     // the end; the baseline is carried to Realise Value; the pieces gather; the one-page record comes next.
     { ref: U[139], cap: "Promise, then proof", n: 5,
       svg: () => hl("h0", "NO IMPROVEMENT SHOWN YET", C.orange) + hl("h1", "AN HONEST TEST LATER", C.navy) + hl("h2", "CARRIED TO REALISE VALUE", C.green) + hl("h3", "BRING IT TOGETHER", C.navy) + hl("h4", "THE DECISION RECORD NEXT", C.green) +
         G("ny", 200, 210, R(20, 110, 120, 80, 12, C.paper, C.navy, 3) + T2(80, 146, "MEASURE", "DEFINED", { z: 17, c: C.navy }) + Gl(150, 160, "+", 30, C.navy) +
-          R(160, 110, 100, 80, 12, C.paper, C.green, 3, 'stroke-dasharray="7 5"') + T2(210, 146, "TARGET", "SET", { z: 17, c: C.green }) + Gl(276, 160, "â‰ ", 30, C.orange) +
+          R(160, 110, 100, 80, 12, C.paper, C.green, 3, 'stroke-dasharray="7 5"') + T2(210, 146, "TARGET", "SET", { z: 17, c: C.green }) + Gl(276, 160, "≠", 30, C.orange) +
           R(290, 110, 100, 80, 12, "none", C.orange, 3, 'stroke-dasharray="7 5"') + T2(340, 146, "PROVEN", "GAIN", { z: 17, c: C.orange }) + R(84, 240, 232, 54, 10, C.paper, C.orange, 4) + T(200, 275, "NOT YET PROVEN", { z: 22, c: C.orange })) +
         G("hn", 200, 220, Pa("M30 300H300", C.navy, 5) + Mv("Mw", [[40, 280], [250, 280]], wrench(0, 0, 1, C.navy)) +
           Pa("M340 150V300M290 170H390", C.navy, 4) + Pa("M290 170L276 210H304ZM390 170L376 210H404Z", C.navy, 3) + T2(330, 340, "RESULTS", "JUDGED", { c: C.navy }) + T(150, 340, "WORK COMPLETED", { c: C.green })) +
@@ -3831,13 +3831,13 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O3e â€” The one-page Launch Pad decision (32 lines, 10 shots). Audit score 3.5 -> rebuilt first.
+  // O3e — The one-page Launch Pad decision (32 lines, 10 shots). Audit score 3.5 -> rebuilt first.
   // Each commitment named in the narration gets its own picture: the closing meeting, the recommendation,
   // the billing trade-off, the three kinds of work, the boundary, the people, the measure, benefits and
   // risks, confirmed versus assumed, and the hand-over to the Understand team.
   // =====================================================================
   section("O3e", "The one-page decision", 32, [0, 2, 4, 6, 7, 8, 10, 12, 13, 15, 17, 19, 21, 23, 25, 27, 28, 30], [
-    // Template 124 Â· Project Dashboard (LottieFiles) â€” https://lottiefiles.com/free-animation/project-dashboard-PeJUc2p1iB
+    // Template 124 · Project Dashboard (LottieFiles) — https://lottiefiles.com/free-animation/project-dashboard-PeJUc2p1iB
     // Adapted: "reveal data, then collaborators" -> the steering table fills, then the four candidate cards and the
     // two constraints (one delivery team, six-month review) drop onto the board.
     { ref: U[124], cap: "Closing the Launch Pad", n: 2,
@@ -3851,7 +3851,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("six", 300, 348, clock(244, 350, 22, C.orange, 180) + T(274, 357, "SIX MONTHS", { a: "start", c: C.orange })),
       steps: ["+mgr +tbl +dir +h0 +sg !dir", "-h0 +h1 -sg +c0 +c1 +c2 +c3 +team +six"] },
 
-    // Template 119 Â· Infographics V2 by Typoland (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-v2-556482/
+    // Template 119 · Infographics V2 by Typoland (Motion Array) — https://motionarray.com/after-effects-templates/infographics-v2-556482/
     // Adapted: "reveal statistic modules" -> one module per reason: complaints that started the programme,
     // four functions x fourteen properties, the sponsor-support bars, the three strengths, then the risks left.
     { ref: U[119], cap: "Recommending guest arrival", n: 4,
@@ -3878,7 +3878,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 -spg -spn +k0 +k1 +k2 +gbig",
         "-h2 +h3 +w0 +w1 +w2 ~gbig"] },
 
-    // Template 126 Â· Stacked-to-grouped bars (Observable) â€” https://observablehq.com/@d3/stacked-to-grouped-bars
+    // Template 126 · Stacked-to-grouped bars (Observable) — https://observablehq.com/@d3/stacked-to-grouped-bars
     // Adapted: "reposition bars while preserving identity" -> billing (left) and guest arrival (right) are compared
     // side by side; each criterion bar keeps its column; the trade-off is then written into one ledger.
     { ref: U[126], cap: "Weighing the rival", n: 4,
@@ -3902,7 +3902,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +sp +Lch +nodes +coop",
         "-h2 +h3 ~tw ~twl ~B0 ~vl ~opp ~sp ~Lch ~nodes ~coop +led"] },
 
-    // Template 089 Â· Git Workflow 1 (LottieFiles) â€” https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
+    // Template 089 · Git Workflow 1 (LottieFiles) — https://lottiefiles.com/free-animation/git-workflow-1-G6eTYjLVJ5
     // Adapted: "branch, merge and reconnect" -> each remaining candidate is examined, then the work branches into
     // three separate lines: the BPM project, deferred improvements and mandatory compliance.
     { ref: U[89], cap: "Three kinds of work", n: 4,
@@ -3927,7 +3927,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +Lcl +hc",
         "-h2 +h3 -hd -Lcl -hc +lanes +t0 +t1 +t3 +t2"] },
 
-    // Template 078 Â· Data Workflow Animation (Dribbble) â€” https://dribbble.com/shots/27247003-Data-Workflow-Animation
+    // Template 078 · Data Workflow Animation (Dribbble) — https://dribbble.com/shots/27247003-Data-Workflow-Animation
     // Adapted: "activate nodes and links in sequence" -> the booking packet runs from booking confirmed to the
     // first night's bill; start and end flags plant, exclusions grey out, and only Reservations' handoff joins.
     { ref: U[78], cap: "Boundary on the page", n: 4,
@@ -3955,7 +3955,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +out",
         "-h2 +h3 -out +res +Lup n0.s=1.1"] },
 
-    // Template 109 Â· teamwork (LottieFiles) â€” https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6
+    // Template 109 · teamwork (LottieFiles) — https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6
     // Adapted: "add people and reveal team" -> sponsor first (key opens the barrier), the empty owner chair,
     // the six groups that must be involved, then the three-part engagement plan.
     { ref: U[109], cap: "People and authority", n: 4,
@@ -3976,14 +3976,14 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h1 +h2 +stk",
         "-h2 +h3 -stk +p0 +p1 +p2"] },
 
-    // Template 125 Â· Infographics Dashboard (LottieFiles) â€” https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB
+    // Template 125 · Infographics Dashboard (LottieFiles) — https://lottiefiles.com/free-animation/infographics-dashboard-X6P5rVLZAB
     // Adapted: "grow pie arc and metric graph" -> a check-in donut and its fraction, then the three measurement
     // commitments: baseline from verified records, target and reporting owner still to be agreed.
     { ref: U[125], cap: "The measurement commitment", n: 2,
       svg: () => hl("h0", "THE PROPOSED MEASURE", C.navy) + hl("h1", "VERIFY, THEN AGREE", C.green) +
         G("dn", 108, 196, ring(108, 190, 72, C.orange, 26) + Gl(108, 204, "%", 40, C.navy) + T2(108, 298, "CHECK-INS", "WITHOUT CORRECTION", { z: 17, c: C.green })) +
         Ln("Lar", "M108 118A72 72 0 1 1 50 232", C.green, 26, 'stroke-linecap="butt"') +
-        G("fr", 296, 200, pill(296, 150, "NO CORRECTION", C.green) + Pa("M212 196H380", C.ink, 3) + pill(296, 242, "ALL CHECK-INS", C.navy) + Gl(296, 300, "Ã— 100", 24, C.ink)) +
+        G("fr", 296, 200, pill(296, 150, "NO CORRECTION", C.green) + Pa("M212 196H380", C.ink, 3) + pill(296, 242, "ALL CHECK-INS", C.navy) + Gl(296, 300, "× 100", 24, C.ink)) +
         G("r0", 200, 110, cab(48, 108, 1, C.navy) + T(86, 116, "BASELINE FROM RECORDS", { a: "start", c: C.navy }) + okB(368, 110, 15)) +
         G("r1", 200, 200, Ci(48, 200, 22, C.paper, C.green, 3, 'stroke-dasharray="5 4"') + Ci(48, 200, 9, C.green) + T(86, 206, "TARGET TO AGREE", { a: "start", c: C.green }) +
           R(326, 182, 58, 36, 7, "none", C.orange, 2.5, 'stroke-dasharray="5 4"') + qB(355, 200, 12)) +
@@ -3991,7 +3991,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           R(326, 272, 58, 36, 7, "none", C.orange, 2.5, 'stroke-dasharray="5 4"') + qB(355, 290, 12)),
       steps: ["+h0 +dn +Lar +fr", "-h0 +h1 -dn -Lar -fr +r0 +r1 +r2"] },
 
-    // Template 117 Â· Infographics Elements by TarZanchik (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-elements-789489/
+    // Template 117 · Infographics Elements by TarZanchik (Motion Array) — https://motionarray.com/after-effects-templates/infographics-elements-789489/
     // Adapted: "reveal shapes and data" -> a benefits column and a risks column; the sponsor then hangs an owner
     // tag on every risk and the "automatic approval" stamp is struck through.
     { ref: U[117], cap: "Benefits and risks", n: 2,
@@ -4007,7 +4007,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("st", 246, 336, pill(246, 340, "NOT AUTOMATIC APPROVAL", C.orange) + Pa("M112 340H380", C.orange, 3)),
       steps: ["+h0 +bh +rh +b0 +b1 +k0 +k1", "-h0 +h1 +sp +La +Lb +o0 +o1 +st"] },
 
-    // Template 094 Â· Process - Success (LottieFiles) â€” https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
+    // Template 094 · Process - Success (LottieFiles) — https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
     // Adapted: "transform activity into check" -> confirmed items become solid checks, assumptions stay as dashed
     // question marks, and the decision receives a CONDITIONAL stamp instead of a plain approval.
     { ref: U[94], cap: "Confirmed versus assumed", n: 2,
@@ -4020,7 +4020,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("stp", 200, 338, R(84, 310, 232, 56, 10, C.paper, C.orange, 5) + T(200, 346, "CONDITIONAL YES", { z: 24, c: C.orange })),
       steps: ["+h0 +cA +cB +a0 +a1 +a2 +q0 +q1 +q2", "-h0 +h1 +stp stp.r=-4 q0.x=-4 q1.x=-4 q2.x=-4"] },
 
-    // Template 095 Â· contract process (LottieFiles) â€” https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8
+    // Template 095 · contract process (LottieFiles) — https://lottiefiles.com/free-animation/contract-process-tnM3xY0cM8
     // Adapted: "reveal proposal and agreement" -> the one-page record travels to the Understand team, the crystal
     // ball (predicted solution) is struck out, the open evidence is listed, and the same page template turns to you.
     { ref: U[95], cap: "Hand it to Understand", n: 4,
@@ -4046,12 +4046,12 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
   ]);
 
   // =====================================================================
-  // O3f â€” From Qasr's decision to your forum (35 lines, 10 shots). Audit score 4.6 -> rebuilt.
+  // O3f — From Qasr's decision to your forum (35 lines, 10 shots). Audit score 4.6 -> rebuilt.
   // Recap of Qasr's choice, then the forum task step by step (case, criteria, boundary, objections, posting
   // rules), then Week 8: investigating the chosen process, with new evidence allowed to send us back.
   // =====================================================================
   section("O3f", "From Qasr to your forum", 35, [0, 2, 4, 6, 7, 8, 10, 12, 14, 16, 18, 20, 21, 23, 24, 26, 27, 29, 31, 33], [
-    // Template 138 Â· Scrolling Timeline (Motion Array) â€” https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
+    // Template 138 · Scrolling Timeline (Motion Array) — https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
     // Adapted: "scroll the dates and settle on an event" -> Qasr's road ends at its flag and a new road starts at you;
     // the recap scrolls back to the four problems, one team and six months, and every candidate keeps its tick.
     { ref: U[138], cap: "Qasr's journey ends", n: 3,
@@ -4063,7 +4063,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("lg", 200, 200, [0, 1, 2, 3].map((i) => node(70 + i * 87, 190, 32, CCOL[i], CAND[i](70 + i * 87, 192, 1)) + okB(94 + i * 87, 164, 11)).join("") + T(200, 270, "A REAL REASON EACH", { c: C.green })),
       steps: ["+h0 +rd", "-h0 +h1 -rd +rc", "-h1 +h2 -rc +lg"] },
 
-    // Template 096 Â· Process in cub (LottieFiles) â€” https://lottiefiles.com/free-animation/process-in-cub-9iNG7QP0qC
+    // Template 096 · Process in cub (LottieFiles) — https://lottiefiles.com/free-animation/process-in-cub-9iNG7QP0qC
     // Adapted: "cycle the cube states" -> guest arrival steps forward with its two advantages, then three locks show
     // the conditions it still depended on.
     { ref: U[96], cap: "Arrival, with conditions", n: 2,
@@ -4073,7 +4073,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         [["SECURE", "COOPERATION"], ["CONFIRM", "OWNERSHIP"], ["RELIABLE", "EVIDENCE"]].map(([a, b], i) => G("l" + i, 70 + i * 130, 300, lockI(70 + i * 130, 290, 1.4, C.orange) + T2(70 + i * 130, 334, a, b, { z: 17, c: C.orange }))).join(""),
       steps: ["+h0 +ga +gv", "-h0 +h1 -gv ga.y=-40 ga.s=0.75 +l0 +l1 +l2"] },
 
-    // Template 117 Â· Infographics Elements by TarZanchik (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-elements-789489/
+    // Template 117 · Infographics Elements by TarZanchik (Motion Array) — https://motionarray.com/after-effects-templates/infographics-elements-789489/
     // Adapted: "reveal shapes and data" -> billing is deferred but still important, room release and the digital
     // record take their places, the waiting managers receive the reasoning, and four criteria lock into one argument.
     { ref: U[117], cap: "Others still matter", n: 4,
@@ -4089,7 +4089,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           doc(200, 270, 1.8, C.green, 4) + okB(232, 230, 13) + arr(200, 180, 200, 220, C.green, 3)),
       steps: ["+h0 +bl", "-h0 +h1 -bl +ot", "-h1 +h2 -ot +ex", "-h2 +h3 -ex +cv"] },
 
-    // Template 105 Â· World map with logistics (LottieFiles) â€” https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy
+    // Template 105 · World map with logistics (LottieFiles) — https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy
     // Adapted: "trace routes between hubs" -> the reasoning travels from Qasr to a different organisation in your
     // forum; its case arrives with a title; you read the case and its exhibit closely.
     { ref: U[105], cap: "Your forum begins", n: 3,
@@ -4104,7 +4104,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           lens(280, 170, 26, C.green)),
       steps: ["+h0 +mp", "-h0 +h1 -mp +ti", "-h1 +h2 -ti +rd"] },
 
-    // Template 116 Â· Infographics by Ruslan Klimovich (Motion Array) â€” https://motionarray.com/after-effects-templates/infographics-3844461/
+    // Template 116 · Infographics by Ruslan Klimovich (Motion Array) — https://motionarray.com/after-effects-templates/infographics-3844461/
     // Adapted: "sequence statistic graphics" -> Qasr's answer is refused at the border, the organisation's own goals
     // become the target, the four criteria are applied with evidence, and the two classic traps appear in turn.
     { ref: U[116], cap: "Weigh your options", n: 5,
@@ -4119,7 +4119,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           T2(300, 106, "MAIN", "PRIORITIES", { c: C.navy }) + T2(240, 330, "TINY", "CONTRIBUTION", { c: C.orange })),
       steps: ["+h0 +cp", "-h0 +h1 -cp +tg", "-h1 +h2 -tg +gd", "-h2 +h3 -gd +hv", "-h3 +h4 -hv +ez"] },
 
-    // Template 090 Â· Multi-Step Icon Animation (LottieFiles) â€” https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
+    // Template 090 · Multi-Step Icon Animation (LottieFiles) — https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
     // Adapted: "activate one step after another" -> your own process is bracketed with the problem it addresses, then
     // its four boundary markers are placed one after another.
     { ref: U[90], cap: "Your boundary", n: 2,
@@ -4133,7 +4133,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("m3", 350, 200, noB(350, 200, 20) + T2(350, 302, "OUT OF", "SCOPE", { z: 17, c: C.orange })),
       steps: ["+h0 +fl +bk +pb", "-h0 +h1 -pb +m0 +m1 +m2 +m3"] },
 
-    // Template 080 Â· Creative Design Workflow Animation (Dribbble) â€” https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
+    // Template 080 · Creative Design Workflow Animation (Dribbble) — https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
     // Adapted: "assemble shapes and refine the composition" -> objectors appear around your recommendation, one
     // objection opens into what it may reveal, and the louder repeat is replaced by weighing the evidence.
     { ref: U[80], cap: "Welcome the challenge", n: 3,
@@ -4148,7 +4148,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           R(294, 100, 12, 160, 4, C.navy) + R(230, 96, 140, 12, 6, C.navy) + Fi("M230 108L214 160H246ZM370 108L354 160H386Z", C.navy) + T2(300, 290, "COMPETING", "EVIDENCE", { c: C.green })),
       steps: ["+h0 +rc", "-h0 +h1 -rc +op", "-h1 +h2 -op +ev"] },
 
-    // Template 086 Â· Workflow by a (LottieFiles) â€” https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
+    // Template 086 · Workflow by a (LottieFiles) — https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
     // Adapted: "reveal workers and workflow actions" -> the forum thread is built action by action: your post first
     // (others hidden), two replies including a challenge, the Jeston citation, the facilitator's summary, the mark type.
     { ref: U[86], cap: "Post, reply, cite", n: 5,
@@ -4169,7 +4169,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h2 +h3 -bk +fs",
         "-h3 +h4 -fs +fm"] },
 
-    // Template 135 Â· Timeline by The Creators (Motion Array) â€” https://motionarray.com/after-effects-templates/timeline/
+    // Template 135 · Timeline by The Creators (Motion Array) — https://motionarray.com/after-effects-templates/timeline/
     // Adapted: "reveal milestones and media" -> the framework advances to Understand; the lens opens the process; new
     // evidence can send the route back; observation replaces assumption; observed and expected bars meet the baseline.
     { ref: U[135], cap: "On to Understand", n: 5,
@@ -4180,7 +4180,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("iv", 200, 280, [0, 1, 2, 3].map((i) => node(60 + i * 94, 280, 22, C.navy, [JI.book, JI.room, JI.key, JI.bill][i](60 + i * 94, 280)) + (i < 3 ? Pa(`M${84 + i * 94} 280H${130 + i * 94}`, C.navy, 3) : "")).join("") +
           clock(154, 236, 13, C.orange, 120) + clock(248, 236, 13, C.orange, 220) + qB(342, 236, 13) + lens(60, 262, 22, C.green)) +
         G("bk", 200, 280, doc(290, 280, 1.5, C.orange, 3) + exB(316, 252, 12) + T2(290, 336, "NEW", "EVIDENCE", { c: C.orange }) + Pa("M270 240Q220 200 214 140", C.orange, 4) + Fi("M206 146L214 128L222 146Z", C.orange)) +
-        G("as", 200, 280, person(80, 290, 1.4, C.navy) + bub(80, 220, 120, 44, C.navy) + T(80, 226, "WE BELIEVEâ€¦", { c: C.navy }) + noB(132, 202, 11) +
+        G("as", 200, 280, person(80, 290, 1.4, C.navy) + bub(80, 220, 120, 44, C.navy) + T(80, 226, "WE BELIEVE…", { c: C.navy }) + noB(132, 202, 11) +
           person(320, 290, 1.4, C.green) + lens(300, 230, 18, C.green) + T2(320, 336, "WHAT ACTUALLY", "HAPPENS", { c: C.green })) +
         G("ob", 200, 280, Pa("M40 330H360", C.navy, 3) + R(110, 240, 60, 90, 6, C.navy) + R(230, 210, 60, 120, 6, "none", C.green, 3, 'stroke-dasharray="7 5"') + Pa("M40 270H360", C.orange, 3, 'stroke-dasharray="4 4"') +
           T2(140, 352, "OBSERVED", "NOW", { c: C.navy }) + T2(260, 352, "EXPECTED", "LEVEL", { c: C.green }) + T(376, 262, "AGREED BASELINE", { a: "end", z: 17, c: C.orange })),
@@ -4191,7 +4191,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         "-h2 +h3 -bk +as",
         "-h3 +h4 -as +ob"] },
 
-    // Template 140 Â· Corporate Timeline by MotionTores (Motion Array) â€” https://motionarray.com/after-effects-templates/corporate-timeline-77666/
+    // Template 140 · Corporate Timeline by MotionTores (Motion Array) — https://motionarray.com/after-effects-templates/corporate-timeline-77666/
     // Adapted: "transition milestones along a path with typography" -> the course path turns from choosing where to
     // understanding why; the people around the decision nod; you carry your questions through the Week 8 door.
     { ref: U[140], cap: "On to Week 8", n: 3,
