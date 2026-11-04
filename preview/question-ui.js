@@ -1,16 +1,22 @@
 /* Presentation helpers only. The original selects and grading handlers stay authoritative. */
 (() => {
-  let observer;
+  let observer, activeDialog;
   window.VL_QUESTIONS = {
-    enhance(root) {
+    reset() {
       if (observer) observer.disconnect();
+      if (activeDialog) { activeDialog.close(); activeDialog = null; }
+    },
+    enhance(root, { onInspect } = {}) {
+      this.reset();
       const diagrams = [...root.querySelectorAll('.st-opts.vis .st-opt')];
       if (diagrams.length) {
         const enlarge = document.createElement('button');
         enlarge.type = 'button'; enlarge.className = 'qenlarge'; enlarge.textContent = 'Enlarge diagrams';
         root.querySelector('.qskip-inline').after(enlarge);
         enlarge.onclick = () => {
+          if (onInspect) onInspect();
           const dialog = document.createElement('dialog');
+          activeDialog = dialog;
           dialog.className = 'qdiagram-dialog'; dialog.setAttribute('aria-label', 'Enlarged question diagrams');
           const close = document.createElement('button');
           close.type = 'button'; close.className = 'qdiagram-close'; close.textContent = 'Close enlarged view';
@@ -23,7 +29,7 @@
             drawing.appendChild(option.querySelector('.dgo').cloneNode(true));
             figure.append(caption, drawing); dialog.appendChild(figure);
           });
-          dialog.onclose = () => { dialog.remove(); enlarge.focus(); };
+          dialog.onclose = () => { dialog.remove(); if (activeDialog === dialog) activeDialog = null; if (enlarge.isConnected) enlarge.focus({ preventScroll: true }); };
           document.body.appendChild(dialog); dialog.showModal(); close.focus();
         };
       }

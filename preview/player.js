@@ -496,6 +496,8 @@
 
   // ---------- build the current step ----------
   function load() {
+    if (window.VL_QUESTIONS) VL_QUESTIONS.reset();
+    $("main").querySelectorAll("#rateCard, #s2ReportCard, .pending-report").forEach(el => el.remove());
     const st = cur();
     if (NEW_UI) document.body.dataset.step = st.kind; // Presentation hooks only.
     if (view === "player") { setRoute(st.kind === "report" ? "report" : "player", true); }
@@ -528,6 +530,9 @@
     renderSend(st.kind === "report" && !!T.sendReport);
     if (st.kind === "report") { const old = $("rateCard"); if (old) old.remove(); const rc = document.createElement("div"); rc.className = "card rate-card"; rc.id = "rateCard"; rc.innerHTML = `<div class="eyebrow">Your opinion</div><button class="primary" id="rateWeek" type="button">★ Rate this week</button><div class="muted" style="font-size:15px">Anonymous, two minutes. Opens in a new tab.</div>`; if (window.S2 && S2.reportCard) { const old2 = $("s2ReportCard"); if (old2) old2.remove(); const h = S2.reportCard(); if (h) { const w = document.createElement("div"); w.id = "s2ReportCard"; w.innerHTML = h; $("main").appendChild(w); S2.bindReport(w); } } $("main").appendChild(rc); $("rateWeek").onclick = openFeedback; }
     if(st.kind==="report"&&deferred.length){const note=document.createElement("div");note.className="card pending-report";note.setAttribute("role","status");note.textContent=`Week not complete: ${deferred.length} question(s) saved To answer later. Return Home to finish them.`;$("main").prepend(note);}
+    // Paint the saved sentence immediately, including a paused return or a look change.
+    caption((P.part === "feedback" ? script.feedback : script.main)?.[P.sent]);
+    if (P.part === "main") vstep(P.sent - script.offset);
   }
 
   // ---------- questions: six auto-checked, single-response types ----------
@@ -582,7 +587,25 @@
     script = Object.assign({ main: head.concat(say), offset: 0 }, s);
     Scenes.loadBeats(cap, `${P.q + 1}/${st.qs.length}`, beats);
     wireQuestion(q);
-    if (window.VL_QUESTIONS) VL_QUESTIONS.enhance(stageEl);
+    if (window.VL_QUESTIONS) VL_QUESTIONS.enhance(stageEl, { onInspect: pause });
+    // A saved response still owns its feedback screen after a reload. Repaint it
+    // from history without submitting another response or changing the score.
+    if (P.part === "feedback") {
+      const response = P.hist.find(h => h.id === q.id);
+      if (response) {
+        paintFeedback(response.ok);
+        stageEl.querySelectorAll(".qbox").forEach(el => el.hidden = true);
+        const actions = stageEl.querySelector(".qskip-actions");
+        if (actions.querySelector(".qenlarge")) {
+          actions.querySelectorAll(".qskip-inline, .qskip-hint").forEach(el => el.hidden = true);
+          actions.style.gridTemplateColumns = "1fr";
+        } else actions.hidden = true;
+        const solution = document.createElement("div");
+        solution.className = "st-note qright";
+        solution.textContent = script.rightSay;
+        stageEl.querySelector("#fbk").after(solution);
+      }
+    }
   }
 
   function wireQuestion(q) {
@@ -621,6 +644,16 @@
     }
   }
 
+  function paintFeedback(ok, ui = {}) {
+    stageEl.querySelectorAll(".st-opt").forEach((b) => { b.disabled = true; b.classList.toggle("picked", +b.dataset.pos === ui.pos && !ok); });
+    stageEl.querySelectorAll(".st-opt[data-right]").forEach((b) => b.classList.add("right"));
+    const chk = stageEl.querySelector(".qcheck"); if (chk) chk.disabled = true;
+    const skip=stageEl.querySelector(".qskip-inline");if(skip)skip.disabled=true;
+    script.feedback = [ok ? "Correct." : `Not quite. ${script.rightSay}`].concat(sentences(script.q.why));
+    const f = stageEl.querySelector("#fbk"); f.textContent = ok ? "✓ Correct" : "✗ Not quite"; f.style.color = ok ? "var(--st-good)" : "var(--st-bad)";
+    Scenes.step(99);
+  }
+
   function submit(ok, ui = {}) {
     const st = cur(); if (st.kind !== "quiz" || P.part === "feedback") return;
     const q = script.q;
@@ -629,13 +662,7 @@
     (P.rounds[rkey(st)] = P.rounds[rkey(st)] || {})[q.id] = ok;
     P.part = "feedback"; P.sent = 0; waiting = false; save();
     stopSpeech();
-    stageEl.querySelectorAll(".st-opt").forEach((b) => { b.disabled = true; b.classList.toggle("picked", +b.dataset.pos === ui.pos && !ok); });
-    stageEl.querySelectorAll(".st-opt[data-right]").forEach((b) => b.classList.add("right"));
-    const chk = stageEl.querySelector(".qcheck"); if (chk) chk.disabled = true;
-    const skip=stageEl.querySelector(".qskip-inline");if(skip)skip.disabled=true;
-    script.feedback = [ok ? "Correct." : `Not quite. ${script.rightSay}`].concat(sentences(q.why));
-    const f = stageEl.querySelector("#fbk"); f.textContent = ok ? "✓ Correct" : "✗ Not quite"; f.style.color = ok ? "var(--st-good)" : "var(--st-bad)";
-    Scenes.step(99);
+    paintFeedback(ok, ui);
     const feedback = stageEl.querySelector("#fbk");
     setTimeout(() => {
       if (!feedback?.isConnected || P.part !== "feedback") return;
@@ -687,6 +714,7 @@
       { at: 0, html: `<div class="st-kicker" style="color:var(--st-muted)">Mastery per part (your last ${A.window} answers)</div><div class="st-los">${rows}</div>` },
       { at: 1, html: st.verdict === "pass" ? `<div class="st-quote">Lesson <em>mastered</em>.</div>`
         : st.verdict === "flagged" ? `<div class="st-quote">Flagged for <em>instructor review</em></div>`
+        : st.verdict === "deferred" ? `<div class="st-quote">Questions saved <em>for later</em>.</div>`
         : `<div class="st-kicker" style="color:var(--st-warm)">Your plan</div><div class="st-cards">${st.plan.map((p) => `<div class="st-it st-card" data-at="${say.length - 1}"><b>${esc(A.sections[p.sec].name)}</b><span>Fresh explanation + ${p.qs.length} new question${p.qs.length > 1 ? "s" : ""}</span></div>`).join("")}</div>` },
     ]);
   }
@@ -749,15 +777,15 @@
     const say = [deferred.length ? `Week ${WK} is not complete yet. You have ${deferred.length} questions to answer later.` : flagged.length ? `You have reached the end of Week ${WK}. Here is your achievement report.` : `Week ${WK} complete. Here is your achievement report.`]
       .concat(CLOS.map((c) => `Course outcome ${c}: ${said(cloM(c))}.`))
       .concat(LOS.map((k) => `${A.outcomes[k].name}: ${said(loM(k))}.`))
-      .concat(flagged.length ? [`Some parts are not yet at the target, and they are marked for instructor review: ${flagged.map((s) => A.sections[s].name.toLowerCase()).join(" and ")}. Please show this report to your instructor.`] : [`You reached the target on every part of Week ${WK}. Excellent work.`]);
+      .concat(deferred.length ? [] : flagged.length ? [`Some parts are not yet at the target, and they are marked for instructor review: ${flagged.map((s) => A.sections[s].name.toLowerCase()).join(" and ")}. Please show this report to your instructor.`] : [`You reached the target on every part of Week ${WK}. Excellent work.`]);
     script = { main: say, offset: 0 };
     const bar = (label, m, at, small) => `<div class="st-it st-lo${small ? " sm" : ""}" data-at="${at}"><div class="st-lo-h"><b>${esc(label)}</b><span>${m == null ? "–" : pct(m) + "%"}</span></div><div class="st-lo-t"><i class="${m != null && m >= A.target - 1e-9 ? "good" : "bad"}" style="--w:${pct(m)}%"></i><em style="left:${pct(A.target)}%"></em></div></div>`;
     Scenes.loadBeats("<b>Achievement report</b>", "", [
       { at: 0, html: `<div class="st-kicker">${esc(C.code)} · Week ${WK} achievement</div><h2 class="st-h">${esc(C.title)}</h2>` },
-      { at: 1, fx: "bars", html: `<div class="st-score ${k1 != null && k1 >= A.target ? "good" : "bad"}"><span data-count="${pct(k1)}" data-unit="%">0%</span><small>CLO ${CLOS[0]} · ${esc(A.clos[CLOS[0]].full)}</small></div>` },
+      { at: 1, fx: "bars", html: `<div class="st-score ${k1 != null && k1 >= A.target ? "good" : "bad"}">${k1 == null ? '<span>–</span>' : `<span data-count="${pct(k1)}" data-unit="%">0%</span>`}<small>CLO ${CLOS[0]} · ${esc(A.clos[CLOS[0]].full)}</small></div>` },
       { at: 2, html: `<div class="st-kicker">Week ${WK} outcomes</div><div class="st-los">${LOS.map((k, i) => bar(A.outcomes[k].full, loM(k), 2 + i)).join("")}</div>` },
       { at: 2 + LOS.length, html: `<div class="st-kicker">Every part</div><div class="st-los">${SECS.map((s) => bar(A.sections[s].name + (P.flags[s] ? " · flagged" : ""), secM(s), 2 + LOS.length, true)).join("")}</div>` },
-      { at: say.length - 1, html: flagged.length ? `<div class="st-quote">Flagged for <em>instructor review</em>: ${esc(flagged.map((s) => A.sections[s].name).join(", "))}</div>` : `<div class="st-quote">Every part <em>achieved</em>.</div>` },
+      { at: say.length - 1, html: deferred.length ? `<div class="st-quote">${deferred.length} question${deferred.length === 1 ? "" : "s"} saved <em>for later</em>.</div>` : flagged.length ? `<div class="st-quote">Flagged for <em>instructor review</em>: ${esc(flagged.map((s) => A.sections[s].name).join(", "))}</div>` : `<div class="st-quote">Every part <em>achieved</em>.</div>` },
       ...(T.sendReport ? [{ at: say.length - 1, html: `<button class="st-card st-send"><b>✉ Send this report</b><span>By email or share</span></button>` }] : []),
       ...(nextWeek() ? [{ at: say.length - 1, html: `<button class="st-card st-next primary"><b>Continue to Week ${nextWeek().n} →</b><span>${esc(nextWeek().title)}</span></button>` }] : []),
     ]);
@@ -790,7 +818,7 @@
       if (st.kind === "quiz" && P.part === "main") {
         playing = false; waiting = true; P.sent = 0; save();
         caption(["drop", "order", "match"].includes(script.q.type) ? "Make your choices, then press Check answer." : "Tap your answer.");
-        const f = stageEl.querySelector(".qsel, .qchip, .st-opt"); if (f && document.activeElement === document.body) f.focus({ preventScroll: true });
+        const f = stageEl.querySelector(".qpick summary, .qchip, .st-opt"); if (f && document.activeElement === document.body) f.focus({ preventScroll: true });
         return bar();
       }
       advance();
@@ -954,15 +982,15 @@
     }
     function setupVoice() {
       showScreen("setupVoice", `<section class="card onboard"><div class="eyebrow">Setup · Step 2 of 3</div><h1>Choose your narrator</h1>
-        <p>Voices available on your device are shown best first. Use <b>▶ Test</b> to hear each one. You can change these choices later in Settings.</p>
-        <label class="fld">Narration mode <select id="setupMode"><option value="voice">Voice with captions</option><option value="captions">Captions only</option></select></label>
-        <label class="fld">Voice <select id="setupVoice"></select></label>
-        <div id="setupVoiceTests" class="voice-tests" aria-label="Available voices"></div>
+        <p>The natural voice is recommended. You can also use your phone's own voice, or read captions only. You can change these choices later in Settings.</p>
+        <label class="fld">Narration mode <select id="setupMode"><option value="voice">Natural voice, with captions</option><option value="device">Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
+        <div id="setupDevice"><label class="fld">Phone voice <select id="setupVoice"></select></label>
+        <div id="setupVoiceTests" class="voice-tests" aria-label="Available voices"></div></div>
         <label class="fld">Speed: <output id="setupRateOut"></output><input id="setupRate" type="range" min="0.5" max="2" step="0.05"></label>
         <div id="setupVoiceNote" role="status" class="muted"></div>
         <label class="listen-choice"><input id="setupListen" type="checkbox"> <span><strong>Listen only (hands-free)</strong><br>Play lessons continuously and save checks to answer later. A single Play tap starts narration.</span></label>
         <div class="actions"><button id="voiceBack" type="button">← Design</button><button class="primary" id="setupDone" type="button">Next: AI feedback →</button></div></section>`);
-      $("setupMode").value=VS.mode;$("setupMode").onchange=e=>{VS.mode=e.target.value;saveVS();};
+      const devShow=()=>{$("setupDevice").hidden=VS.mode!=="device";};$("setupMode").value=VS.mode;devShow();$("setupMode").onchange=e=>{VS.mode=e.target.value;saveVS();if($("vMode"))$("vMode").value=VS.mode;devShow();};
       $("setupRate").value=VS.rate;$("setupRateOut").textContent=VS.rate.toFixed(2)+"×";
       $("setupRate").oninput=e=>{$("setupRateOut").textContent=Number(e.target.value).toFixed(2)+"×";};
       $("setupRate").onchange=e=>{VS.rate=num(e.target.value,.5,2,.95);saveVS();$("vRate").value=VS.rate;};
@@ -1326,8 +1354,13 @@ if (settingsWeek) {
 (function installCaptionToggleAndCounter() {
   const KEY = "voicelearn.oper621.captions.v1", btn = $("ccBtn");
   const apply = (on) => { document.body.classList.toggle("cc-off", !on); if (btn) btn.setAttribute("aria-pressed", String(on)); };
-  let on = false; try { on = localStorage.getItem(KEY) === "on"; } catch (e) {}
+  let on = VS.mode === "captions"; try { on = on || localStorage.getItem(KEY) === "on"; } catch (e) {}
   apply(on);
+  // Choosing captions as the narrator must also reveal the caption band.
+  document.addEventListener("change", e => {
+    if (!["vMode", "setupMode"].includes(e.target.id) || e.target.value !== "captions") return;
+    on = true; apply(on); try { localStorage.setItem(KEY, "on"); } catch (e) {}
+  });
   if (btn) btn.onclick = () => { on = !on; apply(on); try { localStorage.setItem(KEY, on ? "on" : "off"); } catch (e) {} };
   // The look's own "07/32" counter moves into the slim top bar (the look header itself is hidden by CSS).
   const sync = () => { const c = document.querySelector(".player .nb-counter,.player .cx-counter,.player .jy-counter"), t = $("lookCount"); if (t) t.textContent = c ? c.textContent.trim() : ""; };

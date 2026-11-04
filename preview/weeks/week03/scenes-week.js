@@ -1352,7 +1352,7 @@
         var row = function (y, st) { var nm = ["Search", "Retype", "Call rooms"], o = "", k; for (k = 0; k < 3; k++) o += card(20 + k * 130, y, 100, 44, nm[k], k === 1 ? C.rose : C.white, k === 1 ? C.red : st, C.ink, 15) + (k ? arrow(120 + (k - 1) * 130, y + 22, 148 + (k - 1) * 130, y + 22, C.ink, 2) : ""); return o; };
         return S(0, person(70, 132, C.amber, 1.3, "happy") + T(70, 200, "Vendor", 15, C.amber) + bubble(130, 40, 250, 60, ["“We fit your current", "process closely!”"], C.sun, 15) +
             pill(255, 150, "Close fit", C.green, C.white, 17), 0) +
-          S(1, T(200, 44, "Current process", 17) + row(64, C.ink)) +
+          S(1, T(200, 44, "Current process", 17) + row(64, C.ink), 2) +
           S(1, guest(180, 150, 1, "sad") + clock(240, 150, 16, C.coral, true) + T(200, 236, "This made her wait", 16, C.red), 1) +
           S(2, arrow(200, 112, 200, 150, C.amber, 3) + T(212, 136, "close fit copies", 14, C.amber, "start") + row(156, C.navy) +
             T(200, 236, "Keeps what should go", 16, C.red), 2) +
@@ -2075,4 +2075,3 @@
   });
 
 })();
-

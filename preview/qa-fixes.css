@@ -1,4 +1,22 @@
 /* Shared course repairs. Loaded after both adopted design sheets. */
+/* Let the picture use the space left by its explanation on portrait screens. */
+html[data-week] .player .w10s-mount { max-height: none !important; flex: 1 1 0; }
+html[data-week] .player .w10s-text { flex: 0 1 auto; }
+html[data-week] .player .w10s-note + .w10s-note { margin-top: 14px; }
+/* Future report rows must not leave invisible, focusable boxes in the scroll area. */
+html[data-week] .stage.scroll .st-beat:not(.in),
+html[data-week] .stage.scroll .st-it:not(.in) { display: none; }
+html[data-week] .stage.scroll .st-lo-h span { flex-shrink: 0; }
+/* Reports and checks share a single page scroll area, with room above the controls. */
+html body[data-view="player"][data-step="report"]:not(.fs) main {
+  height: auto !important; display: block !important;
+}
+html body[data-view="player"][data-step="report"]:not(.fs) .player .stage.scroll {
+  height: auto !important; min-height: 0; overflow: visible; margin: 0 !important; width: 100%;
+}
+html body[data-view="player"][data-step="report"]:not(.fs) main > :not(:first-child) { margin-top: 16px; }
+/* Keyboard focus must stay visible inside a wrapping picker. */
+.qpick .qchoices button:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 /* Dense checks use the page's scroll area, so the stage never becomes a second scroll trap. */
 html:has(body[data-step="quiz"]:not(.fs)),
 html body[data-view="player"][data-step="quiz"]:not(.fs) { overflow-y: auto !important; }
@@ -82,7 +100,7 @@ html body[data-step="quiz"] .stage.scroll .qorder { margin: 0; padding-left: 26p
 .qpick summary[aria-disabled="true"]::after { display: none; }
 @media (max-width: 600px) {
   html body[data-step="quiz"] .stage.scroll .st-track { padding: 14px 12px; gap: 12px; }
-  html body[data-step="quiz"] .stage.scroll .st-kicker { font-size: 10px; letter-spacing: .05em; }
+  html body[data-step="quiz"] .stage.scroll .st-kicker { font-size: 12px; line-height: 1.5; letter-spacing: .04em; overflow-wrap: anywhere; }
   html body[data-step="quiz"] .stage.scroll .st-opts.vis { grid-template-columns: minmax(0,1fr); gap: 8px; }
   html body[data-step="quiz"] .stage.scroll .st-opts.vis .st-opt { grid-template-columns: 24px minmax(0,1fr); padding: 6px !important; gap: 6px !important; }
   html body[data-step="quiz"] .stage.scroll .st-opts.vis .st-opt b { width: 24px !important; height: 28px !important; }
@@ -90,6 +108,7 @@ html body[data-step="quiz"] .stage.scroll .qorder { margin: 0; padding-left: 26p
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
+  html[data-week] .player .w10s-text { max-height: 100%; }
   html body[data-view="player"][data-step="quiz"]:not(.fs) main { min-height: calc(100dvh - 100px); }
   html body[data-step="quiz"] .stage.scroll .st-track { padding: 12px 16px; gap: 10px; }
   html body[data-step="quiz"] .stage.scroll .st-opts.vis { grid-template-columns: repeat(2,minmax(0,1fr)); }

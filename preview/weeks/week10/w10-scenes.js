@@ -105,7 +105,7 @@
     switch (v.type) {
       case "title": return { k: v.kicker, m: v.text };
       case "item": return { k: v.n && v.of ? v.n + " of " + v.of : "", m: v.title, s: v.text };
-      case "compare": return { k: v.side, m: v.label, s: v.note };
+      case "compare": return { k: ["a", "b", "left", "right"].includes(String(v.side).toLowerCase()) ? "" : v.side, m: v.label, s: v.note };
       case "diagram": return { k: v.kicker, m: v.caption };
       case "formula": return { k: "", m: clean(v.label) };
       case "issue": return { k: "", m: v.text, s: v.effect };
@@ -116,31 +116,35 @@
   function showText(st, index) {
     if (!st.text) return;
     // A null moment keeps the previous picture, so keep the previous words too (never an empty box).
-    let t = null;
-    for (let j = index; j >= 0 && !t; j--) {
+    let notes = [];
+    for (let j = index; j >= 0 && !notes.length; j--) {
       const line = st.lines && st.lines[j];
-      const c = momentText(Array.isArray(line) ? line[1] : null);
-      if (c && (c.m || c.s)) t = c;
+      notes = [].concat(Array.isArray(line) ? line[1] : null)
+        .map(momentText).filter(c => c && (c.m || c.s));
     }
-    if (!t) {
+    if (!notes.length) {
       // Nothing to keep yet (opening sentences): show the sentence being spoken.
       const line = st.lines && st.lines[index];
       const said = Array.isArray(line) ? line[0] : line;
-      if (said) t = { k: "", m: String(said) };
+      if (said) notes = [{ k: "", m: String(said) }];
     }
-    const key = t ? t.m + "|" + t.s : "";
+    const key = JSON.stringify(notes);
     if (key && st.text.dataset.shown === key && st.text.childElementCount) return;
     st.text.dataset.shown = key;
     st.text.replaceChildren();
-    if (!t) return;
-    [["k", t.k], ["m", t.m], ["s", t.s]].forEach(([c, s]) => {
-      if (!s) return;
-      const p = document.createElement("p");
-      p.className = c;
-      p.textContent = String(s).replace(/\|/g, " ");
-      st.text.appendChild(p);
+    notes.forEach(t => {
+      const note = document.createElement("div");
+      note.className = "w10s-note";
+      [["k", t.k], ["m", t.m], ["s", t.s]].forEach(([c, s]) => {
+        if (!s) return;
+        const p = document.createElement("p");
+        p.className = c;
+        p.textContent = String(s).replace(/\|/g, " ");
+        note.appendChild(p);
+      });
+      st.text.appendChild(note);
     });
-    st.text.classList.remove("in"); void st.text.offsetWidth; st.text.classList.add("in");
+    st.text.scrollTop = 0;
   }
 
   // Before the first scene step (the part's opening lines): show the part title, not an empty box.
