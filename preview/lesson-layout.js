@@ -7,13 +7,15 @@
   const number = s => parseFloat(s) || 0;
   function put(el, name, value) { if (el.style.getPropertyValue(name) !== value) el.style.setProperty(name, value); }
   function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; fit(); }); }
-  function measureText(source, texts, width) {
+  function measureText(source, texts, width, scales) {
     const style = getComputedStyle(source);
+    const variants = scales || [null], heights = variants.map(() => 0);
     const fragment = document.createDocumentFragment(), seen = new Set(), clones = [];
     for (const text of texts) {
       const key = typeof text === 'string' ? text : text.map(n => n.outerHTML).join('');
       if (seen.has(key)) continue;
       seen.add(key);
+      for (const [index, scale] of variants.entries()) {
       const clone = source.cloneNode(false);
       clone.removeAttribute('id'); clone.removeAttribute('aria-live'); clone.removeAttribute('tabindex');
       clone.classList.add('vl-measure'); clone.setAttribute('aria-hidden', 'true');
@@ -22,14 +24,20 @@
       clone.style.setProperty('line-height', style.lineHeight, 'important');
       clone.style.setProperty('padding', style.padding, 'important');
       clone.style.setProperty('white-space', 'normal', 'important');
+      if (scale != null) {
+        clone.style.setProperty('--vl-note-scale', String(scale));
+        clone.style.setProperty('--vl-note-label-scale', String(Math.min(1.3, scale)));
+      }
       if (typeof text === 'string') clone.textContent = text;
       else clone.replaceChildren(...text.map(n => n.cloneNode(true)));
-      fragment.appendChild(clone); clones.push(clone);
+      fragment.appendChild(clone); clones.push({clone, index});
+      }
     }
     // Insert once, read once, remove once: avoid reflowing the live SVG for every sentence.
     source.parentElement.appendChild(fragment);
-    const height = Math.max(0,...clones.map(clone => clone.getBoundingClientRect().height));
-    clones.forEach(clone => clone.remove()); return Math.ceil(height);
+    clones.forEach(({clone,index}) => { heights[index] = Math.max(heights[index], clone.getBoundingClientRect().height); });
+    clones.forEach(({clone}) => clone.remove());
+    return scales ? heights.map(Math.ceil) : Math.ceil(heights[0]);
   }
   function fit() {
     if (body.dataset.view !== 'player') return;
@@ -42,9 +50,13 @@
     const top = full ? (viewport?.offsetTop || 0) : Math.max(0, nav.getBoundingClientRect().bottom);
     const cs = getComputedStyle(main), space = Math.max(1, bottom - top - number(cs.paddingTop) - number(cs.paddingBottom));
     const width = Math.max(1, main.clientWidth - number(cs.paddingLeft) - number(cs.paddingRight));
-    const key = [part, width, space, full, off, getComputedStyle(cc).font, devicePixelRatio].join('|');
+    const portrait = !!scene && space > width * 1.25;
+    const key = [part, width, space, full, off, portrait, getComputedStyle(document.documentElement).fontSize, devicePixelRatio].join('|');
     if (key !== signature) {
       signature = key;
+      // Portrait has room for a reading band as well as the picture. Measure every
+      // sentence at the larger type, so captions never change height mid-part.
+      put(body, '--vl-caption-scale', portrait ? '1.15' : '1');
       const natural = off ? 0 : measureText(cc, captions.length ? captions : [cc.textContent], width);
       // Extremely long captions and large accessibility fonts stay readable in a scrollable band.
       const height = Math.min(natural, space * (width > space ? .25 : .28));
@@ -63,18 +75,21 @@
     const available = Math.max(1, space - band - number(hcs.paddingTop) - number(hcs.paddingBottom));
     const row = w > available * 1.35;
     host.dataset.flow = row ? 'row' : 'stack';
+    host.dataset.presentation = portrait && !row ? 'portrait' : 'wide';
     const gap = number(getComputedStyle(host).fontSize) * .5;
     const noteWidth = row ? Math.min(w * .32, number(getComputedStyle(text).fontSize) * 22) : w;
-    const noteKey = [part, w, available, row, noteWidth, getComputedStyle(text).font, getComputedStyle(text.querySelector('.m') || text).font].join('|');
+    const noteKey = [part, w, available, row, noteWidth, getComputedStyle(text).font, getComputedStyle(document.documentElement).fontSize].join('|');
     if (scene.noteKey !== noteKey) {
       scene.noteKey = noteKey;
+      put(host, '--vl-note-scale', '1');
+      put(host, '--vl-note-label-scale', '1');
       scene.notes = measureText(text, states.length ? states : [[...text.children]], noteWidth);
       scene.chromeReserve = null;
+      scene.portraitKey = '';
     }
     // Freeze the drawing size to the largest explanation of this part. Current notes
     // keep their natural height; changing a sentence cannot move or shrink the picture.
-    const notes = Math.min(scene.notes, available * (row ? 1 : .42));
-    put(text, '--vl-note-limit', px(row ? available : notes));
+    let notes = Math.min(scene.notes, available * (row ? 1 : .42));
     const view = svg.viewBox.baseVal;
     // Some authored scenes adjust their viewBox to fit a label during playback.
     // Keep the presentation box stable while SVG's own meet scaling handles that change.
@@ -104,9 +119,28 @@
       + number(style.rowGap) * siblings.length;
     const drawingH = drawingW / ratio + finalChrome;
     put(mount, '--vl-scene-height', px(drawingH));
+    // The largest base explanation above reserves a stable drawing size. Fit
+    // the CURRENT explanation into its remaining portrait space: a short note
+    // need not stay small just because another note in this part is longer.
+    // Never stretch the SVG or shrink accessibility text to make it fit.
+    const noteLimit = portrait && !row ? Math.max(1, available - drawingH - gap) : row ? available : notes;
+    const portraitKey = [noteKey, noteLimit, text.innerHTML].join('|');
+    if (portrait && !row && scene.portraitKey !== portraitKey) {
+      scene.portraitKey = portraitKey;
+      const current = [[...text.children]];
+      // Measure type candidates in one DOM batch, without repeatedly reflowing
+      // the live animated drawing or flashing intermediate sizes on a phone.
+      const scales = Array.from({length:16}, (_, i) => 1 + i * .05);
+      const sizes = measureText(text, current, noteWidth, scales);
+      let low = 1;
+      sizes.forEach((height, i) => { if (height <= noteLimit) low = scales[i]; });
+      put(host, '--vl-note-scale', String(low));
+      put(host, '--vl-note-label-scale', String(Math.min(1.3, low)));
+    }
+    put(text, '--vl-note-limit', px(noteLimit));
     put(host, '--vl-note-width', px(noteWidth));
     put(host, '--vl-scene-gap', px(gap));
-    const noteH = Math.min(text.scrollHeight, row ? available : notes);
+    const noteH = Math.min(text.scrollHeight, noteLimit);
     const rowHeight = Math.max(drawingW / ratio + scene.chromeReserve, Math.min(scene.notes, available));
     put(host, '--vl-row-height', px(rowHeight));
     const height = (row ? Math.max(rowHeight,drawingH) : drawingH + noteH + gap) + number(hcs.paddingTop) + number(hcs.paddingBottom);

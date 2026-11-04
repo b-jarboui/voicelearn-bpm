@@ -298,7 +298,7 @@ html[data-week] body[data-view="player"] #cc {
   display: block !important; flex: 0 0 var(--vl-caption-size, auto) !important;
   height: var(--vl-caption-size, auto) !important; max-height: var(--vl-caption-size, none) !important;
   padding: .35em .6em !important; margin: 0 !important; overflow-y: auto; overscroll-behavior: contain;
-  font: 400 1rem/1.35 var(--body) !important; text-align: center;
+  font: 400 calc(1rem * var(--vl-caption-scale, 1))/1.35 var(--body) !important; text-align: center;
   white-space: normal !important; text-overflow: clip; text-wrap: pretty;
   -webkit-line-clamp: unset !important; -webkit-box-orient: initial !important;
 }
@@ -370,9 +370,14 @@ html[data-week] body.vl-measured .player .w10s-host .w10s-text {
   border-left: 0 !important; border-top: 0; text-align: left;
 }
 html[data-week] body.vl-measured .player .w10s-host[data-look="journey"] .w10s-text::before { display: none; }
-html[data-week] body.vl-measured .player .w10s-text .m { font-size: 1.15rem !important; line-height: 1.4 !important; }
-html[data-week] body.vl-measured .player .w10s-text .s { font-size: 1rem; line-height: 1.4; margin-top: .35em; }
-html[data-week] body.vl-measured .player .w10s-text .k { font-size: .75rem !important; margin-bottom: .3em; }
+html[data-week] body.vl-measured .player .w10s-text .m { font-size: calc(1.15rem * var(--vl-note-scale, 1)) !important; line-height: 1.4 !important; }
+html[data-week] body.vl-measured .player .w10s-text .s { font-size: calc(1rem * var(--vl-note-scale, 1)); line-height: 1.4; margin-top: .35em; }
+html[data-week] body.vl-measured .player .w10s-text .k { font-size: calc(.75rem * var(--vl-note-label-scale, 1)) !important; margin-bottom: .3em; }
+/* The marker font has a more specific authored shorthand. Keep its face while
+   allowing the same measured portrait growth as the other three looks. */
+html[data-week] body.vl-measured .player .w10s-host[data-look="board"][data-presentation="portrait"] .w10s-text .m {
+  font-size: calc(1.15rem * var(--vl-note-scale, 1)) !important;
+}
 html[data-week] body.vl-measured .player .w10s-note + .w10s-note { margin-top: .65em; }
 html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-inner {
   flex-direction: row !important; align-items: center !important; justify-content: center !important;
@@ -383,3 +388,18 @@ html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-text 
 .vl-measure { pointer-events: none !important; }
 /* Report links use the button's readable foreground in every look and theme. */
 html[data-week] .stage .st-next.primary :is(b,span) { color: var(--accent-ink) !important; opacity: 1; }
+/* One status meaning on the shared question surface, including wrapping pickers. */
+html[data-week] .stage.scroll .st-opt.picked {
+  border-color: var(--st-bad); background: color-mix(in srgb, var(--st-bad) 8%, var(--surface));
+}
+html[data-week] .stage .qpick:has(.qsel.bad) summary,
+html[data-week] .stage .qplaced.bad { border-color: var(--st-bad); }
+html[data-week] .stage .qright { color: var(--st-good); font-size: 1rem; line-height: 1.5; }
+html[data-week] .stage .st-answer-count { font-size: 1rem; line-height: 1.5; overflow-wrap: anywhere; }
+html[data-week] .stage .st-mastery-rule { font-size: .9rem; line-height: 1.5; color: var(--st-muted); }
+html[data-week] .stage .st-score.pending { color: var(--st-muted); background: var(--st-panel2); }
+html[data-week] .stage .st-score.pending span { color: inherit; }
+/* Full-screen's illustration clipping must not trap dense question/report pages. */
+html[data-week] body.fs[data-view="player"] .player .stage.scroll {
+  overflow-y: auto !important; overscroll-behavior: contain;
+}

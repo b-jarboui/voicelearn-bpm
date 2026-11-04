@@ -85,11 +85,12 @@
   }
   function resumeDeferred(id){
     if(!id||!deferred.includes(id)||!allQ[id])return;
-    pause();deferredReturn={queue:P.queue,idx:P.idx,part:P.part,sent:P.sent,q:P.q};
+    pause();deferredReturn=deferredReturn||{queue:P.queue,idx:P.idx,part:P.part,sent:P.sent,q:P.q};
     // A temporary single-question queue; do not touch the original progress fields on disk.
     const q=allQ[id],l=C.lessons.findIndex((x,i)=>lessonSecs(i).includes(q.sec));
     const lesson=l>=0?l:Math.max(0,Math.min(C.lessons.length-1,cur().l||0));
-    P.queue=[{kind:"quiz",l:lesson,round:0,qs:[id],deferred:true}];P.idx=0;P.part="main";P.sent=0;P.q=0;
+    const original = deferredReturn.queue.find(st => st.kind === "quiz" && st.qs?.includes(id) && !st.deferred);
+    P.queue=[{kind:"quiz",l:lesson,round:original?.round||0,qs:[id],deferred:true}];P.idx=0;P.part="main";P.sent=0;P.q=0;
     view="player";setRoute("player");
     $("main").innerHTML=`<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`;
     $("slot").replaceWith(stageEl);stageEl.after(lookEl);load();bar();
@@ -548,7 +549,28 @@
   const capOf = (l) => `<b>Lesson ${l + 1}</b> · ${esc(C.lessons[l].title)}`;
 
   // ---------- build the current step ----------
+  // A deferred result is a cached view, not a final mastery decision. Once its
+  // saved answers are back, use the existing result/remediation path and then
+  // resume the exact course position. Keep the continuation in the saved queue
+  // so a reload during the fresh explanation or practice is safe too.
+  function reconcileDeferredResult() {
+    if (deferredReturn) return;
+    const l = C.lessons.findIndex((les, i) => P.lessons[les.id]?.pending && !hasDeferredForLesson(i));
+    if (l < 0) return;
+    const result = P.queue.find(q => q.kind === "result" && q.l === l && q.verdict === "deferred");
+    if (!result) return;
+    if (!result.done) {
+      delete result.plan; delete result.verdict; delete result.weak; delete result.newFlags;
+    } else {
+      P.queue.splice(P.idx, 0, {kind:"result", l, round:result.round,
+        resumeState:{part:P.part, sent:P.sent, q:P.q}});
+      P.part = "main"; P.sent = 0; P.q = 0;
+      // loadResult below replaces the pending lesson with the computed result.
+    }
+    save();
+  }
   function load() {
+    reconcileDeferredResult();
     if (window.VL_QUESTIONS) VL_QUESTIONS.reset();
     $("main").querySelectorAll("#rateCard, #s2ReportCard, .pending-report").forEach(el => el.remove());
     const st = cur();
@@ -647,17 +669,8 @@
     if (P.part === "feedback") {
       const response = P.hist.find(h => h.id === q.id);
       if (response) {
-        paintFeedback(response.ok);
+        paintFeedback(response.ok, {pos:response.pos});
         stageEl.querySelectorAll(".qbox").forEach(el => el.hidden = true);
-        const actions = stageEl.querySelector(".qskip-actions");
-        if (actions.querySelector(".qenlarge")) {
-          actions.querySelectorAll(".qskip-inline, .qskip-hint").forEach(el => el.hidden = true);
-          actions.style.gridTemplateColumns = "1fr";
-        } else actions.hidden = true;
-        const solution = document.createElement("div");
-        solution.className = "st-note qright";
-        solution.textContent = script.rightSay;
-        stageEl.querySelector("#fbk").after(solution);
       }
     }
   }
@@ -692,7 +705,6 @@
         const seq = picked.map((i) => s.pool[i]), ok = seq.every((x, n) => x === q.items[n]);
         ol.querySelectorAll(".qplaced").forEach((b, n) => { b.classList.add(seq[n] === q.items[n] ? "ok" : "bad"); b.disabled = true; });
         root.querySelector(".qclear").disabled = true;
-        if (!ok) ol.insertAdjacentHTML("afterend", `<div class="st-note qright">Right order: ${q.items.map((x, n) => `${n + 1}. ${esc(x)}`).join(" · ")}</div>`);
         submit(ok);
       };
     }
@@ -701,10 +713,26 @@
   function paintFeedback(ok, ui = {}) {
     stageEl.querySelectorAll(".st-opt").forEach((b) => { b.disabled = true; b.classList.toggle("picked", +b.dataset.pos === ui.pos && !ok); });
     stageEl.querySelectorAll(".st-opt[data-right]").forEach((b) => b.classList.add("right"));
+    stageEl.querySelectorAll(".st-opt").forEach(b => {
+      const label = b.getAttribute("aria-label") || b.textContent.trim();
+      b.setAttribute("aria-label", label + (b.classList.contains("right") ? ". Correct answer." : b.classList.contains("picked") ? ". Your answer. Incorrect." : ""));
+    });
     const chk = stageEl.querySelector(".qcheck"); if (chk) chk.disabled = true;
     const skip=stageEl.querySelector(".qskip-inline");if(skip)skip.disabled=true;
+    const actions = stageEl.querySelector(".qskip-actions");
+    if (actions?.querySelector(".qenlarge")) {
+      actions.querySelectorAll(".qskip-inline, .qskip-hint").forEach(el => el.hidden = true);
+      actions.style.gridTemplateColumns = "1fr";
+    } else if (actions) actions.hidden = true;
     script.feedback = [ok ? "Correct." : `Not quite. ${script.rightSay}`].concat(sentences(script.q.why));
     const f = stageEl.querySelector("#fbk"); f.textContent = ok ? "✓ Correct" : "✗ Not quite"; f.style.color = ok ? "var(--st-good)" : "var(--st-bad)";
+    // The spoken solution must also be available with captions off or playback
+    // paused. Use the same answer text for live feedback and reload restoration.
+    if (!stageEl.querySelector(".qright")) {
+      const solution = document.createElement("div");
+      solution.className = "st-note qright"; solution.textContent = script.rightSay;
+      f.after(solution);
+    }
     Scenes.step(99);
   }
 
@@ -712,7 +740,7 @@
     const st = cur(); if (st.kind !== "quiz" || P.part === "feedback") return;
     const q = script.q;
     P.used[q.id] = true;resolveDeferred(q.id);
-    P.hist.push({ id: q.id, sec: q.sec, lo: q.lo, clo: q.clo, type: q.type, ok, r: rkey(st), t: Date.now() });
+    P.hist.push({ id: q.id, sec: q.sec, lo: q.lo, clo: q.clo, type: q.type, ok, r: rkey(st), t: Date.now(), ...(Number.isInteger(ui.pos) ? {pos:ui.pos} : {}) });
     (P.rounds[rkey(st)] = P.rounds[rkey(st)] || {})[q.id] = ok;
     P.part = "feedback"; P.sent = 0; waiting = false; save();
     stopSpeech();
@@ -721,8 +749,11 @@
     const feedback = stageEl.querySelector("#fbk");
     setTimeout(() => {
       if (!feedback?.isConnected || P.part !== "feedback") return;
-      if (stageEl.scrollHeight > stageEl.clientHeight + 2) stageEl.scrollTo({ top: stageEl.scrollHeight, behavior: smooth() });
-      else feedback.scrollIntoView({ block: "nearest", behavior: smooth() });
+      const scrolls = /auto|scroll/.test(getComputedStyle(stageEl).overflowY) && stageEl.scrollHeight > stageEl.clientHeight + 2;
+      const top = scrolls ? stageEl.getBoundingClientRect().top : Math.max(0, $("courseNav").getBoundingClientRect().bottom);
+      const delta = feedback.getBoundingClientRect().top - top - parseFloat(getComputedStyle(feedback).fontSize);
+      if (scrolls) stageEl.scrollBy({ top: delta, behavior: smooth() });
+      else window.scrollBy({ top: delta, behavior: smooth() });
     }, 400);
     playing = true; play();
   }
@@ -733,7 +764,7 @@
     const secs = lessonSecs(st.l), id = C.lessons[st.l].id;
     if (!st.plan && hasDeferredForLesson(st.l)) {
       st.plan=[];st.newFlags=[];st.weak=[];st.verdict="deferred";
-      const prev=P.lessons[id]||{};P.lessons[id]={...prev,passed:false,pending:true};save();
+      const prev=P.lessons[id]||{};P.lessons[id]={...prev,first:prev.first??score,rounds:Math.max(prev.rounds||0,st.round+1),passed:false,pending:true};save();
     }
     if (!st.plan) { // decide once, then keep (resume-safe)
       const weak = secs.filter((s) => !secOk(s) && !P.flags[s]);
@@ -748,7 +779,7 @@
       const flagged = secs.filter((s) => P.flags[s]);
       st.verdict = plan.length ? "remediate" : flagged.length ? "flagged" : "pass";
       const prev = P.lessons[id] || {};
-      P.lessons[id] = { first: prev.first ?? score, rounds: st.round + 1, passed: st.verdict === "pass", flagged: flagged.length > 0 };
+      P.lessons[id] = { first: st.round === 0 && prev.pending ? score : prev.first ?? score, rounds: st.round + 1, passed: st.verdict === "pass", flagged: flagged.length > 0 };
       save();
     }
     const names = (a) => a.filter((s) => A.sections[s]).map((s) => A.sections[s].name.toLowerCase());
@@ -760,12 +791,12 @@
     else if(st.verdict!=="deferred")say.push(`You have now used every fresh question on ${join(names(secs.filter((s) => P.flags[s])))}, and that part is not yet at the target.`, "It is marked for instructor review on your report, so please show your report to your instructor. Let's move on for now.");
     if (st.verdict === "remediate" && st.newFlags && st.newFlags.length) say.push(`There are no fresh questions left on ${join(names(st.newFlags))}, so that part is marked for instructor review.`);
     script = { main: say, offset: 0 };
-    const rows = secs.map((s) => { const m = secM(s) ?? 0, cls = secOk(s) ? "good" : "bad";
-      return `<div class="st-it st-lo" data-at="0"><div class="st-lo-h"><b>${esc(A.sections[s].name)}</b><span>${pct(m)}%${P.flags[s] ? " · flagged" : ""}</span></div>
+    const rows = secs.map((s) => { const m = secM(s), cls = m == null ? "pending" : secOk(s) ? "good" : "bad";
+      return `<div class="st-it st-lo" data-at="0"><div class="st-lo-h"><b>${esc(A.sections[s].name)}</b><span>${m == null ? "Not assessed" : pct(m) + "%"}${P.flags[s] ? " · flagged" : ""}</span></div>
         <div class="st-lo-t"><i class="${cls}" style="--w:${pct(m)}%"></i><em style="left:${pct(A.target)}%"></em></div></div>`; }).join("");
     Scenes.loadBeats(st.round ? `<b>Practice result</b> · Lesson ${st.l + 1}` : capOf(st.l), "Result", [
       { at: 0, fx: "bars", html: `<div class="st-kicker">${st.round ? `Practice round ${st.round} result` : `Lesson ${st.l + 1} result`}</div>
-        <div class="st-score ${st.verdict === "pass" ? "good" : "bad"}"><span data-count="${pct(score)}" data-unit="%">0%</span><small>this round · target ${pct(A.target)}% per part</small></div>` },
+        <div class="st-score ${st.verdict === "deferred" ? "pending" : st.verdict === "pass" ? "good" : "bad"}">${n ? `<span data-count="${pct(score)}" data-unit="%">0%</span>` : '<span>—</span>'}<small>${n ? `${c} correct / ${n} answered` : "No answers yet"} · this round<br>target ${pct(A.target)}% per part</small></div>` },
       { at: 0, html: `<div class="st-kicker" style="color:var(--st-muted)">Mastery per part (your last ${A.window} answers)</div><div class="st-los">${rows}</div>` },
       { at: 1, html: st.verdict === "pass" ? `<div class="st-quote">Lesson <em>mastered</em>.</div>`
         : st.verdict === "flagged" ? `<div class="st-quote">Flagged for <em>instructor review</em></div>`
@@ -802,9 +833,10 @@
       flagged.length ? `Needs instructor review: ${flagged.map((s) => A.sections[s].name).join("; ")}.` : `No part needs instructor review.`,
       ``,
       `Lessons:`,
-      ...C.lessons.map((x, l) => { const r = P.lessons[x.id]; return `- Lesson ${l + 1}, ${x.title}: ${r ? `first check ${pct(r.first)}%, ${r.rounds} round${r.rounds > 1 ? "s" : ""}, ${r.passed ? "mastered" : r.flagged ? "flagged" : "in progress"}` : "not completed"}`; }),
+      ...C.lessons.map((x, l) => { const r = P.lessons[x.id]; return `- Lesson ${l + 1}, ${x.title}: ${r?.pending ? "questions saved for later" : r ? `first check ${pct(r.first)}%, ${r.rounds} round${r.rounds > 1 ? "s" : ""}, ${r.passed ? "mastered" : r.flagged ? "flagged" : "in progress"}` : "not completed"}`; }),
       ``,
       `Questions answered: ${P.hist.length}, correct: ${P.hist.filter((h) => h.ok).length}.`,
+      `Questions saved for later: ${deferred.length}.`,
     ].concat(window.S2 ? ["", ...S2.reportText()] : []).join("\n");
   }
   function renderSend(show) {
@@ -836,7 +868,7 @@
     script = { main: say, offset: 0 };
     const bar = (label, m, at, small) => `<div class="st-it st-lo${small ? " sm" : ""}" data-at="${at}"><div class="st-lo-h"><b>${esc(label)}</b><span>${m == null ? "–" : pct(m) + "%"}</span></div><div class="st-lo-t"><i class="${m != null && m >= A.target - 1e-9 ? "good" : "bad"}" style="--w:${pct(m)}%"></i><em style="left:${pct(A.target)}%"></em></div></div>`;
     Scenes.loadBeats("<b>Achievement report</b>", "", [
-      { at: 0, html: `<div class="st-kicker">${esc(C.code)} · Week ${WK} achievement</div><h2 class="st-h">${esc(C.title)}</h2>` },
+      { at: 0, html: `<div class="st-kicker">${esc(C.code)} · Week ${WK} achievement</div><h2 class="st-h">${esc(C.title)}</h2><div class="st-note st-answer-count">Knowledge checks: ${P.hist.length} answered · ${P.hist.filter(h => h.ok).length} correct · ${deferred.length} saved for later</div><div class="st-note st-mastery-rule">Mastery uses your last ${A.window} answers per part. Target: ${pct(A.target)}% on every part.</div>` },
       { at: 1, fx: "bars", html: `<div class="st-score ${k1 != null && k1 >= A.target ? "good" : "bad"}">${k1 == null ? '<span>–</span>' : `<span data-count="${pct(k1)}" data-unit="%">0%</span>`}<small>CLO ${CLOS[0]} · ${esc(A.clos[CLOS[0]].full)}</small></div>` },
       { at: 2, html: `<div class="st-kicker">Week ${WK} outcomes</div><div class="st-los">${LOS.map((k, i) => bar(A.outcomes[k].full, loM(k), 2 + i)).join("")}</div>` },
       { at: 2 + LOS.length, html: `<div class="st-kicker">Every part</div><div class="st-los">${SECS.map((s) => bar(A.sections[s].name + (P.flags[s] ? " · flagged" : ""), secM(s), 2 + LOS.length, true)).join("")}</div>` },
@@ -895,8 +927,12 @@
         const plan = st.plan.map((p) => ({ kind: "review", sec: p.sec, v: p.v, l: st.l }));
         const qs = st.plan.flatMap((p) => p.qs);
         const mixed = perm(qs.length, P.seed + rkey(st)).map((i) => qs[i]);
-        plan.push({ kind: "quiz", l: st.l, round: st.round + 1, qs: mixed }, { kind: "result", l: st.l, round: st.round + 1 });
+        plan.push({ kind: "quiz", l: st.l, round: st.round + 1, qs: mixed }, { kind: "result", l: st.l, round: st.round + 1, ...(st.resumeState ? {resumeState:st.resumeState} : {}) });
         P.queue.splice(P.idx + 1, 0, ...plan);
+      } else if (st.resumeState) {
+        const back = st.resumeState;
+        P.idx++; P.part = back.part; P.sent = back.sent; P.q = back.q;
+        save(); load(); play(); return;
       } else if (st.l + 1 < C.lessons.length) P.queue.push(...lessonPlan(st.l + 1));
       else P.queue.push({ kind: "report", l: st.l });
     }
