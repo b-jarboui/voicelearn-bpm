@@ -1,5 +1,7 @@
-// FILE: w09-claude-v2-part1.js
-// OPER621 Week 9 (The Innovate Phase) - animated teaching scenes v2, part 1 of 3: O1a, O1b, O1c, O2a.
+// FILE: w09-claude-v3-part1.js
+// v3 (targeted repair of v2 after GPT-6 audit r2): every bar, range, share and timeline is drawn to scale with units;
+// moving sprites are clamped inside their track/chart/panel box (def.B); ghost copies now fade in place; jumps clear effects.
+// OPER621 Week 9 (The Innovate Phase) - animated teaching scenes v3, part 1 of 3: O1a, O1b, O1c, O2a.
 // v2 rebuild after the content audit: every narration line shows the literal Qasr Marina activity it describes.
 // Each visual is annotated with the benchmark template it adapts (motion grammar only; all artwork is original).
 // Standalone: registers its scenes in window.VL_SCENES and appends scoped rules to <style id="vl-sc-w09">.
@@ -202,7 +204,21 @@
     };
     this.cur = { x: 0, y: 0, s: 1, r: 0, o: 1, sx: 1, sy: 1, u: 0, d: 1, n: this.orig.n, A: {}, m: this.orig.m };
     this.tok = 0;
+    this.box = null;
   }
+  /* v3: keep the whole sprite inside its container box [x0, y0, x1, y1] (track, chart, gauge or panel) */
+  Actor.prototype.fitBox = function (tx, ty, c) {
+    var b = null;
+    try { b = this.el.getBBox(); } catch (e) { b = null; }
+    if (!b || (!b.width && !b.height)) return [tx, ty];
+    var B = this.box, px = this.px, py = this.py, kx = c.s * c.sx, ky = c.s * c.sy;
+    var xa = tx + px + kx * (b.x - px), xb = tx + px + kx * (b.x + b.width - px);
+    var ya = ty + py + ky * (b.y - py), yb = ty + py + ky * (b.y + b.height - py);
+    var x0 = Math.min(xa, xb), x1 = Math.max(xa, xb), y0 = Math.min(ya, yb), y1 = Math.max(ya, yb);
+    if (x0 < B[0] || x1 - x0 > B[2] - B[0]) tx += B[0] - x0; else if (x1 > B[2]) tx -= x1 - B[2];
+    if (y0 < B[1] || y1 - y0 > B[3] - B[1]) ty += B[1] - y0; else if (y1 > B[3]) ty -= y1 - B[3];
+    return [tx, ty];
+  };
   Actor.prototype.dflt = function (k) {
     if (k in DEF) return DEF[k];
     if (k === "n") return this.orig.n;
@@ -219,17 +235,18 @@
   };
   Actor.prototype.paint = function () {
     var c = this.cur, el = this.el, tx = c.x, ty = c.y, k;
+    for (k in c.A) el.setAttribute(k, r2(c.A[k]));
     if (this.path) { try { this.plen = this.path.getTotalLength(); } catch (e) { this.plen = 0; } }
     if (this.path && this.plen) {
       var pt = this.path.getPointAtLength(clamp(c.u, 0, 1) * this.plen);
       tx += pt.x - this.px; ty += pt.y - this.py;
     }
+    if (this.box) { var fb = this.fitBox(tx, ty, c); tx = fb[0]; ty = fb[1]; }
     if (tx || ty || c.s !== 1 || c.r || c.sx !== 1 || c.sy !== 1) {
       el.setAttribute("transform", "translate(" + r2(tx + this.px) + " " + r2(ty + this.py) + ") rotate(" + r2(c.r) + ") scale(" + r2(c.s * c.sx) + " " + r2(c.s * c.sy) + ") translate(" + r2(-this.px) + " " + r2(-this.py) + ")");
     } else el.removeAttribute("transform");
     el.setAttribute("opacity", r2(c.o));
     el.style.visibility = c.o < 0.01 ? "hidden" : "";
-    for (k in c.A) el.setAttribute(k, r2(c.A[k]));
     if (this.draws.length) {
       var dv = clamp(c.d, 0, 1);
       this.draws.forEach(function (p) {
@@ -277,6 +294,7 @@
     var lab = root.querySelector(".vw-lab"), bar = root.querySelector(".vw-bar i"), fxL = root.querySelector(".vw-fx");
     var actors = {}, list = [].slice.call(root.querySelectorAll("[data-a]"));
     list.forEach(function (n) { actors[n.getAttribute("data-a")] = new Actor(n, root); });
+    if (def.B) Object.keys(def.B).forEach(function (n) { if (actors[n]) actors[n].box = def.B[n]; });
     var touched = {};
     [def.init || {}].concat(def.K.map(function (k) { return (k && k.a) || {}; })).forEach(function (o) {
       for (var a in o) { touched[a] = touched[a] || {}; for (var k in o[a]) { if (k === "A") { touched[a].A = touched[a].A || {}; for (var q in o[a].A) touched[a].A[q] = 1; } else touched[a][k] = 1; } }
@@ -297,8 +315,17 @@
 
     function stateAt(k) {
       var S = {}, j;
+      var I0 = {}; mergeInto(I0, def.init || {});
       mergeInto(S, def.init || {});
-      for (j = 0; j <= k; j++) if (def.K[j] && def.K[j].a) mergeInto(S, def.K[j].a);
+      var g0 = 0;
+      for (j = k; j > 0; j--) if (def.K[j] && def.K[j].c) { g0 = j; break; }
+      for (j = 0; j <= k; j++) {
+        if (j === g0 && g0 > 0) {
+          var keep = [].concat(def.K[j].c === true || def.K[j].c === 1 ? [] : def.K[j].c);
+          for (var a0 in S) if (I0[a0] && I0[a0].o === 0 && keep.indexOf(a0) < 0) S[a0].o = 0;
+        }
+        if (def.K[j] && def.K[j].a) mergeInto(S, def.K[j].a);
+      }
       var full = {}, a, p;
       for (a in touched) {
         var A = actors[a]; if (!A) continue;
@@ -316,6 +343,7 @@
     function goTo(k, instant) {
       var S = stateAt(k), kf = def.K[k] || {}, dur = kf.dur || def.dur || 0.95;
       var moveForward = !instant && k === cur + 1;
+      if (!moveForward) { run.kill(); while (fxL.firstChild) fxL.removeChild(fxL.firstChild); }
       var wOwn = kf.a || {};
       Object.keys(S).forEach(function (name) {
         var A = actors[name], Tt = S[name], from = {}, to = {}, p, any = false;
@@ -386,7 +414,7 @@
       for (var i = 0; i < count; i++) (function (i) {
         var a = i / count * Math.PI * 2, n = mk("circle", { cx: r2(x), cy: r2(y), r: 3, fill: col || def.acc || "#c0502a" });
         run.add(0.8, 0.05, "out", function (t) {
-          n.setAttribute("cx", r2(x + Math.cos(a) * 30 * t)); n.setAttribute("cy", r2(y + Math.sin(a) * 30 * t));
+          n.setAttribute("cx", r2(x + Math.cos(a) * 14 * t)); n.setAttribute("cy", r2(y + Math.sin(a) * 14 * t));
           n.setAttribute("opacity", r2(1 - t));
         }, function () { if (n.parentNode) n.parentNode.removeChild(n); });
       })(i);
@@ -405,19 +433,16 @@
       burstOn: function (name, col, delay) {
         later(delay || 0, function () { var c = screenCenter(name); if (c) burstAt(c.x, c.y, col, 12); });
       },
-      ghost: function (name, dx, dy, rot) {
+      /* v3: in-place fade (the copy never leaves its card, bin or chart) */
+      ghost: function (name) {
         var A = actors[name]; if (!A || !A.el.parentNode) return;
         var g = A.el.cloneNode(true);
         g.removeAttribute("data-a");
         [].slice.call(g.querySelectorAll("[data-a]")).forEach(function (q) { q.removeAttribute("data-a"); });
+        g.style.visibility = "";
         A.el.parentNode.insertBefore(g, A.el.nextSibling);
-        var base = g.getAttribute("transform") || "", bb;
-        try { bb = A.el.getBBox(); } catch (e) { bb = { x: 0, y: 0, width: 0, height: 0 }; }
-        var cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2;
-        run.add(0.9, 0, "io", function (t) {
-          g.setAttribute("transform", "translate(" + r2(dx * t) + " " + r2(dy * t) + ") " + base + " rotate(" + r2((rot || 0) * t) + " " + r2(cx) + " " + r2(cy) + ")");
-          g.setAttribute("opacity", r2(1 - t));
-        }, function () { if (g.parentNode) g.parentNode.removeChild(g); });
+        run.add(0.9, 0, "io", function (t) { g.setAttribute("opacity", r2(0.9 * (1 - t))); },
+          function () { if (g.parentNode) g.parentNode.removeChild(g); });
       },
       kick: function (name, dx, dy, rot) {
         var A = actors[name]; if (!A) return;
@@ -449,6 +474,7 @@
       step: function (i, n) { if (inst) inst.go(i, n); },
       reset: function () { if (inst) inst.reset(); }
     };
+    W.VL_SCENES[id]._dbg = function () { return { W: def.W || 400, H: def.H || 320, B: def.B || {}, N: def.K.length }; };
   }
 
   var K = { ink: "#14233a", navy: "#1f4e79", orange: "#c0502a", green: "#2f7d5f", paper: "#fbf8f1",
@@ -531,6 +557,7 @@
     }
     SC("O1a", {
       title: "From Understand to Innovate", W: 400, H: 320, acc: K.orange,
+      B: { g: [8, 196, 376, 276], g2: [264, 228, 384, 304], detl: [16, 52, 384, 304], barAll: [30, 140, 358, 174], p47: [30, 248, 358, 276], doc: [8, 40, 392, 110] },
       art: function () {
         var A = "", B = "", Cc = "", D = "", Ee = "", Ff = "";
         /* ---------- pA: the hotel floor ---------- */
@@ -567,6 +594,8 @@
         A += PILL("outside", 300, 146, "Outside reception", "#fff", K.plum, 15);
         A += G("newR", P("M40 186 C120 120 260 120 340 186", K.green, 3.5, 'data-draw="" pathLength="1" stroke-dasharray="1 0"'), 190, 150);
         A += PILL("pNew", 190, 112, "A new way?", K.green, "#fff", 15);
+        /* v3: the walk to the room follows a drawn floor route; the guest stops at the door */
+        A += G("route", P("M46 271 H322", K.green, 3, 'stroke-dasharray="7 6"') + C(322, 271, 4, K.green), 184, 271);
         A += G("g", AT(34, 270, GUY(K.navy)), 34, 252);
         /* ---------- pB: as-is vs to-be map ---------- */
         B += R(-1400, 46, 3200, 1400, "#e9f1f8") ;
@@ -610,21 +639,24 @@
         /* ---------- pD: journey bar ---------- */
         D += R(-1400, 46, 3200, 1400, "#f3f5f8");
         D += '<g data-a="num" data-p="200 80" data-n0="0" data-fmt="# min"><text data-t="" class="vw-t" x="200" y="92" font-size="34" fill="' + K.ink + '" text-anchor="middle">0 min</text></g>';
-        D += G("barAll", R(30, 142, 328, 30, "#9aa7b8", 6), 30, 157);
-        D += G("segSvc", R(138, 142, 32, 30, "#3fae74", 0, 'data-f=""'), 138, 157);
-        D += G("segApp", R(170, 142, 188, 30, K.orange, 0), 170, 157);
-        D += G("segWait", P("M40 157 H130", "#fff", 3, 'stroke-dasharray="10 8"'), 85, 157);
-        D += T(30, 196, "Lobby", 15, K.ink, "start") + T(358, 196, "Room", 15, K.ink, "end");
+        /* v3: one zero-based minute scale, 4 units per minute: 82 min = 328, 8.1 min = 32.4, 47 min = 188 */
+        D += G("barAll", R(30, 142, 328, 30, "#9aa7b8", 0), 30, 157);
+        D += G("segSvc", R(30, 142, 32.4, 30, "#3fae74", 0, 'data-f=""'), 30, 157);
+        var ax = P("M30 178 H358", K.ink, 1.5);
+        [0, 20, 40, 60, 80].forEach(function (m) { ax += P("M" + (30 + 4 * m) + " 176 V184", K.ink, 1.5) + T(30 + 4 * m, 199, String(m), 13, K.slate); });
+        D += G("ax", ax + T(200, 215, "minutes, lobby to room", 13, K.slate), 194, 196);
+        D += G("segWait", P("M74 157 H350", "#fff", 3, 'stroke-dasharray="10 8"'), 212, 157);
         D += G("brW", P("M30 134 V128 H358 V134", K.ink, 2), 194, 130);
         D += PILL("pW", 200, 114, "Whole journey", "#fff", K.ink, 15);
-        D += G("brD", P("M138 180 V186 H170 V180", K.green, 2.5), 154, 184);
-        D += PILL("pDesk", 154, 204, "At desk", "#e9f3ee", K.green, 15);
-        D += PILL("p47", 264, 232, "47-min approval", K.orange, "#fff", 15);
-        D += guestRow();
-        D += PILL("p61", 312, 296, "61% of cases", "#fff", K.orange, 15);
-        D += PILL("p81", 180, 206, "8.1 min service", "#3fae74", "#fff", 15);
-        D += PILL("pRush", 154, 238, "Rushing: tiny gain", "#fff", K.red, 15);
-        D += PILL("pa1", 70, 232, "Waiting", "#fff", K.slate, 15) + PILL("pa2", 184, 268, "Handoffs", "#fff", K.slate, 15) + PILL("pa3", 300, 232, "Repeats", "#fff", K.slate, 15);
+        D += G("brD", P("M46 174 V222", K.green, 2), 46, 198);
+        D += PILL("pDesk", 70, 236, "At desk", "#e9f3ee", K.green, 15);
+        /* the 47-min wait is not part of every journey: its own bar on the same scale, with its 61% share */
+        D += G("p47", R(30, 250, 188, 24, K.orange, 3) + T(124, 267, "47-min approval wait", 14, "#fff", "middle", 'class="vw-n"'), 30, 262);
+        D += G("p61", R(30, 284, 328, 16, "#dfe4ea", 3) + R(30, 284, 200.1, 16, K.orange, 3) + T(130, 297, "61% of cases", 13, "#fff", "middle", 'class="vw-n"') +
+          T(30, 315, "0%", 12, K.slate, "start") + T(358, 315, "100% of arrivals", 12, K.slate, "end"), 194, 292);
+        D += PILL("p81", 110, 236, "8.1 min service", "#3fae74", "#fff", 15);
+        D += PILL("pRush", 250, 274, "Rushing: tiny gain", "#fff", K.red, 15);
+        D += PILL("pa1", 80, 236, "Waiting", "#fff", K.slate, 15) + PILL("pa2", 200, 272, "Handoffs", "#fff", K.slate, 15) + PILL("pa3", 310, 236, "Repeats", "#fff", K.slate, 15);
         /* ---------- pE: outcome first ---------- */
         Ee += R(-1400, 46, 3200, 1400, "#eef5f0");
         Ee += G("depts", box("", 80, 110, 120, "Reception", K.slate) + box("", 80, 170, 120, "Revenue", K.slate) + box("", 80, 230, 120, "Rooms", K.slate), 80, 170);
@@ -647,9 +679,8 @@
       },
       init: M(only("pA"), ch(0, 0, 0), HID(["queue", "qMore", "qClock", "office", "lnk", "lnkX", "hg", "tools", "sy1", "sy2", "sy3", "strike", "sweat", "weak", "mag", "cause", "mgr", "order", "corp", "outside", "bound", "doorOpen",
         "toLbl", "t1", "t2", "t3", "gloss", "pc", "pBoxes", "pSys", "xs", "pSym", "pCau", "bk", "rule", "bkOk", "pBk", "pBc", "aGhost", "moveArr", "pWhy", "noFast", "pNoF", "idK", "pId", "detl", "pDet",
-        "segSvc", "segApp", "segWait", "brW", "pW", "brD", "pDesk", "p47", "p61", "p81", "pRush", "pa1", "pa2", "pa3", "back", "pTgt", "qa", "doc", "sign", "pNew",
-        "gr0", "gr1", "gr2", "gr3", "gr4", "gr5", "gr6", "gr7", "gr8", "gr9"]),
-        { g: { x: 0 }, g2: { x: 0 }, newR: { d: 0 }, tLine: { d: 0 }, fixArr: { d: 0 }, barAll: { sx: 0.02 }, num: { n: 0 }, roomLt: { f: "#c9d3df" }, segSvc: { f: "#3fae74", sx: 1 },
+        "segSvc", "segWait", "brW", "pW", "brD", "pDesk", "p47", "p61", "p81", "pRush", "pa1", "pa2", "pa3", "back", "pTgt", "qa", "doc", "sign", "pNew", "route"]),
+        { g: { x: 0 }, g2: { x: 0 }, newR: { d: 0 }, tLine: { d: 0 }, fixArr: { d: 0 }, barAll: { sx: 0.02 }, p47: { sx: 0.02 }, num: { n: 0 }, roomLt: { f: "#c9d3df" }, segSvc: { f: "#3fae74", sx: 1 },
           mag: { o: 0, x: -150, y: 40 }, aBlk: { o: 1, x: 0, y: 0 }, detl: { o: 0, x: 324, y: 236 }, tgt: { s: 0.6, o: 0 }, depts: { o: 1 },
           lv1: { sy: 0.05 }, lv2: { sy: 0.05 }, lv3: { sy: 0.05 }, doc: { o: 0, x: 0, y: 0, s: 1 } }),
       K: [
@@ -660,7 +691,7 @@
         { L: "Disconnected information", a: M(ON("tools", "sy1", "office"), { sy2: { o: 1, w: 0.25 }, sy3: { o: 1, w: 0.5 } }), p: "tools" },
         { L: "Effort is not enough", a: M(ON("sweat", "lnk", "lnkX", "weak")), fx: function (f) { f.kick("queue", 3, 0, 0); }, p: "lnkX" },
         { L: "Understand finds causes", dur: 1.3, a: M(ch(1, 0, 0), OFF("weak", "sweat"), ON("hg"), { mag: { o: 1, x: 0, y: 0 }, cause: { o: 1, w: 0.9 }, sy1: { o: 0.4 }, sy2: { o: 0.4 }, sy3: { o: 0.4 } }), p: "cause" },
-        { L: "Innovate: phase five", dur: 1.2, a: M(ch(0, 1, 0), only("pB", "pA"), { mag: { o: 0 } }), p: "chI" },
+        { L: "Innovate: phase five", dur: 1.2, a: M(ch(0, 1, 0), only("pB"), { mag: { o: 0 } }), p: "chI" },
         { L: "The to-be process", dur: 1.4, a: M(ON("toLbl"), { t1: { o: 1 }, tLine: { d: 1, w: 0.3 }, t2: { o: 1, w: 0.4 }, t3: { o: 1, w: 0.8 } }), p: "t2" },
         { L: "More than boxes", a: M(ON("gloss", "pBoxes"), { pc: { o: 1, w: 0.4 }, pSys: { o: 1, w: 0.5 }, xs: { o: 1, w: 1 } }), p: "xs" },
         { L: "Causes, not symptoms", dur: 1.3, a: M(OFF("gloss", "pc", "pBoxes", "pSys", "xs"), ON("pSym", "pCau"), { b3: { f: "#fde3d6" }, fixArr: { d: 1, w: 0.4 } }), p: "pCau" },
@@ -672,16 +703,16 @@
         { L: "Why at arrival?", dur: 1.3, a: M(OFF("noFast", "pNoF"), ON("moveArr", "pWhy")), fx: function (f) { f.ghost("aGhost", -240, -10, 0); }, p: "pWhy" },
         { L: "82 min, lobby to room", dur: 1.6, a: M(only("pD"), { barAll: { sx: 1 }, num: { n: 82 } }), e: "out", p: "num" },
         { L: "Whole journey counts", a: M(ON("brW", "pW", "segSvc"), { brD: { o: 1, w: 0.4 }, pDesk: { o: 1, w: 0.5 } }), p: "pD" },
-        { L: "47-min wait, 61%", dur: 1.2, a: M(ON("segApp", "p47"), { gr0: { o: 1 }, gr1: { o: 1, w: 0.05 }, gr2: { o: 1, w: 0.1 }, gr3: { o: 1, w: 0.15 }, gr4: { o: 1, w: 0.2 }, gr5: { o: 1, w: 0.25 },
-            gr6: { o: 1, w: 0.3 }, gr7: { o: 1, w: 0.35 }, gr8: { o: 1, w: 0.4 }, gr9: { o: 1, w: 0.45 }, p61: { o: 1, w: 0.7 } }), p: "p61" },
-        { L: "Only 8.1 min service", a: M(OFF("pDesk", "p47", "gr0", "gr1", "gr2", "gr3", "gr4", "gr5", "gr6", "gr7", "gr8", "gr9", "p61"), ON("p81"), { segSvc: { sx: 0.8, w: 0.6 }, pRush: { o: 1, w: 0.9 } }), p: "segSvc" },
-        { L: "What could we avoid?", a: M(OFF("p81", "pRush"), ON("segWait", "pa1"), { segSvc: { sx: 1 }, pa2: { o: 1, w: 0.2 }, pa3: { o: 1, w: 0.4 } }), p: ["pa1", "pa2", "pa3"] },
+        { L: "47-min wait, 61%", dur: 1.2, a: M(OFF("pDesk", "brD"), { p47: { o: 1, sx: 1 }, p61: { o: 1, w: 0.7 } }), e: "out", p: "p61" },
+
+        { L: "Only 8.1 min service", a: M(OFF("p47", "p61"), ON("p81"), { pRush: { o: 1, w: 0.9 } }), p: "segSvc" },
+        { L: "What could we avoid?", a: M(OFF("p81", "pRush"), ON("segWait", "pa1"), { pa2: { o: 1, w: 0.2 }, pa3: { o: 1, w: 0.4 } }), p: ["pa1", "pa2", "pa3"] },
         { L: "Keep real controls", a: M(only("pC"), OFF("moveArr", "pWhy", "aGhost"), ON("idK", "pId")), p: "idK" },
         { L: "Change when and where", dur: 1.4, a: M(ON("detl", "pDet"), { detl: { x: 76, y: 268 }, pId: { o: 0.5 } }), p: "detl" },
         { L: "Start from the outcome", dur: 1.2, a: M(only("pE"), { tgt: { o: 1, s: 1 }, pTgt: { o: 1, w: 0.4 }, back: { o: 1, w: 0.7 }, depts: { o: 0.3, w: 0.7 } }), e: "back", p: "tgt" },
-        { L: "Right room, no wait", dur: 2, a: M(only("pA"), OFF("queue", "mgr", "bound", "outside", "office", "lnk", "hg", "sweat"), { g: { x: 300, w: 0.3 }, doorOpen: { o: 1, w: 1.5 }, roomLt: { f: "#3fae74", w: 1.5 } }), p: "roomDoor" },
-        { L: "Design, not implement", dur: 1.6, a: M(ch(0, 1, 1), { pA: { o: 0.35 }, doc: { o: 1, x: 128, s: 1.2 } }), e: "io", p: "chM" },
-        { L: "How ambitious?", dur: 1.3, a: M(only("pF"), ch(0, 1, 0), { doc: { o: 0 }, lv1: { sy: 1, w: 0.2 }, lv2: { sy: 1, w: 0.4 }, lv3: { sy: 1, w: 0.6 }, qa: { o: 1, w: 0.9 } }), e: "back", p: "lv2" }
+        { L: "Right room, no wait", dur: 2, a: M(only("pA"), OFF("queue", "qClock", "mgr", "bound", "outside", "office", "lnk", "hg", "sweat"), ON("route"), { g: { x: 292, w: 0.3 }, doorOpen: { o: 1, w: 1.5 }, roomLt: { f: "#3fae74", w: 1.5 } }), e: "io", p: "roomDoor" },
+        { L: "Design, not implement", dur: 1.6, a: M(ch(0, 1, 0), { pA: { o: 0.35 }, doc: { o: 1, x: 128, s: 1.2 } }), e: "io", p: "chM" },
+        { L: "How ambitious?", dur: 1.3, a: M(only("pF"), ch(0, 1, 0), { doc: { o: 0 }, lv1: { sy: 1, w: 0.2 }, lv2: { sy: 1, w: 0.4 }, lv3: { sy: 1, w: 0.6 }, qa: { o: 1, w: 0.9 } }), e: "out", p: "lv2" }
       ]
     });
   })();
@@ -708,15 +739,17 @@
         return G(t[0], R(t[1] - 56, 12, 112, 28, "#fff", 14, 'data-f="" stroke="' + t[3] + '" stroke-width="2"') + T(t[1], 31, t[2], 15, t[3], "middle", 'class="vw-n"'), t[1], 26);
       }).join("");
     }
+    function rk(n) { var C = ["#eceff3", "#9fd8b8", "#f3cf7a", "#f2a385"]; return { rk1: { f: n === 1 ? C[1] : C[0] }, rk2: { f: n === 2 ? C[2] : C[0] }, rk3: { f: n === 3 ? C[3] : C[0] } }; }
     function lv(n) { return { tb1: { f: n === 1 ? "#d9e7f4" : "#fff" }, tb2: { f: n === 2 ? "#e6dcf2" : "#fff" }, tb3: { f: n === 3 ? "#fde3d6" : "#fff" } }; }
     SC("O1b", {
       title: "Three levels of ambition", W: 400, H: 320, acc: K.navy,
+      B: { tok: [0, 54, 162, 290], bArr: [28, 50, 152, 290], bId: [28, 50, 152, 290], gG: [240, 260, 390, 274] },
       art: function () {
         var s = R(-1400, -1400, 3200, 3200, "#f4f1ea") + tabs();
         /* chain */
         s += G("arrows", [90, 130, 170, 210, 250].map(function (y) { return P("M" + X + " " + (y - 4) + " V" + (y + 4), K.slate, 2.5); }).join(""), X, 170);
         s += bx("bArr", 70, "Arrive") + bx("bQ", 110, "Queue", K.slate) + bx("bId", 150, "ID scan") + bx("bRate", 190, "Rate OK?", K.orange) + bx("bKey", 230, "Key") + bx("bRoom", 270, "Room", K.green);
-        s += bx("bDet", 110, "Guest details", K.plum);
+        s += bx("bDet", 110, "Guest details", K.plum) + bx("bRate2", 70, "Rate OK?", K.plum);
         s += bx("bPre", 90, "Phone pre-check", K.orange) + bx("bReady", 170, "Room ready", K.green) + bx("bPkey", 230, "Phone key", K.orange);
         s += G("tagBk", T(160, 75, "at booking", 15, K.plum, "start"), 200, 70) + G("tagBf", T(160, 115, "before arrival", 15, K.plum, "start"), 210, 110);
         s += G("errs", TAGX(152, 150) + TAGX(152, 230), 152, 190) + G("oks", TAGOK(152, 150) + TAGOK(152, 230), 152, 190);
@@ -764,21 +797,26 @@
         s += G("blue", R(20, 54, 360, 190, "#e4eef8", 10, 'stroke="#9fbcd9" stroke-width="2"') + P("M50 210 C120 120 240 220 340 90", "#2b6f9e", 3, 'stroke-dasharray="8 6"') + DOORK(340, 120) + AT(56, 216, GUY(K.navy)), 200, 150);
         s += PILL("pDesign", 200, 250, "Design, then decide", "#2b6f9e", "#fff", 15);
         /* gauges */
-        s += G("gauges", T(200, 271, "Gain", 15, K.green, "start") + T(200, 299, "Risk", 15, K.orange, "start") + R(240, 260, 150, 14, "#eceff3", 7) + R(240, 288, 150, 14, "#eceff3", 7) +
-          G("gG", R(240, 260, 150, 14, "#3fae74", 7), 240, 267) + G("gR", R(240, 288, 150, 14, K.orange, 7, 'data-f=""'), 240, 295), 300, 280);
+        /* v3: indicative gain drawn as a RANGE on a labelled 0-100% scale (1.5 units per %); risk is qualitative (Low / Medium / Higher) */
+        s += G("gauges", T(200, 272, "Gain", 15, K.green, "start") + T(200, 305, "Risk", 15, K.orange, "start") + R(240, 262, 150, 10, "#eceff3", 2) +
+          P("M240 272 V276 M315 272 V276 M390 272 V276", K.slate, 1.5) + T(240, 286, "0%", 11, K.slate, "start") + T(315, 286, "50%", 11, K.slate) + T(390, 286, "100%", 11, K.slate, "end") +
+          '<rect data-a="gG" x="240" y="262" width="0" height="10" rx="2" fill="#3fae74"/>' +
+          G("rk1", R(240, 292, 49, 17, "#eceff3", 3, 'data-f=""') + T(264.5, 305, "Low", 12, K.ink, "middle", 'class="vw-n"'), 264, 300) +
+          G("rk2", R(290.5, 292, 49, 17, "#eceff3", 3, 'data-f=""') + T(315, 305, "Medium", 12, K.ink, "middle", 'class="vw-n"'), 315, 300) +
+          G("rk3", R(341, 292, 49, 17, "#eceff3", 3, 'data-f=""') + T(365.5, 305, "Higher", 12, K.ink, "middle", 'class="vw-n"'), 365, 300), 300, 285);
         s += G("gv1", T(390, 254, "5-15%, low", 15, K.ink, "end"), 340, 250) + G("gv2", T(390, 254, "20-50%, medium", 15, K.ink, "end"), 340, 250) + G("gv3", T(390, 254, "over 50%, high", 15, K.ink, "end"), 340, 250);
         return s;
       },
       init: M(HID(["arrows", "bArr", "bQ", "bId", "bRate", "bKey", "bRoom", "bDet", "bPre", "bReady", "bPkey", "tagBk", "tagBf", "errs", "oks", "tok", "hg", "conn", "qAll", "noDesk", "p82", "sayA", "sayB", "pCause", "mag", "pSame",
         "tools", "pTools", "pCons", "pSound", "pUneven", "revOff", "brk", "pStill", "pConn", "wfIcons", "pWf", "pMove", "speedX", "pNotFast", "pQuestion", "pNoDesk", "pRethink", "preIcons", "pTravel", "doorO", "pPhone",
-        "r1", "r2", "r3", "pInd", "match", "pMatch", "blue", "pDesign", "gauges", "gv1", "gv2", "gv3", "mp0", "mp1", "mp2"]), lv(0),
-        { table: { o: 1 }, bArr: { y: 0 }, bId: { y: 0 }, bRate: { y: 0, f: "#fff" }, bKey: { y: 0 }, tok: { y: 0 }, gG: { sx: 0.02 }, gR: { sx: 0.02, f: K.orange }, doorL: { sx: 0.05 }, bPre: { s: 0.4 }, mp0: { f: "#fff" } }),
+        "r1", "r2", "r3", "pInd", "match", "pMatch", "blue", "pDesign", "gauges", "gv1", "gv2", "gv3", "mp0", "mp1", "mp2", "bRate2"]), lv(0), rk(0),
+        { table: { o: 1 }, bArr: { y: 0 }, bId: { y: 0 }, bRate: { y: 0, f: "#fff" }, bKey: { y: 0 }, tok: { y: 0 }, gG: { A: { x: 240, width: 0 } }, doorL: { sx: 0.05 }, bPre: { s: 0.4 }, mp0: { f: "#fff" } }),
       K: (function () {
         var CTX = ["p82", "sayA", "sayB", "pCause", "mag", "pSame", "tools", "pTools", "pCons", "pSound", "pUneven", "revOff", "brk", "pStill", "pConn", "wfIcons", "pWf", "pMove", "speedX", "pNotFast", "pQuestion", "pNoDesk",
           "pRethink", "preIcons", "pTravel", "doorO", "pPhone", "r1", "r2", "r3", "pInd", "table", "qAll"];
         function cx(keep) { return HID(CTX.filter(function (n) { return (keep || []).indexOf(n) < 0; })); }
         var CHAIN1 = ON("arrows", "bArr", "bQ", "bId", "bRate", "bKey", "bRoom");
-        function gv(n) { return { gv1: { o: n === 1 ? 1 : 0 }, gv2: { o: n === 2 ? 1 : 0 }, gv3: { o: n === 3 ? 1 : 0 } }; }
+        function gv(n) { var o = rk(n); o.gG = { A: n === 1 ? { x: 247.5, width: 15 } : n === 2 ? { x: 270, width: 45 } : n === 3 ? { x: 315, width: 75 } : { x: 240, width: 0 } }; return M(o, { gv1: { o: n === 1 ? 1 : 0 }, gv2: { o: n === 2 ? 1 : 0 }, gv3: { o: n === 3 ? 1 : 0 } }); }
         return [
           { L: "Managers at the table", a: {}, p: "table" },
           { L: "82 minutes is too long", a: M(ON("p82")), e: "back", p: "p82" },
@@ -787,20 +825,20 @@
           { L: "Level 1: improve steps", a: M(cx(), lv(1), ON("pSame", "gauges"), { bRate: { f: "#fff" } }), p: "tb1" },
           { L: "Clear steps, quick scan", a: M(cx(), ON("tools", "pTools", "errs"), { bId: { f: "#d9e7f4" } }), p: "bId" },
           { L: "Fewer mistakes", a: M(cx(), ON("pCons"), { errs: { o: 0 }, oks: { o: 1, w: 0.5 } }), p: "oks" },
-          { L: "5-15%, low risk", dur: 1.2, a: M(cx(), gv(1), { gG: { sx: 0.18 }, gR: { sx: 0.18, f: "#3fae74" } }), p: "gauges" },
+          { L: "5-15%, low risk", dur: 1.2, a: M(cx(), gv(1)), p: "gauges" },
           { L: "When the process is sound", a: M(cx(), ON("pSound", "pUneven")), p: "pUneven" },
           { L: "The approval wait remains", dur: 1.4, a: M(cx(), OFF("oks"), ON("revOff", "brk", "pStill", "hg", "tok"), { tok: { y: 120 }, bRate: { f: "#fde3d6" }, bId: { f: "#fff" } }), p: "hg" },
           { L: "Level 2: redesign workflow", a: M(cx(), lv(2), OFF("hg", "tok"), ON("conn", "pConn")), p: "tb2" },
           { L: "Workflow, defined", a: M(cx(), ON("wfIcons", "pWf")), p: "wfIcons" },
-          { L: "Rate at booking", dur: 1.4, a: M(cx(), ON("pMove", "tagBk", "tagBf", "bDet"), { bRate: { y: -120, f: "#e6dcf2" }, bArr: { y: 80 }, bQ: { o: 0 }, bId: { y: 40 }, conn: { o: 0 } }), p: "bRate" },
+          { L: "Rate at booking", dur: 1.4, a: M(cx(), ON("pMove", "tagBk", "tagBf", "bDet"), { bRate: { o: 0 }, bRate2: { o: 1, w: 0.5 }, bArr: { y: 80 }, bQ: { o: 0 }, bId: { y: 40, w: 0.6 }, conn: { o: 0 } }), p: "bRate" },
           { L: "Connections, not speed", a: M(cx(), ON("speedX", "pNotFast", "conn")), p: "conn" },
-          { L: "20-50%, medium risk", dur: 1.2, a: M(cx(), gv(2), { gG: { sx: 0.45 }, gR: { sx: 0.5, f: K.amber } }), p: "gauges" },
+          { L: "20-50%, medium risk", dur: 1.2, a: M(cx(), gv(2)), p: "gauges" },
           { L: "Question the service", a: M(cx(), lv(3), OFF("tagBk", "tagBf"), ON("qAll", "pQuestion"), { conn: { o: 0 } }), e: "back", p: "tb3" },
           { L: "Skip the desk?", a: M(cx(), ON("noDesk", "pNoDesk")), p: "noDesk" },
-          { L: "Level 3: rethink", dur: 1.4, a: M(cx(), OFF("noDesk", "tagBk", "tagBf"), ON("pRethink", "bReady", "bPkey"), { bPre: { o: 1, s: 1 }, bRate: { o: 0, y: -100 }, bDet: { o: 0 }, bId: { o: 0, y: -60 }, bArr: { o: 0 }, bKey: { o: 0 } }), p: "bPre" },
+          { L: "Level 3: rethink", dur: 1.4, a: M(cx(), OFF("noDesk", "tagBk", "tagBf"), ON("pRethink", "bReady", "bPkey"), { bPre: { o: 1, s: 1 }, bRate2: { o: 0 }, bDet: { o: 0 }, bId: { o: 0 }, bArr: { o: 0 }, bKey: { o: 0 } }), p: "bPre" },
           { L: "Checks before travel", a: M(cx(), ON("preIcons", "pTravel")), p: "preIcons" },
           { L: "Phone opens the door", dur: 1.4, a: M(cx(), ON("doorO", "pPhone"), { doorL: { sx: 1, w: 0.4 } }), p: "doorO" },
-          { L: "Over 50%, higher risk", dur: 1.2, a: M(cx(), gv(3), { gG: { sx: 0.9 }, gR: { sx: 0.92, f: K.orange } }), p: "gauges" },
+          { L: "Over 50%, higher risk", dur: 1.2, a: M(cx(), gv(3)), p: "gauges" },
           { L: "Why the risk is higher", a: M(cx(), { r1: { o: 1 }, r2: { o: 1, w: 0.2 }, r3: { o: 1, w: 0.4 } }), p: ["r1", "r2", "r3"] },
           { L: "Indicative, not promised", a: M(cx(), ON("pInd")), p: "pInd" },
           { L: "Match the problem", dur: 1.2, a: M(cx(), lv(0), OFF("bPre", "bReady", "bPkey", "bRoom", "arrows", "gauges", "gv3"), ON("match", "pMatch"), { mp0: { o: 1 }, mp1: { o: 1, w: 0.3 }, mp2: { o: 1, w: 0.6 } }), p: "match" },
@@ -836,6 +874,7 @@
     }
     SC("O1c", {
       title: "Designing Qasr's future arrival", W: 400, H: 320, acc: K.green,
+      B: { cRate: [160, 70, 392, 230], cDet: [160, 70, 392, 230], cRe2: [160, 70, 392, 230], cPrint: [280, 70, 392, 230], mk: [20, 290, 380, 310] },
       art: function () {
         var Wk = "", Rc = "", Q = "";
         /* pW workshop */
@@ -854,7 +893,7 @@
           G("anch", AT(282, 70, P("M0 -12 V12 M-10 4 Q0 18 10 4 M-6 -6 H6", K.navy, 3.2) + C(0, -15, 3.5, "none", 'stroke="' + K.navy + '" stroke-width="2.5"')) + P("M292 70 H312", K.navy, 2, 'stroke-dasharray="3 3"'), 290, 70);
         /* pR record */
         Rc += G("rec", R(120, 120, 140, 116, "#fff", 10, 'stroke="' + K.navy + '" stroke-width="2.5"') + R(120, 120, 140, 22, K.navy, 8) + T(190, 136, "Shared record", 15, "#fff", "middle", 'class="vw-n"') +
-          field("f1", 158, "Details") + field("f2", 182, "Rate") + field("f3", 206, "Room") + field("f4", 228, "Identity"), 190, 178);
+          field("f1", 158, "Details") + field("f2", 182, "Rate") + field("f3", 206, "Room") + field("f4", 228, "ID: kiosk"), 190, 178);
         Rc += G("gPhone", PHONE(36, 120, 26, 46, K.ink, "#9fe3c0") + AT(76, 176, GUY(K.navy)), 60, 150);
         Rc += G("env", AT(49, 108, R(-12, -8, 24, 16, "#fff", 2, 'stroke="' + K.orange + '" stroke-width="2"') + P("M-12 -8 L0 2 L12 -8", K.orange, 2)), 49, 108);
         Rc += G("flow1", P("M80 150 H118", K.green, 3, 'class="vw-flow"'), 99, 150);
@@ -865,7 +904,7 @@
         Rc += G("kioskR", KIOSKK(300, 266) + AT(352, 266, GUY(K.green)), 326, 246);
         Rc += G("flow4", P("M290 226 H262", K.navy, 3, 'class="vw-flow"'), 276, 226);
         Rc += G("help", R(340, 196, 46, 26, "#fff", 8, 'stroke="' + K.green + '" stroke-width="2"') + T(363, 214, "Help", 15, K.green, "middle", 'class="vw-n"'), 363, 209);
-        Rc += G("tl", P("M20 300 H380", K.ink, 2) + T(100, 293, "Before arrival", 15, K.ink) + T(300, 293, "Arrival", 15, K.ink), 200, 296);
+        Rc += G("tl", P("M20 300 H380", K.ink, 2) + P("M200 284 V314", K.slate, 2, 'stroke-dasharray="4 3"') + T(100, 293, "Before arrival", 15, K.ink) + T(300, 293, "Arrival", 15, K.ink), 200, 296);
         Rc += G("mk", C(100, 300, 7, K.orange), 100, 300);
         Rc += G("whenHow", SHIELD(258, 228, 0.6, "#e9f3ee", K.green) + SHIELD(258, 182, 0.6, "#e9f3ee", K.green), 258, 205);
         Rc += PILL("pKept", 190, 92, "Checks kept, moved", K.green, "#fff", 15);
@@ -923,7 +962,7 @@
           { L: "Five design questions", dur: 1.2, a: M(only("pQ"), { tgt: { o: 0 }, anch: { o: 0 } }), p: "q0" },
           { L: "Is it necessary?", a: M(qh(0), qc(), ON("cPrint")), p: "q0" },
           { L: "Printing a stored copy", a: M(qh(0), qc(["cPrint"]), ON("printer", "db", "pStored")), fx: function (f) { f.kick("printer", 0, -3, 0); }, p: "db" },
-          { L: "Remove the waste", dur: 1.1, a: M(qh(0), qc(), ON("binQ", "pSimpler"), { cPrint: { o: 0, s: 0.4 } }), fx: function (f) { f.ghost("cPrint", -250, 170, -20); } },
+          { L: "Remove the waste", dur: 1.1, a: M(qh(0), qc(), ON("binQ", "pSimpler"), { cPrint: { o: 0, s: 0.6 } }), p: "binQ" },
           { L: "The right person?", a: M(qh(1), qc(), ON("cRate", "deskQ")), p: "q1" },
           { L: "Revenue already approved", a: M(qh(1), qc(["cRate", "deskQ"]), ON("revQ", "pRevOK")), p: "revQ" },
           { L: "Rate at booking stage", dur: 1.3, a: M(qh(1), qc(["revQ"]), ON("cRate", "pNoBn"), { cRate: { x: -120, y: 0 } }), p: "cRate" },
@@ -932,7 +971,7 @@
           { L: "Repeated information?", a: M(qh(3), qc(), ON("cRe1", "cRe2")), fx: function (f) { f.kick("cRe2", 4, 0, 0); }, p: "q3" },
           { L: "Reuse, don't re-type", dur: 1.3, a: M(qh(3), qc(), ON("recQ", "pReuse"), { cRe1: { o: 0 }, cRe2: { o: 0, x: -120, y: 10 } }), p: "recQ" },
           { L: "Is the risk real?", a: M(qh(4), qc(), ON("cDup", "cLegal")), p: "q4" },
-          { L: "Duplicate goes, legal stays", dur: 1.2, a: M(qh(4), qc(["cLegal"]), ON("shQ", "pRisk"), { cDup: { o: 0 } }), fx: function (f) { f.ghost("cDup", -250, 170, 0); }, p: "shQ" },
+          { L: "Duplicate goes, legal stays", dur: 1.2, a: M(qh(4), qc(["cLegal"]), ON("shQ", "pRisk"), { cDup: { o: 0 } }), p: "shQ" },
           { L: "Waste vs safeguard", a: M(qh(4), qc(["cLegal", "shQ"]), ON("binQ", "safeQ")), p: ["binQ", "safeQ"] },
           { L: "The proposed arrival", dur: 1.2, a: M(only("pR"), OFF("whenHow", "pKept"), { feat: { o: 1, w: 0.3 }, tgt: { o: 0 } }), p: "feat" },
           { L: "Still a proposal", a: M(OFF("feat"), ON("prop")), e: "back", p: "prop" },
@@ -972,9 +1011,11 @@
     function bar(name, cx, y, w, col, dash) {
       return G(name, R(cx - 45, y - 8, w, 16, dash ? "none" : col, 4, dash ? 'stroke="' + col + '" stroke-width="2" stroke-dasharray="4 3"' : ""), cx - 45, y);
     }
-    function gauge(name, cx, y, frac, col) {
-      return G(name, R(cx - 45, y - 7, 90, 14, "#eef1f5", 7) + R(cx - 45, y - 7, 90 * frac, 14, col, 7), cx, y);
+    /* v3: criterion cells carry words, not invented magnitudes (the narration gives no scores) */
+    function cell(name, cx, y, label, col, ico) {
+      return G(name, R(cx - 48, y - 12, 96, 24, "#fff", 5, 'stroke="' + col + '" stroke-width="2"') + (ico || "") + T(cx + (ico ? 8 : 0), y + 5, label, 13, col, "middle", 'class="vw-n"'), cx, y);
     }
+    function dashCell(name, cx, y, col) { return G(name, R(cx - 52, y - 15, 104, 30, "none", 6, 'stroke="' + col + '" stroke-width="2" stroke-dasharray="4 3"'), cx, y); }
     SC("O2a", {
       title: "Comparing redesign alternatives", W: 400, H: 320, acc: K.navy,
       art: function () {
@@ -1007,11 +1048,11 @@
         B += PILL("sayA", 205, 36, "We're sure!", K.navy, "#fff", 15) + PILL("sayB", 330, 36, "We're sure!", K.green, "#fff", 15);
         B += G("qmk", T(128, 104, "?", 30, K.orange), 128, 94);
         B += G("board", rowsArt() +
-          bar("benA", CA, 168, 50, "#5b8fc4") + bar("benB", CB, 168, 86, "#3fae74") +
-          bar("estA", CA, 168, 50, K.navy, true) + bar("estB", CB, 168, 86, K.green, true) +
-          G("costA", COIN(CA - 20, 203), CA, 200) + G("costB", COIN(CB - 30, 203) + COIN(CB - 10, 203) + COIN(CB + 10, 203) + COIN(CB + 30, 203), CB, 200) +
-          gauge("riskA", CA, 232, 0.25, "#3fae74") + gauge("riskB", CB, 232, 0.8, K.orange) +
-          bar("timeA", CA, 264, 22, "#5b8fc4") + bar("timeB", CB, 264, 90, "#3fae74") +
+          cell("benA", CA, 168, "Saving?", K.navy) + cell("benB", CB, 168, "Big saving?", K.green) +
+          dashCell("estA", CA, 168, K.navy) + dashCell("estB", CB, 168, K.green) +
+          cell("costA", CA, 200, "Lower", K.navy, COIN(CA - 30, 204)) + cell("costB", CB, 200, "Higher", K.green, COIN(CB - 32, 204)) +
+          cell("riskA", CA, 232, "Few links", K.navy) + cell("riskB", CB, 232, "Many links", K.orange) +
+          cell("timeA", CA, 264, "Sooner", K.navy) + cell("timeB", CB, 264, "14 months", K.green) +
           G("feaA", TAGOK(CA, 296), CA, 296) + G("feaB", C(CB, 296, 10, "#fff", 'stroke="' + K.orange + '" stroke-width="2.5"') + T(CB, 301, "?", 15, K.orange, "middle", 'class="vw-n"'), CB, 296) +
           G("feaB2", TAGOK(CB, 296), CB, 296), 200, 230);
         B += PILL("p82", 92, 100, "Today: 82 min", K.orange, "#fff", 15);
@@ -1050,7 +1091,7 @@
           "pFail", "shB", "pUnd", "u1", "u2", "u3", "waitG", "pToday", "block", "relink", "pBlocks", "brace", "pAll", "nope1", "nope2", "nope3", "nopeX", "memo", "pDef", "costPop", "feaB2"]),
         { gst: { x: 0 }, cardA: { o: 0, y: 20 }, cardB: { o: 0, y: 20 }, gm: { o: 0 }, qA: { o: 0 },
           rBen: { f: "#fff" }, rCost: { f: "#fff" }, rRisk: { f: "#fff" }, rTime: { f: "#fff" }, rFea: { f: "#fff" },
-          benA: { sx: 0.02 }, benB: { sx: 0.02 }, costA: { o: 0 }, costB: { o: 0 }, riskA: { o: 0 }, riskB: { o: 0 }, timeA: { sx: 0.02 }, timeB: { sx: 0.02 }, feaA: { o: 0 }, feaB: { o: 0 } }),
+          benA: { o: 0 }, benB: { o: 0 }, costA: { o: 0 }, costB: { o: 0 }, riskA: { o: 0 }, riskB: { o: 0 }, timeA: { o: 0 }, timeB: { o: 0 }, feaA: { o: 0 }, feaB: { o: 0 } }),
       K: (function () {
         var HL = "#fff4cf";
         function row(n) { var o = {}; ROWS.forEach(function (r) { o[r[0]] = { f: r[0] === n ? HL : "#fff" }; }); return o; }
@@ -1064,20 +1105,20 @@
           { L: "Improve vs change route", a: M(clear(), ON("qA"), { cardA: { s: 1.06 }, cardB: { s: 1.06, w: 0.4 } }), fx: function (f) { f.ring("cardA", K.navy); f.ring("cardB", K.green, 0.5); } },
           { L: "Confidence isn't proof", a: M({ cardA: { s: 1 }, cardB: { s: 1 } }, ON("sayA", "sayB", "qmk")), p: "qmk" },
           { L: "A disciplined comparison", dur: 1.2, a: M(clear(), ON("board")), p: "board" },
-          { L: "Expected benefit", dur: 1.2, a: M(clear(), row("rBen"), { benA: { sx: 1 }, benB: { sx: 1, w: 0.3 } }), e: "out", p: "rBen" },
-          { L: "Big savings tempt", a: M(clear(), ON("p82"), { benB: { sy: 1.4 } }), fx: function (f) { f.kick("benB", 4, 0, 0); }, p: "benB" },
-          { L: "Only estimates so far", a: M(clear(), ON("pEst", "estA", "estB"), { benA: { o: 0.25, sy: 1 }, benB: { o: 0.25, sy: 1 } }), p: "pEst" },
+          { L: "Expected benefit", dur: 1.2, a: M(clear(), row("rBen"), { benA: { o: 1 }, benB: { o: 1, w: 0.3 } }), e: "out", p: "rBen" },
+          { L: "Big savings tempt", a: M(clear(), ON("p82"), { benB: { s: 1.08 } }), p: "benB" },
+          { L: "Only estimates so far", a: M(clear(), ON("pEst", "estA", "estB"), { benA: { o: 0.45 }, benB: { o: 0.45, s: 1 } }), p: "pEst" },
           { L: "Cost of each design", a: M(clear(), row("rCost"), { costA: { o: 1 }, costB: { o: 1, w: 0.3 } }), p: "rCost" },
           { L: "What the cost covers", dur: 1.2, a: M(clear(), { costPop: { o: 1 }, cardA: { o: 0 }, cardB: { o: 0 } }), p: "costPop" },
-          { L: "Cheaper is easier", a: M(clear(), ON("pCheap"), { cardA: { o: 1 }, cardB: { o: 1 }, costA: { s: 1.3 } }), p: "costA" },
+          { L: "Cheaper is easier", a: M(clear(), ON("pCheap"), { cardA: { o: 1 }, cardB: { o: 1 }, costA: { s: 1.12 } }), p: "costA" },
           { L: "Money, cause untouched", dur: 1.3, a: M(clear(), ON("pCause", "coinDrop"), { qA: { s: 1.15 } }), fx: function (f) { f.kick("qA", 3, 0, 0); }, p: "qA" },
           { L: "Delivery risk", a: M(clear(), row("rRisk"), { costA: { s: 1 }, riskA: { o: 1 }, riskB: { o: 1, w: 0.3 } }), p: "rRisk" },
           { L: "If technology fails", a: M(clear(), ON("pFail", "brk"), { bLink: { o: 0.3 } }), fx: function (f) { f.kick("cardB", 3, 0, 0); }, p: "brk" },
           { L: "Ambition can pay off", a: M(clear(), ON("shB", "pUnd"), { brk: { o: 0.35 } }), e: "back", p: "shB" },
           { L: "Make uncertainty visible", a: M(clear(), { u1: { o: 1 }, u2: { o: 1, w: 0.2 }, u3: { o: 1, w: 0.4 }, brk: { o: 0 }, bLink: { o: 1 } }), p: ["u1", "u2", "u3"] },
-          { L: "Time to deliver", a: M(clear(), row("rTime"), ON("waitG", "pToday"), { timeA: { sx: 1 }, timeB: { sx: 0.45, w: 0.3 } }), p: "waitG" },
-          { L: "14 months, no quick relief", dur: 1.5, a: M(clear(["waitG"]), ON("p14"), { timeB: { sx: 1 } }), e: "io", fx: function (f) { f.kick("waitG", 0, -3, 0); }, p: "timeB" },
-          { L: "Quick fix can obstruct", a: M(clear(), ON("block")), e: "back", p: "block" },
+          { L: "Time to deliver", a: M(clear(), row("rTime"), ON("waitG", "pToday"), { timeA: { o: 1 }, timeB: { o: 1, w: 0.3 } }), p: "waitG" },
+          { L: "14 months, no quick relief", dur: 1.5, a: M(clear(["waitG"]), { timeB: { s: 1.1 }, timeA: { o: 0.5 } }), e: "out", fx: function (f) { f.kick("waitG", 0, -3, 0); }, p: "timeB" },
+          { L: "Quick fix can obstruct", a: M(clear(), ON("block"), { timeB: { s: 1 }, timeA: { o: 1 } }), e: "back", p: "block" },
           { L: "How options relate", a: M(clear(), ON("relink", "pBlocks")), p: "relink" },
           { L: "Weigh it all together", a: M(clear(), ON("brace", "pAll"), { rBen: { f: HL }, rCost: { f: HL }, rRisk: { f: HL }, rTime: { f: HL } }), p: "brace" },
           { L: "Test feasibility", a: M(clear(), row("rFea"), OFF("brace", "relink", "block"), { feaA: { o: 1 }, feaB: { o: 1, w: 0.3 } }), p: "feaB" },
@@ -1092,8 +1133,8 @@
 })();
 // END FILE
 
-// FILE: w09-claude-v2-part2.js
-// OPER621 Week 9 (The Innovate Phase) - animated teaching scenes v2, part 2 of 3: O2b, O2c, O3a, O3b.
+// FILE: w09-claude-v3-part2.js
+// OPER621 Week 9 (The Innovate Phase) - animated teaching scenes v3, part 2 of 3: O2b, O2c, O3a, O3b.
 // v2 rebuild after the content audit: every narration line shows the literal Qasr Marina activity it describes.
 // Each visual is annotated with the benchmark template it adapts (motion grammar only; all artwork is original).
 // Standalone: registers its scenes in window.VL_SCENES and appends scoped rules to <style id="vl-sc-w09">.
@@ -1296,7 +1337,21 @@
     };
     this.cur = { x: 0, y: 0, s: 1, r: 0, o: 1, sx: 1, sy: 1, u: 0, d: 1, n: this.orig.n, A: {}, m: this.orig.m };
     this.tok = 0;
+    this.box = null;
   }
+  /* v3: keep the whole sprite inside its container box [x0, y0, x1, y1] (track, chart, gauge or panel) */
+  Actor.prototype.fitBox = function (tx, ty, c) {
+    var b = null;
+    try { b = this.el.getBBox(); } catch (e) { b = null; }
+    if (!b || (!b.width && !b.height)) return [tx, ty];
+    var B = this.box, px = this.px, py = this.py, kx = c.s * c.sx, ky = c.s * c.sy;
+    var xa = tx + px + kx * (b.x - px), xb = tx + px + kx * (b.x + b.width - px);
+    var ya = ty + py + ky * (b.y - py), yb = ty + py + ky * (b.y + b.height - py);
+    var x0 = Math.min(xa, xb), x1 = Math.max(xa, xb), y0 = Math.min(ya, yb), y1 = Math.max(ya, yb);
+    if (x0 < B[0] || x1 - x0 > B[2] - B[0]) tx += B[0] - x0; else if (x1 > B[2]) tx -= x1 - B[2];
+    if (y0 < B[1] || y1 - y0 > B[3] - B[1]) ty += B[1] - y0; else if (y1 > B[3]) ty -= y1 - B[3];
+    return [tx, ty];
+  };
   Actor.prototype.dflt = function (k) {
     if (k in DEF) return DEF[k];
     if (k === "n") return this.orig.n;
@@ -1313,17 +1368,18 @@
   };
   Actor.prototype.paint = function () {
     var c = this.cur, el = this.el, tx = c.x, ty = c.y, k;
+    for (k in c.A) el.setAttribute(k, r2(c.A[k]));
     if (this.path) { try { this.plen = this.path.getTotalLength(); } catch (e) { this.plen = 0; } }
     if (this.path && this.plen) {
       var pt = this.path.getPointAtLength(clamp(c.u, 0, 1) * this.plen);
       tx += pt.x - this.px; ty += pt.y - this.py;
     }
+    if (this.box) { var fb = this.fitBox(tx, ty, c); tx = fb[0]; ty = fb[1]; }
     if (tx || ty || c.s !== 1 || c.r || c.sx !== 1 || c.sy !== 1) {
       el.setAttribute("transform", "translate(" + r2(tx + this.px) + " " + r2(ty + this.py) + ") rotate(" + r2(c.r) + ") scale(" + r2(c.s * c.sx) + " " + r2(c.s * c.sy) + ") translate(" + r2(-this.px) + " " + r2(-this.py) + ")");
     } else el.removeAttribute("transform");
     el.setAttribute("opacity", r2(c.o));
     el.style.visibility = c.o < 0.01 ? "hidden" : "";
-    for (k in c.A) el.setAttribute(k, r2(c.A[k]));
     if (this.draws.length) {
       var dv = clamp(c.d, 0, 1);
       this.draws.forEach(function (p) {
@@ -1371,6 +1427,7 @@
     var lab = root.querySelector(".vw-lab"), bar = root.querySelector(".vw-bar i"), fxL = root.querySelector(".vw-fx");
     var actors = {}, list = [].slice.call(root.querySelectorAll("[data-a]"));
     list.forEach(function (n) { actors[n.getAttribute("data-a")] = new Actor(n, root); });
+    if (def.B) Object.keys(def.B).forEach(function (n) { if (actors[n]) actors[n].box = def.B[n]; });
     var touched = {};
     [def.init || {}].concat(def.K.map(function (k) { return (k && k.a) || {}; })).forEach(function (o) {
       for (var a in o) { touched[a] = touched[a] || {}; for (var k in o[a]) { if (k === "A") { touched[a].A = touched[a].A || {}; for (var q in o[a].A) touched[a].A[q] = 1; } else touched[a][k] = 1; } }
@@ -1391,8 +1448,17 @@
 
     function stateAt(k) {
       var S = {}, j;
+      var I0 = {}; mergeInto(I0, def.init || {});
       mergeInto(S, def.init || {});
-      for (j = 0; j <= k; j++) if (def.K[j] && def.K[j].a) mergeInto(S, def.K[j].a);
+      var g0 = 0;
+      for (j = k; j > 0; j--) if (def.K[j] && def.K[j].c) { g0 = j; break; }
+      for (j = 0; j <= k; j++) {
+        if (j === g0 && g0 > 0) {
+          var keep = [].concat(def.K[j].c === true || def.K[j].c === 1 ? [] : def.K[j].c);
+          for (var a0 in S) if (I0[a0] && I0[a0].o === 0 && keep.indexOf(a0) < 0) S[a0].o = 0;
+        }
+        if (def.K[j] && def.K[j].a) mergeInto(S, def.K[j].a);
+      }
       var full = {}, a, p;
       for (a in touched) {
         var A = actors[a]; if (!A) continue;
@@ -1410,6 +1476,7 @@
     function goTo(k, instant) {
       var S = stateAt(k), kf = def.K[k] || {}, dur = kf.dur || def.dur || 0.95;
       var moveForward = !instant && k === cur + 1;
+      if (!moveForward) { run.kill(); while (fxL.firstChild) fxL.removeChild(fxL.firstChild); }
       var wOwn = kf.a || {};
       Object.keys(S).forEach(function (name) {
         var A = actors[name], Tt = S[name], from = {}, to = {}, p, any = false;
@@ -1480,7 +1547,7 @@
       for (var i = 0; i < count; i++) (function (i) {
         var a = i / count * Math.PI * 2, n = mk("circle", { cx: r2(x), cy: r2(y), r: 3, fill: col || def.acc || "#c0502a" });
         run.add(0.8, 0.05, "out", function (t) {
-          n.setAttribute("cx", r2(x + Math.cos(a) * 30 * t)); n.setAttribute("cy", r2(y + Math.sin(a) * 30 * t));
+          n.setAttribute("cx", r2(x + Math.cos(a) * 14 * t)); n.setAttribute("cy", r2(y + Math.sin(a) * 14 * t));
           n.setAttribute("opacity", r2(1 - t));
         }, function () { if (n.parentNode) n.parentNode.removeChild(n); });
       })(i);
@@ -1499,19 +1566,16 @@
       burstOn: function (name, col, delay) {
         later(delay || 0, function () { var c = screenCenter(name); if (c) burstAt(c.x, c.y, col, 12); });
       },
-      ghost: function (name, dx, dy, rot) {
+      /* v3: in-place fade (the copy never leaves its card, bin or chart) */
+      ghost: function (name) {
         var A = actors[name]; if (!A || !A.el.parentNode) return;
         var g = A.el.cloneNode(true);
         g.removeAttribute("data-a");
         [].slice.call(g.querySelectorAll("[data-a]")).forEach(function (q) { q.removeAttribute("data-a"); });
+        g.style.visibility = "";
         A.el.parentNode.insertBefore(g, A.el.nextSibling);
-        var base = g.getAttribute("transform") || "", bb;
-        try { bb = A.el.getBBox(); } catch (e) { bb = { x: 0, y: 0, width: 0, height: 0 }; }
-        var cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2;
-        run.add(0.9, 0, "io", function (t) {
-          g.setAttribute("transform", "translate(" + r2(dx * t) + " " + r2(dy * t) + ") " + base + " rotate(" + r2((rot || 0) * t) + " " + r2(cx) + " " + r2(cy) + ")");
-          g.setAttribute("opacity", r2(1 - t));
-        }, function () { if (g.parentNode) g.parentNode.removeChild(g); });
+        run.add(0.9, 0, "io", function (t) { g.setAttribute("opacity", r2(0.9 * (1 - t))); },
+          function () { if (g.parentNode) g.parentNode.removeChild(g); });
       },
       kick: function (name, dx, dy, rot) {
         var A = actors[name]; if (!A) return;
@@ -1543,6 +1607,7 @@
       step: function (i, n) { if (inst) inst.go(i, n); },
       reset: function () { if (inst) inst.reset(); }
     };
+    W.VL_SCENES[id]._dbg = function () { return { W: def.W || 400, H: def.H || 320, B: def.B || {}, N: def.K.length }; };
   }
 
   var K = { ink: "#14233a", navy: "#1f4e79", orange: "#c0502a", green: "#2f7d5f", paper: "#fbf8f1",
@@ -1614,11 +1679,14 @@
     }
     SC("O2b", {
       title: "Qasr's two competing designs", W: 400, H: 320, acc: K.orange,
+      B: { queueA: [214, 150, 330, 206], tlA: [20, 238, 380, 282], tlB: [20, 238, 380, 282], jan: [260, 232, 346, 306], todayQ: [140, 270, 220, 310] },
       art: function () {
         var s = R(-1400, -1400, 3200, 3200, "#f4f6f9");
         s += G("gridBg", R(8, 50, 190, 190, "#fff", 10, 'stroke="#dfe4ea" stroke-width="1.5"') + tiles(0, 99, "#eef1f5"), 103, 145);
         s += G("tSvc", tiles(0, 7, "#3fae74"), 80, 60) + G("tA", tiles(8, 43, K.navy), 80, 90) + G("tB", tiles(44, 81, K.navy), 80, 150);
         s += G("tB2", tiles(22, 43, K.navy), 80, 100);
+        /* v3: minute mode legend sits on the unused tenth row (82 squares = 82 minutes) */
+        s += G("leg", R(12, 214, 184, 22, "#fff", 4) + T(104, 230, "1 square = 1 minute", 13, K.slate, "middle", 'class="vw-n"'), 104, 225);
         s += G("dGo", dots(0, 73, "#3fae74"), 100, 120) + G("dHelp", dots(74, 99, K.orange), 100, 220);
         s += '<g data-a="num" data-p="300 84" data-n0="0" data-fmt="#"><text data-t="" class="vw-t" x="300" y="98" font-size="42" fill="' + K.ink + '" text-anchor="middle">0</text></g>';
         s += G("unit", T(300, 122, "minutes", 15, K.slate), 300, 118) + G("unitM", T(300, 122, "modelled min", 15, K.navy), 300, 118) + G("unitG", T(300, 122, "of 100 guests", 15, "#3fae74"), 300, 118);
@@ -1633,7 +1701,7 @@
         s += G("bkA", BOOK(240, 152, K.green) + TAGOK(258, 140), 240, 152);
         s += G("hgA", HOURG(290, 152) + TAGX(306, 142), 296, 148);
         s += G("kioskA", KIOSKK(262, 200), 262, 180) + G("retype", R(318, 136, 30, 22, "#fff", 3, 'stroke="#9aa7b8" stroke-width="1.5"') + TAGX(350, 140), 334, 146);
-        s += G("queueA", [0, 1, 2].map(function (k) { return AT(244 - k * 0, 200, GUY(k % 2 ? K.orange : "#5b8fc4"), 0.55); }).join("") + AT(250, 200, GUY(K.orange), 0.55) + AT(258, 200, GUY("#5b8fc4"), 0.55), 250, 190);
+        s += G("queueA", [0, 1, 2].map(function (k) { return AT(258 - k * 13, 200, GUY(k % 2 ? K.orange : "#5b8fc4"), 0.55); }).join(""), 245, 190);
         /* route B */
         s += G("rB", PHONE(222, 150, 22, 40, K.ink, "#9fe3c0") + ARROW(250, 172, 330, 172, K.green, 3) + R(338, 146, 30, 52, K.navy, 2) + G("doorB", R(341, 149, 24, 46, "#ffe9a8", 2), 353, 172), 300, 172);
         s += G("readyB", [["Identity", 0], ["Payment", 1], ["Rate", 2], ["Room", 3]].map(function (r) { var x = 222 + (r[1] % 2) * 86, y = 212 + Math.floor(r[1] / 2) * 24; return TAGOK(x, y) + T(x + 14, y + 5, r[0], 15, K.ink, "start"); }).join(""), 300, 224);
@@ -1642,22 +1710,30 @@
           return G("fn" + f[1], C(232 + f[1] * 44, 160, 15, "#fff", 'data-f="" stroke="' + K.navy + '" stroke-width="2.5"') + '<g class="vw-goSpin">' + GEAR(232 + f[1] * 44, 160, 7, 8, K.navy, "#fff") + "</g>" + T(232 + f[1] * 44, 194, f[0], 15, K.ink), 232 + f[1] * 44, 170);
         }).join(""), 300, 170);
         /* compare bars */
-        s += G("bars", vbar(0, 82) + vbar(1, 44) + vbar(2, 22) + T(BX[0], 254, "Today", 15, K.ink) + T(BX[1], 254, "A", 15, K.navy) + T(BX[2], 254, "B", 15, K.green) +
+        /* v3: zero-based minute axis (1.2 units per minute) with gridlines; savings drawn as the removed part of each bar */
+        var gl = P("M210 " + BASE + " H374", K.ink, 2);
+        [20, 40, 60, 80].forEach(function (m) { gl += P("M210 " + r2(BASE - m * SC_) + " H374", "#c9d3df", 1, 'stroke-dasharray="3 4"') + T(378, r2(BASE - m * SC_ + 4), String(m), 11, K.slate, "start"); });
+        gl += T(378, BASE + 4, "0", 11, K.slate, "start") + T(378, r2(BASE - 92 * SC_), "min", 11, K.slate, "start");
+        s += G("bars", gl + vbar(0, 82) + vbar(1, 44) + vbar(2, 22) + T(BX[0], 254, "Today", 15, K.ink) + T(BX[1], 254, "A", 15, K.navy) + T(BX[2], 254, "B", 15, K.green) +
           T(BX[0], 130, "82", 15, K.ink) + T(BX[1], 176, "44", 15, K.navy) + T(BX[2], 202, "22", 15, K.green), 292, 190);
-        s += G("save", T(BX[1] + 26, 152, "-38", 15, K.orange, "start") + T(BX[2] + 24, 176, "-60", 15, K.orange, "start"), 330, 160);
-        s += G("both47", TAGX(BX[1], 222) + TAGX(BX[2], 222), 322, 222);
+        function gap(x, hi, lo, lab) { return R(x - 20, r2(BASE - hi * SC_), 40, r2((hi - lo) * SC_), "#fff3e8", 3, 'stroke="' + K.orange + '" stroke-width="2" stroke-dasharray="4 3"') + (lab ? T(x, r2(BASE - hi * SC_ + 18), lab, 14, K.orange, "middle", 'class="vw-n"') : ""); }
+        s += G("save", gap(BX[1], 82, 44, "-38") + gap(BX[2], 82, 22, "-60"), 322, 170);
+        s += G("both47", HOURG(BX[1] - 6, 168) + TAGX(BX[1] + 10, 160) + HOURG(BX[2] - 6, 194) + TAGX(BX[2] + 10, 186), 322, 180);
         s += G("svcHi", R(BX[0] - 24, BASE - 12, 168, 14, "none", 4, 'stroke="#3fae74" stroke-width="2.5"'), 300, BASE - 5);
-        s += G("diff", P("M" + (BX[2] + 26) + " 183 H382 V210 H" + (BX[2] + 26), K.orange, 2.5), 370, 196);
+        s += G("diff", gap(BX[2], 44, 22, "") + P("M" + (BX[1] + 20) + " " + r2(BASE - 44 * SC_) + " H" + (BX[2] - 20), K.orange, 2, 'stroke-dasharray="4 3"'), 330, 196);
         /* tensions */
         s += G("flagB", P("M330 140 V112", K.ink, 2) + F("M330 112 l16 5 l-16 6Z", K.red) + P("M362 140 V112", K.ink, 2) + F("M362 112 l16 5 l-16 6Z", K.red), 346, 126);
         s += G("objs", [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (k) { var c = k < 7 ? K.orange : "#9aa7b8"; return R(216 + k * 19, 140, 15, 12, c, 3) + F("M" + (220 + k * 19) + " 152 l-2 5 l6 -5Z", c); }).join(""), 300, 146);
         /* timeline */
-        s += G("tl", P("M20 296 H390", K.ink, 2) + T(20, 314, "Now", 15, K.ink, "start"), 200, 300);
+                /* v3: month scale under the delivery bars: 14 months = 360 units (25.7 per month); 18 weeks = 4.1 months */
+        var mt = "", MO = 360 / 14;
+        for (var m = 0; m <= 14; m++) mt += P("M" + r2(20 + m * MO) + " 294 V" + (m % 6 === 0 || m === 14 ? 302 : 299), K.ink, 1.5);
+        s += G("tl", P("M20 296 H380", K.ink, 2) + mt + T(20, 314, "Now", 13, K.ink, "start") + T(r2(20 + 6 * MO), 314, "6 mo", 12, K.slate) + T(r2(20 + 12 * MO), 314, "12 mo", 12, K.slate) + T(380, 314, "14", 12, K.slate, "end"), 200, 300);
         s += G("tlA", R(20, 240, 106, 18, K.navy, 5) + T(26, 254, "A: 18 weeks", 15, "#fff", "start", 'class="vw-n"'), 20, 249);
         s += G("tlB", R(20, 262, 360, 18, "#3fae74", 5) + T(150, 276, "B: 14 months", 15, "#fff", "start", 'class="vw-n"'), 20, 271);
         s += G("hotels", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(function (k) { return R(136 + k * 13, 284, 9, 9, K.navy, 2); }).join(""), 226, 288);
         s += G("jan", P("M303 252 V302", K.red, 3) + R(278, 238, 50, 18, K.red, 5) + T(303, 252, "Jan", 15, "#fff", "middle", 'class="vw-n"'), 303, 260);
-        s += G("ovl", R(240, 262, 63, 18, "#ffd479", 4, 'opacity=".85"') + AT(271, 271, R(-6, -3, 12, 9, K.red, 2) + P("M-3.5 -3 V-6 Q-3.5 -9.5 0 -9.5 Q3.5 -9.5 3.5 -6 V-3", K.red, 1.8)), 271, 271);
+        s += G("ovl", R(303, 262, 77, 18, "#ffd479", 4, 'opacity=".9"') + AT(341, 271, R(-6, -3, 12, 9, K.red, 2) + P("M-3.5 -3 V-6 Q-3.5 -9.5 0 -9.5 Q3.5 -9.5 3.5 -6 V-3", K.red, 1.8)), 341, 271);
         s += G("todayQ", AT(160, 304, GUY(K.orange), 0.6) + AT(174, 304, GUY("#5b8fc4"), 0.6) + CLOCKK(196, 290, 9, K.orange), 178, 294);
         /* pills */
         var PL = [["pTwo", "Two proposals", K.ink], ["pSame", "Same yardstick", K.ink], ["pBook", "Rate at booking", K.green], ["pKiosk", "Kiosk checks ID", K.navy], ["pOne", "One function", K.navy],
@@ -1679,10 +1755,10 @@
         function pl(n) { var o = {}; PLS.forEach(function (k) { o[k] = { o: k === n ? 1 : 0 }; }); return o; }
         var RIGHT = ["fA", "fB", "yard", "rA", "pDeskC", "bkA", "hgA", "kioskA", "retype", "queueA", "rB", "readyB", "funcs", "bars", "save", "both47", "svcHi", "diff", "flagB", "objs", "people", "asm"];
         function rt(keep) { keep = keep || []; var o = HID(RIGHT.filter(function (n) { return keep.indexOf(n) < 0; })); keep.forEach(function (n) { o[n] = { o: 1 }; }); return o; }
-        var MIN = { tSvc: { o: 1 }, tA: { o: 1 }, tB: { o: 1 }, dGo: { o: 0 }, dHelp: { o: 0 } };
+        var MIN = { tSvc: { o: 1 }, tA: { o: 1 }, tB: { o: 1 }, dGo: { o: 0 }, dHelp: { o: 0 }, leg: { o: 1 } };
         return [
           { L: "Two concrete proposals", a: M(pl("pTwo"), { fA: { o: 1 }, fB: { o: 1, w: 0.25 } }), e: "back", p: ["fA", "fB"] },
-          { L: "82 minutes today", dur: 1.6, a: M(pl(), rt(["fA", "fB"]), { tSvc: { o: 1 }, tA: { o: 1, w: 0.15 }, tB: { o: 1, w: 0.3 }, num: { o: 1, n: 82 }, unit: { o: 1 } }), e: "out", p: "num" },
+          { L: "82 minutes today", dur: 1.6, a: M(pl(), rt(["fA", "fB"]), { tSvc: { o: 1 }, tA: { o: 1, w: 0.15 }, tB: { o: 1, w: 0.3 }, leg: { o: 1, w: 0.5 }, num: { o: 1, n: 82 }, unit: { o: 1 } }), e: "out", p: "num" },
           { L: "One shared yardstick", a: M(pl("pSame"), rt(["fA", "fB", "yard"])), p: "yard" },
           { L: "Design A: desk at centre", a: M(pl(), rt(["rA", "pDeskC"])), p: "rA" },
           { L: "Rate at booking", a: M(pl("pBook"), rt(["rA", "bkA", "hgA"])), p: "bkA" },
@@ -1692,20 +1768,20 @@
           { L: "Speed matters", a: M(pl("pSpeed"), rt(["funcs"]), OFF("hotels"), ON("todayQ")), fx: function (f) { f.kick("todayQ", 0, -3, 0); }, p: "todayQ" },
           { L: "Design B: desk optional", dur: 1.2, a: M(pl("pBold"), rt(["rB"]), OFF("todayQ"), { tB: { o: 1 }, num: { n: 82 }, unit: { o: 1 }, unitM: { o: 0 } }), p: "rB" },
           { L: "All ready before arrival", dur: 1.3, a: M(pl(), rt(["rB", "readyB"]), { doorB: { sx: 1, w: 0.6 } }), p: "readyB" },
-          { L: "74% skip the desk", dur: 1.2, a: M(pl(), rt(["rB"]), { tSvc: { o: 0 }, tA: { o: 0 }, tB: { o: 0 }, dGo: { o: 1 }, dHelp: { o: 1, w: 0.3 }, num: { o: 0 }, unit: { o: 0 }, p74: { o: 1 }, unitG: { o: 1 } }), p: "dHelp" },
+          { L: "74% skip the desk", dur: 1.2, a: M(pl(), rt(["rB"]), { tSvc: { o: 0 }, tA: { o: 0 }, tB: { o: 0 }, leg: { o: 0 }, dGo: { o: 1 }, dHelp: { o: 1, w: 0.3 }, num: { o: 0 }, unit: { o: 0 }, p74: { o: 1 }, unitG: { o: 1 } }), p: "dHelp" },
           { L: "22 min, 14 months", dur: 1.5, a: M(pl("pFour"), rt(["funcs"]), MIN, { tB: { o: 0.12 }, tA: { o: 0.12 }, tB2: { o: 0 }, p74: { o: 0 }, unitG: { o: 0 }, num: { o: 1, n: 22 }, unitM: { o: 1 }, fn0: { f: "#ffd479" }, fn1: { f: "#ffd479", w: 0.2 }, fn2: { f: "#ffd479", w: 0.4 }, fn3: { f: "#ffd479", w: 0.6 }, tlB: { o: 1, sx: 1, w: 0.4 } }), p: "tlB" },
           { L: "More changes together", a: M(pl("pTog"), rt(["funcs"])), fx: function (f) { f.kick("funcs", 0, -3, 0); f.kick("tlB", 4, 0, 0); }, p: "funcs" },
           { L: "Side by side", dur: 1.4, a: M(pl("pSide"), rt(["bars"]), OFF("tl", "tlA", "tlB", "num", "unitM"), { tA: { o: 1 }, tB: { o: 1 }, bar0: { sy: 1 }, bar1: { sy: 1, w: 0.2 }, bar2: { sy: 1, w: 0.4 } }), e: "out", p: "bars" },
           { L: "Save 38 or 60 min", a: M(pl(), rt(["bars", "save"])), p: "save" },
           { L: "Both remove the 47 min", a: M(pl("pBoth"), rt(["bars", "both47"])), p: "both47" },
           { L: "Service stays 8.1 min", a: M(pl("pSvc"), rt(["bars", "svcHi"]), { tSvc: { o: 1 }, tA: { o: 0.25 }, tB: { o: 0.25 } }), p: "svcHi" },
-          { L: "Savings come from waiting", a: M(pl("pWaste"), rt(["bars", "svcHi"]), { tA: { o: 0.12 }, tB: { o: 0.12 } }), fx: function (f) { f.ghost("tB", -40, 30, 0); }, p: "gridBg" },
+          { L: "Savings come from waiting", a: M(pl("pWaste"), rt(["bars", "svcHi"]), { tA: { o: 0.12 }, tB: { o: 0.12 } }), p: "gridBg" },
           { L: "Where A and B differ", a: M(pl("pDiff"), rt(["bars", "diff"]), { tA: { o: 1 }, tB: { o: 0.12 } }), p: "diff" },
           { L: "A: every guest queues", a: M(pl("pQA"), rt(["rA", "queueA"])), fx: function (f) { f.kick("queueA", 3, 0, 0); }, p: "queueA" },
-          { L: "B: most never queue", dur: 1.2, a: M(pl("pQB"), rt(["rB"]), { tSvc: { o: 0 }, tA: { o: 0 }, tB: { o: 0 }, dGo: { o: 1 }, dHelp: { o: 1 }, doorB: { sx: 1 } }), p: "dGo" },
+          { L: "B: most never queue", dur: 1.2, a: M(pl("pQB"), rt(["rB"]), { tSvc: { o: 0 }, tA: { o: 0 }, tB: { o: 0 }, leg: { o: 0 }, dGo: { o: 1 }, dHelp: { o: 1 }, doorB: { sx: 1 } }), p: "dGo" },
           { L: "Hidden tensions", a: M(pl("pTens"), rt(["fB", "flagB"])), p: "flagB" },
-          { L: "26% and 7 of 9", a: M(pl("p7"), rt(["objs"]), { dGo: { o: 0.25 } }), p: "dHelp" },
-          { L: "January rule, 11 months", dur: 1.2, a: M(pl("pJan"), rt(), MIN, ON("tl", "tlB", "jan"), { tA: { o: 0.12 }, tB: { o: 0.12 } }), p: "jan" },
+          { L: "26% and 7 of 9", a: M(pl("p7"), rt(["objs"]), { dGo: { o: 0.25 }, num: { o: 1, n: 26 }, unitG: { o: 1 } }), p: "dHelp" },
+          { L: "January rule, 11 months", dur: 1.2, a: M(pl("pJan"), rt(), MIN, ON("tl", "tlB", "jan"), { tA: { o: 0.12 }, tB: { o: 0.12 }, num: { o: 0 }, unitG: { o: 0 } }), p: "jan" },
           { L: "Saving, or deadline risk?", a: M(pl("pOvl"), ON("ovl")), fx: function (f) { f.kick("jan", 3, 0, 0); }, p: "ovl" },
           { L: "Modelled, not results", a: M(pl("pMod"), rt(["bars", "asm"]), OFF("tl", "tlB", "jan", "ovl")), p: "asm" },
           { L: "Numbers need people", a: M(pl("pConn"), rt(["people"]), { tA: { o: 1 } }), p: "people" }
@@ -1734,6 +1810,8 @@
     }
     SC("O2c", {
       title: "The quick-win trap", W: 400, H: 320, acc: K.orange,
+      /* v3: the attention track keeps A + B = 290 units at every frame; cards drop only into their own bin */
+      B: { c1: [94, 92, 250, 310], c2: [94, 92, 250, 310], attA: [100, 262, 390, 284], attB: [100, 262, 390, 284], pplB: [100, 196, 390, 254] },
       art: function () {
         var s = R(-1400, -1400, 3200, 3200, "#f2efe8");
         /* timeline */
@@ -1887,6 +1965,8 @@
     }
     SC("O3a", {
       title: "Technology that changes the process", W: 400, H: 320, acc: K.plum,
+      /* v3: booking cards ride the belt and stop at the gate's exit edge */
+      B: { cards: [20, 150, 246, 222] },
       art: function () {
         var A = "", B = "", Cc = "", D = "", Ee = "", Ff = "", Gg = "";
         var svcA = 8.1 / 82 * Math.PI * 2;
@@ -1901,7 +1981,7 @@
         A += PILL("pNewW", 300, 300, "New way of work", K.green, "#fff", 15);
         A += G("donut", C(200, 170, 70, "none", 'stroke="#9aa7b8" stroke-width="26"') + P(arc(200, 170, 70, 0, svcA), "#3fae74", 26) + T(200, 165, "82 min", 22, K.ink, "middle", 'class="vw-n"') + T(200, 188, "journey", 15, K.slate, "middle", 'class="vw-n"'), 200, 170);
         A += PILL("pSvc", 316, 90, "8.1 min service", "#3fae74", "#fff", 15);
-        A += PILL("pWaitA", 92, 272, "Waiting, handoffs", "#9aa7b8", "#fff", 15);
+        A += PILL("pWaitA", 92, 272, "Rest of journey", "#9aa7b8", "#fff", 15);
         /* pB */
         B += G("desk", DESKK(110, 250), 110, 236);
         B += G("pc", R(126, 196, 34, 24, K.ink, 3) + R(130, 200, 26, 16, "#9fe3c0", 2) + R(138, 220, 10, 6, K.ink), 143, 210);
@@ -2029,11 +2109,16 @@
     function task(name, cx, cy, w, label, col, fill) {
       return G(name, R(cx - w / 2, cy - 15, w, 30, fill || "#fff", 7, 'data-f="" stroke="' + col + '" stroke-width="2.5"') + T(cx, cy + 5, label, 15, K.ink, "middle", 'class="vw-n"'), cx, cy);
     }
-    var HP = "M112 81 H170 V141 H280 C340 141 370 120 370 81";
-    var XP = "M112 81 H170 V141 C170 192 180 201 240 201 C252 190 256 160 280 141 C340 141 370 120 370 81";
-    var EP = "M112 81 H170 V141 H280 C340 141 370 120 370 81";
+    /* v3: every token path runs only along the drawn connectors: start > pre-check > ID gateway > mobile key > room door.
+       hp ends at the door; xp detours along the red exception edge to Manual ID, then up the green edge to the key;
+       ep (readiness sync broken) stops 18 units short of the door - access is refused, the guest never enters. */
+    var HP = "M112 81 H170 V141 H330 C360 141 370 120 370 100";
+    var XP = "M112 81 H170 V141 V163 C170 192 180 201 190 201 H240 H252 V141 H330 C360 141 370 120 370 100";
+    var EP = "M112 81 H170 V141 H330 C360 141 370 125 370 112";
+    var U_GW = 0.2608, U_MAN = 0.5251;
     SC("O3b", {
       title: "Constraints and exceptions", W: 400, H: 320, acc: K.orange,
+      B: { tk: [8, 52, 392, 290], tx: [8, 52, 392, 290], te: [8, 52, 392, 290], hkp: [8, 232, 392, 300], redQ: [98, 112, 230, 170] },
       art: function () {
         var s = R(-1400, -1400, 3200, 3200, "#f1f4f2");
         var names = ["Guest", "Systems", "Reception", "Rooms"], fills = ["#fbf3e4", "#eef1f8", "#e9f4ee", "#f5eef8"];
@@ -2042,11 +2127,11 @@
           return R(8, y, 384, 58, fills[i], 6) + R(8, y, 90, 58, "rgba(20,35,58,.06)", 6) + T(14, y + 34, n, 15, K.ink, "start");
         }).join(""), 200, 170);
         /* edges */
-        s += G("e1", P("M" + PX + " 96 V119", K.navy, 2.5) + P("M192 141 H230", K.navy, 2.5) + P("M330 141 C360 141 370 120 370 100", K.navy, 2.5), 250, 120);
+        s += G("e1", C(112, 81, 10, "#fff", 'stroke="' + K.navy + '" stroke-width="2.5"') + P("M122 81 H124", K.navy, 2.5) + P("M" + PX + " 96 V119", K.navy, 2.5) + P("M192 141 H230", K.navy, 2.5) + P("M330 141 C360 141 370 120 370 100", K.navy, 2.5), 250, 120);
         s += G("eX", P("M170 163 C170 192 180 201 190 201", K.red, 3, 'stroke-dasharray="6 5"'), 180, 185);
-        s += G("eM", P("M252 186 V158", K.green, 3), 252, 172);
+        s += G("eM", P("M252 201 V156", K.green, 3) + P("M240 201 H252", K.green, 3), 252, 172);
         s += G("eA", P("M112 92 V186", K.plum, 3, 'stroke-dasharray="5 5"'), 112, 140);
-        s += G("fbHi", P("M170 163 C170 192 180 201 240 201 C252 190 256 160 280 141", "#3fae74", 8, 'opacity=".35"'), 220, 180);
+        s += G("fbHi", P("M170 163 C170 192 180 201 190 201 H252 V141", "#3fae74", 8, 'opacity=".35"'), 220, 180);
         s += '<path data-id="hp" d="' + HP + '" fill="none" stroke="none"/><path data-id="xp" d="' + XP + '" fill="none" stroke="none"/><path data-id="ep" d="' + EP + '" fill="none" stroke="none"/>';
         /* nodes */
         s += task("pre", PX, 81, 92, "Pre-check", K.navy);
@@ -2075,7 +2160,7 @@
           AT(214, 78, C(0, -6, 4, K.plum) + P("M0 -2 V5 M-5 1 H5", K.plum, 2) + C(0, 12, 5, "none", 'stroke="' + K.plum + '" stroke-width="2"')) + T(232, 84, "Access needs", 15, K.ink, "start") +
           AT(214, 110, R(-9, -8, 18, 14, K.plum, 4) + F("M-5 6 l-2 6 l7 -6Z", K.plum)) + T(232, 115, "Language", 15, K.ink, "start") +
           AT(214, 142, R(-7, -9, 14, 18, "#fff", 2, 'stroke="' + K.plum + '" stroke-width="2"') + R(-3, -12, 14, 18, "#fff", 2, 'stroke="' + K.plum + '" stroke-width="2"')) + T(232, 147, "Complex booking", 15, K.ink, "start"), 292, 110);
-        s += G("share", R(104, 62, 0, 0, "none") + R(220, 66, 130, 30, "#eef1f5", 6) + G("share74", R(220, 66, 96, 30, "#5b8fc4", 6), 220, 81) + G("share26", R(316, 66, 34, 30, K.orange, 6), 350, 81), 300, 81);
+        s += G("share", R(220, 66, 130, 30, "#eef1f5", 6) + G("share74", R(220, 66, 96.2, 30, "#5b8fc4", 6), 220, 81) + G("share26", R(316.2, 66, 33.8, 30, K.orange, 6) + T(333, 86, "26%", 12, "#fff", "middle", 'class="vw-n"'), 350, 81) + T(285, 107, "share of all guests", 11, K.slate), 285, 81);
         s += G("heart", F("M140 176 c-5 -8 -15 -3 -10 4 l10 10 l10 -10 c5 -7 -5 -12 -10 -4Z", K.rose), 140, 182);
         /* constraints */
         s += G("rule", R(130, 105, 80, 72, "none", 8, 'stroke="' + K.red + '" stroke-width="2.5" stroke-dasharray="6 4"') + AT(214, 176, R(-10, -8, 20, 16, "#fff", 2, 'stroke="' + K.red + '" stroke-width="2"') + P("M0 -8 V8", K.red, 1.5)), 170, 141);
@@ -2085,7 +2170,9 @@
         s += G("supKey", AT(352, 206, C(-4, 0, 4, "none", 'stroke="' + K.amber + '" stroke-width="2.4"') + P("M0 0 H10 M7 0 V4", K.amber, 2.4)), 356, 206);
         s += G("routine", [0, 1, 2].map(function (i) { return R(104 + i * 14, 176 - i * 3, 12, 16, "#fff", 2, 'stroke="#9aa7b8" stroke-width="1.5"'); }).join(""), 122, 184);
         s += G("complexC", R(146, 179, 30, 22, "#fde3d6", 4, 'stroke="' + K.orange + '" stroke-width="2"') + T(161, 195, "!", 15, K.orange, "middle", 'class="vw-n"'), 161, 190);
-        s += G("cal", R(104, 30, 288, 16, "#eef1f5", 8) + G("calF", R(104, 30, 288, 16, K.navy, 8), 104, 38), 248, 38);
+                /* v3: the delivery bar has a month scale: 288 units = 14 months (20.6 per month) */
+        var ct = ""; for (var m = 0; m <= 14; m++) ct += P("M" + r2(104 + m * 288 / 14) + " 27 V" + (m % 7 === 0 ? 22 : 25), K.slate, 1.5);
+        s += G("cal", R(104, 30, 288, 16, "#eef1f5", 8) + G("calF", R(104, 30, 288, 16, K.navy, 8), 104, 38) + ct + T(104, 18, "0", 11, K.slate, "start") + T(248, 18, "7", 11, K.slate) + T(392, 18, "14 months", 11, K.slate, "end"), 248, 38);
         s += G("calBrace", P("M100 54 Q94 54 94 64 V282 Q94 292 100 292", K.navy, 3), 96, 170);
         s += G("calX", TAGX(180, 38), 180, 38);
         s += G("stamp", AT(180, 236, R(-56, -15, 112, 30, "rgba(255,255,255,.85)", 6, 'stroke="' + K.slate + '" stroke-width="2.5"') + T(0, 6, "Approval", 16, K.slate, "middle", 'class="vw-n"'), 1, -6), 180, 236);
@@ -2117,9 +2204,9 @@
           { L: "What if ID fails?", a: M(pl(), ON("sup", "supQ"), { tk: { o: 0 } }), e: "back", p: "supQ" },
           { L: "An exception", a: M(pl("pExc"), ON("eX"), { gw: { f: "#fde3d6" }, roomOk: { o: 0 } }), p: "gw" },
           { L: "Exceptions happen daily", a: M(pl("pDaily"), ON("redQ")), fx: function (f) { f.kick("redQ", 3, 0, 0); }, p: "redQ" },
-          { L: "Unrecognised document", dur: 1.4, a: M(pl(), OFF("redQ", "supQ"), ON("tired", "idBad"), { tx: { o: 1, u: 0.23 } }), p: "idBad" },
+          { L: "Unrecognised document", dur: 1.4, a: M(pl(), OFF("redQ", "supQ"), ON("tired", "idBad"), { tx: { o: 1, u: U_GW } }), p: "idBad" },
           { L: "Don't trap the guest", a: M(pl("pTrap"), ON("loop")), fx: function (f) { f.kick("tx", 3, 0, 0); }, p: "loop" },
-          { L: "Reception resolves it", dur: 1.3, a: M(pl("pOwn"), OFF("loop", "tired"), ON("manual", "owner", "shield", "eM"), { tx: { u: 0.43 } }), p: "manual" },
+          { L: "Reception resolves it", dur: 1.3, a: M(pl("pOwn"), OFF("loop", "tired"), ON("manual", "owner", "shield", "eM"), { tx: { u: U_MAN } }), p: "manual" },
           { L: "The fallback route", dur: 1.8, a: M(pl("pFb"), OFF("idBad"), ON("fbHi"), { tx: { u: 1 }, roomOk: { o: 1, w: 1.5 } }), p: "fbHi" },
           { L: "Some guests want help", a: M(pl("pHelp"), OFF("fbHi", "tx", "roomOk", "sup"), ON("assist", "eA")), p: "assist" },
           { L: "26% need assistance", dur: 1.3, a: M(pl("p26"), ON("share"), { share74: { sx: 1 }, share26: { sx: 1, w: 0.5 } }), e: "out", p: "share26" },
@@ -2134,7 +2221,7 @@
           { L: "Contracts matter", a: M(pl("pCon"), OFF("rule"), ON("contract")), e: "back", p: "contract" },
           { L: "Check contracts early", a: M(pl("pCheck"), ON("cLinks", "manual", "assist")), p: "cLinks" },
           { L: "New skills needed", a: M(pl("pSkill"), OFF("cLinks", "contract"), ON("sup", "supQ")), p: "sup" },
-          { L: "Less routine work", dur: 1.3, a: M(pl("pShift"), OFF("supQ", "assist", "eA"), { routine: { o: 1 }, complexC: { o: 1, w: 0.6 } }), fx: function (f) { f.ghost("routine", -20, 20, 0); }, p: "complexC" },
+          { L: "Less routine work", dur: 1.3, a: M(pl("pShift"), OFF("supQ", "assist", "eA"), { routine: { o: 0.35 }, complexC: { o: 1, w: 0.6 } }), p: "complexC" },
           { L: "Training and authority", a: M(pl("pTrain"), OFF("routine", "complexC"), ON("supSkill", "supKey", "assist")), e: "back", p: ["supSkill", "supKey"] },
           { L: "14 months of coordination", dur: 1.4, a: M(pl("p14"), ON("cal", "calBrace"), { calF: { sx: 1 } }), p: "cal" },
           { L: "No wishful deadlines", a: M(pl("pNoDl"), ON("calX"), { calF: { sx: 0.3 } }), fx: function (f) { f.kick("calX", 3, 0, 0); }, p: "calX" },
@@ -2151,8 +2238,8 @@
 })();
 // END FILE
 
-// FILE: w09-claude-v2-part3.js
-// OPER621 Week 9 (The Innovate Phase) - animated teaching scenes v2, part 3 of 3: O3c, O2d, O2e.
+// FILE: w09-claude-v3-part3.js
+// OPER621 Week 9 (The Innovate Phase) - animated teaching scenes v3, part 3 of 3: O3c, O2d, O2e.
 // v2 rebuild after the content audit: every narration line shows the literal Qasr Marina activity it describes.
 // Each visual is annotated with the benchmark template it adapts (motion grammar only; all artwork is original).
 // Standalone: registers its scenes in window.VL_SCENES and appends scoped rules to <style id="vl-sc-w09">.
@@ -2355,7 +2442,21 @@
     };
     this.cur = { x: 0, y: 0, s: 1, r: 0, o: 1, sx: 1, sy: 1, u: 0, d: 1, n: this.orig.n, A: {}, m: this.orig.m };
     this.tok = 0;
+    this.box = null;
   }
+  /* v3: keep the whole sprite inside its container box [x0, y0, x1, y1] (track, chart, gauge or panel) */
+  Actor.prototype.fitBox = function (tx, ty, c) {
+    var b = null;
+    try { b = this.el.getBBox(); } catch (e) { b = null; }
+    if (!b || (!b.width && !b.height)) return [tx, ty];
+    var B = this.box, px = this.px, py = this.py, kx = c.s * c.sx, ky = c.s * c.sy;
+    var xa = tx + px + kx * (b.x - px), xb = tx + px + kx * (b.x + b.width - px);
+    var ya = ty + py + ky * (b.y - py), yb = ty + py + ky * (b.y + b.height - py);
+    var x0 = Math.min(xa, xb), x1 = Math.max(xa, xb), y0 = Math.min(ya, yb), y1 = Math.max(ya, yb);
+    if (x0 < B[0] || x1 - x0 > B[2] - B[0]) tx += B[0] - x0; else if (x1 > B[2]) tx -= x1 - B[2];
+    if (y0 < B[1] || y1 - y0 > B[3] - B[1]) ty += B[1] - y0; else if (y1 > B[3]) ty -= y1 - B[3];
+    return [tx, ty];
+  };
   Actor.prototype.dflt = function (k) {
     if (k in DEF) return DEF[k];
     if (k === "n") return this.orig.n;
@@ -2372,17 +2473,18 @@
   };
   Actor.prototype.paint = function () {
     var c = this.cur, el = this.el, tx = c.x, ty = c.y, k;
+    for (k in c.A) el.setAttribute(k, r2(c.A[k]));
     if (this.path) { try { this.plen = this.path.getTotalLength(); } catch (e) { this.plen = 0; } }
     if (this.path && this.plen) {
       var pt = this.path.getPointAtLength(clamp(c.u, 0, 1) * this.plen);
       tx += pt.x - this.px; ty += pt.y - this.py;
     }
+    if (this.box) { var fb = this.fitBox(tx, ty, c); tx = fb[0]; ty = fb[1]; }
     if (tx || ty || c.s !== 1 || c.r || c.sx !== 1 || c.sy !== 1) {
       el.setAttribute("transform", "translate(" + r2(tx + this.px) + " " + r2(ty + this.py) + ") rotate(" + r2(c.r) + ") scale(" + r2(c.s * c.sx) + " " + r2(c.s * c.sy) + ") translate(" + r2(-this.px) + " " + r2(-this.py) + ")");
     } else el.removeAttribute("transform");
     el.setAttribute("opacity", r2(c.o));
     el.style.visibility = c.o < 0.01 ? "hidden" : "";
-    for (k in c.A) el.setAttribute(k, r2(c.A[k]));
     if (this.draws.length) {
       var dv = clamp(c.d, 0, 1);
       this.draws.forEach(function (p) {
@@ -2430,6 +2532,7 @@
     var lab = root.querySelector(".vw-lab"), bar = root.querySelector(".vw-bar i"), fxL = root.querySelector(".vw-fx");
     var actors = {}, list = [].slice.call(root.querySelectorAll("[data-a]"));
     list.forEach(function (n) { actors[n.getAttribute("data-a")] = new Actor(n, root); });
+    if (def.B) Object.keys(def.B).forEach(function (n) { if (actors[n]) actors[n].box = def.B[n]; });
     var touched = {};
     [def.init || {}].concat(def.K.map(function (k) { return (k && k.a) || {}; })).forEach(function (o) {
       for (var a in o) { touched[a] = touched[a] || {}; for (var k in o[a]) { if (k === "A") { touched[a].A = touched[a].A || {}; for (var q in o[a].A) touched[a].A[q] = 1; } else touched[a][k] = 1; } }
@@ -2450,8 +2553,17 @@
 
     function stateAt(k) {
       var S = {}, j;
+      var I0 = {}; mergeInto(I0, def.init || {});
       mergeInto(S, def.init || {});
-      for (j = 0; j <= k; j++) if (def.K[j] && def.K[j].a) mergeInto(S, def.K[j].a);
+      var g0 = 0;
+      for (j = k; j > 0; j--) if (def.K[j] && def.K[j].c) { g0 = j; break; }
+      for (j = 0; j <= k; j++) {
+        if (j === g0 && g0 > 0) {
+          var keep = [].concat(def.K[j].c === true || def.K[j].c === 1 ? [] : def.K[j].c);
+          for (var a0 in S) if (I0[a0] && I0[a0].o === 0 && keep.indexOf(a0) < 0) S[a0].o = 0;
+        }
+        if (def.K[j] && def.K[j].a) mergeInto(S, def.K[j].a);
+      }
       var full = {}, a, p;
       for (a in touched) {
         var A = actors[a]; if (!A) continue;
@@ -2469,6 +2581,7 @@
     function goTo(k, instant) {
       var S = stateAt(k), kf = def.K[k] || {}, dur = kf.dur || def.dur || 0.95;
       var moveForward = !instant && k === cur + 1;
+      if (!moveForward) { run.kill(); while (fxL.firstChild) fxL.removeChild(fxL.firstChild); }
       var wOwn = kf.a || {};
       Object.keys(S).forEach(function (name) {
         var A = actors[name], Tt = S[name], from = {}, to = {}, p, any = false;
@@ -2539,7 +2652,7 @@
       for (var i = 0; i < count; i++) (function (i) {
         var a = i / count * Math.PI * 2, n = mk("circle", { cx: r2(x), cy: r2(y), r: 3, fill: col || def.acc || "#c0502a" });
         run.add(0.8, 0.05, "out", function (t) {
-          n.setAttribute("cx", r2(x + Math.cos(a) * 30 * t)); n.setAttribute("cy", r2(y + Math.sin(a) * 30 * t));
+          n.setAttribute("cx", r2(x + Math.cos(a) * 14 * t)); n.setAttribute("cy", r2(y + Math.sin(a) * 14 * t));
           n.setAttribute("opacity", r2(1 - t));
         }, function () { if (n.parentNode) n.parentNode.removeChild(n); });
       })(i);
@@ -2558,19 +2671,16 @@
       burstOn: function (name, col, delay) {
         later(delay || 0, function () { var c = screenCenter(name); if (c) burstAt(c.x, c.y, col, 12); });
       },
-      ghost: function (name, dx, dy, rot) {
+      /* v3: in-place fade (the copy never leaves its card, bin or chart) */
+      ghost: function (name) {
         var A = actors[name]; if (!A || !A.el.parentNode) return;
         var g = A.el.cloneNode(true);
         g.removeAttribute("data-a");
         [].slice.call(g.querySelectorAll("[data-a]")).forEach(function (q) { q.removeAttribute("data-a"); });
+        g.style.visibility = "";
         A.el.parentNode.insertBefore(g, A.el.nextSibling);
-        var base = g.getAttribute("transform") || "", bb;
-        try { bb = A.el.getBBox(); } catch (e) { bb = { x: 0, y: 0, width: 0, height: 0 }; }
-        var cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2;
-        run.add(0.9, 0, "io", function (t) {
-          g.setAttribute("transform", "translate(" + r2(dx * t) + " " + r2(dy * t) + ") " + base + " rotate(" + r2((rot || 0) * t) + " " + r2(cx) + " " + r2(cy) + ")");
-          g.setAttribute("opacity", r2(1 - t));
-        }, function () { if (g.parentNode) g.parentNode.removeChild(g); });
+        run.add(0.9, 0, "io", function (t) { g.setAttribute("opacity", r2(0.9 * (1 - t))); },
+          function () { if (g.parentNode) g.parentNode.removeChild(g); });
       },
       kick: function (name, dx, dy, rot) {
         var A = actors[name]; if (!A) return;
@@ -2602,6 +2712,7 @@
       step: function (i, n) { if (inst) inst.go(i, n); },
       reset: function () { if (inst) inst.reset(); }
     };
+    W.VL_SCENES[id]._dbg = function () { return { W: def.W || 400, H: def.H || 320, B: def.B || {}, N: def.K.length }; };
   }
 
   var K = { ink: "#14233a", navy: "#1f4e79", orange: "#c0502a", green: "#2f7d5f", paper: "#fbf8f1",
@@ -2678,10 +2789,13 @@
     var SCN = [["sc1", "Normal guest", K.green], ["sc2", "Coach arrivals", K.orange], ["sc3", "Missing rate", K.orange], ["sc4", "26% need help", K.orange], ["sc5", "Access outage", K.red]];
     SC("O3c", {
       title: "Testing before implementation", W: 400, H: 320, acc: K.orange,
+      B: { t1: [14, 180, 392, 200], t3: [14, 180, 392, 200], t3b: [14, 180, 392, 200], t5: [14, 180, 392, 200], jam: [14, 170, 392, 210], queue: [10, 260, 120, 306] },
       art: function () {
         var s = R(-1400, -1400, 3200, 3200, "#eef2f6") + R(-1400, 244, 3200, 1400, "#e4e9ef");
         /* workflow */
         s += G("track", P("M14 " + FY + " H392", "#b8c4d2", 6) + P("M14 " + FY + " H392", "#fff", 2, 'stroke-dasharray="6 8"'), 200, FY);
+        /* v3: tokens ride UNDER the station icons, start and stop inside the drawn track (x 14-392, radius 8) */
+        s += tok("t1", 22, K.navy) + tok("t3", 22, K.navy) + tok("t3b", 131, K.navy) + tok("t5", 292, K.navy);
         s += station("sPre", SX[0], PHONE(SX[0] - 6, FY - 11, 12, 22, K.ink, "#9fe3c0"));
         s += station("sRate", SX[1], T(SX[1], FY + 6, "%", 17, K.amber, "middle", 'class="vw-n"'));
         s += station("sRoom", SX[2], R(SX[2] - 10, FY - 2, 20, 8, K.green, 2) + R(SX[2] - 10, FY - 8, 7, 6, K.green, 1));
@@ -2695,14 +2809,15 @@
         s += G("brk", P("M300 " + FY + " H330", K.red, 5) + TAGX(306, FY - 22), 306, FY - 10);
         s += G("coordL", P("M" + SX[0] + " " + (FY + 19) + " Q120 250 120 262 M" + SX[2] + " " + (FY + 19) + " Q200 250 140 262", K.plum, 2.5, 'class="vw-flow"'), 150, 230);
         /* tokens */
-        s += tok("t1", 14, K.navy);
+
         s += G("crowd", [0, 1, 2, 3, 4, 5].map(function (i) { return C(20 + (i % 3) * 14, FY - 8 + Math.floor(i / 3) * 16, 7, i % 2 ? K.plum : K.amber); }).join(""), 34, FY);
         s += G("jam", [0, 1, 2, 3, 4].map(function (i) { return C(186 + i * 15, FY + (i % 2 ? -8 : 8), 7, i % 2 ? K.plum : K.amber); }).join(""), 216, FY);
         s += G("bus", AT(30, 140, R(-24, -12, 48, 22, K.amber, 5) + R(-20, -8, 9, 7, "#fff", 1) + R(-8, -8, 9, 7, "#fff", 1) + R(4, -8, 9, 7, "#fff", 1) + C(-13, 11, 4, K.ink) + C(13, 11, 4, K.ink)), 30, 140);
-        s += tok("t3", 14, K.navy);
-        s += G("helpRow", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return C(30 + i * 18, FY, 6.5, i < 3 ? K.orange : "#5b8fc4"); }).join(""), 110, FY);
+
+        /* v3: 26 of 100 guests as a 26%-wide share of one 100% bar (196 units; 26% = 50.96) */
+        s += G("helpRow", R(14, 155, 196, 13, "#5b8fc4", 3) + R(14, 155, 50.96, 13, K.orange, 3) + T(39.5, 165.5, "26%", 10, "#fff", "middle", 'class="vw-n"') + T(206, 165.5, "100% of guests", 10, "#fff", "end", 'class="vw-n"'), 112, 161);
         s += G("divert", [0, 1, 2].map(function (i) { return C(56 + i * 18, 288, 6.5, K.orange); }).join(""), 74, 288);
-        s += tok("t5", SX[2], K.navy);
+
         /* staff lane */
         s += G("desk", DESKK(120, 296), 120, 280);
         s += G("st2", AT(184, 300, GUY(K.green)), 184, 284) + G("st3", AT(212, 300, GUY(K.green)), 212, 284);
@@ -2729,7 +2844,8 @@
         s += PILL("pBefore", 112, 140, "Before implementing", K.navy, "#fff", 15);
         s += PILL("pEasy", 112, 108, "Easy case only", "#fff", K.slate, 15);
         s += G("spark", R(14, 92, 196, 66, "#fff", 8, 'stroke="#c9d3df" stroke-width="1.5"') + P("M24 140 H200", K.slate, 2, 'stroke-dasharray="5 5"') +
-          P("M24 142 L60 138 L84 140 L110 104 L130 100 L150 136 L200 140", K.orange, 3, 'data-draw="" pathLength="1"'), 112, 125);
+          P("M24 142 L60 138 L84 140 L110 104 L130 100 L150 136 L200 140", K.orange, 3, 'data-draw="" pathLength="1"') +
+          T(20, 104, "arrivals", 11, K.slate, "start") + T(156, 110, "peak", 12, K.orange, "start") + T(204, 153, "average", 11, K.slate, "end"), 112, 125);
         s += PILL("pPeak", 112, 108, "Peak demand", K.orange, "#fff", 15);
         s += PILL("pAvg", 112, 140, "Built for average", "#fff", K.red, 15);
         s += PILL("pCoord", 112, 108, "Still coordinated?", "#fff", K.plum, 15);
@@ -2755,7 +2871,7 @@
         s += PILL("pNext", 112, 108, "Next: decide", K.navy, "#fff", 16);
         /* top-right: test log */
         s += G("log", R(232, 46, 156, 128, "#fff", 8, 'stroke="' + K.ink + '" stroke-width="2"') + logRow(0, "Normal") + logRow(1, "Peak") + logRow(2, "Missing rate") + logRow(3, "Assistance") + logRow(4, "Outage"), 310, 110);
-        s += G("conf", R(240, 52, 140, 10, "#eef1f5", 5) + G("confF", R(240, 52, 140, 10, K.green, 5), 240, 57), 310, 57);
+        s += G("conf", R(240, 49, 140, 17, "#e3f3ea", 5, 'stroke="' + K.green + '" stroke-width="1.5"') + T(310, 61.5, "Confidence grows", 12, K.green, "middle", 'class="vw-n"'), 310, 57);
         /* judgement scale (replaces log late) */
         s += G("scale", R(232, 46, 156, 128, "#fff", 8, 'stroke="' + K.ink + '" stroke-width="2"') +
           G("beam", P("M248 92 H372", K.ink, 4) + P("M260 92 V112 M360 92 V112", K.ink, 2) + R(236, 112, 48, 26, "#e3f3ea", 6) + R(336, 112, 48, 26, "#fde3d6", 6) +
@@ -2764,9 +2880,9 @@
       },
       init: M(HID(["shine", "dashOver", "prep", "rateQ", "rateOk", "brk", "coordL", "crowd", "jam", "bus", "t3", "helpRow", "divert", "t5", "st2", "st3", "pile", "sweat", "queue", "flag", "bell", "keyR", "redFlags", "fog", "aTags", "aResp",
         "scnF", "sc1", "sc2", "sc3", "sc4", "sc5", "deck", "pLess", "pNot", "pReal", "pBefore", "pEasy", "spark", "pPeak", "pAvg", "pCoord", "pOver", "pWho", "pOwn", "pNobody", "pFront", "sayR", "sayH", "pChal", "p26", "pAll", "pStaff",
-        "pDep", "pKey", "pRev", "pEarly", "pTgt", "pClaim", "pUnc", "pAss", "pNext", "log", "lgOk0", "lgOk1", "lgOk2", "lgOk3", "lgOk4", "lgX0", "lgX1", "lgX2", "lgX3", "lgX4", "conf", "scale"]),
+        "pDep", "pKey", "pRev", "pEarly", "pTgt", "pClaim", "pUnc", "pAss", "pNext", "log", "lgOk0", "lgOk1", "lgOk2", "lgOk3", "lgOk4", "lgX0", "lgX1", "lgX2", "lgX3", "lgX4", "conf", "scale", "t3b", "t5"]),
         { pProp: { o: 0, s: 0.6 }, sPre: { o: 0, s: 0.4, f: "#fff" }, sRate: { o: 0, s: 0.4, f: "#fff" }, sRoom: { o: 0, s: 0.4, f: "#fff" }, sAcc: { o: 0, s: 0.4, f: "#fff" }, track: { o: 0 },
-          t1: { o: 0, x: 0 }, desk: { o: 0.35 }, hk: { o: 0.35 }, rev: { o: 0.35 }, confF: { sx: 0.05 }, beam: { r: 0 }, spark: { o: 0 },
+          t1: { o: 0, x: 0 }, desk: { o: 0.35 }, hk: { o: 0.35 }, rev: { o: 0.35 }, beam: { r: 0 }, spark: { o: 0 },
           lg0: { o: 0.35 }, lg1: { o: 0.35 }, lg2: { o: 0.35 }, lg3: { o: 0.35 }, lg4: { o: 0.35 } }),
       K: (function () {
         var TL = ["pProp", "pLess", "pNot", "pReal", "pBefore", "pEasy", "pPeak", "pAvg", "pCoord", "pOver", "pWho", "pOwn", "pNobody", "pFront", "sayR", "pChal", "p26", "pAll", "pStaff", "pDep", "pKey", "pRev", "pEarly", "pTgt", "pClaim", "pUnc", "pAss", "pNext", "deck", "spark"];
@@ -2781,18 +2897,18 @@
           { L: "Test realistic cases", dur: 1.2, a: M(tl(), OFF("dashOver"), ON("deck", "pReal", "log")), p: "log" },
           { L: "Test before implementing", a: M(tl(["deck"]), ON("pBefore"), { lg0: { o: 1 }, lg1: { o: 1, w: 0.1 }, lg2: { o: 1, w: 0.2 }, lg3: { o: 1, w: 0.3 }, lg4: { o: 1, w: 0.4 } }), p: "pBefore" },
           { L: "Test 1: normal guest", a: M(tl(), scn("sc1"), { t1: { o: 1 } }, st(GOOD, GOOD, GOOD, NEU)), e: "back", p: "sc1" },
-          { L: "Normal journey passes", dur: 2, a: M(tl(), { t1: { x: 378 } }, st(GOOD, GOOD, GOOD, GOOD), { lgOk0: { o: 1, w: 1.6 } }), e: "io", p: "lgOk0" },
+          { L: "Normal journey passes", dur: 2, a: M(tl(), { t1: { x: 362 } }, st(GOOD, GOOD, GOOD, GOOD), { lgOk0: { o: 1, w: 1.6 } }), e: "io", p: "lgOk0" },
           { L: "An easy case only", a: M(tl(), ON("pEasy"), { t1: { o: 0 } }, st()), p: "pEasy" },
           { L: "Test 2: coach arrivals", dur: 1.3, a: M(tl(), scn("sc2"), ON("bus", "crowd", "prep"), { sRoom: { f: BAD } }), e: "out", p: "bus" },
-          { L: "Peak demand", dur: 1.3, a: M(tl(), { spark: { o: 1 }, pPeak: { o: 1, w: 0.9 } }), p: "pPeak" },
+          { L: "Peak demand", dur: 1.3, a: M(tl(), { spark: { o: 1 } }), p: "spark" },
           { L: "Built for average fails", a: M(tl(), OFF("crowd", "bus"), ON("jam", "pAvg"), st(NEU, NEU, BAD, NEU)), fx: function (f) { f.kick("jam", 4, 0, 0); }, p: "jam" },
           { L: "Still coordinated?", a: M(tl(), ON("coordL", "pCoord"), { desk: { o: 1 }, sPre: { f: "#fff4cf" }, sRoom: { f: "#fff4cf" } }), p: "coordL" },
           { L: "One overloaded person", a: M(tl(), OFF("coordL"), ON("pile", "sweat", "pOver", "lgX1")), fx: function (f) { f.kick("desk", 3, 0, 0); }, p: "pile" },
-          { L: "Test 3: missing rate", dur: 1.3, a: M(tl(), scn("sc3"), OFF("jam", "prep", "pile", "sweat"), ON("rateQ", "t3"), { t3: { x: 124 } }, st(GOOD, BAD, NEU, NEU)), p: "rateQ" },
+          { L: "Test 3: missing rate", dur: 1.3, a: M(tl(), scn("sc3"), OFF("jam", "prep", "pile", "sweat"), ON("rateQ", "t3"), { t3: { x: 109 } }, st(GOOD, BAD, NEU, NEU)), p: "rateQ" },
           { L: "Who investigates?", a: M(tl(), ON("pWho"), { rev: { o: 1 }, desk: { o: 1 } }), fx: function (f) { f.kick("t3", 3, 0, 0); }, p: "pWho" },
-          { L: "Ownership, defined", dur: 1.6, a: M(tl(), ON("flag", "pOwn", "rateOk"), { rateQ: { o: 0 }, t3: { x: 378, w: 0.7 } }, st(GOOD, GOOD, GOOD, GOOD), { lgOk2: { o: 1, w: 1.2 } }), p: "flag" },
-          { L: "Nobody owns it", a: M(tl(), OFF("flag", "rateOk", "lgOk2"), ON("rateQ", "bell", "pNobody", "lgX2"), { t3: { x: 124 } }, st(GOOD, BAD, NEU, NEU)), fx: function (f) { f.kick("bell", 0, 0, 18); }, p: "bell" },
-          { L: "Frontline staff test", a: M(tl(), OFF("bell", "rateQ", "t3"), ON("pFront"), { hk: { o: 1 }, desk: { o: 1 }, rev: { o: 0.35 } }, st()), p: ["desk", "hk"] },
+          { L: "Ownership, defined", dur: 1.6, a: M(tl(), ON("flag", "pOwn", "rateOk"), { rateQ: { o: 0 }, t3: { x: 362, w: 0.7 } }, st(GOOD, GOOD, GOOD, GOOD), { lgOk2: { o: 1, w: 1.2 } }), p: "flag" },
+          { L: "Nobody owns it", a: M(tl(), OFF("flag", "rateOk", "lgOk2"), ON("rateQ", "bell", "pNobody", "lgX2", "t3b"), { t3: { o: 0 } }, st(GOOD, BAD, NEU, NEU)), fx: function (f) { f.kick("bell", 0, 0, 18); }, p: "bell" },
+          { L: "Frontline staff test", a: M(tl(), OFF("bell", "rateQ", "t3", "t3b"), ON("pFront"), { hk: { o: 1 }, desk: { o: 1 }, rev: { o: 0.35 } }, st()), p: ["desk", "hk"] },
           { L: "They know the reality", a: M(tl(["pFront"]), ON("sayR", "sayH")), p: ["sayR", "sayH"] },
           { L: "Challenge early", a: M(tl(), OFF("sayH"), ON("redFlags", "pChal")), p: "redFlags" },
           { L: "Test 4: 26% need help", dur: 1.3, a: M(tl(), OFF("redFlags"), scn("sc4"), ON("helpRow", "p26")), p: "helpRow" },
@@ -2803,11 +2919,11 @@
           { L: "Revise the design", a: M(tl(), scn(null), OFF("brk", "t5", "keyR"), ON("pRev", "aTags"), st(), { sRoom: { s: 1.12 } }), e: "back", p: "pRev" },
           { L: "Better found now", a: M(tl(), ON("pEarly"), { sRoom: { s: 1 } }), p: "pEarly" },
           { L: "Times stay targets", a: M(tl(), OFF("aTags"), ON("pTgt", "conf")), p: "pTgt" },
-          { L: "Confidence, not claims", dur: 1.3, a: M(tl(["pTgt"]), ON("pClaim"), { confF: { sx: 0.7 } }), p: "conf" },
-          { L: "Weigh gain against cost", dur: 1.3, a: M(tl(), OFF("log", "conf"), ON("scale"), { beam: { r: -8, w: 0.4 } }), p: "scale" },
+          { L: "Confidence, not claims", dur: 1.3, a: M(tl(["pTgt"]), ON("pClaim")), p: "conf" },
+          { L: "Weigh gain against cost", dur: 1.3, a: M(tl(), OFF("log", "conf"), ON("scale"), { beam: { r: 0 } }), p: "scale" },
           { L: "Some uncertainty stays", a: M(tl(), ON("fog", "pUnc")), p: "fog" },
           { L: "Know your assumptions", a: M(tl(), OFF("fog"), ON("aTags", "pAss"), { aResp: { o: 1, w: 0.5 } }), p: "aTags" },
-          { L: "Next: defend a decision", a: M(tl(), ON("pNext"), { beam: { r: -14 } }), e: "back", p: "pNext" }
+          { L: "Next: defend a decision", a: M(tl(), ON("pNext")), e: "back", p: "pNext" }
         ];
       })()
     });
@@ -2842,12 +2958,14 @@
         E1 += G("you", AT(200, 270, GUY(K.orange), 1.3), 200, 246);
         E1 += PILL("pDef", 200, 64, "A decision to defend", K.navy, "#fff", 15);
         E1 += PILL("pWhich", 200, 196, "Which, and why?", "#fff", K.ink, 15, 'stroke="' + K.ink + '" stroke-width="1.5"');
-        E1 += G("ruler", P("M110 280 H384", K.ink, 2) + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (k) { return P("M" + (110 + k * 33.4) + " 274 V286", K.ink, 1.6); }).join(""), 247, 280);
+        /* v3: zero-based minute axis, 3.34 units per minute (82 = 274, 44 = 147, 22 = 73.5), labelled every 20 min */
+        E1 += G("ruler", P("M110 88 V280 H384", K.ink, 2) + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (k) { return P("M" + r2(110 + k * 33.41) + " 276 V286", K.ink, 1.6); }).join("") +
+          [0, 20, 40, 60].map(function (m) { return T(r2(110 + m * 3.341), 270, String(m), 11, K.slate); }).join("") + T(390, 270, "80 min", 11, K.slate, "end"), 247, 280);
         E1 += G("rowL", T(14, 112, "Today", 15, K.ink, "start") + T(14, 172, "Design A", 15, K.navy, "start") + T(14, 232, "Design B", 15, K.green, "start"), 50, 170);
         E1 += hbar("bT", 106, 274, "#9aa7b8") + hbar("bA", 166, 147, K.navy, true) + hbar("bB", 226, 73, K.green, true);
         E1 += G("vT", T(380, 86, "82 min", 15, K.ink, "end"), 360, 88) + G("vA", T(264, 171, "44 modelled", 15, K.navy, "start"), 310, 166) + G("vB", T(192, 231, "22 modelled", 15, K.green, "start"), 240, 226);
-        E1 += G("cut", R(227, 93, 157, 26, K.orange, 5) + T(305, 111, "47-min wait", 15, "#fff", "middle", 'class="vw-n"'), 305, 106);
-        E1 += G("cutX", TAGX(240, 166) + TAGX(200, 226), 220, 196);
+        E1 += G("cut", R(110, 124, 157, 15, K.orange, 3) + T(188.5, 135.5, "47-min approval wait", 11, "#fff", "middle", 'class="vw-n"'), 188, 131);
+        E1 += G("cutX", HOURG(366, 166) + TAGX(382, 158) + HOURG(296, 226) + TAGX(312, 218), 340, 196);
         E1 += PILL("pBoth", 200, 300, "Both remove it", K.orange, "#fff", 15);
         E1 += PILL("pYard", 247, 300, "Lobby to room", "#fff", K.ink, 15);
         /* pA */
@@ -2868,13 +2986,15 @@
         Tt += G("tCard1", R(20, 56, 170, 44, "#fff", 10, 'stroke="' + K.orange + '" stroke-width="2.5"') + T(105, 84, "26% need help", 15, K.orange, "middle", 'class="vw-n"'), 105, 78);
         Tt += G("tCard2", R(210, 56, 170, 44, "#fff", 10, 'stroke="' + K.red + '" stroke-width="2.5"') + T(295, 84, "January rule", 15, K.red, "middle", 'class="vw-n"'), 295, 78);
         Tt += G("objs", (function () { var s = ""; for (i = 0; i < 9; i++) s += G("ob" + i, R(26 + i * 18, 118, 14, 12, i < 7 ? K.orange : "#9aa7b8", 3, 'data-f=""') + F("M" + (30 + i * 18) + " 130 l-2 5 l6 -5Z", i < 7 ? K.orange : "#9aa7b8"), 33 + i * 18, 124); return s; })(), 105, 124);
-        Tt += G("helpG", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (k) { return C(30 + k * 16, 168, 6, k < 3 ? K.orange : "#5b8fc4"); }).join(""), 102, 168);
+        Tt += G("helpG", R(26, 160, 160, 16, "#5b8fc4", 3) + R(26, 160, 41.6, 16, K.orange, 3) + T(46.8, 172, "26%", 11, "#fff", "middle", 'class="vw-n"') + T(182, 172, "of guests", 11, "#fff", "end", 'class="vw-n"'), 106, 168);
         Tt += PILL("p7of9", 105, 204, "7 of 9 objections", K.orange, "#fff", 15);
         Tt += G("magT", AT(80, 168, C(0, 0, 24, "rgba(255,255,255,.35)", 'stroke="' + K.ink + '" stroke-width="3.5"') + P("M17 17 L30 30", K.ink, 5)), 80, 168);
         Tt += PILL("pFlaw", 105, 240, "Flaw or visible?", "#fff", K.ink, 15);
         Tt += G("peakT", AT(60, 290, R(-24, -12, 48, 24, "#b98b5e", 4) + AT(0, -12, GUY(K.green), 0.7)) + AT(110, 300, GUY(K.green), 0.8) + [0, 1, 2].map(function (k) { return C(150 + k * 14, 290, 6, K.orange); }).join("") + TAGOK(196, 276), 120, 284);
         Tt += PILL("pPeak", 105, 240, "Test at peak", K.green, "#fff", 15);
-        Tt += G("tl", P("M214 200 H382", K.ink, 2.5) + C(214, 200, 5, K.ink) + T(214, 226, "Now", 15, K.ink), 298, 200);
+        /* v3: month ticks: Now at x214, January (11 months) at x362 = 13.45 units per month */
+        Tt += G("tl", P("M214 200 H382", K.ink, 2.5) + C(214, 200, 5, K.ink) + (function () { var t = ""; for (var m = 1; m <= 12; m++) t += P("M" + r2(214 + m * 148 / 11) + " 196 V204", K.ink, 1.5); return t; })() +
+          T(214, 226, "Now", 15, K.ink) + T(r2(214 + 6 * 148 / 11), 222, "6", 12, K.slate) + T(362, 222, "11 mo", 12, K.red), 298, 200);
         Tt += G("janPin", P("M362 160 V210", K.red, 3) + R(330, 140, 64, 22, K.red, 6) + T(362, 156, "Jan", 15, "#fff", "middle", 'class="vw-n"'), 362, 175);
         Tt += G("bWork", R(222, 178, 140, 14, K.green, 5), 292, 185);
         Tt += PILL("p11", 290, 248, "11 months away", "#fff", K.red, 15);
@@ -2977,10 +3097,12 @@
         s += PILL("pUse", 270, 270, "Usable form needed", K.orange, "#fff", 15);
         /* dossier */
         s += G("doss", R(8, 50, 152, 196, "#e9dcc3", 10, 'stroke="#b39b6e" stroke-width="2"') + T(84, 72, "Handover", 15, "#6d5530", "middle", 'class="vw-n"') + R(60, 46, 48, 8, "#b39b6e", 3), 84, 148);
+        var OWN = ["People & Develop", "Project leaders", "Realize Value", "People & Develop", "Implement"];
         TABS.forEach(function (t, i) {
           var y = 98 + i * 34;
           s += G(t[0], R(14, y - 14, 140, 28, "#fff", 6, 'data-f="" stroke="#b39b6e" stroke-width="1.5"') + C(28, y, 9, K.navy) + T(28, y + 5, String(i + 1), 13.5, "#fff", "middle", 'class="vw-n"').replace('font-size="13.5"', 'font-size="15"') + T(42, y + 5, t[1], 15, K.ink, "start"), 84, y);
-          s += G("ow" + i, AT(174, y + 2, C(0, -4, 4, K.green) + F("M-6 6 Q-6 -1 0 -1 Q6 -1 6 6Z", K.green)), 174, y);
+          /* v3: each item names the downstream team that owns it */
+          s += G("ow" + i, AT(174, y + 2, C(0, -4, 4, K.green) + F("M-6 6 Q-6 -1 0 -1 Q6 -1 6 6Z", K.green)) + T(184, y + 5, OWN[i], 12, K.green, "start"), 174, y);
           s += G("qq" + i, C(174, y, 9, "#fff", 'stroke="' + K.orange + '" stroke-width="2"') + T(174, y + 5, "?", 15, K.orange, "middle", 'class="vw-n"'), 174, y);
         });
         /* viewer frame */
@@ -2999,10 +3121,10 @@
           }).join("") + G("trace", P("M336 84 V196", K.green, 3) + TAGOK(336, 214) + T(282, 246, "Reasons kept", 15, K.green), 320, 214);
         s += G("v2", v2, 279, 158);
         /* v3 target */
-        var v3 = T(176, 92, "Baseline", 15, K.ink, "start") + G("b82", R(176, 100, 208, 24, "#9aa7b8", 5), 176, 112) + G("l82", T(380, 118, "82", 15, "#fff", "end", 'class="vw-n"'), 370, 112) +
-          T(176, 150, "Target", 15, K.green, "start") + G("b22", R(176, 158, 56, 24, "none", 5, 'stroke="' + K.green + '" stroke-width="2.5" stroke-dasharray="6 4"'), 176, 170) + G("l22", T(240, 176, "22", 15, K.green, "start"), 250, 170) +
+        var v3 = T(176, 92, "Baseline", 15, K.ink, "start") + G("b82", R(176, 100, 208, 24, "#9aa7b8", 5), 176, 112) + G("l82", T(380, 118, "82 min", 15, "#fff", "end", 'class="vw-n"'), 360, 112) +
+          T(176, 150, "Target", 15, K.green, "start") + G("b22", R(176, 158, 56, 24, "none", 5, 'stroke="' + K.green + '" stroke-width="2.5" stroke-dasharray="6 4"'), 176, 170) + G("l22", T(240, 176, "22 min", 15, K.green, "start"), 262, 170) +
           G("tags3", T(300, 92, "measured", 15, K.slate, "middle") + T(300, 150, "modelled", 15, K.green, "middle"), 300, 120) +
-          G("ruler3", P("M176 206 H384", K.ink, 2) + [0, 1, 2, 3, 4, 5, 6].map(function (k) { return P("M" + (176 + k * 34.7) + " 200 V212", K.ink, 1.5); }).join("") + T(280, 230, "Lobby to room", 15, K.ink), 280, 214) +
+          G("ruler3", P("M176 206 H384", K.ink, 2) + [0, 20, 40, 60, 80].map(function (m) { var x = r2(176 + m * 208 / 82); return P("M" + x + " 200 V212", K.ink, 1.5) + T(x, 196, String(m), 11, K.slate); }).join("") + T(280, 230, "Lobby to room, minutes", 14, K.ink), 280, 214) +
           G("rvMag", AT(214, 170, C(0, 0, 20, "rgba(255,255,255,.35)", 'stroke="' + K.ink + '" stroke-width="3"') + P("M14 14 L26 26", K.ink, 4)), 214, 170) +
           G("easy", R(176, 238, 60, 20, "#fde3d6", 5) + T(244, 253, "Desk time", 15, K.red, "start") + TAGX(340, 248), 260, 248);
         s += G("v3", v3, 279, 158);
@@ -3051,7 +3173,7 @@
           { L: "2. Options considered", a: M(pb(), tab("t2"), view("v2")), p: "t2" },
           { L: "A traceable choice", a: M(pb("pDM"), ON("trace")), p: "trace" },
           { L: "3. A measurable target", a: M(pb(), tab("t3"), view("v3")), p: "t3" },
-          { L: "82 today, 22 modelled", dur: 1.4, a: M(pb(), { b82: { sx: 1 }, l82: { o: 1, w: 0.8 }, b22: { sx: 1, w: 0.4 }, l22: { o: 1, w: 1 } }), e: "out", p: "b22" },
+          { L: "82 today, 22 modelled", dur: 1.4, a: M(pb(), { b82: { sx: 1 }, l82: { o: 1, w: 0.8 }, b22: { sx: 1, w: 0.4 }, l22: { o: 1, w: 1 }, ruler3: { o: 1, w: 0.2 } }), e: "out", p: "b22" },
           { L: "Baseline vs target", a: M(pb(), ON("tags3")), p: "tags3" },
           { L: "Realize Value checks it", a: M(pb("pRV"), ON("rvMag")), p: "rvMag" },
           { L: "Same lobby-to-room measure", a: M(pb("pSame"), OFF("rvMag"), ON("ruler3")), p: "ruler3" },
@@ -3067,7 +3189,7 @@
           { L: "Not proven yet", dur: 1.6, a: M(pb("pNot"), tab(null), view("vEnd"), { vf: { o: 1 }, ph0: { f: "#ffd479" }, pkt: { o: 1, y: 0 } }), p: "ph0" },
           { L: "Next: the People phase", dur: 1.2, a: M(pb("pPeople"), { ph0: { f: "#fff" }, ph1: { f: "#ffd479" }, pkt: { y: 38 } }), p: "ph1" },
           { L: "Forum: a new case", a: M(pb("pForum"), view(null), OFF("pkt"), ON("forum")), e: "back", p: "forum" },
-          { L: "Defend your ambition", dur: 1.2, a: M(pb("pDefend"), ON("scaleE"), { forum: { o: 0.3 } }), e: "back", fx: function (f) { f.kick("scaleE", 0, 0, 3); }, p: "scaleE" }
+          { L: "Defend your ambition", dur: 1.2, a: M(pb("pDefend"), ON("scaleE"), { forum: { o: 0.3 } }), e: "back", p: "scaleE" }
         ];
       })()
     });

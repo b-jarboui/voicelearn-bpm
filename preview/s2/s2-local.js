@@ -363,7 +363,7 @@ function renderSelectRequirement(result, contract) {
       <p class="ev-opt">${index + 1}. ${esc(item.option.name)} — your choice</p>
       <p class="ev-quote">“${esc(item.clause)}”</p>
       ${contract.choiceNeeds ? item.attachment
-        ? `<p class="ev-risk"><span>${esc(attachmentLabel(contract))}</span>${esc(item.attachment)}</p>`
+        ? `<p class="ev-risk"><span>${esc(attachmentLabel(contract))}:</span> ${esc(item.attachment)}</p>`
         : `<p class="ev-none">The app did not find ${esc(contract.choiceNeeds)} close to this choice. It may be phrased in a way the local checker cannot recognise.</p>` : ""}
     </li>`).join("");
 
@@ -371,7 +371,7 @@ function renderSelectRequirement(result, contract) {
       <p class="ev-opt">${esc(item.option.name)} — addressed</p>
       <p class="ev-quote">“${esc(item.clause)}”</p>
       ${contract.choiceNeeds ? item.attachment
-        ? `<p class="ev-risk"><span>${esc(attachmentLabel(contract))}</span>${esc(item.attachment)}</p>`
+        ? `<p class="ev-risk"><span>${esc(attachmentLabel(contract))}:</span> ${esc(item.attachment)}</p>`
         : `<p class="ev-none">This item is named, but the local checker could not reliably extract ${esc(contract.choiceNeeds)}.</p>` : ""}
     </li>`).join("");
 
