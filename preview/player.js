@@ -200,10 +200,16 @@
   // REC_RATE = the speed the clips were recorded at. Near it (the default 1x, and 0.95) a clip plays untouched, because
   // browser time-stretching adds an audible wobble; only a clearly different speed is stretched. REC_V busts phone caches.
   let REC = null, REC_RATE = 1, REC_V = 1;
-  fetch(REC_DIR + "index.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && Array.isArray(j.files)) { REC = new Set(j.files); REC_RATE = Number(j.rate) || 1; REC_V = j.v || 1; try { bar(); } catch (e) {} } }).catch(() => {});
+  let recReady = false;
+  const recordingIndex = Promise.race([
+    fetch(REC_DIR + "index.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    new Promise(resolve => setTimeout(() => resolve(null), 2500))
+  ]).then((j) => { if (j && Array.isArray(j.files)) { REC = new Set(j.files); REC_RATE = Number(j.rate) || 1; REC_V = j.v || 1; } recReady = true; try { bar(); } catch (e) {} });
   const AUD = new Audio(), PRE = new Audio();
   AUD.preload = "auto"; PRE.preload = "auto";
   const recUrl = (h) => REC_DIR + h + ".mp3?v=" + REC_V;
+  const recordedRate = () => { const r = VS.rate / REC_RATE; return Math.abs(r - 1) <= 0.06 ? 1 : r; };
+  let speechRun = null;
   // A recorded sentence is one clip, or two: an answer-letter lead-in ("B.", "Not quite. The answer is B.") and the option
   // text, recorded once instead of once per shuffled letter.
   const recFor = (s) => {
@@ -219,7 +225,7 @@
   };
   // ---------- pacing (all pauses in one place, milliseconds) ----------
   const PACE = {
-    lead: 200,       // the visual appears, then this short beat, then the voice (never longer than the gap itself)
+    lead: 200,       // queue the next utterance within the gap; reveal it only when playback starts
     sentence: 200,   // pause between sentences of the same paragraph (talking, not a list)
     join: 28,        // two short sentences of the same moment are spoken as ONE utterance when together ≤ this many words
     moment: 600,    // pause before a sentence that brings in a new visual moment
@@ -258,8 +264,8 @@
     document.body.appendChild(tapBtn);
     bar();
   }
-  // Speak list[from..] as complete sentences: show the sentence's visual, a short beat, speak it, wait for the engine's
-  // "end", pause, then the next one. Never splits a sentence. For flowing narration, two short consecutive sentences of the
+  // Speak list[from..] as complete sentences: reveal each sentence at the recording/engine's start,
+  // wait for its "end", pause, then the next one. Never splits a sentence. For flowing narration, two short consecutive sentences of the
   // same moment (opts.canJoin(k) = sentence k+1 brings no new visual) are spoken as ONE utterance so the intonation carries;
   // the second caption/visual appears at the word boundary where it starts (or at an estimated time on engines without
   // boundary events, e.g. Android and network voices). The step only moves on after the last sentence has been spoken.
@@ -267,28 +273,59 @@
   const IS_CHROME_DESKTOP = /Chrome\//.test(UA) && !IS_EDGE && !IS_ANDROID && !/CriOS|OPR\//.test(UA);
   const ENDS = /[.!?…]["'”’)\]]*$/;
   function speak(list, from, onSentence, onDone, opts = {}) {
-    const my = ++tok; cancelSpeech();
-    const later = (ms, f) => setTimeout(() => { if (my === tok) f(); }, ms);
+    stopSpeech();
+    const my = tok, context = cur(), part = P.part, timers = new Set();
+    let shown = -1;
+    const announce = k => { if (shown !== k) { shown = k; onSentence(k); } };
+    const arm = task => {
+      task.started = performance.now();
+      task.id = setTimeout(() => { timers.delete(task); if (my === tok && !run.paused) task.f(); }, task.left);
+    };
+    const later = (ms, f) => { const task = { left: Math.max(0, ms), f }; timers.add(task); if (!run.paused) arm(task); };
+    const run = speechRun = {
+      paused: false, recorded: false, engine: "gap", resumeAudio: false, savedSentence: from,
+      matches: () => context === cur() && part === P.part && run.savedSentence === P.sent && list.join("\n") === (P.part === "feedback" ? script.feedback : script.main)?.join("\n"),
+      cancel: () => { timers.forEach(t => clearTimeout(t.id)); timers.clear(); AUD.onplaying = AUD.onended = AUD.onerror = null; },
+      pause: () => {
+        run.paused = true; run.savedSentence = P.sent;
+        timers.forEach(t => { clearTimeout(t.id); t.left = Math.max(0, t.left - (performance.now() - t.started)); });
+        run.resumeAudio = run.recorded && !AUD.ended;
+        if (run.resumeAudio) AUD.pause();
+        else if (synth?.speaking) synth.pause();
+      },
+      resume: () => {
+        run.paused = false;
+        if (run.engine !== "device" && synth && (synth.speaking || synth.pending)) synth.cancel();
+        timers.forEach(arm);
+        if (run.resumeAudio) { AUD.playbackRate = recordedRate(); AUD.play().catch(e => { if (my === tok && e.name === "NotAllowedError") needTap("not-allowed"); }); }
+        else if (synth?.paused) synth.resume();
+      }
+    };
+    const complete = () => { if (my !== tok) return; run.cancel(); speechRun = null; onDone(); };
     const gapAfter = opts.gapAfter || (() => PACE.sentence);
     const canJoin = opts.canJoin || (() => false);
     let i = from;
     // How many sentences (1 or 2) the utterance starting at k carries.
-    const group = (k) => (!FAST && !silent && VS.mode !== "captions" && synth && k + 1 < list.length && canJoin(k) && !recFor(list[k]) && !recFor(list[k + 1]) &&
+    const group = (k) => (!FAST && !silent && VS.mode !== "captions" && (VS.mode !== "voice" || recReady) && synth && k + 1 < list.length && canJoin(k) && !recFor(list[k]) && !recFor(list[k + 1]) &&
       ENDS.test(String(list[k]).trim()) && words(list[k]) + words(list[k + 1]) <= PACE.join ? 2 : 1);
-    const next = (lead, sync) => { if (i >= list.length) return onDone(); const k = i, n = group(k); i += n; onSentence(k); if (sync && !FAST) return say(k, n, 0); later(FAST ? 40 : lead, () => say(k, n, 0)); };
+    const next = (lead, sync) => { if (i >= list.length) return complete(); const k = i, n = group(k); i += n; if (sync && !FAST) return say(k, n, 0); later(FAST ? 40 : lead, () => say(k, n, 0)); };
     // The silence between two utterances equals the gap (the lead beat before the voice is part of it).
     const after = (last) => {
+      run.engine = "gap";
       const gap = last + 1 < list.length ? gapAfter(last) : PACE.sentence, lead = Math.min(PACE.lead, gap);
       later(FAST ? 60 : Math.max(0, gap - lead), () => next(lead));
     };
     // Recorded sentence: play its MP3 at the chosen speed, then the usual pause. A file that fails falls back to the device voice.
     const playRec = (k, hs) => {
-      let ended = false, j = 0;
-      const fail = (why) => { if (ended) return; ended = true; log("rec-" + why); hs.forEach((h) => REC.delete(h)); if (my === tok) say(k, 1, 0); };
+      let ended = false, j = 0, lastTime = -1, stalled = 0;
+      run.recorded = true; run.engine = "recorded";
+      const fail = (why) => { if (ended || my !== tok) return; ended = true; run.recorded = false; run.resumeAudio = false; AUD.onplaying = AUD.onended = AUD.onerror = null; AUD.pause(); log("rec-" + why); REC.delete(hs[j]); later(0, () => say(k, 1, 0)); };
       const clip = () => {
-        AUD.src = recUrl(hs[j]); const pr = VS.rate / REC_RATE; AUD.playbackRate = Math.abs(pr - 1) <= 0.06 ? 1 : pr; AUD.preservesPitch = true; AUD.volume = window.__vlMute ? 0 : 1;
+        if (my !== tok || ended) return;
+        lastTime = -1; stalled = 0;
+        AUD.src = recUrl(hs[j]); AUD.playbackRate = recordedRate(); AUD.preservesPitch = true; AUD.volume = window.__vlMute ? 0 : 1;
         const p = AUD.play();
-        if (p && p.then) p.then(() => { spoken = true; log("rec-start"); }).catch((e) => {
+        if (p && p.then) p.then(() => { if (my === tok && !ended) { spoken = true; log("rec-start"); } }).catch((e) => {
           if (ended || my !== tok) return;
           if (e && e.name === "NotAllowedError") { ended = true; return needTap("not-allowed"); }
           if (e && e.name === "AbortError") return; // replaced by a newer sentence
@@ -296,20 +333,32 @@
         });
         if (j + 1 < hs.length) { PRE.src = recUrl(hs[j + 1]); PRE.load(); }
       };
-      AUD.onended = () => { if (ended || my !== tok) return; if (++j < hs.length) return clip(); ended = true; after(k); };
+      AUD.onplaying = () => { if (!ended && my === tok && !run.paused) announce(k); };
+      AUD.onended = () => { if (ended || my !== tok) return; if (++j < hs.length) return clip(); ended = true; run.recorded = false; run.resumeAudio = false; after(k); };
       AUD.onerror = () => fail("error");
       clip();
       const nh = k + 1 < list.length && recFor(list[k + 1]); if (nh && hs.length === 1) { PRE.src = recUrl(nh[0]); PRE.load(); } // warm the next file
-      later(Math.max(15000, speakMs(list[k]) * 3 + 5000), () => { if (!ended) { ended = true; log("rec-no-end"); AUD.pause(); after(k); } });
+      // A missing/stalled file must fall back, never silently skip a sentence. This clock
+      // is suspended with the transport and follows actual playback, including speed changes.
+      const watch = () => {
+        if (ended || my !== tok) return;
+        stalled = AUD.currentTime === lastTime ? stalled + 1000 : 0;
+        lastTime = AUD.currentTime;
+        if (stalled >= 4000) return fail("stalled");
+        later(1000, watch);
+      };
+      later(1000, watch);
     };
     // Reading pace (captions only / no voice): each sentence shown for its own reading time.
-    const readOut = (k, n, wait = 0) => later(Math.max(0, readMs(list[k]) - wait), () => { if (n === 2) { onSentence(k + 1); later(readMs(list[k + 1]), () => after(k + 1)); } else after(k); });
+    const readOut = (k, n, wait = 0) => { run.engine = "reading"; announce(k); later(Math.max(0, readMs(list[k]) - wait), () => { if (n === 2) { announce(k + 1); later(readMs(list[k + 1]), () => after(k + 1)); } else after(k); }); };
     const say = (k, n, attempt) => {
-      if (FAST) return later(120, () => { if (n === 2) onSentence(k + 1); after(k + n - 1); });
+      if (FAST) { announce(k); return later(120, () => { if (n === 2) announce(k + 1); after(k + n - 1); }); }
       if (VS.mode === "captions") return readOut(k, n);
+      if (VS.mode === "voice" && !recReady) return recordingIndex.then(() => { if (my === tok) later(0, () => say(k, n, attempt)); });
       const rh = n === 1 && recFor(list[k]);
       if (rh) return playRec(k, rh);
       if (silent) return readOut(k, n);
+      run.engine = "device";
       const parts = list.slice(k, k + n).map(sayText), text = parts.join(" "), split = parts[0].length + 1;
       const u = new SpeechSynthesisUtterance(text);
       const v = voice();
@@ -318,14 +367,16 @@
       window.__vlU = u; // keep a reference so the engine cannot lose the utterance before it starts
      
       let started = false, ended = false, words0 = 0, second = n === 1, keep = 0; const t0 = performance.now();
-      const showSecond = () => { if (second || my !== tok) return; second = true; onSentence(k + 1); log("join"); };
+      const showSecond = () => { if (second || my !== tok) return; second = true; announce(k + 1); log("join"); };
       const done = () => { clearInterval(keep); if (!second) showSecond(); };
       u.onstart = () => {
+        if (my !== tok) return;
+        announce(k);
         started = true; spoken = true; noStart = 0; log("start");
         // Engines without boundary events: show the second sentence at its estimated start.
         if (n === 2) later(speakMs(list[k]) * 0.92, () => { if (!words0) showSecond(); });
         // Chrome desktop cuts network (Google) voices after ~15 s: a pause/resume every 10 s keeps them talking.
-        if (IS_CHROME_DESKTOP && v && !v.localService) keep = setInterval(() => { if (my !== tok || ended) return clearInterval(keep); if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); } }, 10000);
+        if (IS_CHROME_DESKTOP && v && !v.localService) keep = setInterval(() => { if (my !== tok || ended) return clearInterval(keep); if (!run.paused && synth.speaking && !synth.paused) { synth.pause(); synth.resume(); } }, 10000);
       };
       u.onboundary = (e) => { words0++; if (n === 2 && e.charIndex >= split) showSecond(); };
       u.onend = () => { if (ended) return; ended = true; done(); log(`end ${Math.round(performance.now() - t0)}ms ${words0}w`); if (my === tok) after(k + n - 1); };
@@ -374,11 +425,11 @@
   let lastCancel = -1e9;
   // Only cancel when the engine has something to cancel (a needless cancel() can wedge Chrome's engine); remember when.
   function cancelSpeech(force) { try { AUD.pause(); } catch (e) {} if (!synth) return; try { if (force || synth.speaking || synth.pending) { synth.cancel(); lastCancel = performance.now(); } } catch (e) {} }
-  const stopSpeech = () => { tok++; cancelSpeech(); };
+  const stopSpeech = () => { tok++; if (speechRun) speechRun.cancel(); speechRun = null; cancelSpeech(); };
 
   let wake = null;
   async function keepAwake() { try { if (!wake && "wakeLock" in navigator && !document.hidden) { wake = await navigator.wakeLock.request("screen"); wake.onrelease = () => (wake = null); } } catch (e) {} }
-  document.addEventListener("visibilitychange", () => { if (!document.hidden && playing) { keepAwake(); play(); } });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && playing) keepAwake(); });
 
   // ---------- views ----------
   const stageEl = document.createElement("div");
@@ -399,6 +450,7 @@
   function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); }
   function loadLook(key, lessonLabel, title, body) {
     const s = lookStyle(), moments = window.MOMENTS && MOMENTS[key];
+    if (window.W10_SCENES_HOST) W10_SCENES_HOST.release();
     look = null;
     if (!s || !moments) { showLook(false); return false; }
     showLook(true);
@@ -491,7 +543,7 @@
     $("status").textContent = `${where} · ${waiting ? "Your answer" : playing ? (VS.mode === "captions" ? "Captions only" : silent && !REC ? "Reading pace (no voice)" : "Playing") : "Paused"}`;
     updateNavigation();updateSkipButton();updateListenControls();updateMediaSession();
   }
-  const caption = (t) => { const cc = $("cc"); if (cc) cc.textContent = t || ""; };
+  const caption = (t) => { const cc = $("cc"); if (cc) { cc.textContent = t || ""; cc.scrollTop = 0; } };
   const capOf = (l) => `<b>Lesson ${l + 1}</b> · ${esc(C.lessons[l].title)}`;
 
   // ---------- build the current step ----------
@@ -515,7 +567,7 @@
       script = { main: [`A fresh look at ${A.sections[st.sec].name.toLowerCase()}.`].concat(body), offset: 1 };
       if (!loadLook(`review:${st.sec}:${st.v}`, `Fresh explanation · ${A.sections[st.sec].name}`, r.title, body))
         Scenes.loadBeats(`<b>Review</b> · ${esc(A.sections[st.sec].name)}`, "", [{ at: 0, html: `<h2 class="st-h">${esc(r.title)}</h2>` }]);
-    } else { look = null; showLook(false); }
+    } else { if (window.W10_SCENES_HOST) W10_SCENES_HOST.release(); look = null; showLook(false); }
     if (st.kind === "quiz") {
       if (!st.qs) { st.qs = st.sec ? partCheck(st.l, st.sec) : firstCheck(st.l); save(); }
       // never re-ask an item this learner has already answered
@@ -801,6 +853,7 @@
     if (!spoken && !FAST && (REC || (synth && !silent)) && VS.mode !== "captions" && !gesture) return needTap("no-gesture");
     hideTap();
     playing = true; waiting = false; keepAwake(); bar();
+    if (speechRun?.paused && speechRun.matches()) { speechRun.resume(); return; }
     const st = cur();
     const list = P.part === "feedback" ? script.feedback : script.main;
     if (!list) { P.part = "main"; P.sent = 0; return play(); }
@@ -814,6 +867,7 @@
     speak(list, P.sent, (i) => {
       P.sent = i; save(); caption(list[i]);
       if (P.part === "main") vstep(i - script.offset);
+      updateNavigation();
     }, () => {
       if (st.kind === "quiz" && P.part === "main") {
         playing = false; waiting = true; P.sent = 0; save();
@@ -849,7 +903,7 @@
     if(listenOnly&&notePending){notePending=false;const cc=$("cc");if(cc)cc.textContent="We will save the questions for later.";}
     play();
   }
-  function pause() { playing = false; stopSpeech(); hideTap(); bar(); }
+  function pause() { playing = false; if (speechRun && !speechRun.paused) speechRun.pause(); hideTap(); bar(); }
 
   mediaAction("play",()=>{if(view==="player")play(true);});mediaAction("pause",()=>{if(view==="player")pause();});mediaAction("nexttrack",handsFreeNext);
   $("skipQuestion").onclick=()=>skipQuestion(false);
@@ -890,7 +944,7 @@
     if (n && SLOG.length) n.textContent += ` (engine: ${SLOG.slice(-4).join(", ")})`;
   }
   const showRate = () => { $("vRateOut").textContent = VS.rate.toFixed(2).replace(/0$/, "") + "×"; };
-  const applyLive = () => { if (playing) play(); };
+  const applyLive = () => { if (speechRun?.engine === "device") { const resume = playing; stopSpeech(); if (resume) play(); } };
   const showPitch = () => { $("vPitchOut").textContent = VS.pitch < 0.95 ? "deeper" : VS.pitch > 1.05 ? "higher" : "normal"; };
   $("vLook").onchange = (e) => {
     VS.look = e.target.value; saveVS();
@@ -900,11 +954,11 @@
     const st = cur();
     updateLookClass();
     if (st.kind !== "sec" && st.kind !== "review") return;
-    const wasPlaying = playing; if (wasPlaying) stopSpeech();
+    const wasPlaying = playing;
     load();
-    if (wasPlaying) play(); else vstep(P.sent - script.offset);
+    if (!wasPlaying) vstep(P.sent - script.offset);
   };
-  $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
+  $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); const resume = playing; stopSpeech(); if (resume) play(); bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
   $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "journey"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
@@ -913,7 +967,7 @@
   $("vClose").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); $("vBtn").focus(); };
   $("vVoice").onchange = (e) => { VS.uri = e.target.value; saveVS(); if (synth) { silent = false; noStart = 0; avoidNetwork = false; } applyLive(); };
   $("vRate").oninput = (e) => { VS.rate = +e.target.value; showRate(); };
-  $("vRate").onchange = () => { saveVS(); applyLive(); };
+  $("vRate").onchange = () => { saveVS(); if (speechRun?.recorded) AUD.playbackRate = recordedRate(); else applyLive(); };
   // Test voice: spoken directly inside the click (user gesture), with the same voice/rate/pitch the lessons use.
   $("vTest").onclick = () => {
     if (playing) pause(); if (!synth) return fillVoices();
@@ -1269,8 +1323,8 @@ function updateNavigation() {
     delete button.dataset.compact;
   }
 }
-    function seekSentence(delta){if(view!=="player"||waiting||P.part!=="main"||!script)return;const to=clamp(P.sent+delta,0,script.main.length-1);pause();P.sent=to;save();caption(script.main[to]);vstep(to-script.offset);updateNavigation();}
-    function seekPart(delta){if(view!=="player")return;const st=cur();if(st.kind!=="sec")return;const next=st.s+delta;if(next<0)return;if(next>=C.lessons[st.l].sections.length){pause();advance();return;}pause();
+    function seekSentence(delta){if(view!=="player"||waiting||P.part!=="main"||!script)return;const to=clamp(P.sent+delta,0,script.main.length-1);pause();stopSpeech();P.sent=to;save();caption(script.main[to]);vstep(to-script.offset);updateNavigation();}
+    function seekPart(delta){if(view!=="player")return;const st=cur();if(st.kind!=="sec")return;const next=st.s+delta;if(next<0)return;if(next>=C.lessons[st.l].sections.length){pause();stopSpeech();advance();return;}pause();stopSpeech();
       // Review navigation is a replay only; do not consume questions or alter mastery.
       const nx=P.queue[P.idx+1], rep={kind:"sec",l:st.l,s:next,replay:true};
       // A part's own check is never skipped: "next" first goes to the questions on this part.

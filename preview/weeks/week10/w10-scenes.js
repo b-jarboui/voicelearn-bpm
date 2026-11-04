@@ -158,6 +158,17 @@
   }
 
   const hosts = new WeakMap();
+  let active = null;
+  function release() {
+    if (!active) return;
+    const st = active;
+    active = null;
+    // reset() owns scene timers/RAF work; remove GSAP work before its SVG is detached.
+    try { st.scene?.reset(); } catch (e) { console.warn("[w10s] release", st.id, e); }
+    if (st.root && window.gsap) gsap.killTweensOf([st.root, ...st.root.querySelectorAll("*")]);
+    st.scene = null; st.lastIndex = null;
+    if (st.mo) st.mo.disconnect();
+  }
 
   function install(style) {
     if (!style || hosts.has(style) || !["mount", "load", "step"].every(k => typeof style[k] === "function")) return;
@@ -170,6 +181,7 @@
     }
 
     style.mount = function (element) {
+      release();
       const r = base.mount.apply(this, arguments);
       st.root = element || null; st.host = null; st.scene = null; st.id = null; st.built = null;
       if (st.mo) st.mo.disconnect();
@@ -215,7 +227,7 @@
           try { scene.build(mountEl); } catch (e) { console.warn("[w10s] build", id, e); }
           st.built = id;
         }
-        st.scene = scene; st.id = id;
+        st.scene = scene; st.id = id; st.lastIndex = null; active = st;
         try { scene.reset(); } catch (e) { console.warn("[w10s] reset", id, e); }
         root.setAttribute("data-w10s", "on");
         st.host.classList.add("on");
@@ -230,19 +242,23 @@
     };
 
     style.step = function (index) {
-      const r = base.step.apply(this, arguments);
+      // The registered scene covers the base look. Do not animate an invisible second
+      // presentation underneath it, or restart the same scene on a viewport refit.
+      if (!st.scene) return base.step.apply(this, arguments);
+      const target = Math.max(-1, index);
+      if (target === st.lastIndex) return;
+      st.lastIndex = target;
       try {
         if (st.scene && index >= 0) { st.scene.step(index, st.n || 1); showText(st, index); }
         else if (st.scene && index < 0) { st.scene.reset(); showTitle(st); }
       } catch (e) { console.warn("[w10s] step", st.id, e); }
-      return r;
     };
   }
 
   function installAll() { (window.STYLES || []).forEach(install); }
   installAll();
   window.addEventListener("pageshow", installAll);
-  window.W10_SCENES_HOST = { installAll, repairKeys, reduced };
+  window.W10_SCENES_HOST = { installAll, repairKeys, reduced, release };
 })();
 
 ;

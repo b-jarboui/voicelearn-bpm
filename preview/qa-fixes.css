@@ -1,4 +1,18 @@
 /* Shared course repairs. Loaded after both adopted design sheets. */
+/* Changing caption line counts must not resize an illustration mid-animation. */
+html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
+  flex: 0 0 108px; height: 108px; max-height: 108px; overflow-y: auto;
+}
+@media (min-width: 900px) and (min-height: 501px) {
+  html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
+    flex-basis: 84px; height: 84px; max-height: 84px;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]):not(.fs):not(.cc-off) .cc {
+    flex-basis: 70px; height: 70px; max-height: 70px;
+  }
+}
 /* Let the picture use the space left by its explanation on portrait screens. */
 html[data-week] .player .w10s-mount { max-height: none !important; flex: 1 1 0; }
 html[data-week] .player .w10s-text { flex: 0 1 auto; }
