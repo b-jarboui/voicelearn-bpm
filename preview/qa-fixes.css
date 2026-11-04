@@ -304,3 +304,13 @@ html[data-week] .player .look.vl-notebook:not([data-w10s]) svg.dg {
     font-size: 16px; line-height: 1.45;
   }
 }
+
+/* Full screen: a compact caption band, two lines in portrait and one in landscape; longer sentences scroll inside it. */
+html[data-week] body.fs:not(.cc-off) { --vl25-caption-h: clamp(52px, 8.5dvh, 72px) !important; }
+@media (orientation: landscape) and (max-height: 500px) {
+  html[data-week] body.fs:not(.cc-off) { --vl25-caption-h: 42px !important; }
+}
+html[data-week] body.fs:not(.cc-off) .cc {
+  display: flex !important; align-items: center; justify-content: center; overflow-y: auto;
+  padding: 6px 16px !important; font-size: clamp(14px, 1.9dvh, 17px) !important; line-height: 1.35 !important;
+}
