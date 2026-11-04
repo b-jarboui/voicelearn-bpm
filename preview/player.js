@@ -212,6 +212,9 @@
     if (REC.has(h)) return [h];
     const m = t.match(/^(.*?\b[ABCD][.:])\s+(.+)$/);
     if (m) { const a = fnv(m[1].trim()), b = fnv(m[2].trim()); if (REC.has(a) && REC.has(b)) return [a, b]; }
+    // Shuffled lists ("Blank 1: x, y, or z." / "Choose from: a; b; c."): one clip per piece, in this learner's order.
+    const parts = t.split(/(?<=[:;,])\s+/).map((c) => c.replace(/[,;:.]+$/, "").trim()).filter(Boolean);
+    if (parts.length > 1) { const hs = parts.map(fnv); if (hs.every((x) => REC.has(x))) return hs; }
     return null;
   };
   // ---------- pacing (all pauses in one place, milliseconds) ----------

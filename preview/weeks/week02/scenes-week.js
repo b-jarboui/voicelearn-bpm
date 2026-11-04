@@ -287,10 +287,10 @@
       let s = R(x0, y0, w, h, { fill: "#ffffff", stroke: col, sw: 3, rx: 10 }) + R(x0, y0, w, 24, { fill: col, rx: 10 }) + R(x0, y0 + 14, w, 10, { fill: col, rx: 0 });
       s += CI(x0 + 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 }) + CI(-x0 - 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 });
       const cw = (w - 20) / 5, ch = (h - 36) / 3;
-      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c cc cc${r * 5 + c}` });
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c v2cell v2cell${r * 5 + c}` });
       return s + (p.lab ? LAB(0, h / 2 + 18, p.lab, { sz: p.ls || 15 }) : "");
     },
-    u(g, p, st) { qa(g, ".cc").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
+    u(g, p, st) { qa(g, ".v2cell").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
     bb: p => [-(p.w || 104) / 2, -(p.h || 92) / 2, p.w || 104, p.h || 92]
   };
   K.days = {
@@ -1746,10 +1746,10 @@
       let s = R(x0, y0, w, h, { fill: "#ffffff", stroke: col, sw: 3, rx: 10 }) + R(x0, y0, w, 24, { fill: col, rx: 10 }) + R(x0, y0 + 14, w, 10, { fill: col, rx: 0 });
       s += CI(x0 + 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 }) + CI(-x0 - 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 });
       const cw = (w - 20) / 5, ch = (h - 36) / 3;
-      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c cc cc${r * 5 + c}` });
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c v2cell v2cell${r * 5 + c}` });
       return s + (p.lab ? LAB(0, h / 2 + 18, p.lab, { sz: p.ls || 15 }) : "");
     },
-    u(g, p, st) { qa(g, ".cc").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
+    u(g, p, st) { qa(g, ".v2cell").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
     bb: p => [-(p.w || 104) / 2, -(p.h || 92) / 2, p.w || 104, p.h || 92]
   };
   K.days = {
@@ -3150,10 +3150,10 @@
       let s = R(x0, y0, w, h, { fill: "#ffffff", stroke: col, sw: 3, rx: 10 }) + R(x0, y0, w, 24, { fill: col, rx: 10 }) + R(x0, y0 + 14, w, 10, { fill: col, rx: 0 });
       s += CI(x0 + 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 }) + CI(-x0 - 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 });
       const cw = (w - 20) / 5, ch = (h - 36) / 3;
-      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c cc cc${r * 5 + c}` });
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c v2cell v2cell${r * 5 + c}` });
       return s + (p.lab ? LAB(0, h / 2 + 18, p.lab, { sz: p.ls || 15 }) : "");
     },
-    u(g, p, st) { qa(g, ".cc").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
+    u(g, p, st) { qa(g, ".v2cell").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
     bb: p => [-(p.w || 104) / 2, -(p.h || 92) / 2, p.w || 104, p.h || 92]
   };
   K.days = {
@@ -4572,10 +4572,10 @@
       let s = R(x0, y0, w, h, { fill: "#ffffff", stroke: col, sw: 3, rx: 10 }) + R(x0, y0, w, 24, { fill: col, rx: 10 }) + R(x0, y0 + 14, w, 10, { fill: col, rx: 0 });
       s += CI(x0 + 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 }) + CI(-x0 - 22, y0 + 2, 5, { fill: "#ffffff", stroke: col, sw: 2.5 });
       const cw = (w - 20) / 5, ch = (h - 36) / 3;
-      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c cc cc${r * 5 + c}` });
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) s += R(x0 + 10 + c * cw + 2, y0 + 30 + r * ch + 2, cw - 4, ch - 4, { fill: C.pale, rx: 3, cls: `v2c v2cell v2cell${r * 5 + c}` });
       return s + (p.lab ? LAB(0, h / 2 + 18, p.lab, { sz: p.ls || 15 }) : "");
     },
-    u(g, p, st) { qa(g, ".cc").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
+    u(g, p, st) { qa(g, ".v2cell").forEach((e, i) => paint(e, i === (p.due == null ? 13 : p.due) && st.due ? C.red : i < (st.fill || 0) ? (p.col || C.navy) : C.pale)); },
     bb: p => [-(p.w || 104) / 2, -(p.h || 92) / 2, p.w || 104, p.h || 92]
   };
   K.days = {
