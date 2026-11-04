@@ -1345,20 +1345,8 @@ if (settingsWeek) {
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { e.preventDefault(); close(true); } });
   document.addEventListener("click", (e) => { if (!menu.hidden && !menu.contains(e.target) && !btn.contains(e.target)) close(); });
 })();
-(function installCaptionDedupe() {
-  /* If the sentence being spoken is already printed on the slide, the caption line is hidden for that moment (space is kept, so nothing jumps). */
-  const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-  let timer = 0;
-  function check() {
-    const cc = document.querySelector(".cc"), look = document.querySelector(".player .look:not([hidden]),.player .stage:not([hidden])"); if (!cc || !look) return;
-    const c = norm(cc.textContent); let dup = false;
-    if (c.length >= 5) { const lt = norm(look.textContent); const c2 = c.replace(/^(diagram )?[a-d] /, ""); dup = lt.includes(c) || (c2.length >= 15 && lt.includes(c2)); }
-    cc.classList.toggle("cc-dup", dup);
-    cc.title = cc.textContent;
-  }
-  const kick = () => { clearTimeout(timer); timer = setTimeout(check, 450); };
-  new MutationObserver(kick).observe($("main"), { childList: true, characterData: true, subtree: true });
-})();
+// Caption de-duplication removed (4 Nov 2026): hiding the caption 450 ms after it appeared, whenever the slide also showed
+// the sentence, made captions flash or never appear. With CC on, the spoken sentence is now always shown for its whole duration.
 positionSettingsButton();
     window.addEventListener("popstate",e=>{let target=e.state&&e.state.voicelearn?e.state.screen:"welcome";
       if(onboardingFinishedThisVisit&&(target==="setupDesign"||target==="setupVoice"||target==="setupAI")){history.replaceState(routeState("welcome"),"",location.href);target="welcome";}
