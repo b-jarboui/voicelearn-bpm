@@ -1,5 +1,5 @@
-// OPER621 · Week 1 · Fundamentals of Process Management — animated teaching scenes (v3)
-// File: w01-v3-part1.js  ·  Scenes: W1INTRO, O1a, O1b
+// OPER621 · Week 1 · Fundamentals of Process Management — animated teaching scenes (v4)
+// File: w01-v4-part1.js  ·  Scenes: W1INTRO, O1a, O1b
 // Standalone part: registers its own scenes on window.VL_SCENES and appends its own
 // scoped rules into the single shared <style id="vl-sc-w01">. Parts may be concatenated.
 // Contract: VL_SCENES['<sec id>'] = { build(el), step(i, n), reset() }
@@ -8,7 +8,7 @@
 // template it adapts (with URL) in a comment above its drawing code.
 (function () {
 "use strict";
-var PART = "v3p1";
+var PART = "v4p1";
   // ===== shared engine (self-contained copy for this part) =====
   var W = window;
   W.VL_SCENES = W.VL_SCENES || {};
@@ -284,17 +284,44 @@ var PART = "v3p1";
   function stages(c, k, cuts, n) { var s = segOf(k, cuts); for (var i = 0; i < n; i++) { c.all('[data-k="S' + i + '"]').forEach(function (el, _, a) { el.style.visibility = el.getAttribute("data-k") === "S" + s ? "visible" : "hidden"; }); c.op("S" + i, i === s ? 1 : 0, { d: 0.55 }); c.mv("S" + i, i === s ? {} : { y: i < s ? -14 : 14 }, { d: 0.7 }); } return s; }
   var SCENE_BG = [];
 
+  var WH = C.white;
+  function bx(x, y, w, h, f, s, rx, sw, ex) { var a = { stroke: s || C.navy, "stroke-width": sw || 2.5 }; if (ex) for (var q in ex) a[q] = ex[q]; return R(x, y, w, h, f || WH, rx == null ? 10 : rx, a); }
+  function t(x, y, s, col, an, sz) { return T(x, y, s, sz || 18, col || C.ink, null, an); }
+  function ban(s, col, y, fg) { return pill(200, y || 26, s, { sz: 18, bg: col || C.navy, st: col || C.navy, fg: fg || WH }); }
+  function lab(x, y, s, col) { return pill(x, y, s, { sz: 18, bg: WH, st: col || C.navy, fg: col || C.navy }); }
+  function arr(x1, y1, x2, y2, col, w, ex) {
+    var a = Math.atan2(y2 - y1, x2 - x1), h = 10, c1 = col || C.navy;
+    return P("M" + x1 + " " + y1 + " L" + x2 + " " + y2, c1, w || 3, ex) +
+      F("M" + x2 + " " + y2 + " L" + (x2 - h * Math.cos(a - 0.45)).toFixed(1) + " " + (y2 - h * Math.sin(a - 0.45)).toFixed(1) + " L" + (x2 - h * Math.cos(a + 0.45)).toFixed(1) + " " + (y2 - h * Math.sin(a + 0.45)).toFixed(1) + " Z", c1);
+  }
+  function bgc(col) { return R(-400, -300, 1200, 600, col); }
+  function floor(col) { return R(-400, 250, 1200, 100, col || "#e2d8c6"); }
+  // stage-driven scene: only the active stage is rendered each step
+  function build3(id, N, stg, labels, desc, bgcol) {
+    var CUTS = stg.slice(1).map(function (s) { return s.a; });
+    function draw() { return stg.map(function (s, i) { return (i ? H : K)("S" + i, s.d); }).join(""); }
+    function render(c, k) {
+      var si = stages(c, k, CUTS, stg.length), S = stg[si], q;
+      if (S.sh) for (q in S.sh) { var r = S.sh[q], on = k >= r[0] && k <= r[1]; c.op(q, on ? (r[3] == null ? 1 : r[3]) : 0, { dl: on && k === r[0] && r[2] ? r[2] : 0, d: on ? 0.5 : 0 }); /* v4: leaving items vanish at once */ }
+      if (S.mv) for (q in S.mv) c.mv(q, S.mv[q](k) || {}, { d: 1 });
+      if (S.dr) for (q in S.dr) { var z = S.dr[q]; c.dr(q, k >= z[0] && k <= z[1] ? 1 : 0, { d: 1.1, dl: z[2] || 0 }); }
+      if (S.fl) for (q in S.fl) c.fl(q, S.fl[q](k), { d: 0.6 });
+    }
+    REG[id] = makeScene({ id: id, N: N, labels: labels, draw: draw, render: render, desc: desc });
+    SCENE_BG.push([id, bgcol]);
+  }
   // ============================================================
-  // W1INTRO · "ONE EVENING, ONE QUESTION" · 28 moments · 10 visuals
-  // Audit fixes: 6/7 now show helpful staff each finishing OWN task (local
-  // ticks, never outcome ticks); 13/14 show departments meshing and a real
-  // booking record travelling REQUEST > RATE CHECK > ROOM READY > SETTLED;
-  // 18 is an explicit department scoreboard versus her evening; 23 shows
-  // K1 = analyse BPM today; 24/25 are a story book and a guest ignoring
-  // department labels.
+  // v4 part 1 — W1INTRO, O1a, O1b rebuilt on the same stage engine as part 2.
+  // One composition per 2-5 narration lines; only the active composition is
+  // visible (the previous one is hidden at once, never faded behind), items
+  // leaving a composition vanish at once, connectors are drawn before the
+  // boxes they join and stop at the box edges.
+  // ============================================================
+
+  // ============================================================
+  // W1INTRO · "ONE EVENING, ONE QUESTION" · 28 moments · 11 compositions
   // ============================================================
   (function () {
-    var id = "W1INTRO", N = 28;
     // Give the two unnumbered Week 1 sections stable ids (idempotent).
     try {
       var Ls = W.COURSE && W.COURSE.lessons;
@@ -304,836 +331,382 @@ var PART = "v3p1";
         if (lst && !lst.sec) lst.sec = "W1OUTRO";
       }
     } catch (e) { }
-    var CUTS = [3, 6, 9, 12, 15, 18, 19, 24, 26];
-    var labels = ["Welcome to Week 1", "A long journey", "Tired, wants her room", "A warm welcome", "Booking doesn't match",
+    var GOALS = [["SPOT A", "PROCESS"], ["WHY GAPS", "APPEAR"], ["MANAGE", "JOURNEYS"], ["BPM AND", "MATURITY"]];
+    var GI = [
+      function (x, y) { return I.flag(x - 18, y, 0.8, C.green) + I.flag(x + 18, y, 0.8, C.red); },
+      function (x, y) { return R(x - 36, y - 6, 28, 12, C.navy, 3) + R(x + 8, y - 6, 28, 12, C.navy, 3); },
+      function (x, y) { return arr(x - 32, y, x + 32, y, C.green, 3); },
+      function (x, y) { return I.gear(x, y, 10, C.amber); }
+    ];
+    var stars = rep(36, function (k) { return O((k * 97) % 400, 8 + (k * 53) % 150, 1 + (k % 3) * 0.5, "#e9f1ff", { opacity: 0.4 + (k % 4) * 0.15 }); });
+    build3("W1INTRO", 28, [
+      // template: Kurzgesagt — living process token (one protagonist walks into the system) — https://kurzgesagt.org/what-we-do
+      { a: 0, d: bgc("#13263b") + stars + O(40, 40, 14, "#f6edd6") + O(46, 35, 12, "#13263b") + floor("#22344a") +
+          R(220, 70, 172, 180, "#2f4b6b", 4) + rep(15, function (i) { return R(234 + (i % 5) * 32, 128 + Math.floor(i / 5) * 26, 16, 14, i % 3 ? "#f7d48b" : "#fbe3a8", 2); }) +
+          R(228, 80, 156, 34, C.deep, 6) + t(306, 104, "QASR MARINA", C.sun) + R(286, 212, 40, 38, "#ffe3a3", 3) +
+          K("i0g", fig(0, 250, 1.6, C.orange, { hair: "long" }) + R(22, 214, 16, 32, C.navy, 4)) +
+          H("i0a", ban("WELCOME, WEEK 1", C.sun, 30, C.ink)) +
+          H("i0b", ban("A LONG JOURNEY", C.navy2, 30) + I.plane(120, 96, 3, C.white)) +
+          H("i0c", R(14, 62, 192, 84, WH, 24) + O(150, 152, 6, WH) + O(160, 164, 4, WH) + I.bed(110, 90, 2, C.green) + t(110, 134, "JUST HER ROOM", C.green)),
+        sh: { i0a: [0, 0], i0b: [1, 1], i0c: [2, 2] }, mv: { i0g: function (k) { return { x: k === 0 ? 50 : k === 1 ? 90 : 130 }; } } },
+      // template: LottieFiles — Animated Dashboards (screen panels switch state) — https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
+      { a: 3, d: bgc("#f3ecdf") + floor() + R(250, 206, 144, 48, C.navy, 6) + fig(340, 206, 1.1, C.navy, { hair: "long" }) +
+          fig(60, 250, 1.3, C.orange, { hair: "long" }) + R(80, 222, 14, 28, C.navy, 3) +
+          H("i1w", pill(300, 112, "WELCOME!", { sz: 20, bg: C.green, st: C.green, fg: WH })) +
+          H("i1c", bx(10, 46, 184, 94, WH, C.green) + t(102, 80, "BOOKED", C.green) + t(102, 116, "CORPORATE", C.ink) + badge(176, 62, 11, true) +
+            bx(206, 46, 184, 94, WH, C.red) + t(298, 80, "ON SCREEN", C.red) + t(298, 116, "NOT SHOWN", C.ink) + badge(372, 62, 11, false) +
+            ban("RATES DON'T MATCH", C.red, 22)) +
+          H("i1p", I.phone(316, 180, 1.6, C.navy) + pill(190, 176, "OTHER DEPARTMENT", { sz: 18, bg: C.navy, st: C.navy, fg: WH }) +
+            I.passport(116, 214, 1.4) + ban("SAME DETAILS, TWICE", C.orange, 278)),
+        sh: { i1w: [3, 3], i1c: [4, 5], i1p: [5, 5] } },
+      // template: LottieFiles — teamwork (people appear, then act as a team) — https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6
+      { a: 6, d: bgc("#eef3f8") +
+          [["CHECKS", "BOOKING", C.navy], ["CONFIRMS", "RATE", C.green], ["PREPARES", "ROOM", C.slate]].map(function (s, j) {
+            var x = 8 + j * 132;
+            return bx(x, 46, 120, 136, WH, s[2]) + fig(x + 60, 118, 1, s[2]) + t(x + 60, 146, s[0], s[2]) + t(x + 60, 170, s[1], C.ink) + H("i2t" + j, badge(x + 100, 66, 11, true));
+          }).join("") +
+          H("i2a", ban("EVERYONE HELPFUL", C.green, 24)) + H("i2b", ban("EACH OWN TASK DONE", C.navy, 24)) +
+          H("i2c", fig(60, 276, 1.3, C.orange, { mood: "frown", hair: "long" }) + clock(140, 236, 22, C.red) + pill(270, 236, "STILL WAITING", { sz: 18, bg: C.red, st: C.red, fg: WH })),
+        sh: { i2a: [6, 6], i2b: [7, 8], i2t0: [7, 8], i2t1: [7, 8, 0.25], i2t2: [7, 8, 0.5], i2c: [8, 8] } },
+      // template: Apple HIG Motion — controlled focus pull (subdue context, sharpen one object) — https://developer.apple.com/design/human-interface-guidelines/motion
+      { a: 9, d: bgc("#f6f1ea") +
+          H("i3p", O(200, 120, 48, C.navy) + R(181, 98, 12, 44, WH, 3) + R(207, 98, 12, 44, WH, 3) + t(200, 206, "PAUSE AND LOOK", C.navy)) +
+          H("i3a", bx(10, 40, 184, 170, C.mint, C.green) + t(102, 70, "JOBS DONE", C.green) +
+            ["BOOKING", "RATE", "ROOM"].map(function (s, j) { return t(30, 110 + j * 36, s, C.ink, "start") + badge(170, 104 + j * 36, 11, true); }).join("") +
+            bx(206, 40, 184, 170, C.peach, C.red) + t(298, 70, "HER ROOM?", C.red) + badge(298, 126, 30, false) + t(298, 190, "NOT YET", C.red)) +
+          H("i3c", pill(200, 234, "OPER621", { sz: 20, bg: C.sun, st: C.sun, fg: C.ink }) + ban("CARRY IT ALL TERM", C.navy, 276)),
+        sh: { i3p: [9, 9], i3a: [10, 11], i3c: [11, 11] } },
+      // template: Bartosz Ciechanowski — Gears (one mechanism only works when teeth engage) — https://ciechanow.ski/archives/
+      { a: 12, d: bgc("#f2f5f9") +
+          [["RESERVATIONS", 80, C.navy], ["REVENUE", 200, C.green], ["HOUSEKEEPING", 320, C.slate]].map(function (g) {
+            return '<g class="a-spin">' + I.gear(g[1], 112, 40, g[2]) + "</g>" + t(g[1], 180, g[0], g[2], null, 14);
+          }).join("") +
+          H("i4a", ban("WORKING TOGETHER", C.navy, 26)) +
+          H("i4b", R(14, 52, 372, 140, "none", 18, { stroke: C.green, "stroke-width": 4, "stroke-dasharray": "8 6" }) + ban("BUSINESS PROCESS MANAGEMENT", C.green, 26)) +
+          H("i4c", bx(10, 214, 120, 44, WH, C.navy) + t(70, 243, "REQUEST", C.navy) + arr(136, 236, 244, 236, C.orange, 5) + t(190, 224, "BPM", C.orange, null, 14) +
+            bx(250, 214, 140, 44, C.mint, C.green) + t(300, 243, "SETTLED", C.green) + I.star(370, 236, 1.2)),
+        sh: { i4a: [12, 12], i4b: [13, 14], i4c: [14, 14] } },
+      // template: LottieFiles — World map with logistics (pins and routes on a map) — https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy
+      { a: 15, d: bgc("#eef2f6") + R(206, 46, 188, 206, "#cfe1ef", 12) + F("M218 70 Q300 44 382 70 L386 232 Q300 256 220 238 Z", "#efe4cc") +
+          rep(14, function (i) { var r = Math.floor(i / 4), x = 226 + (i % 4) * 44 + (r % 2) * 18, y = 80 + r * 46; return H("i5p" + i, I.hotel(x, y, 0.9, i === 13 ? C.orange : C.navy)); }) +
+          ban("QASR HOSPITALITY", C.navy, 24) +
+          H("i5w", bx(10, 56, 184, 90, WH, C.navy) + t(102, 92, "WEEKS 1 TO 14", C.navy) + t(102, 126, "ONE HOTEL GROUP", C.slate, null, 14)) +
+          H("i5s", bx(10, 56, 184, 90, WH, C.navy) + t(60, 112, "14", C.navy, null, 40) + t(150, 96, "HOTELS &", C.ink, null, 14) + t(150, 118, "RESORTS", C.ink, null, 14) +
+            bx(10, 156, 184, 90, WH, C.green) + t(102, 198, "3,100", C.green, null, 36) + t(102, 230, "STAFF", C.ink, null, 14)) +
+          H("i5m", O(288, 218, 20, "none", { stroke: C.orange, "stroke-width": 4, "class": "a-pulse" }) + ban("QASR MARINA · DELAYED FLIGHT", C.orange, 276)),
+        sh: (function () { var o = { i5w: [15, 15], i5s: [16, 17], i5m: [17, 17] }; for (var i = 0; i < 14; i++) o["i5p" + i] = [15, 17, i * 0.06]; return o; })() },
+      // template: Motion Array — Infographic Chart Creator (bars grow, values stamp in) — https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
+      { a: 18, d: bgc("#f6f4ee") + ban("DEPARTMENT TARGETS", C.navy, 24) +
+          [["FRONT DESK", C.navy], ["REVENUE", C.green], ["HOUSEKEEPING", C.slate]].map(function (d, j) {
+            var y = 50 + j * 46; return bx(10, y, 250, 38, WH, d[1]) + t(22, y + 26, d[0], d[1], "start") + H("i6t" + j, badge(238, y + 19, 12, true));
+          }).join("") +
+          H("i6m", t(135, 206, "TARGET MET", C.green)) +
+          H("i6g", bx(272, 50, 118, 130, C.peach, C.red) + t(331, 78, "GUEST", C.red) + t(331, 102, "RESULT", C.red) + badge(331, 144, 20, false)) +
+          H("i6p", fig(330, 278, 1.2, C.orange, { mood: "frown", hair: "long" }) + ban("POOR EVENING", C.red, 240)),
+        sh: { i6t0: [18, 18, 0.2], i6t1: [18, 18, 0.5], i6t2: [18, 18, 0.8], i6m: [18, 18, 1.0], i6g: [18, 18, 1.4], i6p: [18, 18, 1.8] } },
+      // template: LottieFiles — Multi-Step Icon Animation (activate one step after another) — https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
+      { a: 19, d: bgc("#f4f6f9") + ban("THIS WEEK'S GOALS", C.navy, 24) +
+          GOALS.map(function (g, j) {
+            var x = j % 2 ? 204 : 8, y = j < 2 ? 48 : 156;
+            return H("i7g" + j, bx(x, y, 188, 100, WH, C.navy) + O(x + 28, y + 30, 18, C.orange) + T(x + 28, y + 37, String(j + 1), 20, WH) +
+              t(x + 112, y + 40, g[0], C.navy) + t(x + 112, y + 66, g[1], C.navy) + GI[j](x + 112, y + 86));
+          }).join(""),
+        sh: { i7g0: [19, 22], i7g1: [20, 22], i7g2: [21, 22], i7g3: [22, 22] } },
+      // template: Apple HIG Motion — controlled focus pull (subdue context, sharpen one object) — https://developer.apple.com/design/human-interface-guidelines/motion
+      { a: 23, d: bgc("#eef3f8") + ban("COURSE OUTCOME", C.navy, 26) + O(200, 112, 52, C.navy) + t(200, 128, "K1", C.sun, null, 44) +
+          H("i8a", t(200, 200, "ANALYSE HOW ORGANISATIONS", C.ink) + t(200, 230, "USE BPM TODAY", C.green, null, 24)),
+        sh: { i8a: [23, 23, 0.4] } },
+      // template: Behance — Process: What is a Motion Designer? (illustrated narrative vignettes) — https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer-
+      { a: 24, d: bgc("#f6f1ea") +
+          H("i9a", ban("ONE STORY, ALL TERM", C.navy, 26) + P("M30 130 H370", C.slate, 4) +
+            rep(14, function (i) { var x = 30 + i * 340 / 13; return O(x.toFixed(1), 130, i === 0 ? 11 : 7, i === 0 ? C.orange : C.navy2); }) +
+            fig(30, 110, 0.8, C.orange, { hair: "long" }) + t(30, 166, "WEEK 1", C.ink, null, 14) + t(386, 166, "WEEK 14", C.ink, "end", 14) +
+            pill(200, 214, "QASR, WEEK BY WEEK", { sz: 20, bg: C.navy, st: C.navy, fg: WH })) +
+          H("i9b", '<g opacity="0.6">' + [["RESERVATIONS", 100, 62], ["REVENUE", 300, 62], ["HOUSEKEEPING", 100, 150], ["FINANCE", 300, 150]].map(function (d) {
+              return pill(d[1], d[2], d[0], { sz: 18, bg: "#edf0f4", st: C.muted, fg: C.slate, dash: true });
+            }).join("") + "</g>" +
+            fig(200, 262, 1.5, C.orange, { hair: "long" }) + pill(200, 106, "MY ROOM", { sz: 22, bg: C.orange, st: C.orange, fg: WH })),
+        sh: { i9a: [24, 24], i9b: [25, 25] } },
+      // template: 3Blue1Brown (Manim demo) — traced causal path drawn when it becomes relevant — https://www.3blue1brown.com/lessons/manim-demo/
+      { a: 26, d: bgc("#eef6f1") +
+          bx(14, 40, 180, 56, C.mint, C.green) + badge(38, 68, 12, true) + t(116, 75, "RIGHT ROOM", C.green) +
+          bx(206, 40, 180, 56, C.mint, C.green) + badge(230, 68, 12, true) + t(308, 75, "NO WAITING", C.green) +
+          H("i10a", floor() + R(220, 120, 80, 130, "#a8743f", 4) + O(286, 186, 4, C.sun) + badge(260, 150, 16, true) + fig(150, 250, 1.5, C.orange, { hair: "long" })) +
+          H("i10b", bx(14, 150, 90, 48, WH, C.navy) + t(59, 181, "DESK", C.navy) + P("M104 174 H296", C.orange, 4, { "stroke-dasharray": "8 7" }) +
+            [150, 200, 250].map(function (x) { return O(x, 174, 15, WH, { stroke: C.orange, "stroke-width": 3 }) + t(x, 181, "?", C.orange); }).join("") +
+            bx(296, 150, 90, 48, C.mint, C.green) + t(341, 181, "ROOM", C.green) + ban("WHAT'S THE PROCESS?", C.navy, 262)),
+        sh: { i10a: [26, 26], i10b: [27, 27] } }
+    ], ["Welcome to Week 1", "A long journey", "Tired, wants her room", "A warm welcome", "Booking doesn't match",
       "Calls, then asks again", "Nobody is rude", "Each job done", "Still standing there", "Pause and look",
       "Jobs done, need unmet", "Carry this question", "Working together", "What BPM means", "Work becomes value",
       "Qasr Hospitality Group", "14 hotels, 3,100 people", "Qasr Marina", "Targets met, guest not", "Goal 1: spot a process",
       "Goal 2: why gaps appear", "Goal 3: manage journeys", "Goal 4: BPM, maturity", "Outcome K1", "One unfolding story",
-      "Not her concern", "The right room", "What is the process?"];
-    var PINS = [[236, 196], [262, 150], [300, 112], [342, 84], [372, 128], [328, 160], [290, 214], [352, 206], [268, 262], [326, 252], [384, 270], [252, 96], [370, 36], [300, 40]];
-    var GOALS = [["SPOT A", "PROCESS"], ["WHY GAPS", "APPEAR"], ["MANAGE", "JOURNEYS"], ["BPM AND", "MATURITY"]];
-    var GC = [[8, 10], [204, 10], [8, 128], [204, 128]];
-
-    function draw(u) {
-      var s = "", r = 0, k, x, y;
-      // ---------- S0 · Night arrival
-      // Template: Kurzgesagt — living process token (one protagonist walks into the system)
-      // https://kurzgesagt.org/what-we-do
-      var stars = ""; for (k = 0; k < 40; k++) stars += O((k * 97) % 600 - 100, (k * 53) % 190 - 60, 1 + (k % 3) * 0.5, "#e9f1ff", { opacity: 0.4 + (k % 4) * 0.15, "class": k % 5 ? null : "a-blink" });
-      var wins = ""; for (y = 112; y < 190; y += 22) for (x = 216; x < 384; x += 26) wins += R(x, y, 14, 12, (x + y) % 3 ? "#f7d48b" : "#fbe3a8", 2);
-      s += K("S0",
-        "<defs><linearGradient id=\"" + u + "sky\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#0d1c2e\"/><stop offset=\"1\" stop-color=\"#2c4d6e\"/></linearGradient></defs>" +
-        R(-400, -300, 1200, 562, "url(#" + u + "sky)") + stars + O(30, 30, 14, "#f6edd6") + O(36, 25, 12, "#1a3150") +
-        R(-400, 262, 1200, 300, "#22344a") + R(-400, 262, 1200, 5, "#3a5370") +
-        R(204, 58, 192, 204, "#2f4b6b", 4) + R(204, 58, 192, 6, "#3c5c80") + wins +
-        R(276, 196, 48, 66, "#ffe3a3", 3) + E(300, 266, 64, 8, "#ffe3a3", { opacity: 0.35 }) +
-        R(212, 66, 176, 34, C.deep, 6) + K("s0sign", T(300, 90, "QASR MARINA", 19, C.sun)) +
-        H("s0plane", Tr(0, 0, I.plane(0, 0, 2, "#e8eef6") + P("M-30 1 H-120", "#e8eef6", 2, { opacity: 0.5, "stroke-dasharray": "4 6" }))) +
-        H("s0p0", pill(102, 130, "WELCOME, WEEK 1", { sz: 16, bg: C.sun, st: C.sun, fg: C.ink })) +
-        H("s0p1", pill(102, 104, "A LONG JOURNEY", { sz: 16 })) +
-        H("s0p2", pill(106, 112, "JUST HER ROOM", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-        K("s0g", fig(0, 262, 1.7, C.orange, { k: "g0", hair: "long" }) + R(26, 222, 18, 36, C.navy, 4) + P("M30 222 V214 H40 V222", C.navy, 2.5) +
-          H("s0bat", R(-22, 140, 40, 18, "#0f2236", 3, { stroke: C.white, "stroke-width": 2 }) + R(18, 145, 4, 8, C.white, 1) + R(-19, 143, 9, 12, C.coral, 2)) +
-          H("s0think", O(28, 150, 3, C.white) + O(38, 138, 5, C.white) + R(36, 96, 58, 38, C.white, 14) + I.bed(65, 116, 1.4, C.navy))));
-
-      // ---------- S1 · Desk close-up: the booking does not match
-      // Template: LottieFiles — Animated Dashboards (screen panels switch state)
-      // https://lottiefiles.com/free-animation/animated-dashboards-6QvcIUjnYZ
-      s += H("S1",
-        R(-400, -300, 1200, 600, "#f6ead6") + R(-400, -300, 1200, 360, "#efdcbc") + R(-400, 206, 1200, 8, C.gold) + R(-400, 212, 1200, 120, C.navy) +
-        fig(318, 212, 2.3, C.navy, { k: "rc", hair: "long" }) +
-        R(186, 174, 28, 34, C.ink, 3) + R(156, 204, 88, 6, C.ink, 3) +
-        R(122, 66, 156, 112, C.ink, 10) + R(128, 72, 144, 100, C.sky, 6) +
-        H("s1ok", R(140, 84, 120, 76, C.white, 6, { stroke: C.navy, "stroke-width": 2 }) + T(200, 108, "BOOKING", 16, C.navy) + P("M156 124 H244 M156 138 H226", C.muted, 4) + badge(246, 92, 12, true)) +
-        H("s1bad", R(132, 78, 136, 42, C.mint, 5, { stroke: C.green, "stroke-width": 2 }) + T(200, 92, "BOOKED", 12, C.slate) + T(200, 113, "CORPORATE", 18, C.green) +
-          R(132, 128, 136, 42, C.white, 5, { stroke: C.red, "stroke-width": 2 }) + T(200, 142, "ON SCREEN", 12, C.slate) + T(200, 163, "NOT SHOWN", 18, C.red) +
-          O(262, 124, 13, C.red) + T(262, 131, "≠", 20, C.white)) +
-        H("s1forms", R(122, 220, 66, 48, C.white, 4, { stroke: C.green, "stroke-width": 2 }) + P("M130 234 H180 M130 246 H174 M130 258 H168", C.slate, 2.5) + badge(186, 222, 10, true) +
-          R(212, 220, 66, 48, C.white, 4, { stroke: C.orange, "stroke-width": 2, "stroke-dasharray": "5 4" }) + P("M220 234 H270 M220 246 H264 M220 258 H258", C.muted, 2.5) + P("M192 244 H206", C.orange, 3) + T(276, 216, "AGAIN", 14, C.orange)) +
-        H("s1wait", R(140, 84, 120, 76, C.white, 6, { stroke: C.orange, "stroke-width": 2 }) + clock(200, 122, 26)) +
-        H("s1p3", pill(220, 34, "WELCOME!", { sz: 17, bg: C.green, st: C.green, fg: C.white })) +
-        H("s1p4", pill(200, 36, "RATES DON'T MATCH", { sz: 16, bg: C.red, st: C.red, fg: C.white })) +
-        H("s1call", I.phone(298, 104, 1.6) + P("M300 84 Q320 50 330 46", C.orange, 2.5, { "stroke-dasharray": "4 5" }) + pill(300, 34, "OTHER DEPARTMENT", { sz: 16, st: C.orange, fg: C.orange })) +
-        fig(70, 300, 2.5, C.orange, { k: "g1", hair: "long" }) +
-        H("s1pp", I.passport(0, 0, 1.7)) +
-        H("s1p5", pill(240, 284, "SAME DETAILS, TWICE", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })));
-
-      // ---------- S2 · Everyone helpful, each finishes OWN task
-      // Template: LottieFiles — teamwork (people appear, then act as a team)
-      // https://lottiefiles.com/free-animation/teamwork-QNAnTVBTr6
-      var TASK = [["CHECKS", "BOOKING"], ["CONFIRMS", "RATE"], ["PREPARES", "ROOM"]], SX = [66, 180, 294];
-      s += H("S2", R(-400, -300, 1200, 600, "#eef3f8") + R(-400, 214, 1200, 300, "#e1e9f1") +
-        SX.map(function (x, j) {
-          return fig(x, 150, 1.35, [C.navy, C.green, C.slate][j], { hair: j === 1 ? "long" : "" }) +
-            H("s2sm" + j, O(x + 30, 72, 13, C.white, { stroke: C.muted, "stroke-width": 1.5 }) + O(x + 25, 69, 1.8, C.ink) + O(x + 35, 69, 1.8, C.ink) + P("M" + (x + 24) + " 76 Q" + (x + 30) + " 81 " + (x + 36) + " 76", C.ink, 1.8)) +
-            R(x - 50, 160, 100, 48, C.white, 8, { stroke: C.navy, "stroke-width": 2 }) + T(x, 180, TASK[j][0], 15, C.navy) + T(x, 199, TASK[j][1], 15, C.navy) +
-            H("s2ok" + j, badge(x + 46, 162, 12, true)) +
-            (j < 2 ? H("s2gap" + j, P("M" + (x + 52) + " 184 H" + (x + 62), C.red, 3) + T(x + 57, 156, "?", 18, C.red)) : "");
-        }).join("") +
-        H("s2p6", pill(180, 24, "EVERYONE HELPFUL", { sz: 16, bg: C.green, st: C.green, fg: C.white })) +
-        H("s2p7", pill(180, 24, "EACH OWN TASK DONE", { sz: 16, st: C.green, fg: C.green })) +
-        K("s2g", fig(372, 292, 1.35, C.orange, { k: "g2", hair: "long" })) +
-        H("s2clk", K("s2hand", clock(372, 196, 17))) +
-        H("s2out", R(30, 226, 290, 60, C.white, 10, { stroke: C.red, "stroke-width": 2.5, "stroke-dasharray": "7 5" }) + I.bed(70, 256, 1.6, C.muted) + T(194, 263, "STILL WAITING", 20, C.red)));
-
-      // ---------- S3 · Pause: every job done, need unmet, carry the question
-      // Template: Apple HIG Motion — controlled focus pull (subdue context, sharpen one object)
-      // https://developer.apple.com/design/human-interface-guidelines/motion
-      s += H("S3", R(-400, -300, 1200, 600, "#f3efe7") +
-        H("s3split", R(10, 30, 180, 200, C.mint, 14, { stroke: C.green, "stroke-width": 2 }) + T(100, 60, "JOBS DONE", 18, C.green) +
-          [46, 100, 154].map(function (x) { return fig(x, 160, 1, C.slate) + badge(x, 82, 11, true); }).join("") +
-          R(210, 30, 180, 200, C.peach, 14, { stroke: C.red, "stroke-width": 2 }) + T(300, 60, "HER ROOM?", 18, C.red) +
-          R(262, 84, 76, 110, "#a8743f", 4) + I.lock(300, 136, 2.2, C.red) + T(300, 218, "NOT YET", 18, C.red) +
-          P("M176 130 H224", C.orange, 4, { "stroke-dasharray": "6 5" }) + O(200, 130, 13, C.white, { stroke: C.red, "stroke-width": 3 }) + cross(200, 130, 0.8, C.red, 3) +
-          T(200, 112, "HANDOFF", 12, C.red)) +
-        H("s3dim", R(-400, -300, 1200, 600, "#0b1726", 0, { opacity: 0.72 }) + E(200, 210, 92, 104, "#fff3d6", { opacity: 0.22 })) +
-        K("s3g", fig(200, 292, 2.3, C.orange, { k: "g3", hair: "long" })) +
-        H("s3p9", pill(200, 36, "LOOK CLOSER", { sz: 17, bg: C.sun, st: C.sun, fg: C.ink })) +
-        H("s3case", R(130, 214, 140, 76, C.navy, 12) + R(176, 202, 48, 16, "none", 6, { stroke: C.navy, "stroke-width": 5 }) + T(200, 258, "OPER621", 18, C.white)) +
-        H("s3card", R(-30, -26, 60, 52, C.white, 10, { stroke: C.orange, "stroke-width": 3 }) + T(0, 12, "?", 32, C.orange)) +
-        H("s3p11", pill(200, 36, "CARRY IT ALL TERM", { sz: 16, bg: C.navy, st: C.navy, fg: C.white })));
-
-      // ---------- S4 · Departments mesh, BPM wraps them, work becomes value
-      // Template: Bartosz Ciechanowski — Gears (one mechanism only works when teeth engage)
-      // https://ciechanow.ski/archives/
-      // + Dribbble — Workflow Animation (a trigger token travels to an outcome)
-      // https://dribbble.com/shots/3791748-Workflow-Animation
-      var GI = [I.doc(0, 0, 1.7), I.money(0, 0, 1.7), I.bed(0, 0, 1.7)], GX0 = [70, 200, 330], GCOL = [C.navy2, C.green, C.slate];
-      var ST = [[52, "REQUEST", ""], [149, "RATE", "CHECK"], [246, "ROOM", "READY"], [343, "GUEST", "SETTLED"]];
-      s += H("S4", R(-400, -300, 1200, 600, "#f2f0ea") +
-        K("s4top", D("s4belt", "M64 120 A52 52 0 0 1 116 68 L284 68 A52 52 0 0 1 336 120 A52 52 0 0 1 284 172 L116 172 A52 52 0 0 1 64 120 Z", C.orange, 5) +
-          GX0.map(function (x, j) { return K("g" + j, Tr(x, 120, I.gear(0, 0, 46, GCOL[j], C.paper) + GI[j])); }).join("")) +
-        K("gl0", T(70, 194, "RESERVATIONS", 15, C.navy)) + K("gl1", T(200, 50, "REVENUE", 15, C.green)) + K("gl2", T(330, 194, "HOUSEKEEPING", 15, C.slate)) +
-        H("s4p12", pill(200, 250, "WORKING TOGETHER", { sz: 17, bg: C.green, st: C.green, fg: C.white })) +
-        H("s4bpm", R(110, 214, 180, 50, C.navy, 12) + T(200, 250, "BPM", 32, C.white) + T(200, 286, "BUSINESS PROCESS MANAGEMENT", 16, C.navy)) +
-        H("s4trk", P("M52 226 H343", C.muted, 6) + D("s4run", "M52 226 H343", C.orange, 6) +
-          ST.map(function (p, j) { return O(p[0], 226, 19, C.white, { stroke: C.navy, "stroke-width": 3 }) + [I.bell(p[0], 227, 1), I.money(p[0], 226, 1), I.bed(p[0], 227, 1, C.green), I.star(p[0], 226, 1, C.sun)][j] + T(p[0], 264, p[1], 15, C.navy) + (p[2] ? T(p[0], 282, p[2], 15, C.navy) : ""); }).join("") +
-          H("s4val", O(343, 226, 30, "none", { stroke: C.sun, "stroke-width": 4, "class": "a-pulse" }))) +
-        H("s4rec", Tr(52, 200, R(-12, -15, 24, 30, C.white, 3, { stroke: C.orange, "stroke-width": 2.5 }) + P("M-6 -6 H6 M-6 0 H6 M-6 6 H3", C.orange, 2))));
-
-      // ---------- S5 · Qasr Hospitality: 14 hotels, 3,100 people, Qasr Marina
-      // Template: LottieFiles — World map with logistics (pins and routes on a map)
-      // https://lottiefiles.com/free-animation/world-map-with-logistics-qA3cpn3zMy
-      // + The Pudding — unit chart where each icon is a counted unit
-      // https://www.maglr.com/blog/best-scrollytelling-examples
-      var people = ""; for (k = 0; k < 31; k++) { x = 30 + (k % 8) * 19; y = 128 + Math.floor(k / 8) * 26; people += H("pp" + k, O(x, y - 7, 4.2, C.sun) + F("M" + (x - 7) + " " + (y + 8) + " Q" + (x - 7) + " " + (y - 2) + " " + x + " " + (y - 2) + " Q" + (x + 7) + " " + (y - 2) + " " + (x + 7) + " " + (y + 8) + " Z", C.sun)); }
-      s += H("S5", R(-400, -300, 1200, 600, "#2a6f97") +
-        F("M190 330 C180 260 214 226 200 186 C188 146 222 112 210 72 C204 40 230 10 236 -300 L800 -300 L800 600 L190 600 Z", "#efe0bf") +
-        P("M190 330 C180 260 214 226 200 186 C188 146 222 112 210 72 C204 40 230 10 236 -40", "#fff6df", 3, { opacity: 0.8 }) +
-        PINS.map(function (p, j) { return H("pin" + j, F("M" + p[0] + " " + p[1] + " q-10 -13 -10 -21 a10 10 0 0 1 20 0 q0 8 -10 21 z", j === 0 ? C.orange : C.navy) + O(p[0], p[1] - 21, 4, C.white)); }).join("") +
-        H("s5ring", O(236, 186, 24, "none", { stroke: C.orange, "stroke-width": 4, "class": "a-pulse" })) +
-        H("s5logo", pill(306, 248, "QASR HOSPITALITY", { sz: 17, bg: C.navy, st: C.navy, fg: C.white }) + R(30, 70, 140, 150, C.paper, 14) + I.hotel(100, 132, 3.2) + T(100, 200, "WEEKS 1 TO 14", 15, C.navy)) +
-        H("s5panel", R(12, 20, 172, 268, "#0f2a44", 14, { opacity: 0.93 }) + TK("n14", 56, 82, "0", 52, C.sun) + T(126, 62, "HOTELS &", 15, "#dfe9f3") + T(126, 81, "RESORTS", 15, "#dfe9f3") +
-          people + TK("n3100", 98, 240, "0", 26, C.white) + T(98, 262, "STAFF", 15, "#dfe9f3") + T(98, 282, "1 ICON = 100", 15, C.sun)) +
-        H("s5plane", Tr(0, 0, I.plane(0, 0, 2.2, C.white))) +
-        H("s5p17", pill(316, 238, "QASR MARINA", { sz: 17, bg: C.orange, st: C.orange, fg: C.white }) + pill(100, 60, "DELAYED FLIGHT", { sz: 16, bg: C.red, st: C.red, fg: C.white }) + clock(100, 112, 22, C.red)));
-
-      // ---------- S6 · Department scoreboard versus her evening
-      // Template: Motion Array — Infographic Chart Creator (bars grow, values stamp in)
-      // https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
-      var DEP = ["FRONT DESK", "REVENUE", "HOUSEKEEPING"];
-      s += H("S6", R(-400, -300, 1200, 600, "#f4f2ee") + R(10, 20, 252, 242, C.white, 14, { stroke: C.navy, "stroke-width": 2 }) + T(136, 50, "DEPARTMENT TARGETS", 16, C.navy) +
-        DEP.map(function (d, j) { var yy = 92 + j * 60; return T(28, yy, d, 16, C.ink, null, "start") + R(28, yy + 8, 186, 24, "#e6e2da", 6) + K("bar" + j, R(28, yy + 8, 186, 24, C.green, 6)) + H("bok" + j, T(121, yy + 26, "TARGET MET", 16, C.white) + badge(236, yy + 6, 14, true)); }).join("") +
-        T(330, 50, "GUEST", 16, C.red) + T(330, 70, "RESULT", 16, C.red) + fig(330, 248, 1.6, C.orange, { mood: "frown", hair: "long" }) +
-        R(372, 80, 16, 150, "#e6e2da", 8) + K("meter", R(372, 80, 16, 150, C.green, 8)) +
-        H("s6poor", pill(320, 284, "POOR EVENING", { sz: 16, bg: C.red, st: C.red, fg: C.white })));
-
-      // ---------- S7 · Four learning goals, then course outcome K1
-      // Template: LottieFiles — Multi-Step Icon Animation (activate one step after another)
-      // https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
-      s += H("S7", R(-400, -300, 1200, 600, "#14263a") +
-        GC.map(function (g, j) {
-          var X = g[0], Y = g[1], mini = "";
-          if (j === 0) mini = I.flag(X + 32, Y + 76, 1.2, C.green) + D("m0", "M" + (X + 44) + " " + (Y + 80) + " H" + (X + 150), C.orange, 3, { "stroke-dasharray": "6 6" }) + I.flag(X + 162, Y + 76, 1.2, C.red) + T(X + 36, Y + 104, "START", 15, C.green) + T(X + 158, Y + 104, "END", 15, C.red);
-          if (j === 1) mini = R(X + 18, Y + 64, 62, 38, C.green, 6) + R(X + 108, Y + 64, 62, 38, C.green, 6) + tick(X + 49, Y + 84, 1, C.white) + tick(X + 139, Y + 84, 1, C.white) + K("m1", P("M" + (X + 94) + " " + (Y + 60) + " l-6 10 l8 8 l-6 10 l7 10 l-4 8", C.red, 4));
-          if (j === 2) mini = [X + 40, X + 94, X + 148].map(function (xx) { return R(xx - 16, Y + 60, 32, 46, "#2c4a68", 4); }).join("") + D("m2", "M" + (X + 14) + " " + (Y + 84) + " H" + (X + 176), C.orange, 5);
-          if (j === 3) mini = rep(5, function (i) { return K("m3s" + i, R(X + 20 + i * 22, Y + 104 - (i + 1) * 9, 18, (i + 1) * 9, i === 4 ? C.sun : "#7fa6c9", 2)); }) + P("M" + (X + 148) + " " + (Y + 70) + " a14 14 0 1 1 -2 26", C.mint, 3) + F("M" + (X + 142) + " " + (Y + 92) + " l6 8 l4 -9 z", C.mint);
-          return K("gc" + j, R(X, Y, 188, 112, "#1f3a57", 14, { stroke: "#3c5f84", "stroke-width": 2 }) + K("gr" + j, R(X, Y, 188, 112, "none", 14, { stroke: C.sun, "stroke-width": 3, opacity: 0 })) +
-            O(X + 22, Y + 26, 14, C.sun) + T(X + 22, Y + 32, String(j + 1), 16, C.ink) + T(X + 44, Y + 26, GOALS[j][0], 16, C.white, null, "start") + T(X + 44, Y + 46, GOALS[j][1], 16, C.white, null, "start") + mini);
-        }).join("") +
-        H("s7k1", O(200, 138, 64, C.sun) + O(200, 138, 56, "none", { stroke: "#8a5a17", "stroke-width": 2, "stroke-dasharray": "4 4" }) + T(200, 132, "K1", 36, "#5a3a10") +
-          I.mag(214, 160, 1.6, "#5a3a10") + R(178, 152, 20, 22, "#5a3a10", 2) + R(182, 156, 5, 5, C.sun) + R(190, 156, 5, 5, C.sun)) +
-        H("s7p", pill(200, 240, "ANALYSE HOW ORGANISATIONS", { sz: 18, bg: C.sun, st: C.sun, fg: C.ink }) + pill(200, 278, "USE BPM TODAY", { sz: 18, bg: C.white, st: C.sun, fg: C.ink })));
-
-      // ---------- S8 · One unfolding story; she ignores department labels
-      // Template: Behance — Process: What is a Motion Designer? (illustrated narrative vignettes)
-      // https://www.behance.net/gallery/159045079/Process-What-is-a-Motion-Designer-
-      var TAGS = ["RESERVATIONS", "REVENUE", "HOUSEKEEPING", "FINANCE"];
-      s += H("S8", R(-400, -300, 1200, 600, "#f5efe3") +
-        // v3: a 14-week strip of Qasr episodes replaces the book; the same guest walks along it
-        H("s8book", T(200, 34, "QASR, WEEK BY WEEK", 18, C.navy) +
-          rep(14, function (i) { var xx = 22 + (i % 7) * 54, yy = 56 + Math.floor(i / 7) * 86; return R(xx, yy, 46, 62, i === 0 ? C.orange : C.white, 8, { stroke: i === 0 ? C.orange : C.navy, "stroke-width": 2 }) + T(xx + 23, yy + 40, String(i + 1), 20, i === 0 ? C.white : C.navy); }) +
-          K("s8page", fig(0, 0, 0.75, C.orange, { hair: "long" })) +
-          pill(200, 268, "ONE STORY, ALL TERM", { sz: 18, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("s8who", TAGS.map(function (t, j) { return K("tag" + j, pill(84, 48 + j * 54, t, { sz: 15, st: C.slate, fg: C.slate }) + D("strk" + j, "M" + (22) + " " + (48 + j * 54) + " H146", C.red, 3)); }).join("") +
-          fig(206, 292, 2.2, C.orange, { hair: "long" }) +
-          O(262, 150, 4, C.white, { stroke: C.muted }) + O(276, 132, 7, C.white, { stroke: C.muted }) + R(270, 46, 120, 76, C.white, 22, { stroke: C.muted, "stroke-width": 2 }) + I.bed(330, 76, 2, C.green) + T(330, 110, "MY ROOM", 16, C.green)));
-
-      // ---------- S9 · The right room; then: what process delivers it?
-      // Template: 3Blue1Brown (Manim demo) — traced causal path drawn when it becomes relevant
-      // https://www.3blue1brown.com/lessons/manim-demo/
-      s += H("S9", R(-400, -300, 1200, 600, "#eef4ef") +
-        H("s9room", R(-400, 214, 1200, 300, "#d9c7a8") + R(250, 40, 110, 86, C.sky, 6, { stroke: C.white, "stroke-width": 6 }) + I.bed(270, 214, 6, C.green) +
-          fig(104, 280, 2, C.orange, { hair: "long" }) + badge(170, 70, 22, true) + pill(170, 116, "RIGHT ROOM", { sz: 17, bg: C.green, st: C.green, fg: C.white }) + pill(304, 286, "NO WAITING", { sz: 16, st: C.green, fg: C.green })) +
-        H("s9q", O(44, 140, 30, C.white, { stroke: C.navy, "stroke-width": 3 }) + I.bell(44, 142, 1.8) + T(44, 194, "DESK", 16, C.navy) +
-          O(356, 140, 30, C.white, { stroke: C.green, "stroke-width": 3 }) + I.bed(356, 142, 1.8, C.green) + T(356, 194, "ROOM", 16, C.green) +
-          [130, 200, 270].map(function (xx, j) { return K("qb" + j, R(xx - 26, 116, 52, 48, C.white, 8, { stroke: C.orange, "stroke-width": 2.5, "stroke-dasharray": "6 4" }) + T(xx, 152, "?", 28, C.orange)); }).join("") +
-          D("s9path", "M74 140 H104 M156 140 H174 M226 140 H244 M296 140 H326", C.navy, 3) +
-          pill(200, 250, "WHAT'S THE PROCESS?", { sz: 17, bg: C.navy, st: C.navy, fg: C.white })));
-      return s;
-    }
-
-    function render(c, k) {
-      var sg = stages(c, k, CUTS, 10);
-      // S0
-      c.mv("s0g", k === 0 ? { x: -60 } : k === 1 ? { x: 44 } : { x: 150 }, { d: 1.4, e: "power2.inOut" });
-      c.op("s0g", k === 0 ? 0 : 1);
-      c.mv("s0plane", k === 0 ? { x: -60, y: 50 } : k === 1 ? { x: 176, y: 40, r: -4 } : { x: 470, y: 18 }, { d: 1.6, e: "power2.inOut" });
-      c.op("s0plane", k === 1 ? 1 : 0);
-      c.vis({ s0p0: k === 0, s0p1: k === 1, s0p2: k === 2, s0bat: k === 2, s0think: k === 2 });
-      c.mv("s0sign", k === 0 ? { s: 1.08 } : {});
-      c.op("g0-sm", k === 2 ? 0 : 1); c.op("g0-fr", k === 2 ? 1 : 0);
-      // S1
-      c.vis({ s1ok: k === 3, s1bad: k === 4, s1wait: k === 5, s1p3: k === 3, s1p4: k === 4, s1call: k === 5, s1p5: k === 5, s1forms: k === 5 });
-      c.op("s1pp", k === 5 ? 1 : 0); c.mv("s1pp", k === 5 ? { x: 196, y: 196, r: -10 } : { x: 108, y: 210 }, { d: 1.2, dl: k === 5 ? 0.6 : 0 });
-      c.op("g1-sm", k === 3 ? 1 : 0); c.op("g1-fr", k === 3 ? 0 : 1);
-      c.op("rc-sm", k <= 5 ? 1 : 1);
-      // S2
-      [0, 1, 2].forEach(function (j) {
-        c.op("s2sm" + j, k === 6 ? 1 : 0, { dl: k === 6 ? j * 0.2 : 0 });
-        c.op("s2ok" + j, k >= 7 ? 1 : 0, { dl: k === 7 ? j * 0.3 : 0 }); c.mv("s2ok" + j, k >= 7 ? {} : { s: 0.3 }, { dl: k === 7 ? j * 0.3 : 0, e: "back.out(2)" });
-      });
-      c.vis({ s2gap0: k === 8, s2gap1: k === 8, s2p6: k === 6, s2p7: k === 7, s2out: k === 8, s2clk: k >= 6 });
-      c.mv("s2hand", { r: k === 6 ? 0 : k === 7 ? 120 : 300 }, { d: 1.4 });
-      c.op("g2-sm", 0); c.op("g2-fr", 1);
-      // S3
-      c.vis({ s3dim: k === 9, s3p9: k === 9, s3split: k === 10, s3case: k === 11, s3p11: k === 11 });
-      c.mv("s3g", k === 9 ? {} : k === 10 ? { x: 100, y: -40, s: 0.62 } : { x: 0, y: 0, s: 0.4 }, { d: 1 });
-      c.op("s3g", k === 11 ? 0 : 1);
-      c.op("s3card", k === 11 ? 1 : 0); c.mv("s3card", k === 11 ? { x: 200, y: 168, s: 0.9 } : { x: 200, y: 120, s: 1.6 }, { d: 1.3, dl: k === 11 ? 0.2 : 0, e: "power2.inOut" });
-      c.op("g3-sm", 0); c.op("g3-fr", 1);
-      // S4
-      var meshed = k >= 12;
-      c.mv("g0", { x: meshed ? 46 : 0, r: k === 12 ? 144 : k === 13 ? 288 : k === 14 ? 432 : 0 }, { d: 1.6, dl: k === 12 ? 0.5 : 0, e: "power2.inOut" });
-      c.mv("g1", { r: k === 12 ? -144 : k === 13 ? -288 : k === 14 ? -432 : 0 }, { d: 1.6, dl: k === 12 ? 0.5 : 0, e: "power2.inOut" });
-      c.mv("g2", { x: meshed ? -46 : 0, r: k === 12 ? 144 : k === 13 ? 288 : k === 14 ? 432 : 0 }, { d: 1.6, dl: k === 12 ? 0.5 : 0, e: "power2.inOut" });
-      c.mv("gl0", { x: meshed ? 46 : 0 }, { d: 1.6, dl: 0.5 }); c.mv("gl2", { x: meshed ? -46 : 0 }, { d: 1.6, dl: 0.5 });
-      c.vis({ gl0: k <= 13, gl1: k <= 13, gl2: k <= 13, s4p12: k === 12, s4bpm: k === 13, s4trk: k === 14, s4rec: k === 14, s4val: k === 14 });
-      c.dr("s4belt", k >= 13 ? 1 : 0, { d: 1.2 });
-      c.mv("s4top", k === 14 ? { y: -46, s: 0.6 } : {}, { d: 1 });
-      c.dr("s4run", k === 14 ? 1 : 0, { d: 2.4, dl: 0.3 });
-      if (k === 14) c.route("s4rec", [[0, 0], [97, 0], [194, 0], [291, 0]], 2.4); else c.mv("s4rec", {}, { d: 0 });
-      // S5
-      PINS.forEach(function (p, j) {
-        var on = k >= 16 || (k === 15 && j === 0);
-        c.op("pin" + j, on ? (k === 17 && j > 0 ? 0.25 : 1) : 0, { dl: k === 16 ? j * 0.07 : 0 });
-        c.mv("pin" + j, on ? (k === 17 && j === 0 ? { s: 1.5 } : {}) : { y: -16 }, { dl: k === 16 ? j * 0.07 : 0, e: "back.out(2)" });
-      });
-      for (var q = 0; q < 31; q++) c.op("pp" + q, k >= 16 ? 1 : 0, { dl: k === 16 ? 0.4 + q * 0.035 : 0, d: 0.3 });
-      c.tx("n14", k >= 16 ? "14" : "0");
-      c.tx("n3100", k >= 16 ? "3,100" : "0");
-      c.vis({ s5logo: k === 15, s5panel: k === 16, s5ring: k === 17, s5p17: k === 17 });
-      c.op("s5plane", k === 17 ? 1 : 0); c.mv("s5plane", k === 17 ? { x: 212, y: 170, r: 30 } : { x: 30, y: 30, r: 20 }, { d: 1.8, e: "power2.inOut" });
-      // S6
-      [0, 1, 2].forEach(function (j) {
-        c.mv("bar" + j, { sx: k === 18 ? 1 : 0.02, pv: [28, 104 + j * 60] }, { d: 0.9, dl: j * 0.35 });
-        c.op("bok" + j, k === 18 ? 1 : 0, { dl: 0.7 + j * 0.35 });
-      });
-      c.mv("meter", { sy: k === 18 ? 0.2 : 1, pv: [380, 230] }, { d: 1.3, dl: 1.4 });
-      c.fl("meter", k === 18 ? C.red : C.green, { dl: 1.4, d: 1.2 });
-      c.op("s6poor", k === 18 ? 1 : 0, { dl: 2.2 });
-      // S7
-      [0, 1, 2, 3].forEach(function (j) {
-        var act = k === 19 + j, done = k >= 19 + j;
-        var cornerX = j % 2 ? 30 : -30, cornerY = j < 2 ? -18 : 18;
-        c.mv("gc" + j, k === 23 ? { x: cornerX / 3, y: cornerY / 3 } : act ? { s: 1.03 } : {}, { d: 0.9 });
-        c.op("gc" + j, k === 23 ? 0.1 : done ? (act ? 1 : 0.55) : 0.3);
-        c.op("gr" + j, act ? 1 : 0);
-      });
-      c.dr("m0", k >= 19 ? 1 : 0, { d: 1.2 });
-      c.mv("m1", k >= 20 ? { sy: 1 } : { sy: 0.1 }, { d: 0.6 }); c.op("m1", k >= 20 ? 1 : 0);
-      c.dr("m2", k >= 21 ? 1 : 0, { d: 1.2 });
-      for (var st = 0; st < 5; st++) c.mv("m3s" + st, { sy: k >= 22 ? 1 : 0.1, pv: [224, 232] }, { dl: k === 22 ? st * 0.12 : 0 });
-      c.vis({ s7k1: k === 23, s7p: k === 23 });
-      c.mv("s7k1", k === 23 ? {} : { s: 0.4, r: -60 }, { d: 0.9, e: "back.out(1.6)" });
-      // S8
-      c.vis({ s8book: k === 24, s8who: k === 25 });
-      c.mv("s8page", k === 24 ? { x: 360, y: 246 } : { x: 45, y: 246 }, { d: k === 24 ? 3 : 0, e: "power1.inOut" });
-      [0, 1, 2, 3].forEach(function (j) {
-        c.dr("strk" + j, k === 25 ? 1 : 0, { dl: 0.3 + j * 0.25, d: 0.5 });
-        c.op("tag" + j, k === 25 ? 0.75 : 1, { dl: 0.8 + j * 0.25 });
-        c.mv("tag" + j, k === 25 ? { x: -6 } : {}, { dl: 0.8 + j * 0.25 });
-      });
-      // S9
-      c.vis({ s9room: k === 26, s9q: k === 27 });
-      c.dr("s9path", k === 27 ? 1 : 0, { d: 1.2, dl: 0.3 });
-      [0, 1, 2].forEach(function (j) { c.mv("qb" + j, k === 27 ? {} : { s: 0.5 }, { dl: 0.4 + j * 0.2, e: "back.out(2)" }); });
-      void sg;
-    }
-
-    REG[id] = makeScene({ id: id, N: N, labels: labels, draw: draw, render: render,
-      desc: "Week 1 opening: a tired traveller arrives at Qasr Marina, helpful staff each finish their own task while she still waits, and the course asks what process should deliver her room." });
-    SCENE_BG.push([id, "#13263b"]);
+      "Not her concern", "The right room", "What is the process?"],
+      "Week 1 opening: a tired traveller arrives at Qasr Marina, the booking does not match, every department finishes its own job while she waits, BPM joins the departments around her outcome, the four goals and outcome K1, and the question of which process should deliver the right room.", "#13263b");
   })();
 
   // ============================================================
-  // O1a · "A PROCESS, IN PLAIN WORDS" · 34 moments · 10 visuals
-  // Audit fixes: 2 names who holds what (booking / corporate rate / room
-  // status); 7-10 use five explicit action cards that become the definition
-  // ACTIVITIES -> OUTCOME OF VALUE -> CUSTOMER; 15-18 a guest record moves
-  // through labelled lanes; 21 separates "tasks done" from "she got it?";
-  // 23 key = task done, journey not done; 30 fills the test's slots.
+  // O1a · "A PROCESS, IN PLAIN WORDS" · 34 moments · 11 compositions
   // ============================================================
   (function () {
-    var id = "O1a", N = 34;
-    var CUTS = [3, 6, 10, 13, 16, 19, 22, 27, 31];
-    var labels = ["Back at reception", "Several departments", "Who holds what", "Her own job", "Only part of it",
+    var OFF = [["RESERVATIONS", "THE BOOKING", C.navy, I.doc(0, 0, 0.9)], ["REVENUE OFFICE", "CORPORATE RATE", C.green, I.money(0, 0, 0.9, C.green)],
+      ["HOUSEKEEPING", "ROOM READY?", C.slate, I.bed(0, 0, 1, C.slate)]];
+    var NEEDS = ["BOOKING", "RATE", "ROOM", "KEY", "SETTLED"];
+    var CARD = ["QUEUE, REQUEST", "VERIFY BOOKING", "CONFIRM RATE", "ROOM READY", "GUEST SETTLED"];
+    var LN = [["FRONT DESK", C.navy, "#e9f0f7"], ["REVENUE", C.green, "#e8f3ed"], ["HOUSEKEEPING", C.slate, "#eef0f3"]];
+    var SQ = [[0, 54, "VERIFY", "BOOKING"], [1, 106, "CONFIRM", "RATE"], [2, 158, "ROOM", "READY"], [0, 210, "GUEST", "SETTLED"]];
+    build3("O1a", 34, [
+      // template: LottieFiles — Workflow by a (workers revealed, then workflow actions) — https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
+      { a: 0, d: bgc("#f3ecdf") + floor() + R(232, 232, 160, 34, C.navy, 5) + fig(312, 232, 0.8, C.navy, { hair: "long" }) +
+          fig(110, 262, 0.95, C.orange, { hair: "long" }) + R(124, 240, 10, 22, C.navy, 3) +
+          H("o0a", ban("AFTER A DELAYED FLIGHT", C.orange, 26) + I.plane(200, 130, 3.2, C.navy2)) +
+          H("o0b", ban("SEVERAL DEPARTMENTS", C.navy, 26)) + H("o0c", ban("EACH HOLDS A PIECE", C.green, 26)) +
+          OFF.map(function (o, j) {
+            var y = 48 + j * 44;
+            return H("o0r" + j, bx(6, y, 388, 38, WH, o[2]) + Tr(28, y + 19, o[3]) + t(50, y + 26, o[0], o[2], "start") + H("o0i" + j, t(384, y + 25, o[1], C.ink, "end", 14)));
+          }).join(""),
+        sh: { o0a: [0, 0], o0b: [1, 1], o0c: [2, 2], o0r0: [1, 2], o0r1: [1, 2, 0.25], o0r2: [1, 2, 0.5], o0i0: [2, 2], o0i1: [2, 2, 0.3], o0i2: [2, 2, 0.6] } },
+      // template: NYT Immersive — evidence-based zoom (detail, then pull back to the system) — https://www.nytimes.com/spotlight/augmented-reality
+      { a: 3, d: bgc("#eef3f8") +
+          bx(8, 20, 184, 192, WH, C.navy) + fig(48, 96, 0.9, C.navy, { hair: "long" }) + t(128, 66, "HER JOB", C.navy) +
+          t(100, 140, "CHECK BOOKING", C.ink) + t(100, 180, "ISSUE THE KEY", C.ink) +
+          H("o1n", bx(208, 20, 184, 192, WH, C.orange) + t(300, 46, "GUEST NEEDS", C.orange) +
+            NEEDS.map(function (n, j) { var y = 82 + j * 30; return t(232, y, n, C.ink, "start") + (j === 0 || j === 3 ? badge(370, y - 6, 10, true) : O(370, y - 6, 10, "none", { stroke: C.red, "stroke-width": 2.5 })); }).join("")) +
+          H("o1a", ban("ONLY PART OF IT", C.red, 246)) +
+          H("o1b", R(202, 14, 196, 204, "none", 14, { stroke: C.orange, "stroke-width": 4, "stroke-dasharray": "8 6" }) + ban("LOOK BEYOND THE DESK", C.orange, 246)),
+        sh: { o1n: [4, 5], o1a: [4, 4], o1b: [5, 5] } },
+      // template: Dribbble — Workflow AI Animation (data advances through stages) — https://dribbble.com/shots/26275497-Workflow-AI-Animation
+      { a: 6, d: bgc("#f4efe6") + pill(200, 26, "ASKS TO CHECK IN", { sz: 18, bg: C.orange, st: C.orange, fg: WH }) +
+          P("M84 44 V218", C.slate, 3) +
+          CARD.map(function (c, j) {
+            var y = 50 + j * 33;
+            return H("o2c" + j, bx(60, y, 280, 28, WH, C.navy, 8, 2) + O(84, y + 14, 11, C.navy) + T(84, y + 19, String(j + 1), 14, WH) + t(104, y + 21, c, C.ink, "start"));
+          }).join("") +
+          H("o2e", pill(200, 232, "REACHES HER ROOM", { sz: 18, bg: C.green, st: C.green, fg: WH })) +
+          H("o2b", P("M346 26 H360 V232 H346", C.navy, 3) + ban("A BUSINESS PROCESS", C.navy, 276)),
+        sh: { o2c0: [6, 7, 0.1], o2c1: [6, 7, 0.4], o2c2: [6, 7, 0.7], o2c3: [6, 7, 1.0], o2c4: [6, 7, 1.3], o2e: [6, 7, 1.6], o2b: [7, 7] } },
+      // template: Dribbble — Workflow Animation (a trigger token travels to an outcome) — https://dribbble.com/shots/3791748-Workflow-Animation
+      { a: 8, d: bgc("#eef6f1") +
+          bx(10, 24, 240, 50, WH, C.navy) + t(130, 56, "ACTIVITIES", C.navy) + arr(130, 76, 130, 97, C.navy, 3) +
+          bx(10, 100, 240, 50, C.peach, C.orange) + t(130, 132, "OUTCOME OF VALUE", C.orange) + arr(130, 152, 130, 173, C.navy, 3) +
+          bx(10, 176, 240, 50, WH, C.green) + fig(40, 222, 0.65, C.green) + t(140, 208, "CUSTOMER", C.green) +
+          H("o3h", R(4, 94, 252, 62, "none", 12, { stroke: C.orange, "stroke-width": 4 })) +
+          H("o3a", ban("THE RESULT COMES FIRST", C.orange, 262)) +
+          H("o3b", arr(252, 125, 272, 125, C.orange, 3) + bx(274, 60, 118, 136, C.mint, C.green) + I.bed(333, 90, 1.6, C.green) +
+            t(333, 136, "SETTLED", C.green) + t(333, 160, "RIGHT ROOM", C.ink, null, 14) + t(333, 182, "QUICKLY", C.ink, null, 14)),
+        sh: { o3h: [9, 10], o3a: [9, 10], o3b: [10, 10] } },
+      // template: Kurzgesagt — consequence ripple (an event propagates to what it causes) — https://www.youtube.com/kurzgesagt/videos
+      { a: 11, d: bgc("#f6f4ee") +
+          H("o4t", ban("WHERE DOES IT START?", C.navy, 26) +
+            P("M30 90 C120 50 160 240 250 120 C300 60 360 70 370 200 M40 220 C140 120 200 260 300 90 M60 60 C200 260 260 50 360 250", C.muted, 3) + I.mag(200, 160, 3.2, C.navy)) +
+          H("o4s", floor() + R(120, 222, 96, 40, C.wood, 4) + I.bell(168, 212, 1.6) + fig(70, 262, 1.4, C.orange, { hair: "long" }) +
+            pill(214, 112, "CHECK-IN REQUESTED", { sz: 18, bg: WH, st: C.orange, fg: C.orange })) +
+          H("o4g", pill(176, 170, "THE TRIGGER", { sz: 20, bg: C.orange, st: C.orange, fg: WH }) + O(168, 210, 22, "none", { stroke: C.orange, "stroke-width": 3, "class": "a-pulse" })) +
+          H("o4n", R(262, 190, 130, 66, "#f3f0ea", 10, { stroke: C.slate, "stroke-width": 2.5, "stroke-dasharray": "6 5" }) +
+            t(327, 218, "NO REQUEST", C.slate, null, 14) + t(327, 242, "NO CASE", C.slate, null, 14) + ban("NO TRIGGER, NO JOURNEY", C.red, 26)),
+        sh: { o4t: [11, 11], o4s: [12, 14], o4g: [13, 14], o4n: [14, 14] } },
+      // template: Dribbble — Data Workflow Animation (nodes and links activate in sequence) — https://dribbble.com/shots/27247003-Data-Workflow-Animation
+      { a: 15, d: bgc("#f7f8fa") +
+          LN.map(function (l, j) { var x = 4 + j * 132; return R(x, 6, 128, 254, l[2], 8) + t(x + 64, 34, l[0], l[1], null, 14); }).join("") +
+          D("o5l", "M126 77 H200 V104 M258 129 H332 V156 M332 204 V233 H128", C.orange, 3) +
+          H("o5h", F("M195 97 L205 97 L200 106 Z", C.orange) + F("M327 149 L337 149 L332 158 Z", C.orange) + F("M136 228 L136 238 L127 233 Z", C.orange)) +
+          SQ.map(function (s, j) {
+            var x = 10 + s[0] * 132;
+            return H("o5b" + j, bx(x, s[1], 116, 46, WH, LN[s[0]][1], 8, 2.5) + t(x + 58, s[1] + 20, s[2], LN[s[0]][1]) + t(x + 58, s[1] + 41, s[3], C.ink));
+          }).join("") +
+          H("o5d", I.doc(170, 77, 1.1, C.orange) + I.doc(296, 129, 1.1, C.orange) + I.doc(230, 233, 1.1, C.orange)) +
+          H("o5w", ban("WORK BEGINS", C.orange, 280)) + H("o5a", ban("THE SEQUENCE", C.navy, 280)) +
+          H("o5c", ban("SPANS THREE TEAMS", C.navy, 280)) + H("o5e", ban("EACH TEAM ADDS", C.orange, 280)),
+        sh: { o5b0: [15, 18], o5b1: [16, 18, 0.2], o5b2: [16, 18, 0.5], o5b3: [16, 18, 0.8], o5h: [16, 18, 1.0], o5w: [15, 15], o5a: [16, 16], o5c: [17, 17], o5e: [18, 18], o5d: [18, 18] },
+        dr: { o5l: [16, 18, 0.2] } },
+      // template: Apple HIG Motion — physical handoff (same object stays recognisable in transfer) — https://developer.apple.com/design/human-interface-guidelines/motion
+      { a: 19, d: bgc("#f1f4f8") +
+          H("o6a", floor() + fig(90, 214, 1.4, C.navy) + t(90, 244, "FRONT DESK", C.navy) + fig(310, 214, 1.4, C.green) + t(310, 244, "REVENUE", C.green) +
+            P("M130 112 Q200 58 270 112", C.orange, 4) + F("M262 100 L274 116 L256 114 Z", C.orange) +
+            pill(200, 40, "HANDOFF", { sz: 20, bg: C.orange, st: C.orange, fg: WH }) + K("o6d", I.doc(130, 150, 1.8, C.orange))) +
+          H("o6b", [["FRONT DESK", C.navy], ["REVENUE", C.green], ["HOUSEKEEPING", C.slate]].map(function (d, j) {
+              var x = 6 + j * 132;
+              return bx(x, 36, 124, 146, WH, d[1]) + t(x + 62, 62, d[0], d[1], null, 14) +
+                rep(3, function (r) { return P("M" + (x + 16) + " " + (92 + r * 30) + " H" + (x + 84), C.muted, 5) + tick(x + 104, 92 + r * 30, 1, C.green); });
+            }).join("") + arr(20, 210, 380, 210, C.orange, 6) + ban("ONE PROCESS ACROSS", C.orange, 250)),
+        sh: { o6a: [19, 19], o6b: [20, 20] }, mv: { o6d: function (k) { return { x: k === 19 ? 140 : 0 }; } } },
+      // template: LottieFiles — Process Success (activity transforms into a check only at the real end) — https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
+      { a: 21, d: bgc("#f6f4ee") +
+          bx(10, 24, 180, 138, C.mint, C.green) + t(100, 52, "TASKS DONE", C.green) + rep(3, function (r) { return badge(50 + r * 50, 98, 15, true); }) + t(100, 146, "ALL TEAMS", C.ink, null, 14) +
+          bx(210, 24, 180, 138, C.peach, C.red) + t(300, 52, "GUEST?", C.red) + fig(260, 152, 1.1, C.orange, { hair: "long" }) + t(338, 128, "?", C.red, null, 48) +
+          H("o7e", P("M30 226 H346", C.navy, 5) + I.flag(368, 216, 1.6, C.green) + pill(286, 186, "END STATE", { sz: 18, bg: C.green, st: C.green, fg: WH })) +
+          H("o7k", I.key(90, 226, 2, C.amber) + t(90, 268, "TASK DONE", C.green) + t(392, 268, "JOURNEY NOT DONE", C.red, "end")),
+        sh: { o7e: [22, 23], o7k: [23, 23] } },
+      // template: Motion Array — Scrolling Timeline (pan along time and settle on the event) — https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
+      { a: 24, d: bgc("#f3efe7") + floor() + R(40, 96, 90, 154, "#a8743f", 4) + O(116, 176, 4, C.sun) + I.lock(98, 150, 1.8, C.red) +
+          fig(190, 250, 1.4, C.orange, { hair: "long", mood: "frown" }) + I.key(190, 146, 1.5, C.amber) +
+          pill(100, 70, "NOT RELEASED", { sz: 18, bg: C.red, st: C.red, fg: WH }) +
+          H("o8c", bx(232, 40, 160, 86, WH, C.green) + t(312, 72, "RECEPTIONIST'S", C.ink, null, 14) + t(296, 104, "TASK", C.green) + badge(352, 98, 12, true) +
+            bx(232, 140, 160, 86, WH, C.red) + t(312, 172, "GUEST'S", C.ink, null, 14) + t(296, 204, "CHECK-IN", C.red) + badge(372, 198, 11, false)) +
+          H("o8m", ban("OUTCOME MISSING", C.red, 278)),
+        sh: { o8c: [25, 26], o8m: [26, 26] } },
+      // template: Awwwards — UI Animation & Microinteractions (morphing decision gate: pass or bounce) — https://www.awwwards.com/awwwards/collections/animation/
+      { a: 27, d: bgc("#f1eef5") + ban("THE PROCESS TEST", C.plum, 26) +
+          [["CUSTOMER?", "ARRIVING GUEST", 56], ["OUTCOME?", "RIGHT ROOM, FAST", 136]].map(function (s, j) {
+            var y = s[2];
+            return bx(10, y, 380, 66, WH, C.plum) + t(24, y + 40, s[0], C.plum, "start") +
+              R(150, y + 12, 232, 42, "#f6f3fa", 8, { stroke: C.plum, "stroke-width": 2, "stroke-dasharray": "5 4" }) +
+              H("o9v" + j, t(255, y + 40, s[1], C.green) + badge(364, y + 33, 11, true));
+          }).join("") +
+          H("o9a", ban("WHO GETS VALUE? WHAT RESULT?", C.navy, 246)) + H("o9b", ban("NOT JOB DESCRIPTIONS", C.orange, 246)),
+        sh: { o9a: [28, 28], o9b: [29, 29], o9v0: [30, 30], o9v1: [30, 30, 0.4] } },
+      // template: Dribbble — Creative Design Workflow Animation (parts assemble into one product) — https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
+      { a: 31, d: bgc("#eef3f8") +
+          [["TRIGGER", C.orange], ["SEQUENCE", C.navy], ["OUTCOME", C.green]].map(function (p, j) { var x = 6 + j * 136; return bx(x, 30, 116, 50, WH, p[1]) + t(x + 58, 62, p[0], p[1]); }).join("") +
+          arr(124, 55, 140, 55, C.slate, 3) + arr(260, 55, 276, 55, C.slate, 3) +
+          H("o10t", ban("THREE PARTS, ONE PROCESS", C.navy, 120)) +
+          H("o10d", LN.map(function (l, j) { var y = 100 + j * 34; return R(6, y, 388, 30, l[2], 6) + t(16, y + 21, l[0], l[1], "start", 14); }).join("") +
+            P("M150 115 H230 V149 H300 V183 H370", C.orange, 4) + F("M368 176 L382 183 L368 190 Z", C.orange) + ban("BEYOND INDIVIDUAL JOBS", C.navy, 226)) +
+          H("o10m", bx(10, 100, 184, 110, "#fbe9e4", C.red) + t(102, 142, "EVERY CLICK", C.red) + t(102, 174, "TOO MUCH", C.slate, null, 14) +
+            bx(206, 100, 184, 110, C.mint, C.green) + t(298, 142, "HER JOURNEY", C.green) + t(298, 174, "RIGHT SCOPE", C.slate, null, 14) + ban("HOW MUCH TO MAP?", C.orange, 250)),
+        sh: { o10t: [31, 31], o10d: [32, 32], o10m: [33, 33] } }
+    ], ["Back at reception", "Several departments", "Who holds what", "Her own job", "Only part of it",
       "Look beyond the desk", "Follow the work", "A business process", "Activities to outcome", "Result over department",
       "Settled, right room", "How to spot it?", "She asks to check in", "The trigger", "No trigger, no journey",
       "Work begins", "The sequence", "Not one department", "Information moves", "The handoff",
       "Bigger than task lists", "Tasks done. Guest?", "The end state", "Key is not the end", "Room not released",
       "Complete?", "Outcome missing", "The process test", "Customer and outcome", "Apply the test",
-      "Guest, right room, fast", "Three parts", "Across departments", "How much to map?"];
-    var CX = [44, 122, 200, 278, 356];
-    var CARD = [["QUEUE,", "REQUEST"], ["VERIFY", "BOOKING"], ["CONFIRM", "RATE"], ["ROOM", "READY"], ["GUEST", "SETTLED"]];
-    var OFF = [["RESERVATIONS", "THE BOOKING", 20], ["REVENUE OFFICE", "CORPORATE RATE", 104], ["HOUSEKEEPING", "ROOM READY?", 188]];
-
-    function draw(u) {
-      var s = "";
-      // ---------- S0 · Reception, and the three offices that hold her information
-      // Template: LottieFiles — Workflow by a (workers revealed, then workflow actions)
-      // https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
-      s += K("S0", R(-400, -300, 1200, 600, "#f3ecdf") + R(-400, 212, 590, 120, C.navy) + R(-400, 206, 590, 8, C.gold) +
-        fig(100, 212, 1.9, C.navy, { hair: "long" }) + R(132, 168, 44, 34, C.ink, 5) + R(136, 172, 36, 26, C.sky, 3) +
-        fig(40, 300, 1.8, C.orange, { mood: "frown", hair: "long" }) + R(60, 262, 14, 30, C.navy, 3) +
-        OFF.map(function (o, j) {
-          var y = o[2];
-          var icon = j === 0 ? I.doc(222, y + 50, 1.3) : j === 1 ? I.money(222, y + 50, 1.3, C.green) : I.bed(222, y + 50, 1.4, C.slate);
-          return K("of" + j, R(196, y, 196, 72, C.white, 10, { stroke: C.navy, "stroke-width": 2 }) + T(294, y + 24, o[0], 16, C.navy) +
-            H("oq" + j, T(222, y + 58, "?", 24, C.orange)) + H("oi" + j, icon + T(244, y + 56, o[1], 14, C.green, null, "start")));
-        }).join("") +
-        H("s0links", OFF.map(function (o) { return P("M176 184 C186 184 184 " + (o[2] + 36) + " 196 " + (o[2] + 36), C.orange, 2.5, { "class": "a-flow" }); }).join("")) +
-        H("s0p0", pill(96, 40, "AFTER A DELAYED FLIGHT", { sz: 15, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("s0p1", pill(96, 40, "SEVERAL DEPARTMENTS", { sz: 15, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("s0p2", pill(96, 40, "EACH HOLDS A PIECE", { sz: 15, bg: C.green, st: C.green, fg: C.white })));
-
-      // ---------- S1 · Her job description versus everything the guest needs
-      // Template: NYT Immersive — evidence-based zoom (detail, then pull back to the system)
-      // https://www.nytimes.com/spotlight/augmented-reality
-      var NEED = [["BOOKING", 1], ["RATE", 0], ["ROOM", 0], ["KEY", 1], ["SETTLED", 0]], NX = [46, 123, 200, 277, 354];
-      s += H("S1", R(-400, -300, 1200, 600, "#eef3f8") +
-        H("s1hotel", R(150, 18, 240, 250, "#e2e9f1", 8, { stroke: C.navy, "stroke-width": 2 }) +
-          [["GUEST ROOMS", 56], ["HOUSEKEEPING", 112], ["REVENUE", 168]].map(function (f, j) { return R(160, f[1] - 30, 220, 46, C.white, 6) + T(270, f[1], f[0], 15, C.navy); }).join("") +
-          R(160, 194, 220, 64, C.white, 6) + T(300, 232, "RESERVATIONS", 15, C.navy) + R(10, 226, 130, 40, C.navy, 6) + T(75, 252, "FRONT DESK", 15, C.white) +
-          O(75, 210, 58, "none", { stroke: C.orange, "stroke-width": 3, "stroke-dasharray": "6 5" }) + pill(270, 286, "THE WHOLE HOTEL", { sz: 15, bg: C.navy, st: C.navy, fg: C.white })) +
-        K("s1rec", fig(96, 196, 2.2, C.navy, { hair: "long" })) +
-        H("s1job", R(196, 24, 194, 132, C.white, 12, { stroke: C.navy, "stroke-width": 2 }) + R(196, 24, 194, 34, C.navy, 12) + R(196, 46, 194, 12, C.navy) + T(293, 48, "HER JOB", 17, C.white) +
-          tick(218, 88, 1.1) + T(236, 94, "CHECK BOOKING", 15, C.ink, null, "start") + tick(218, 128, 1.1) + T(236, 134, "ISSUE THE KEY", 15, C.ink, null, "start")) +
-        H("s1need", R(4, 204, 392, 92, C.white, 12, { stroke: C.orange, "stroke-width": 2 }) +
-          NEED.map(function (n, j) {
-            var x = NX[j], ic = [I.doc(x, 236, 1.3), I.money(x, 236, 1.3), I.bed(x, 236, 1.4), I.key(x + 4, 236, 1.4), I.star(x, 236, 1.4)][j];
-            return R(x - 34, 214, 68, 72, n[1] ? C.mint : "#fbeee6", 8) + ic + T(x, 276, n[0], 15, n[1] ? C.green : C.orange) +
-              (n[1] ? badge(x + 28, 218, 9, true) : O(x + 28, 218, 9, C.orange) + T(x + 28, 224, "?", 14, C.white));
-          }).join("")) +
-        H("s1p4", pill(293, 180, "ONLY PART OF IT", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })));
-
-      // ---------- S2 · Follow the work: five action cards, then the definition
-      // Template: Dribbble — Workflow AI Animation (data advances through stages)
-      // https://dribbble.com/shots/26275497-Workflow-AI-Animation
-      s += H("S2", R(-400, -300, 1200, 600, "#f6f4ee") +
-        H("s2ends", O(26, 142, 18, C.white, { stroke: C.navy, "stroke-width": 3 }) + I.bell(26, 144, 1.2) + O(374, 142, 18, C.white, { stroke: C.green, "stroke-width": 3 }) + I.bed(374, 143, 1.2, C.green) +
-          pill(104, 60, "ASKS TO CHECK IN", { sz: 15, st: C.navy }) + pill(298, 60, "REACHES HER ROOM", { sz: 15, st: C.green, fg: C.green })) +
-        D("s2line", "M44 142 H356", C.orange, 4, { "stroke-dasharray": "6 6" }) +
-        H("s2walk", fig(0, 0, 1.1, C.orange, { hair: "long" })) +
-        CX.map(function (x, j) {
-          return K("cd" + j, R(x - 36, 112, 72, 60, j === 4 ? C.mint : C.white, 9, { stroke: j === 4 ? C.green : C.navy, "stroke-width": 2.5 }) +
-            T(x, CARD[j][1] ? 138 : 147, CARD[j][0], 14, j === 4 ? C.green : C.navy) + (CARD[j][1] ? T(x, 158, CARD[j][1], 14, j === 4 ? C.green : C.navy) : ""));
-        }).join("") +
-        H("s2brk", P("M8 186 V194 H392 V186", C.navy, 3) + pill(200, 212, "A BUSINESS PROCESS", { sz: 16, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("s2stack", rep(5, function (i) { return R(28 + i * 6, 100 + i * 12, 70, 44, i === 4 ? C.mint : C.white, 8, { stroke: i === 4 ? C.green : C.navy, "stroke-width": 2.5 }); })) +
-        H("s2eq", P("M128 150 H150 M142 142 L152 150 L142 158", C.navy, 4) + P("M250 150 H272 M264 142 L274 150 L264 158", C.navy, 4) +
-          K("s2star", O(200, 150, 40, C.sun) + I.star(200, 150, 2.6, C.white)) +
-          T(70, 244, "ACTIVITIES", 16, C.navy) + T(200, 268, "OUTCOME OF VALUE", 16, C.amber) + T(330, 244, "CUSTOMER", 16, C.orange) +
-          K("s2cust", fig(330, 214, 1.5, C.orange, { k: "cu", hair: "long" }))) +
-        H("s2tags", pill(200, 40, "THE RESULT COMES FIRST", { sz: 18, bg: C.green, st: C.green, fg: C.white }) + O(200, 150, 52, "none", { stroke: C.green, "stroke-width": 4, "class": "a-pulse" })));
-
-      // ---------- S3 · The valuable result, and how to find its process in a tangle
-      // Template: Awwwards — masked reveal (a moving lens shows what matters)
-      // https://www.awwwards.com/websites/animation/
-      var NODES = [[60, 60], [140, 40], [230, 70], [320, 46], [90, 140], [180, 130], [270, 150], [350, 120], [50, 220], [150, 230], [250, 236], [340, 214]];
-      var LINKS = [[0, 5], [1, 6], [2, 4], [3, 9], [4, 10], [5, 11], [6, 8], [7, 1], [8, 2], [9, 7], [10, 3], [11, 0], [0, 7], [2, 10]];
-      s += H("S3", R(-400, -300, 1200, 600, "#eef1f6") +
-        H("s3room", R(-400, 220, 1200, 200, "#d9c7a8") + R(40, 30, 110, 190, "#a8743f", 4) + R(48, 38, 94, 182, "#fff6e3") + I.bed(250, 196, 5, C.green) +
-          fig(150, 270, 2, C.orange, { hair: "long" }) + pill(300, 44, "RIGHT ROOM", { sz: 17, bg: C.green, st: C.green, fg: C.white }) +
-          clock(300, 100, 22, C.green) + pill(300, 146, "QUICKLY", { sz: 16, st: C.green, fg: C.green })) +
-        H("s3tangle", LINKS.map(function (l) { var a = NODES[l[0]], b = NODES[l[1]]; return P("M" + a[0] + " " + a[1] + " L" + b[0] + " " + b[1], "#b8c4d2", 2); }).join("") +
-          NODES.map(function (n, j) { return R(n[0] - 22, n[1] - 15, 44, 30, j === 9 ? C.white : "#d8e0ea", 6, { stroke: "#8ea3b8", "stroke-width": 1.5 }); }).join("") +
-          K("s3hit", R(116, 208, 68, 46, C.peach, 8, { stroke: C.orange, "stroke-width": 3 }) + fig(136, 250, 0.62, C.orange, { hair: "long" }) + I.bell(164, 238, 1))) +
-        H("s3mag", I.mag(0, 0, 4.2, C.ink)) +
-        H("s3p11", pill(200, 284, "WHERE DOES IT START?", { sz: 16, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("s3p12", pill(200, 284, "CHECK-IN REQUESTED", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })));
-
-      // ---------- S4 · The trigger: the bell starts everything
-      // Template: Kurzgesagt — consequence ripple (an event propagates to what it causes)
-      // https://www.youtube.com/kurzgesagt/videos
-      var TC = [["CHECK BOOKING", 70], ["CONFIRM RATE", 148], ["VERIFY ROOM", 226]];
-      s += H("S4", R(-400, -300, 1200, 600, "#f4efe6") + R(-400, 214, 1200, 300, "#e9dfcd") +
-        K("s4bell", I.bell(110, 168, 4.6)) +
-        H("s4rip", [40, 64, 88].map(function (r) { return O(110, 150, r, "none", { stroke: C.orange, "stroke-width": 4 - r / 40, "class": "a-pulse" }); }).join("")) +
-        H("s4flag", I.flag(52, 236, 2.2, C.green) + pill(110, 268, "THE TRIGGER", { sz: 18, bg: C.green, st: C.green, fg: C.white })) +
-        H("s4no", O(110, 150, 62, "none", { stroke: C.red, "stroke-width": 6 }) + P("M66 106 L154 194", C.red, 6) + pill(200, 270, "NO REQUEST, NO CASE", { sz: 18, bg: C.red, st: C.red, fg: C.white })) +
-        TC.map(function (t, j) {
-          return D("tl" + j, "M170 150 C200 150 200 " + t[1] + " 228 " + t[1], C.orange, 3) +
-            K("tc" + j, R(228, t[1] - 28, 160, 56, C.white, 10, { stroke: C.muted, "stroke-width": 2.5 }) + T(308, t[1] + 6, t[0], 15, C.slate)) +
-            K("tg" + j, R(228, t[1] - 28, 160, 56, C.mint, 10, { stroke: C.green, "stroke-width": 3 }) + T(308, t[1] + 6, t[0], 15, C.green));
-        }).join("") +
-        H("s4p15", pill(308, 268, "WORK BEGINS", { sz: 17, st: C.green, fg: C.green })));
-
-      // ---------- S5 · Swimlanes: the sequence crosses teams; the record collects each part
-      // Template: Dribbble — Data Workflow Animation (nodes and links activate in sequence)
-      // https://dribbble.com/shots/27247003-Data-Workflow-Animation
-      var LN = [["FRONT", "DESK", 40], ["REVENUE", "", 118], ["HOUSE", "KEEPING", 196]], LC = ["#f8efe0", "#e6f1ea", "#e5edf6"];
-      var SC = [[128, 0, "VERIFY", "BOOKING"], [205, 1, "CONFIRM", "RATE"], [282, 2, "ROOM", "READY"], [358, 0, "GUEST", "SETTLED"]];
-      s += H("S5", R(-400, -300, 1200, 600, "#f7f7f4") +
-        LN.map(function (l, j) {
-          return R(-400, l[2], 1200, 72, LC[j]) + K("lh" + j, R(2, l[2] + 4, 84, 64, "none", 8, { stroke: C.orange, "stroke-width": 3, opacity: 0 })) +
-            T(44, l[2] + (l[1] ? 32 : 42), l[0], 15, C.navy) + (l[1] ? T(44, l[2] + 52, l[1], 15, C.navy) : "");
-        }).join("") + P("M88 34 V274", C.muted, 1.5) +
-        SC.map(function (c, j) {
-          var y = LN[c[1]][2] + 36;
-          var link = j < 3 ? D("sl" + j, "M" + (c[0] + 37) + " " + y + " L" + (SC[j + 1][0] - 37) + " " + (LN[SC[j + 1][1]][2] + 36), C.navy, 3) : "";
-          return link + K("sc" + j, R(c[0] - 37, y - 28, 74, 56, C.white, 9, { stroke: C.navy, "stroke-width": 2.5 }) + T(c[0], y - 4, c[2], 14, C.navy) + T(c[0], y + 16, c[3], 14, C.navy));
-        }).join("") +
-        H("s5brk", P("M94 282 V288 H396 V282", C.orange, 3) + pill(245, 288, "THE SEQUENCE", { sz: 15, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("s5p17", pill(245, 288, "SPANS THREE TEAMS", { sz: 15, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("s5p18", pill(245, 288, "EACH TEAM ADDS", { sz: 15, bg: C.green, st: C.green, fg: C.white })) +
-        H("s5rec", R(-24, -30, 48, 60, C.sun, 5, { stroke: C.amber, "stroke-width": 2.5 }) + R(-24, -30, 48, 12, C.amber, 5) +
-          K("rb0", I.doc(0, -8, 0.5)) + K("rb1", I.money(0, 7, 0.5, C.green)) + K("rb2", I.bed(0, 20, 0.6, C.slate))));
-
-      // ---------- S6 · The handoff, and a process bigger than any task list
-      // Template: Apple HIG Motion — physical handoff (same object stays recognisable in transfer)
-      // https://developer.apple.com/design/human-interface-guidelines/motion
-      s += H("S6", R(-400, -300, 1200, 600, "#eef3f8") +
-        H("s6a", R(-400, 230, 600, 100, "#f6ead6") + R(200, 230, 600, 100, "#e1efe6") + P("M200 30 V300", C.orange, 3, { "stroke-dasharray": "8 6" }) +
-          fig(84, 240, 2.1, C.navy, { hair: "long" }) + fig(316, 240, 2.1, C.green) + T(84, 270, "FRONT DESK", 16, C.navy) + T(316, 270, "REVENUE", 16, C.green) +
-          pill(200, 34, "HANDOFF", { sz: 20, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("s6fold", R(-18, -14, 36, 28, C.sun, 4, { stroke: C.amber, "stroke-width": 2.5 }) + P("M-10 -4 H10 M-10 4 H6", C.amber, 2)) +
-        H("s6b", [80, 200, 320].map(function (x, j) {
-          return R(x - 46, 40, 92, 104, C.white, 8, { stroke: C.slate, "stroke-width": 2 }) + R(x - 16, 34, 32, 12, C.slate, 4) +
-            P("M" + (x - 30) + " 74 H" + (x + 30) + " M" + (x - 30) + " 96 H" + (x + 30) + " M" + (x - 30) + " 118 H" + (x + 18), C.muted, 4) +
-            T(x, 166, ["FRONT DESK", "REVENUE", "HOUSEKEEPING"][j], 15, C.slate) + H("tk" + j, badge(x + 40, 44, 12, true));
-        }).join("") +
-          D("s6rib", "M20 214 H372", C.orange, 10) + F("M370 202 L392 214 L370 226 Z", C.orange) +
-          H("s6p20", pill(200, 254, "ONE PROCESS ACROSS", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-          H("s6g", R(300, 226, 44, 70, "#a8743f", 3) + I.lock(322, 258, 1.4, C.red) + fig(372, 296, 1.1, C.orange, { mood: "frown", hair: "long" }) + pill(150, 270, "ALL DONE, DOOR LOCKED", { sz: 18, bg: C.red, st: C.red, fg: C.white }))));
-
-      // ---------- S7 · End state; the key is not the end; the locked room
-      // Template: LottieFiles — Process Success (activity transforms into a check only at the real end)
-      // https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
-      s += H("S7", R(-400, -300, 1200, 600, "#f3efe7") +
-        H("s7a", R(-400, 200, 1200, 120, "#e3d7c2") + R(-400, 168, 210, 40, C.navy) + R(-400, 164, 210, 6, C.gold) + fig(70, 168, 1.6, C.navy, { hair: "long" }) +
-          R(300, 64, 70, 136, "#a8743f", 4) + R(306, 70, 58, 130, "#fff6e3") + I.bed(335, 168, 1.8, C.green) +
-          rep(5, function (i) { return R(372 + (i % 2) * 8, 40 + Math.floor(i / 2) * 8, 8, 8, i % 2 ? C.ink : C.white); }) + P("M372 40 V100", C.ink, 3) +
-          D("s7line", "M120 232 H330", C.orange, 5) + D("s7dash", "M190 232 H330", C.red, 5, { "stroke-dasharray": "8 7" }) +
-          H("s7end", pill(316, 30, "END STATE", { sz: 18, bg: C.green, st: C.green, fg: C.white })) +
-          H("s7task", R(16, 32, 150, 52, C.mint, 10, { stroke: C.green, "stroke-width": 2.5 }) + T(91, 64, "TASK DONE", 16, C.green) + badge(160, 34, 12, true)) +
-          H("s7jnd", pill(250, 270, "JOURNEY NOT DONE", { sz: 16, bg: C.red, st: C.red, fg: C.white })) +
-          K("s7g", fig(150, 262, 1.5, C.orange, { k: "g7", hair: "long" }) + H("s7key", I.key(172, 228, 1.6)))) +
-        H("s7b", R(-400, 220, 1200, 100, "#cdbb98") + R(-400, -300, 1200, 520, "#efe4cf") + F("M0 300 L0 220 L40 220 L40 190 L80 190 L80 160 L120 160 L120 300 Z", "#b49a6d") +
-          R(268, 40, 104, 180, "#a8743f", 6) + O(356, 134, 5, C.sun) + K("s7lock", I.lock(320, 120, 3, C.red)) +
-          R(276, 0, 88, 34, C.white, 6, { stroke: C.red, "stroke-width": 2.5 }) + T(320, 24, "NOT RELEASED", 14, C.red) +
-          R(166, 172, 52, 40, C.slate, 6) + O(176, 216, 6, C.ink) + O(208, 216, 6, C.ink) + T(192, 196, "HK", 15, C.white) +
-          K("s7g2", fig(0, 0, 1.7, C.orange, { mood: "frown", hair: "long" }) + I.key(22, -34, 1.4))) +
-        H("s7c", R(40, 40, 320, 200, C.white, 14, { stroke: C.navy, "stroke-width": 2 }) +
-          R(64, 72, 40, 40, C.white, 6, { stroke: C.green, "stroke-width": 3 }) + tick(84, 92, 1.4) + T(118, 98, "RECEPTIONIST'S TASK", 16, C.green, null, "start") +
-          R(64, 160, 40, 40, C.white, 6, { stroke: C.navy, "stroke-width": 3 }) + T(118, 186, "GUEST'S CHECK-IN", 16, C.navy, null, "start") +
-          H("s7x", cross(84, 180, 1.6, C.red, 5)) + H("s7cur", I.cursor(92, 194, 2.2)) +
-          H("s7miss", pill(200, 270, "OUTCOME MISSING", { sz: 18, bg: C.red, st: C.red, fg: C.white }))));
-
-      // ---------- S8 · the practical process test
-      // Template: Awwwards — UI Animation & Microinteractions (morphing decision gate: pass or bounce)
-      // https://www.awwwards.com/awwwards/collections/animation/
-      s += H("S8", R(-400, -300, 1200, 600, "#f1eef5") +
-        H("s8book", R(40, 30, 320, 200, C.white, 16, { stroke: C.plum, "stroke-width": 3 }) + R(40, 30, 320, 44, C.plum, 16) + R(40, 58, 320, 16, C.plum) + T(200, 60, "THE PROCESS TEST", 20, C.white) +
-          O(78, 118, 20, C.lilac) + T(78, 126, "1", 20, C.plum) + T(110, 125, "WHO IS THE CUSTOMER?", 18, C.ink, null, "start") +
-          O(78, 184, 20, C.lilac) + T(78, 192, "2", 20, C.plum) + T(110, 191, "WHAT OUTCOME?", 18, C.ink, null, "start") +
-          pill(200, 266, "A PRACTICAL TEST", { sz: 18, bg: C.plum, st: C.plum, fg: C.white })) +
-        H("s8card", R(30, 24, 340, 222, C.white, 16, { stroke: C.plum, "stroke-width": 2.5 }) +
-          T(56, 66, "CUSTOMER?", 18, C.plum, null, "start") + R(256, 40, 96, 74, "#f6f3fa", 10, { stroke: C.plum, "stroke-width": 2.5, "stroke-dasharray": "6 4" }) +
-          T(56, 168, "OUTCOME?", 18, C.plum, null, "start") + R(256, 142, 96, 74, "#f6f3fa", 10, { stroke: C.plum, "stroke-width": 2.5, "stroke-dasharray": "6 4" }) +
-          H("s8f1", fig(304, 108, 1.15, C.orange, { hair: "long" }) + T(56, 94, "ARRIVING GUEST", 16, C.green, null, "start") + badge(352, 42, 12, true)) +
-          H("s8f2", I.bed(290, 186, 1.8, C.green) + clock(330, 168, 13, C.green) + T(56, 196, "RIGHT ROOM, FAST", 15, C.green, null, "start") + badge(352, 144, 12, true))) +
-        H("s8rule", pill(200, 278, "WHO GETS VALUE? WHAT RESULT?", { sz: 18, bg: C.plum, st: C.plum, fg: C.white })) +
-        H("s8jobs", pill(200, 278, "NOT JOB DESCRIPTIONS", { sz: 16, bg: C.red, st: C.red, fg: C.white })) +
-        [0, 1].map(function (j) { return H("jd" + j, R(-26, -20, 52, 40, C.cream, 4, { stroke: C.slate, "stroke-width": 2 }) + P("M-16 -8 H16 M-16 0 H16 M-16 8 H8", C.slate, 2.5) + cross(22, -18, 0.9, C.red, 3.5)); }).join(""));
-
-      // ---------- S9 · Trigger + sequence + outcome; across departments; how much to map?
-      // Template: Dribbble — Creative Design Workflow Animation (parts assemble into one product)
-      // https://dribbble.com/shots/27476599-Creative-Design-Workflow-Animation
-      s += H("S9", R(-400, -300, 1200, 600, "#f4f6f9") +
-        H("s9cols", [["FRONT DESK", 70], ["REVENUE", 200], ["HOUSEKEEPING", 330]].map(function (c) { return R(c[1] - 62, 20, 124, 230, "#e7edf4", 10) + T(c[1], 46, c[0], 15, C.navy); }).join("")) +
-        K("s9t", R(20, 92, 100, 96, C.white, 12, { stroke: C.navy, "stroke-width": 2.5 }) + I.bell(70, 132, 2) + T(70, 176, "TRIGGER", 15, C.navy)) +
-        K("s9s", R(150, 92, 100, 96, C.white, 12, { stroke: C.navy, "stroke-width": 2.5 }) + rep(3, function (i) { return R(166 + i * 24, 112, 20, 30, C.blue, 3, { stroke: C.navy, "stroke-width": 1.5 }); }) + T(200, 176, "SEQUENCE", 15, C.navy)) +
-        K("s9o", R(280, 92, 100, 96, C.mint, 12, { stroke: C.green, "stroke-width": 2.5 }) + I.bed(330, 132, 2, C.green) + T(330, 176, "OUTCOME", 15, C.green)) +
-        H("s9plus", T(135, 150, "+", 28, C.navy) + T(265, 150, "+", 28, C.navy)) +
-        H("s9eq", pill(200, 232, "= A BUSINESS PROCESS", { sz: 17, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("s9arr", P("M20 214 H372", C.orange, 6) + F("M370 204 L390 214 L370 224 Z", C.orange) + pill(200, 274, "BEYOND INDIVIDUAL JOBS", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("s9frame", R(8, 56, 186, 196, C.white, 12, { stroke: C.red, "stroke-width": 2.5 }) + T(101, 84, "EVERY CLICK", 18, C.red) +
-          rep(24, function (i) { return R(20 + (i % 6) * 28, 100 + Math.floor(i / 6) * 34, 22, 24, "#e7edf4", 3, { stroke: C.muted, "stroke-width": 1.5 }); }) + T(101, 240, "TOO MUCH", 18, C.red) +
-          R(206, 56, 186, 196, C.white, 12, { stroke: C.green, "stroke-width": 2.5 }) + T(299, 84, "HER JOURNEY", 18, C.green) +
-          I.bell(232, 152, 1.4) + P("M248 150 H272", C.navy, 3) + R(274, 134, 26, 32, C.blue, 4, { stroke: C.navy, "stroke-width": 2 }) + P("M302 150 H326", C.navy, 3) + I.bed(352, 152, 1.4, C.green) +
-          T(299, 240, "RIGHT SCOPE", 18, C.green) + K("s9knob", O(0, 0, 0.1, "none")) +
-          pill(200, 26, "HOW MUCH TO MAP?", { sz: 18, bg: C.ink, st: C.ink, fg: C.white })));
-      return s;
-    }
-
-    function render(c, k) {
-      stages(c, k, CUTS, 10);
-      // S0
-      [0, 1, 2].forEach(function (j) {
-        c.op("of" + j, k === 0 ? 0.18 : 1, { dl: k === 1 ? j * 0.2 : 0 });
-        c.op("oq" + j, k === 1 ? 1 : 0); c.op("oi" + j, k === 2 ? 1 : 0, { dl: k === 2 ? j * 0.3 : 0 });
-        c.mv("of" + j, k === 2 ? { x: -4 } : {}, { dl: j * 0.3 });
-      });
-      c.vis({ s0links: k >= 1 && k <= 2, s0p0: k === 0, s0p1: k === 1, s0p2: k === 2 });
-      // S1
-      c.vis({ s1job: inR(k, 3, 4), s1need: k === 4, s1p4: k === 4, s1hotel: k === 5 });
-      c.mv("s1rec", k === 5 ? { x: -22, y: 24, s: 0.42 } : {}, { d: 1.1 });
-      // S2
-      var tr = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
-      c.vis({ s2ends: k === 6 || k === 7, s2brk: k === 7, s2eq: k >= 8, s2stack: k >= 8, s2tags: k === 9 });
-      c.op("s2stack", k >= 8 ? (k === 9 ? 0.5 : 1) : 0, { dl: k === 8 ? 0.6 : 0 });
-      c.dr("s2line", k === 6 || k === 7 ? 1 : 0, { d: 1.4 });
-      c.op("s2walk", k === 6 ? 1 : 0);
-      if (k === 6) c.route("s2walk", [[26, 186], [374, 186]], 2.2); else c.mv("s2walk", { x: 26, y: 186 }, { d: 0 });
-      CX.forEach(function (x, j) {
-        var st = k >= 8 ? { x: 64 - x, y: 0, s: 0.5 } : {};
-        c.mv("cd" + j, st, { d: 0.9, dl: k === 8 ? j * 0.08 : 0 });
-        c.op("cd" + j, k >= 8 ? 0 : 1, { dl: k === 6 ? 0.4 + j * 0.4 : k === 8 ? 0.3 + j * 0.08 : 0 });
-        void tr;
-      });
-      c.mv("s2star", k === 9 ? { s: 1.3 } : {}, { d: 0.9, e: "back.out(1.8)" });
-      c.op("cu-sm", 1);
-      // S3
-      c.vis({ s3room: k === 10, s3tangle: k >= 11, s3p11: k === 11, s3p12: k === 12 });
-      c.op("s3mag", k >= 11 ? 1 : 0);
-      if (k === 11) c.route("s3mag", [[60, 70], [300, 60], [260, 160], [100, 140]], 2.4);
-      else c.mv("s3mag", k === 12 ? { x: 236, y: 196 } : { x: 60, y: 70 }, { d: 1.2 });
-      c.mv("s3hit", k === 12 ? { s: 1.25 } : {}, { d: 0.8, dl: k === 12 ? 0.8 : 0, e: "back.out(1.6)" });
-      // S4
-      c.mv("s4bell", k === 13 || k === 15 ? { r: 14 } : k === 14 ? { s: 0.9 } : {}, { d: 0.35, e: "back.out(3)" });
-      c.op("s4bell", k === 14 ? 0.35 : 1);
-      c.vis({ s4rip: k === 13 || k === 15, s4flag: k === 13, s4no: k === 14, s4p15: k === 15 });
-      [0, 1, 2].forEach(function (j) {
-        c.dr("tl" + j, k === 15 ? 1 : 0, { dl: j * 0.35, d: 0.6 });
-        c.op("tg" + j, k === 15 ? 1 : 0, { dl: 0.5 + j * 0.35 });
-        c.op("tc" + j, k === 15 ? 0 : k === 14 ? 0.4 : 1, { dl: k === 15 ? 0.5 + j * 0.35 : 0 });
-      });
-      // S5
-      [0, 1, 2, 3].forEach(function (j) {
-        c.op("sc" + j, k >= 16 ? 1 : 0, { dl: k === 16 ? j * 0.3 : 0 });
-        c.mv("sc" + j, k >= 16 ? (k === 18 ? { s: 1.06 } : {}) : { s: 0.5 }, { dl: k === 16 ? j * 0.3 : k === 18 ? j * 0.55 : 0, e: "back.out(1.6)" });
-        if (j < 3) c.dr("sl" + j, k >= 16 ? 1 : 0, { dl: k === 16 ? 0.3 + j * 0.3 : 0, d: 0.5 });
-      });
-      [0, 1, 2].forEach(function (j) { c.op("lh" + j, k === 17 ? 1 : 0, { dl: j * 0.3 }); });
-      c.vis({ s5brk: k === 16, s5p17: k === 17, s5p18: k === 18, s5rec: k === 18 });
-      if (k === 18) c.route("s5rec", [[128, 50], [205, 128], [282, 206], [358, 50]], 2.2); else c.mv("s5rec", { x: 128, y: 50 }, { d: 0 });
-      [0, 1, 2].forEach(function (j) { c.op("rb" + j, k === 18 ? 1 : 0, { dl: k === 18 ? 0.9 + j * 0.7 : 0 }); });
-      // S6
-      c.vis({ s6a: k === 19, s6b: k >= 20, s6p20: k === 20, s6g: k === 21 });
-      c.op("s6fold", k === 19 ? 1 : 0);
-      if (k === 19) c.route("s6fold", [[110, 160], [200, 104], [292, 160]], 1.6); else c.mv("s6fold", { x: 110, y: 160 }, { d: 0 });
-      c.dr("s6rib", k >= 20 ? 1 : 0, { d: 1.3 });
-      [0, 1, 2].forEach(function (j) { c.op("tk" + j, k === 21 ? 1 : 0, { dl: j * 0.25 }); });
-      // S7
-      c.vis({ s7a: inR(k, 22, 23), s7b: k === 24, s7c: inR(k, 25, 26), s7end: inR(k, 22, 23), s7task: k === 23, s7jnd: k === 23, s7x: k === 26, s7miss: k === 26, s7cur: k === 25 });
-      c.dr("s7line", inR(k, 22, 23) ? 1 : 0, { d: 1.2 });
-      c.dr("s7dash", k === 23 ? 1 : 0, { d: 1, dl: 0.6 });
-      c.mv("s7g", k === 23 ? { x: 30 } : {}, { d: 0.9 });
-      c.op("s7key", k === 23 ? 1 : 0, { dl: 0.4 });
-      if (k === 24) c.route("s7g2", [[60, 196], [150, 236], [236, 236]], 1.8); else c.mv("s7g2", { x: 236, y: 236 }, { d: 0 });
-      c.mv("s7lock", k === 24 ? { r: 0 } : {}, { d: 0.3 });
-      c.mv("s7cur", k === 25 ? { x: 0, y: 0 } : { x: 60, y: 30 }, { d: 1 });
-      // S8
-      c.vis({ s8book: k === 27, s8card: k >= 28, s8rule: k === 28, s8jobs: k === 29, s8f1: k >= 29, s8f2: k >= 29 });
-      [0, 1].forEach(function (j) {
-        c.op("jd" + j, k === 29 ? 1 : 0);
-        if (k === 29) c.route("jd" + j, [[-40, 78 + j * 102], [200, 77 + j * 102], [2, 112 + j * 102]], 1.6); else c.mv("jd" + j, { x: -40, y: 80 + j * 100 }, { d: 0 });
-      });
-      // S9
-      c.vis({ s9plus: k === 31, s9eq: k === 31, s9cols: k === 32, s9arr: k === 32, s9frame: k === 33 });
-      ["s9t", "s9s", "s9o"].forEach(function (key, j) {
-        c.mv(key, k === 31 ? {} : k === 32 ? { y: -10 } : { y: -10, s: 0.92 }, { d: 1, dl: j * 0.12 });
-        c.op(key, k === 33 ? 0 : 1, { dl: k === 31 ? j * 0.3 : 0 });
-      });
-      c.mv("s9knob", k === 33 ? { x: 30 } : {}, { d: 1.2, e: "power2.inOut" });
-    }
-
-    REG[id] = makeScene({ id: id, N: N, labels: labels, draw: draw, render: render,
-      desc: "A business process as the guest's journey: information held by three departments, five action cards from request to guest settled, the trigger, a sequence that crosses teams through handoffs, the end state, and the customer-and-outcome test." });
-    SCENE_BG.push([id, "#f3ecdf"]);
+      "Guest, right room, fast", "Three parts", "Across departments", "How much to map?"],
+      "What a business process is: three offices each hold a piece of the guest's check-in, the work is followed from her request to her room, the definition (activities, outcome of value, customer), trigger, sequence across teams, handoff, end state, the locked room, and the customer-and-outcome test.", "#f3ecdf");
   })();
 
   // ============================================================
-  // O1b · "LEVELS AND BOUNDARIES" · 33 moments · 10 visuals
-  // Audit fixes: every level is a labelled CONTAINER holding real check-in
-  // work and zooms out of its parent tile (visible containment, depth gauge);
-  // 14-17 show all five as one nested box with the same guest beside it;
-  // 20-25 move real START/END brackets so the queue and the locked room are
-  // visibly OUTSIDE the map; 26-29 pin the map beside reality.
+  // O1b · "LEVELS AND BOUNDARIES" · 33 moments · 10 compositions
   // ============================================================
   (function () {
-    var id = "O1b", N = 33;
-    var CUTS = [4, 7, 10, 14, 18, 21, 23, 26, 30];
-    var labels = ["Drawing the map", "Two descriptions", "Different sizes of work", "Agree the level", "From high above",
+    var LVC = [C.red, C.navy, C.green, C.amber, C.plum];
+    var LVN = ["VALUE CHAIN", "PROCESS", "SUB-PROCESS", "ACTIVITY", "TASK"];
+    var ST = [["GREET", "GUEST"], ["VERIFY", "BOOKING"], ["ASSIGN", "ROOM"], ["ISSUE", "KEY"]];
+    var SUB = ["FIND THE BOOKING", "CHECK RATE, GUARANTEE", "CONFIRM DETAILS"];
+    var ACT = ["OPEN THE PORTAL", "FIND AGREEMENT", "CHECK GUARANTEE"];
+    var BX = [58, 132, 206, 280, 354], BL = [["QUEUE"], ["FIND", "BOOKING"], ["KEY"], ["WALK", "UP"], ["IN", "ROOM"]];
+    var BI = [I.users(0, 0, 0.9, WH), I.doc(0, 0, 0.7, WH), I.key(0, 0, 0.8, WH), I.flag(0, 0, 0.7, WH), I.bed(0, 0, 0.8, WH)];
+    function journey(y, ly) {
+      return P("M40 " + y + " H372", C.slate, 4) + BX.map(function (x, j) {
+        return O(x, y, 16, j === 0 ? C.slate : C.navy2) + Tr(x, y, BI[j]) + BL[j].map(function (l, m) { return t(x, ly + m * 24, l, C.ink); }).join("");
+      }).join("");
+    }
+    build3("O1b", 33, [
+      // template: Behance — Motion Design Process (production stages shown as team vignettes) — https://www.behance.net/gallery/53752435/Motion-Design-Process
+      { a: 0, d: bgc("#f3efe7") + floor() + bx(110, 44, 180, 110, WH, C.slate) + t(200, 70, "CHECK-IN MAP", C.navy) +
+          fig(56, 250, 1.5, C.navy) + fig(344, 250, 1.3, C.slate, { hair: "long" }) +
+          H("p0a", pill(90, 174, "WHOLE ARRIVAL", { sz: 18, anchor: "start", bg: WH, st: C.navy, fg: C.navy }) +
+            pill(318, 214, "OPEN PORTAL", { sz: 18, anchor: "end", bg: WH, st: C.slate, fg: C.slate })) +
+          H("p0b", R(126, 84, 100, 58, "none", 6, { stroke: C.navy, "stroke-width": 3 }) + R(250, 124, 14, 14, "none", 3, { stroke: C.slate, "stroke-width": 3 }) +
+            ban("VERY DIFFERENT SIZES", C.navy, 22)) +
+          H("p0c", P("M130 120 C150 86 170 140 190 92 C210 84 230 140 250 96 C262 86 280 136 266 140 C240 146 150 110 132 100", C.red, 3) +
+            ban("AGREE THE LEVEL", C.orange, 22) + pill(200, 274, "NO USEFUL MAP", { sz: 18, bg: C.red, st: C.red, fg: WH })),
+        sh: { p0a: [1, 3], p0b: [2, 2], p0c: [3, 3] } },
+      // template: Observable — Animated quadtree (a region subdivides into parts) — https://observablehq.com/@d3/animated-quadtree
+      { a: 4, d: bgc("#eef2f6") + rep(7, function (i) { return I.hotel(50 + i * 50, 74, 1.4, i === 3 ? C.orange : C.navy); }) +
+          H("p1a", ban("FROM HIGH ABOVE", C.navy, 24)) + H("p1b", ban("LEVEL 1 · VALUE CHAIN", C.red, 24)) + H("p1c", ban("ONE OF MANY JOURNEYS", C.orange, 24)) +
+          H("p1v", F("M10 112 H350 L388 142 L350 172 H10 L36 142 Z", C.red) + t(196, 140, "VALUE CHAIN", WH) + t(196, 162, "SERVE THE GUEST", C.sun, null, 14)) +
+          H("p1j", [["RESERVE", 6, 190, 124], ["CHECK-IN", 138, 190, 124], ["DINING", 270, 190, 124], ["ROOM SERVICE", 20, 236, 176], ["CHECK-OUT", 204, 236, 176]].map(function (c, j) {
+            var on = j === 1;
+            return bx(c[1], c[2], c[3], 36, on ? C.peach : WH, on ? C.orange : C.slate, 18, on ? 3 : 2) + t(c[1] + c[3] / 2, c[2] + 24, c[0], on ? C.orange : C.slate);
+          }).join("")),
+        sh: { p1a: [4, 4], p1b: [5, 5], p1c: [6, 6], p1v: [5, 6], p1j: [6, 6] } },
+      // template: Observable — Hierarchy traversal animated (visit one node, then its child) — https://old.observablehq.com/@d3/hierarchy-traversal-animated
+      { a: 7, d: bgc("#f4f6f9") +
+          H("p2a", ban("LEVEL 2 · PROCESS", C.navy, 24)) + H("p2c", ban("LEVEL 3 · SUB-PROCESS", C.green, 24)) +
+          bx(6, 46, 388, 104, WH, C.navy) + t(200, 70, "CHECK A GUEST IN", C.navy) +
+          ST.map(function (s, j) { var x = 14 + j * 96; return bx(x, 82, 88, 60, j === 1 ? C.sky : "#f6f8fb", j === 1 ? C.navy2 : C.muted, 8, 2) + t(x + 44, 107, s[0], C.ink) + t(x + 44, 131, s[1], C.ink); }).join("") +
+          H("p2w", R(108, 80, 92, 64, "none", 10, { stroke: C.red, "stroke-width": 4 }) + clock(154, 190, 22, C.red) + pill(270, 190, "WHY SO SLOW?", { sz: 18, bg: C.red, st: C.red, fg: WH })) +
+          H("p2z", P("M110 150 L6 164 M198 150 L394 164", C.navy2, 2.5) + bx(6, 164, 388, 130, "#eef6f1", C.green) + t(200, 188, "VERIFY THE BOOKING", C.green) +
+            SUB.map(function (s, j) { var y = 198 + j * 31; return R(20, y, 360, 26, WH, 6, { stroke: C.green, "stroke-width": 2 }) + t(36, y + 20, (j + 1) + "  " + s, C.ink, "start"); }).join("")),
+        sh: { p2a: [7, 8], p2c: [9, 9], p2w: [8, 8], p2z: [9, 9] } },
+      // template: Dribbble — Product Workflow Animation & UI Motion Design (shift between product states) — https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design
+      { a: 10, d: bgc("#f6f4ee") +
+          H("p3b0", ban("RATE AND GUARANTEE", C.green, 24)) + H("p3b1", ban("LEVEL 4 · ACTIVITY", C.amber, 24)) + H("p3b2", ban("5 · TASK: ONE ACTION", C.plum, 24)) +
+          H("p3s", bx(6, 44, 388, 92, "#eef6f1", C.green) + t(200, 68, "VERIFY THE BOOKING", C.green) +
+            bx(14, 82, 70, 40, WH, C.muted, 8, 2) + t(49, 107, "FIND", C.slate, null, 14) +
+            bx(92, 82, 208, 40, C.peach, C.orange, 8, 3) + t(196, 108, "RATE + GUARANTEE", C.orange) +
+            bx(308, 82, 78, 40, WH, C.muted, 8, 2) + t(347, 107, "CONFIRM", C.slate, null, 14)) +
+          H("p3t", R(70, 46, 260, 96, C.ink, 10) + R(80, 56, 240, 76, C.sky, 6) + t(200, 80, "CORPORATE PORTAL", C.navy, null, 14) +
+            pill(176, 110, "OPEN", { sz: 18, bg: C.green, st: C.green, fg: WH }) + I.cursor(220, 124, 1.4)) +
+          H("p3a", P("M92 122 L6 150 M300 122 L394 150", C.orange, 2.5) + bx(6, 150, 388, 140, C.peach, C.amber) + t(200, 174, "CHECK RATE, GUARANTEE", C.amber) +
+            ACT.map(function (s, j) { var y = 186 + j * 34; return R(20, y, 360, 28, WH, 6, { stroke: C.amber, "stroke-width": 2 }) + t(36, y + 21, s, C.ink, "start"); }).join("") +
+            H("p3h", R(16, 182, 368, 36, "none", 8, { stroke: C.plum, "stroke-width": 4 }) + I.mag(356, 200, 1.6, C.plum))),
+        sh: { p3b0: [10, 10], p3b1: [11, 12], p3b2: [13, 13], p3s: [10, 12], p3t: [13, 13], p3a: [11, 13], p3h: [12, 13] } },
+      // template: Behance — The Process Architectural Motion (an idea grows into nested layers) — https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
+      { a: 14, d: bgc("#f4f6f9") +
+          H("p4n", rep(5, function (i) { var h = 90 - i * 18; return R(100 - h, 140 - h, h * 2, h * 2, i === 4 ? "#f6f1fb" : "none", 6, { stroke: LVC[i], "stroke-width": 3 }); }) +
+            fig(100, 160, 0.6, C.orange, { hair: "long" })) +
+          LVN.map(function (n, i) { var y = 56 + i * 42; return R(206, y, 188, 34, WH, 8, { stroke: LVC[i], "stroke-width": 2.5 }) + O(224, y + 17, 9, LVC[i]) + t(240, y + 24, n, LVC[i], "start"); }).join("") +
+          H("p4a", ban("SAME GUEST, ANY LEVEL", C.orange, 280)) + H("p4b", ban("SAME WORK, MORE DETAIL", C.navy, 280)) +
+          H("p4c", R(200, 94, 198, 42, "none", 10, { stroke: C.orange, "stroke-width": 4 }) + ban("AGREE THE LEVEL", C.orange, 280)) +
+          H("p4d", P("M64 176 L204 115 M164 176 L204 241", C.slate, 2.5, { "stroke-dasharray": "5 5" }) +
+            fig(50, 232, 1.2, C.navy) + fig(150, 232, 1.2, C.slate, { hair: "long" }) +
+            P("M72 120 C86 98 114 98 128 120", C.red, 3) + F("M122 112 L132 124 L118 124 Z", C.red) +
+            P("M128 140 C114 160 86 160 72 140", C.red, 3) + F("M78 148 L68 136 L82 136 Z", C.red) + ban("OR ARGUE IN CIRCLES", C.red, 280)),
+        sh: { p4n: [14, 16], p4a: [14, 14], p4b: [15, 15], p4c: [16, 16], p4d: [17, 17] } },
+      // template: Motion Array — Project TimeLine (markers advance along a time line) — https://motionarray.com/after-effects-templates/project-timeline-2424919/
+      { a: 18, d: bgc("#f6f4ee") +
+          H("p5a", ban("A SECOND DECISION", C.navy, 24)) + H("p5b", ban("THE PROCESS BOUNDARY", C.navy, 24)) + H("p5c", ban("START AT THE BOOKING?", C.orange, 24)) +
+          journey(150, 196) +
+          H("p5k", K("p5st", P("M24 112 H14 V178 H24", C.green, 4) + pill(40, 92, "START", { sz: 18, bg: C.green, st: C.green, fg: WH })) +
+            P("M384 112 H394 V178 H384", C.red, 4) + pill(366, 92, "END", { sz: 18, bg: C.red, st: C.red, fg: WH })) +
+          H("p5o", pill(58, 262, "OUTSIDE", { sz: 18, bg: "#edf0f4", st: C.slate, fg: C.slate, dash: true })),
+        sh: { p5a: [18, 18], p5b: [19, 19], p5c: [20, 20], p5k: [19, 20], p5o: [20, 20] }, mv: { p5st: function (k) { return { x: k >= 20 ? 78 : 0 }; } } },
+      // template: Dribbble — Motion Graphics tag (elastic queue: requests accumulate under pressure) — https://dribbble.com/tags/motion-graphics
+      { a: 21, d: bgc("#f3efe7") + floor() +
+          [40, 84, 128].map(function (x, j) { return fig(x, 250, 1.1, [C.slate, C.navy2, C.plum][j]); }).join("") + fig(172, 250, 1.1, C.orange, { hair: "long" }) +
+          R(210, 52, 184, 198, "#eef3f8", 12, { stroke: C.navy, "stroke-width": 3, "stroke-dasharray": "8 6" }) + t(302, 82, "THE MAP", C.navy) +
+          bx(222, 104, 160, 56, WH, C.navy) + t(302, 140, "FIND BOOKING", C.navy) + pill(302, 204, "STARTS HERE", { sz: 18, bg: C.navy, st: C.navy, fg: WH }) +
+          H("p6a", ban("SHE ALREADY QUEUED", C.orange, 24)) +
+          H("p6b", clock(106, 110, 30, C.red) + pill(106, 166, "HIDDEN DELAY", { sz: 18, bg: C.red, st: C.red, fg: WH }) + ban("STARTS TOO LATE", C.red, 24)),
+        sh: { p6a: [21, 21], p6b: [22, 22] } },
+      // template: Motion Array — Scrolling Timeline (pan along time and settle on the event) — https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
+      { a: 23, d: bgc("#f6f4ee") +
+          F("M210 262 L210 236 L250 236 L250 210 L290 210 L290 184 L330 184 L330 158 L392 158 L392 262 Z", "#d9cbb3") +
+          R(340, 70, 46, 88, "#a8743f", 3) + I.lock(374, 118, 1.4, C.red) +
+          R(6, 48, 190, 112, "#eef3f8", 12, { stroke: C.navy, "stroke-width": 3, "stroke-dasharray": "8 6" }) + t(100, 74, "THE MAP", C.navy) +
+          I.key(70, 118, 2.2, C.amber) + t(140, 126, "KEY", C.ink) + P("M196 44 V164", C.red, 6) + pill(196, 184, "END", { sz: 18, bg: C.red, st: C.red, fg: WH }) +
+          H("p7a", ban("END AT THE KEY?", C.navy, 24)) +
+          H("p7n", pill(330, 46, "NOT READY", { sz: 18, bg: C.red, st: C.red, fg: WH })) +
+          H("p7g", K("p7m", fig(230, 236, 1, C.orange, { hair: "long" }))) +
+          H("p7d", badge(30, 220, 11, true) + t(108, 226, "TASK DONE", C.green) + ban("RESULT MISSING", C.red, 280)),
+        sh: { p7a: [23, 23], p7n: [24, 25], p7g: [24, 25], p7d: [25, 25] }, mv: { p7m: function (k) { return k >= 24 ? { x: 86, y: -78 } : {}; } } },
+      // template: The Pudding — responsive scrollytelling (pinned before-and-after comparison) — https://pudding.cool/process/responsive-scrollytelling/
+      { a: 26, d: bgc("#f1f6f2") +
+          H("p8t", journey(112, 158) + P("M24 74 H14 V140 H24", C.green, 4) + P("M384 74 H394 V140 H384", C.green, 4)) +
+          H("p8a", ban("ARRIVAL TO RIGHT ROOM", C.green, 24)) +
+          H("p8b", ban("ONE SHARED DEFINITION", C.navy, 24) + [120, 200, 280].map(function (x, j) { return fig(x, 276, 0.9, [C.navy, C.green, C.slate][j]) + badge(x + 18, 218, 9, true); }).join("")) +
+          H("p8c", bx(6, 44, 188, 160, WH, C.navy) + t(100, 72, "THE MAP", C.navy) + I.key(92, 118, 2.2, C.amber) + badge(150, 118, 12, true) + t(100, 184, "MAP ENDS", C.navy) +
+            bx(206, 44, 188, 160, WH, C.red) + t(300, 72, "REALITY", C.red) + I.key(240, 124, 1.8, C.amber) + arr(266, 124, 302, 124, C.slate, 3) +
+            R(310, 92, 50, 80, "#a8743f", 3) + I.lock(346, 132, 1.3, C.red)) +
+          H("p8d", ban("KEY, LOCKED DOOR", C.red, 238)) +
+          H("p8e", R(300, 84, 70, 96, "none", 10, { stroke: C.orange, "stroke-width": 4, "stroke-dasharray": "7 5" }) + ban("WHAT'S LEFT OUT?", C.orange, 238)),
+        sh: { p8t: [26, 27], p8a: [26, 26], p8b: [27, 27], p8c: [28, 29], p8d: [28, 28], p8e: [29, 29] } },
+      // template: Motion Array — Corporate Timeline by HenlyFx (milestones revealed one by one) — https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
+      { a: 30, d: bgc("#f4f6f9") +
+          H("p9w", P("M40 120 H340", C.navy, 4) + [[40, "NOW", C.orange], [200, "WEEK 6", C.navy], [340, "WEEK 8", C.navy]].map(function (w) { return O(w[0], 120, 12, w[2]) + t(w[0], 160, w[1], w[2]); }).join("") +
+            pill(270, 70, "MAPPING DETAIL", { sz: 18, bg: C.navy2, st: C.navy2, fg: WH }) + I.book(120, 216, 2, C.navy) + I.book(280, 216, 2, C.navy)) +
+          H("p9c", bx(6, 40, 188, 170, WH, C.navy) + I.mag(100, 90, 2.6, C.navy) + t(100, 152, "LEVEL", C.navy, null, 26) + t(100, 186, "HOW CLOSELY", C.slate) +
+            bx(206, 40, 188, 170, WH, C.orange) + P("M262 66 H250 V114 H262 M338 66 H350 V114 H338", C.orange, 4) + O(300, 90, 10, C.orange) +
+            t(300, 152, "BOUNDARY", C.orange, null, 26) + t(300, 186, "WHICH WORK", C.slate)) +
+          H("p9q", ban("WHAT WENT WRONG?", C.red, 256)),
+        sh: { p9w: [30, 30], p9c: [31, 32], p9q: [32, 32] } }
+    ], ["Drawing the map", "Two descriptions", "Different sizes of work", "Agree the level", "From high above",
       "1 · Value chain", "One of many journeys", "2 · Process", "Why so much effort?", "3 · Sub-process",
       "Rate and guarantee", "4 · Activity", "Even closer", "5 · Task", "Same guest, any level",
       "Five levels of detail", "Agree before drawing", "Or argue in circles", "A second decision", "The process boundary",
       "Start at the booking?", "She already queued", "Starts too late", "End at the key?", "Room not ready",
       "Ends too early", "Arrival to right room", "One shared meaning", "Key, locked door", "What's left out?",
-      "Weeks 6 and 8", "Level and boundary", "What went wrong?"];
-    var LVC = [C.red, C.navy, C.green, C.amber, C.plum];
-    // depth gauge: five concentric squares, the current level outlined
-    function gauge(pre) {
-      return rep(5, function (i) { var h = 28 - i * 5; return K(pre + i, R(37 - h, 37 - h, h * 2, h * 2, i === 4 ? "#f6f1fb" : "none", 4, { stroke: LVC[i], "stroke-width": 2.5 })); }) +
-        T(37, 98, "LEVEL", 15, C.slate) + TK(pre + "n", 37, 132, "1", 30, C.navy);
-    }
-    // a level container: header + children area
-    function box(n, title, ex, inner) {
-      return R(76, 8, 316, 254, C.white, 14, { stroke: LVC[n - 1], "stroke-width": 3 }) + R(76, 8, 316, 66, LVC[n - 1], 14, { opacity: 0.12 }) +
-        T(234, 36, n + " · " + title, 18, LVC[n - 1]) + T(234, 60, ex, 15, C.slate) + inner;
-    }
-    function tile(k, x, y, w, h, l1, l2, icon, col) {
-      return K(k, R(x, y, w, h, C.paper, 10, { stroke: col || C.navy, "stroke-width": 2 }) + (icon || "") +
-        T(x + w / 2, y + (l2 ? h / 2 + (icon ? 10 : -2) : h / 2 + (icon ? 18 : 6)), l1, 15, col || C.navy) + (l2 ? T(x + w / 2, y + h / 2 + (icon ? 28 : 18), l2, 15, col || C.navy) : ""));
-    }
-    function row(k, y, txt, icon) { return K(k, R(92, y, 284, 50, C.paper, 10, { stroke: C.navy, "stroke-width": 2 }) + icon + T(132, y + 31, txt, 16, C.navy, null, "start")); }
-
-    function draw(u) {
-      var s = "";
-      // ---------- S0 · Two managers, two very different sizes of work
-      // Template: Behance — Motion Design Process (production stages shown as team vignettes)
-      // https://www.behance.net/gallery/53752435/Motion-Design-Process
-      s += K("S0", R(-400, -300, 1200, 600, "#f3efe7") + R(-400, 262, 1200, 100, "#e2d8c6") +
-        R(112, 18, 176, 132, C.white, 8, { stroke: C.slate, "stroke-width": 3 }) + R(196, 150, 8, 112, C.slate) + T(200, 42, "CHECK-IN MAP", 16, C.slate) +
-        D("scrib", "M128 120 C150 70 170 140 190 80 C210 50 230 136 250 76 C262 56 280 130 266 136 C240 140 150 100 132 92 C124 86 170 72 200 120", C.orange, 3) +
-        H("bx", cross(200, 96, 3, C.red, 6)) +
-        fig(54, 270, 1.6, C.navy) + fig(346, 270, 1.6, C.green, { hair: "long" }) +
-        H("bubL", R(6, 50, 100, 70, C.white, 16, { stroke: C.navy, "stroke-width": 2.5 }) + F("M44 118 L40 136 L58 118 Z", C.white) + I.bell(26, 86, 1.1) + P("M38 86 H70", C.orange, 2.5) + I.bed(84, 86, 1.2, C.green)) +
-        H("bubR", R(312, 72, 78, 50, C.white, 14, { stroke: C.green, "stroke-width": 2.5 }) + F("M350 120 L356 136 L340 120 Z", C.white) + I.screen(340, 96, 1.1) + I.cursor(366, 102, 0.9)) +
-        H("lbL", pill(66, 152, "WHOLE ARRIVAL", { sz: 15, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("lbR", pill(334, 152, "OPEN PORTAL", { sz: 15, bg: C.green, st: C.green, fg: C.white })) +
-        H("p2", pill(200, 186, "VERY DIFFERENT SIZES", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("p3", pill(200, 186, "NO USEFUL MAP", { sz: 16, bg: C.red, st: C.red, fg: C.white })));
-
-      // ---------- S1 · Value chain: the whole hotel group, many journeys
-      // Template: Observable — Animated quadtree (a region subdivides into parts)
-      // https://observablehq.com/@d3/animated-quadtree
-      var VT = [["vt0", 86, 84, "RESERVE", I.doc(132, 108, 1.3)], ["vt1", 188, 84, "CHECK", I.bell(234, 110, 1.4), "IN"], ["vt2", 290, 84, "DINING", I.star(336, 108, 1.3, C.amber)],
-        ["vt3", 137, 168, "ROOM", I.bed(183, 194, 1.5), "SERVICE"], ["vt4", 239, 168, "CHECK", I.key(289, 192, 1.5), "OUT"]];
-      s += H("S1", R(-400, -300, 1200, 600, "#eef2f6") + gauge("ga") +
-        K("vbox", box(1, "VALUE CHAIN", "SERVE THE GUEST", VT.map(function (t) { return tile(t[0], t[1], t[2], 92, 72, t[3], t[5] || "", t[4], t[0] === "vt1" ? C.orange : C.navy); }).join(""))) +
-        H("vcg", R(184, 80, 100, 80, "none", 12, { stroke: C.orange, "stroke-width": 4, "class": "a-pulse" })) +
-        H("vabove", I.plane(37, 200, 2, C.navy) + T(37, 238, "ABOVE", 15, C.navy)) +
-        H("vone", pill(234, 278, "ONE OF MANY", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })));
-
-      // ---------- S2 · Process: check a guest in; why does verifying take so long?
-      // Template: Observable — Hierarchy traversal animated (visit one node, then its child)
-      // https://old.observablehq.com/@d3/hierarchy-traversal-animated
-      s += H("S2", R(-400, -300, 1200, 600, "#eef2f6") + gauge("gb") +
-        K("pbox", box(2, "PROCESS", "CHECK A GUEST IN",
-          tile("pt0", 90, 84, 140, 74, "GREET", "GUEST") + tile("pt1", 242, 84, 140, 74, "VERIFY", "BOOKING", "", C.green) +
-          tile("pt2", 90, 172, 140, 74, "ASSIGN", "ROOM") + tile("pt3", 242, 172, 140, 74, "ISSUE", "KEY"))) +
-        H("pslow", R(238, 80, 148, 82, "none", 12, { stroke: C.red, "stroke-width": 3.5, "class": "a-pulse" }) + clock(372, 90, 16, C.red)) +
-        H("pmag", I.mag(0, 0, 3.4, C.ink)) +
-        H("pwhy", pill(234, 280, "WHY SO SLOW?", { sz: 16, bg: C.red, st: C.red, fg: C.white })) +
-        H("sbox", box(3, "SUB-PROCESS", "CHECK-IN › VERIFY BOOKING",
-          row("sr0", 82, "FIND THE BOOKING", I.doc(112, 107, 1.2)) + row("sr1", 142, "CHECK RATE, GUARANTEE", I.money(112, 167, 1.1, C.green)) + row("sr2", 202, "CONFIRM DETAILS", I.passport(112, 227, 1.1)))));
-
-      // ---------- S3 · Activity, then a single task: open the corporate portal
-      // Template: Dribbble — Product Workflow Animation & UI Motion Design (shift between product states)
-      // https://dribbble.com/shots/27577799-Product-Workflow-Animation-UI-Motion-Design
-      s += H("S3", R(-400, -300, 1200, 600, "#eef2f6") + gauge("gc") +
-        K("s3sub", box(3, "SUB-PROCESS", "VERIFY THE BOOKING",
-          row("tr0", 82, "FIND THE BOOKING", I.doc(112, 107, 1.2)) + row("tr1", 142, "CHECK RATE, GUARANTEE", I.money(112, 167, 1.1, C.green)) + row("tr2", 202, "CONFIRM DETAILS", I.passport(112, 227, 1.1)))) +
-        H("trhi", R(88, 138, 292, 58, "none", 12, { stroke: C.amber, "stroke-width": 4 })) +
-        H("abox", box(4, "ACTIVITY", "VERIFY › RATE, GUARANTEE",
-          row("ar0", 82, "OPEN THE PORTAL", I.screen(112, 107, 1.1)) + row("ar1", 142, "FIND AGREEMENT", I.doc(112, 167, 1.2)) + row("ar2", 202, "CHECK GUARANTEE", I.money(112, 227, 1.1, C.green)))) +
-        H("arhi", R(88, 78, 292, 58, "none", 12, { stroke: C.plum, "stroke-width": 4 })) +
-        H("tbox", box(5, "TASK", "CHECK RATE › OPEN PORTAL",
-          R(110, 84, 248, 140, C.ink, 10) + R(118, 92, 232, 116, C.sky, 6) + T(234, 118, "CORPORATE PORTAL", 15, C.navy) +
-          K("tbtn", R(184, 140, 100, 40, C.green, 10) + T(234, 166, "OPEN", 17, C.white)) + R(210, 224, 48, 10, C.ink, 3) +
-          pill(234, 250, "ONE ACTION", { sz: 15, bg: C.plum, st: C.plum, fg: C.white }))) +
-        H("cur", I.cursor(0, 0, 2.4)));
-
-      // ---------- S4 · All five levels as one nested box; agree which one to draw
-      // Template: Behance — The Process Architectural Motion (an idea grows into nested layers)
-      // https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
-      var NEST = [["VALUE CHAIN", "SERVE THE GUEST"], ["PROCESS", "CHECK A GUEST IN"], ["SUB-PROCESS", "VERIFY BOOKING"], ["ACTIVITY", "CHECK RATE"], ["TASK", "OPEN PORTAL"]];
-      s += H("S4", R(-400, -300, 1200, 600, "#f4f2ee") +
-        NEST.map(function (n, i) {
-          var x = 8 + i * 14, y = 8 + i * 32, w = 322 - i * 28, h = 256 - i * 40;
-          return K("nb" + i, R(x, y, w, h, i === 4 ? "#f6f1fb" : C.white, 12, { stroke: LVC[i], "stroke-width": 3 }) +
-            T(x + 10, y + 22, n[0], 15, LVC[i], null, "start") + (i < 4 ? "" : T(x + w / 2, y + 74, n[1], 16, C.plum) + I.cursor(x + w / 2 + 58, y + 84, 1.4))) +
-            K("nh" + i, R(x, y, w, i === 4 ? h : 32, "none", 12, { stroke: C.orange, "stroke-width": 4, opacity: 0 }));
-        }).join("") +
-        H("ng", fig(366, 262, 1.4, C.orange, { hair: "long" }) + P("M333 20 H340 V170 H333", C.orange, 3) + T(372, 96, "SAME", 15, C.orange) + T(372, 114, "GUEST", 15, C.orange)) +
-        H("nlock", I.users(354, 56, 1.8, C.green) + badge(380, 32, 11, true) + pill(170, 284, "AGREE THE LEVEL", { sz: 16, bg: C.green, st: C.green, fg: C.white })) +
-        H("nfight", T(364, 120, "≠", 44, C.red) + P("M334 54 C366 54 366 96 364 100 M334 214 C366 214 366 150 364 136", C.red, 3, { "stroke-dasharray": "5 4" }) +
-          pill(170, 284, "TALKING PAST EACH OTHER", { sz: 15, bg: C.red, st: C.red, fg: C.white })) +
-        H("nsame", pill(170, 284, "SAME WORK, MORE DETAIL", { sz: 15, bg: C.navy, st: C.navy, fg: C.white })));
-
-      // ---------- S5 · The boundary: start and end brackets on her evening
-      // Template: Motion Array — Project TimeLine (markers advance along a time line)
-      // https://motionarray.com/after-effects-templates/project-timeline-2424919/
-      var FR = [["QUEUE", ""], ["FIND", "BOOKING"], ["KEY", ""], ["WALK UP", ""], ["IN ROOM", ""]], FX = [44, 122, 200, 278, 356];
-      var FI = [I.users(44, 106, 2), I.screen(122, 106, 1.9), I.key(204, 106, 2.2), F("M256 128 L256 112 L270 112 L270 98 L284 98 L284 84 L300 84 L300 128 Z", C.slate), I.bed(356, 108, 2.2, C.green)];
-      s += H("S5", R(-400, -300, 1200, 600, "#f6f4ee") +
-        FX.map(function (x, j) { return K("fr" + j, R(x - 36, 66, 72, 84, C.white, 10, { stroke: C.navy, "stroke-width": 2.5 }) + FI[j] + T(x, 176, FR[j][0], 15, C.navy) + (FR[j][1] ? T(x, 194, FR[j][1], 15, C.navy) : "")); }).join("") +
-        H("frsh", R(4, 58, 80, 150, C.slate, 8, { opacity: 0.35 }) + pill(44, 226, "OUTSIDE", { sz: 15, bg: C.slate, st: C.slate, fg: C.white })) +
-        H("bS", P("M12 54 H4 V162 H12", C.green, 5) + pill(4, 34, "START", { sz: 15, bg: C.green, st: C.green, fg: C.white, anchor: "start" })) +
-        H("bE", P("M388 54 H396 V162 H388", C.orange, 5) + pill(396, 34, "END", { sz: 15, bg: C.orange, st: C.orange, fg: C.white, anchor: "end" })) +
-        H("p18", pill(200, 268, "A SECOND DECISION", { sz: 16, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("p19", pill(200, 268, "THE PROCESS BOUNDARY", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("p20", pill(200, 268, "START AT THE BOOKING?", { sz: 16, bg: C.green, st: C.green, fg: C.white })));
-
-      // ---------- S6 · Close-up of what the late start hides: the queue
-      // Template: Dribbble — Motion Graphics tag (elastic queue: requests accumulate under pressure)
-      // https://dribbble.com/tags/motion-graphics
-      s += H("S6", R(-400, -300, 1200, 600, "#efe7da") + R(-400, 250, 1200, 100, "#d9c7a8") +
-        P("M20 250 V196 M160 250 V196 M20 200 Q90 186 160 200", C.navy, 4) + O(20, 196, 6, C.navy) + O(160, 196, 6, C.navy) +
-        fig(48, 250, 1.4, C.slate) + fig(92, 250, 1.4, C.navy2) + fig(136, 250, 1.4, C.slate, { hair: "long" }) + K("qg", fig(196, 252, 1.7, C.orange, { mood: "frown", hair: "long" })) +
-        K("qclk", clock(110, 92, 30, C.red)) +
-        H("qhatch", R(-400, -300, 652, 600, "#5d7389", 0, { opacity: 0.35 }) + rep(14, function (i) { return P("M" + (-60 + i * 22) + " 300 L" + (40 + i * 22) + " 0", "#ffffff", 2, { opacity: 0.35 }); })) +
-        R(250, 30, 140, 220, C.white, 12, { stroke: C.green, "stroke-width": 3 }) + P("M262 40 H252 V240 H262", C.green, 5) + T(320, 62, "THE MAP", 16, C.navy) +
-        I.screen(320, 116, 2.2) + T(320, 164, "FIND", 15, C.navy) + T(320, 182, "BOOKING", 15, C.navy) + T(320, 222, "STARTS HERE", 15, C.green) +
-        H("p21", pill(126, 30, "SHE ALREADY QUEUED", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("p22", pill(126, 30, "HIDDEN DELAY", { sz: 17, bg: C.red, st: C.red, fg: C.white })));
-
-      // ---------- S7 · Ending at the key hides the unready room
-      // Template: Motion Array — Scrolling Timeline (pan along time and settle on the event)
-      // https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
-      s += H("S7", R(-400, -300, 1200, 600, "#f3efe7") + R(-400, 230, 1200, 100, "#e3d7c2") +
-        R(-400, 186, 560, 48, C.navy) + R(-400, 182, 560, 6, C.gold) + fig(70, 186, 1.6, C.navy, { hair: "long" }) +
-        H("ehatch", R(160, -300, 640, 600, "#5d7389", 0, { opacity: 0.3 }) + rep(14, function (i) { return P("M" + (150 + i * 22) + " 300 L" + (250 + i * 22) + " 0", "#ffffff", 2, { opacity: 0.35 }); })) +
-        F("M176 300 L176 230 L208 230 L208 200 L240 200 L240 170 L272 170 L272 300 Z", "#b49a6d") +
-        R(300, 70, 84, 160, "#a8743f", 6) + K("lk", I.lock(342, 140, 2.8, C.red)) + R(302, 30, 80, 30, C.white, 6, { stroke: C.red, "stroke-width": 2.5 }) + T(342, 51, "NOT READY", 14, C.red) +
-        P("M160 20 V250", C.orange, 5) + pill(160, 20, "END", { sz: 16, bg: C.orange, st: C.orange, fg: C.white }) +
-        K("eg", fig(0, 0, 1.5, C.orange, { k: "eg", hair: "long" }) + I.key(20, -30, 1.3)) +
-        H("etask", R(10, 30, 128, 44, C.mint, 10, { stroke: C.green, "stroke-width": 2.5 }) + T(74, 58, "TASK DONE", 15, C.green) + badge(134, 32, 11, true)) +
-        H("eres", pill(296, 272, "RESULT MISSING", { sz: 16, bg: C.red, st: C.red, fg: C.white })) +
-        H("p23", pill(272, 272, "END AT THE KEY?", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })));
-
-      // ---------- S8 · Pinned before/after: the map beside reality
-      // Template: The Pudding — responsive scrollytelling (pinned before-and-after comparison)
-      // https://pudding.cool/process/responsive-scrollytelling/
-      var MR = [["QUEUE", I.users(42, 70, 1.1)], ["FIND BOOKING", I.screen(42, 108, 1)], ["KEY", I.key(44, 146, 1.2)], ["WALK UP", F("M32 192 V182 H40 V174 H48 V166 H56 V192 Z", C.slate)], ["IN ROOM", I.bed(42, 222, 1.2, C.green)]];
-      s += H("S8", R(-400, -300, 1200, 600, "#eef1f6") +
-        R(8, 8, 188, 242, C.paper, 12, { stroke: C.navy, "stroke-width": 2.5 }) + T(102, 32, "THE MAP", 16, C.navy) +
-        MR.map(function (m, j) { return K("mr" + j, m[1] + T(64, 76 + j * 38, m[0], 15, C.navy, null, "start")); }).join("") +
-        K("mbr", P("M24 52 H16 V236 H24", C.green, 5, { "data-k": null })) +
-        H("mbrK", P("M24 52 H16 V160 H24", C.orange, 5)) +
-        H("mdone", R(96, 136, 96, 30, C.orange, 6) + T(144, 157, "MAP ENDS", 14, C.white)) +
-        R(204, 8, 188, 242, C.white, 12, { stroke: C.slate, "stroke-width": 2.5 }) + T(298, 32, "REALITY", 16, C.slate) +
-        H("rin", R(212, 160, 172, 82, "#d9c7a8") + I.bed(330, 168, 3.4, C.green) + fig(240, 240, 1.4, C.orange, { hair: "long" }) + badge(370, 56, 14, true)) +
-        H("rout", R(212, 196, 172, 46, "#e3d7c2") + R(318, 60, 62, 140, "#a8743f", 4) + I.lock(349, 128, 2.2, C.red) + fig(260, 238, 1.7, C.orange, { mood: "frown", hair: "long" }) + I.key(284, 196, 1.4)) +
-        H("team", R(212, 40, 172, 202, C.white) + [252, 298, 344].map(function (x, j) { return fig(x, 236, 1.3, [C.navy, C.green, C.slate][j]); }).join("") + R(240, 52, 116, 70, C.mint, 16, { stroke: C.green, "stroke-width": 2 }) + I.bed(282, 88, 1.6, C.green) + badge(332, 86, 13, true)) +
-        H("p26", pill(200, 278, "ARRIVAL TO RIGHT ROOM", { sz: 16, bg: C.green, st: C.green, fg: C.white })) +
-        H("p27", pill(200, 278, "ONE SHARED DEFINITION", { sz: 16, bg: C.navy, st: C.navy, fg: C.white })) +
-        H("p28", pill(200, 278, "KEY, LOCKED DOOR", { sz: 16, bg: C.orange, st: C.orange, fg: C.white })) +
-        H("p29", P("M190 190 C230 210 250 200 300 160", C.red, 3, { "stroke-dasharray": "5 4" }) + pill(200, 278, "WHAT'S LEFT OUT?", { sz: 16, bg: C.red, st: C.red, fg: C.white })));
-
-      // ---------- S9 · Weeks 6 and 8; level vs boundary; what went wrong?
-      // Template: Motion Array — Corporate Timeline by HenlyFx (milestones revealed one by one)
-      // https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
-      s += H("S9", R(-400, -300, 1200, 600, "#f4f6f9") +
-        H("wk", P("M20 150 H380", C.navy, 4) + rep(14, function (i) { return O(30 + i * 26, 150, i === 0 || i === 5 || i === 7 ? 9 : 5, i === 5 || i === 7 ? C.plum : i === 0 ? C.orange : C.muted); }) +
-          T(30, 186, "NOW", 15, C.orange) + K("w6", pill(160, 106, "WEEK 6", { sz: 17, bg: C.plum, st: C.plum, fg: C.white }) + P("M160 122 V140", C.plum, 3)) +
-          K("w8", pill(212, 210, "WEEK 8", { sz: 17, bg: C.plum, st: C.plum, fg: C.white }) + P("M212 194 V160", C.plum, 3)) + pill(310, 60, "MAPPING DETAIL", { sz: 15, st: C.plum, fg: C.plum })) +
-        H("rc", R(10, 24, 184, 220, C.white, 14, { stroke: C.navy, "stroke-width": 2.5 }) + T(102, 54, "LEVEL", 20, C.navy) + K("rcz", I.mag(102, 128, 4.2)) + T(102, 222, "HOW CLOSELY", 16, C.navy) +
-          R(206, 24, 184, 220, C.white, 14, { stroke: C.orange, "stroke-width": 2.5 }) + T(298, 54, "BOUNDARY", 20, C.orange) + K("rcb", P("M250 90 H236 V170 H250 M346 90 H360 V170 H346", C.orange, 6)) + T(298, 222, "WHICH WORK", 16, C.orange)) +
-        H("ww", R(-400, 210, 1200, 120, C.navy) + R(-400, 204, 1200, 8, C.gold) + fig(300, 210, 1.7, C.navy, { hair: "long" }) + fig(110, 300, 2.3, C.orange, { mood: "frown", hair: "long" }) +
-          T(210, 120, "?", 70, C.red, { "class": "a-pulse" }) + pill(200, 40, "WHAT WENT WRONG?", { sz: 17, bg: C.red, st: C.red, fg: C.white })));
-      return s;
-    }
-
-    function setGauge(c, pre, n) {
-      for (var i = 0; i < 5; i++) c.mv(pre + i, i === n - 1 ? { s: 1.08 } : {}, { d: 0.5 });
-      for (var j = 0; j < 5; j++) c.op(pre + j, j === n - 1 ? 1 : 0.35);
-      c.tx(pre + "n", String(n));
-    }
-    function render(c, k) {
-      stages(c, k, CUTS, 10);
-      // S0
-      c.dr("scrib", k === 3 ? 1 : 0, { d: 1.4 });
-      c.vis({ bx: k === 3, bubL: k >= 1, bubR: k >= 1, lbL: k >= 1 && k <= 2, lbR: k >= 1 && k <= 2, p2: k === 2, p3: k === 3 });
-      c.mv("bubL", k === 1 || k === 2 ? { s: 1.15 } : {}, { d: 0.8, e: "back.out(1.6)" });
-      c.mv("bubR", k === 1 || k === 2 ? { s: 0.78 } : {}, { d: 0.8, e: "back.out(1.6)" });
-      // S1
-      setGauge(c, "ga", 1);
-      c.mv("vbox", k === 4 ? { s: 0.86 } : {}, { d: 1 });
-      ["vt0", "vt1", "vt2", "vt3", "vt4"].forEach(function (t, j) {
-        c.op(t, k === 4 ? 1 : k === 6 && j !== 1 ? 0.3 : 1, { dl: k === 4 ? j * 0.12 : 0 });
-        c.mv(t, k === 6 && j === 1 ? { s: 1.12 } : {}, { e: "back.out(1.8)" });
-      });
-      c.vis({ vabove: k === 4, vone: k === 6, vcg: k >= 5 });
-      // S2
-      setGauge(c, "gb", k === 9 ? 3 : 2);
-      c.op("pbox", k <= 8 ? 1 : 0); c.mv("pbox", k === 7 ? {} : k === 8 ? {} : { s: 1.6 }, { d: 0.9 });
-      c.vis({ pslow: k === 8, pwhy: k === 8 });
-      c.op("pmag", k === 8 ? 1 : 0); c.mv("pmag", k === 8 ? { x: 230, y: 178 } : { x: 160, y: 200 }, { d: 1.2 });
-      c.op("sbox", k === 9 ? 1 : 0); c.mv("sbox", k === 9 ? {} : { x: 76, y: -14, s: 0.42 }, { d: 1.1, e: "power2.inOut" });
-      // S3
-      setGauge(c, "gc", k === 10 ? 3 : k <= 12 ? 4 : 5);
-      c.op("s3sub", k === 10 ? 1 : 0); c.op("trhi", k === 10 ? 1 : 0);
-      c.op("abox", k === 11 || k === 12 ? 1 : 0); c.mv("abox", k >= 11 ? (k === 13 ? { s: 1.5 } : {}) : { y: 34, s: 0.2 }, { d: 1.1, e: "power2.inOut" });
-      c.op("arhi", k === 12 ? 1 : 0);
-      c.op("tbox", k === 13 ? 1 : 0); c.mv("tbox", k === 13 ? {} : { y: -28, s: 0.2 }, { d: 1.1, e: "power2.inOut" });
-      c.op("cur", k === 12 || k === 13 ? 1 : 0);
-      c.mv("cur", k === 12 ? { x: 300, y: 112 } : k === 13 ? { x: 250, y: 168 } : { x: 380, y: 250 }, { d: 1.1 });
-      c.mv("tbtn", k === 13 ? { s: 0.94 } : {}, { d: 0.25, dl: 1.1 });
-      // S4
-      for (var i = 0; i < 5; i++) {
-        var hi = (k === 15) || (k === 16 && i === 1) || (k === 17 && (i === 1 || i === 4));
-        c.op("nh" + i, hi ? 1 : 0, { dl: k === 15 ? i * 0.35 : 0, d: 0.4 });
-        c.op("nb" + i, k === 14 ? 1 : k === 16 ? (i === 1 ? 1 : 0.6) : 1, { dl: k === 14 ? i * 0.15 : 0 });
-        c.mv("nb" + i, k === 14 ? {} : {}, {});
-      }
-      c.vis({ ng: k === 14 || k === 15, nsame: k === 15, nlock: k === 16, nfight: k === 17 });
-      // S5
-      var sx = k >= 20 ? 78 : 0;
-      c.mv("bS", { x: sx }, { d: 1.1, e: "power2.inOut" });
-      c.vis({ bS: k >= 19, bE: k >= 19, frsh: k === 20, p18: k === 18, p19: k === 19, p20: k === 20 });
-      [0, 1, 2, 3, 4].forEach(function (j) { c.op("fr" + j, 1, { dl: k === 18 ? j * 0.15 : 0 }); c.mv("fr" + j, k === 18 ? {} : {}, {}); });
-      // S6
-      c.mv("qclk", k === 22 ? { s: 1.35, r: 0 } : {}, { d: 0.9, e: "back.out(1.6)" });
-      c.vis({ qhatch: k === 22, p21: k === 21, p22: k === 22 });
-      // S7
-      c.vis({ ehatch: k >= 23, etask: k === 25, eres: k === 25, p23: k === 23 });
-      if (k === 24) c.route("eg", [[110, 230], [190, 200], [256, 170], [280, 230]], 2); else c.mv("eg", k === 23 ? { x: 110, y: 230 } : { x: 280, y: 230 }, { d: 0.8 });
-      c.op("eg-sm", k === 23 ? 1 : 0); c.op("eg-fr", k === 23 ? 0 : 1);
-      c.mv("lk", k === 24 ? { r: 0, s: 1.15 } : {}, { d: 0.4, dl: 1.8, e: "back.out(3)" });
-      // S8
-      c.vis({ mbr: k < 28, mbrK: k >= 28, mdone: k >= 28, rin: k === 26 || k === 27, rout: k >= 28, team: k === 27, p26: k === 26, p27: k === 27, p28: k === 28, p29: k === 29 });
-      [0, 1, 2, 3, 4].forEach(function (j) { c.op("mr" + j, k >= 28 && j >= 3 ? 0.3 : 1); });
-      // S9
-      c.vis({ wk: k === 30, rc: k === 31, ww: k === 32 });
-      c.mv("w6", k === 30 ? {} : { y: -12 }, { dl: 0.3, e: "back.out(2)" }); c.mv("w8", k === 30 ? {} : { y: 12 }, { dl: 0.6, e: "back.out(2)" });
-      c.mv("rcz", k === 31 ? { s: 1.15 } : {}, { d: 0.8, dl: 0.3, e: "back.out(2)" });
-      c.mv("rcb", k === 31 ? { sx: 1.15 } : {}, { d: 0.8, dl: 0.7, e: "back.out(2)" });
-    }
-
-    REG[id] = makeScene({ id: id, N: N, labels: labels, draw: draw, render: render,
-      desc: "Five nested levels of the same check-in work, from value chain to one portal task, then start and end brackets that decide whether the queue and the unready room are inside the process map." });
-    SCENE_BG.push([id, "#eef2f6"]);
+      "Weeks 6 and 8", "Level and boundary", "What went wrong?"],
+      "Levels and boundaries: two managers describe very different sizes of work, the five levels from value chain to one task, the same check-in seen at each level, then the boundary of check-in from arrival to the right room instead of from finding the booking to handing over the key.", "#f3efe7");
   })();
 
 addStyles(SCENE_BG);
 })();
 
 // OPER621 · Week 1 · Fundamentals of Process Management — animated teaching scenes (v3)
-// File: w01-v3-part2.js  ·  Scenes: O2a, O2b, O3a, O3b, O4a, O4b, O4c, W1OUTRO
+// File: w01-v4-part2.js  ·  Scenes: O2a, O2b, O3a, O3b, O4a, O4b, O4c, W1OUTRO
 // Standalone part: registers its own scenes on window.VL_SCENES and appends its own
 // scoped rules into the single shared <style id="vl-sc-w01">. Parts may be concatenated.
 // Contract: VL_SCENES['<sec id>'] = { build(el), step(i, n), reset() }
@@ -1142,7 +715,7 @@ addStyles(SCENE_BG);
 // template it adapts (with URL) in a comment above its drawing code.
 (function () {
 "use strict";
-var PART = "v3p2";
+var PART = "v4p2";
   // ===== shared engine (self-contained copy for this part) =====
   var W = window;
   W.VL_SCENES = W.VL_SCENES || {};
@@ -1453,7 +1026,7 @@ var PART = "v3p2";
     function draw() { return stg.map(function (s, i) { return (i ? H : K)("S" + i, s.d); }).join(""); }
     function render(c, k) {
       var si = stages(c, k, CUTS, stg.length), S = stg[si], q;
-      if (S.sh) for (q in S.sh) { var r = S.sh[q], on = k >= r[0] && k <= r[1]; c.op(q, on ? (r[3] == null ? 1 : r[3]) : 0, { dl: on && k === r[0] && r[2] ? r[2] : 0, d: 0.5 }); }
+      if (S.sh) for (q in S.sh) { var r = S.sh[q], on = k >= r[0] && k <= r[1]; c.op(q, on ? (r[3] == null ? 1 : r[3]) : 0, { dl: on && k === r[0] && r[2] ? r[2] : 0, d: on ? 0.5 : 0 }); /* v4: leaving items vanish at once */ }
       if (S.mv) for (q in S.mv) c.mv(q, S.mv[q](k) || {}, { d: 1 });
       if (S.dr) for (q in S.dr) { var z = S.dr[q]; c.dr(q, k >= z[0] && k <= z[1] ? 1 : 0, { d: 1.1, dl: z[2] || 0 }); }
       if (S.fl) for (q in S.fl) c.fl(q, S.fl[q](k), { d: 0.6 });
@@ -1491,10 +1064,10 @@ var PART = "v3p2";
         sh: { b1h: [3, 3], b1low: [4, 4, 0.3], b1m: [4, 4] }, mv: { b1tok: function (k) { return { x: k >= 3 ? 276 : 0 }; } } },
       // template: LottieFiles — Workflow by a (workers revealed, then workflow actions) — https://lottiefiles.com/free-animation/workflow-9h24Ux0UOm
       { a: 5, d: bgc("#eef3f8") +
-          [["RESERVATIONS", "BOOKING", 4, 44], ["REVENUE", "RATE", 246, 44], ["HOUSEKEEPING", "ROOM STATUS", 4, 176], ["FINANCE", "BILLING", 246, 176]].map(function (b, j) {
-            return H("c2b" + j, bx(b[2], b[3], 150, 70, WH, [C.navy, C.green, C.slate, C.amber][j]) + t(b[2] + 75, b[3] + 28, b[0], [C.navy, C.green, C.slate, C.amber][j]) + t(b[2] + 75, b[3] + 56, b[1], C.ink, null, 16));
+          [["RESERVATIONS", "BOOKING", 2, 44], ["REVENUE", "RATE", 238, 44], ["HOUSEKEEPING", "ROOM STATUS", 2, 176], ["FINANCE", "BILLING", 238, 176]].map(function (b, j) {
+            return H("c2b" + j, bx(b[2], b[3], 160, 70, WH, [C.navy, C.green, C.slate, C.amber][j]) + t(b[2] + 80, b[3] + 28, b[0], [C.navy, C.green, C.slate, C.amber][j]) + t(b[2] + 80, b[3] + 56, b[1], C.ink, null, 16));
           }).join("") +
-          H("c2ar", [[154, 80], [246, 80], [154, 210], [246, 210]].map(function (p) { return P("M" + p[0] + " " + p[1] + " L200 150", C.orange, 3, { "class": "a-flow" }); }).join("")) +
+          H("c2ar", [[162, 80], [238, 80], [162, 210], [238, 210]].map(function (p) { return P("M" + p[0] + " " + p[1] + " L200 150", C.orange, 3, { "class": "a-flow" }); }).join("")) +
           fig(200, 212, 1.3, C.navy, { hair: "long" }) + R(160, 212, 80, 36, C.navy, 4) +
           H("c2h", ban("INFORMATION IS SCATTERED", C.navy, 22)) +
           H("c2s", ban("SEARCH, CHECK, CALL, WAIT", C.orange, 280)),
@@ -1534,7 +1107,7 @@ var PART = "v3p2";
       // template: Observable — Hierarchy traversal animated (visit one node, then its child) — https://old.observablehq.com/@d3/hierarchy-traversal-animated
       { a: 23, d: bgc("#f4f6f9") +
           rep(9, function (i) { var x = 22 + i * 40; return R(x, 70, 34, 170, i < 5 ? "#e3ebf4" : "#edf0f4", 6) + O(x + 17, 56, 10, C.navy) + (i < 5 ? Tr(x + 17, 100, D9[i]) : T(x + 17, 106, "?", 16, C.muted)); }) +
-          H("i8v", rep(9, function (i) { var x = 39 + i * 40; return arr(x, 220, x, 72, C.navy, 2.5); })) +
+          H("i8v", rep(9, function (i) { var x = 39 + i * 40; return arr(x, 232, x, 124, C.navy, 2.5); })) +
           H("i8h", P("M10 176 H392", C.orange, 7) + F("M384 164 L398 176 L384 188 Z", C.orange)) +
           H("i8g", fig(0, 0, 0.9, C.orange, { hair: "long" })) +
           H("i8t", ban("NINE DEPARTMENTS", C.navy, 22)) +
@@ -1612,7 +1185,7 @@ var PART = "v3p2";
           arr(235, 200, 235, 240, C.slate) + t(320, 236, "SAME PACE", C.slate, null, 16) +
           H("r7a", arr(118, 128, 166, 112, C.green, 4) + arr(118, 148, 166, 140, C.green, 4)) +
           H("r7b", arr(118, 112, 166, 96, C.green, 4) + arr(118, 164, 166, 156, C.green, 4)) +
-          H("r7q", rep(4, function (i) { return H("r7r" + i, R(318, 150 - i * 30, 70, 26, C.peach, 4, { stroke: C.red, "stroke-width": 2 }) + I.bed(340, 163 - i * 30, 0.9, C.red) + T(370, 169 - i * 30, "!", 16, C.red)); }) + t(350, 186, "ROOMS WAIT", C.red, null, 14)) +
+          H("r7q", rep(4, function (i) { return H("r7r" + i, R(318, 150 - i * 30, 70, 26, C.peach, 4, { stroke: C.red, "stroke-width": 2 }) + I.bed(340, 163 - i * 30, 0.9, C.red) + T(370, 169 - i * 30, "!", 16, C.red)); }) + t(344, 186, "ROOMS WAIT", C.red, null, 14)) +
           H("r7h", ban("ANOTHER DANGER", C.navy, 26)) + H("r7i", ban("LOCAL OPTIMISATION", C.orange, 26)) + H("r7j", ban("SALES FASTER, ROOMS NOT", C.orange, 26)) + H("r7k", ban("WHOLE FLOW WORSE", C.red, 276)),
         sh: { r7a: [18, 21], r7b: [19, 21], r7q: [20, 21], r7r0: [20, 21, 0.2], r7r1: [20, 21, 0.6], r7r2: [20, 21, 1], r7r3: [21, 21], r7h: [17, 17], r7i: [18, 18], r7j: [19, 21], r7k: [21, 21] } },
       // template: Motion Array — Scrolling Timeline (pan along time and settle on the event) — https://motionarray.com/after-effects-templates/scrolling-timeline-1223172/
@@ -1620,7 +1193,7 @@ var PART = "v3p2";
           O(370, 130, 22, C.mint, { stroke: C.green, "stroke-width": 3 }) + I.bed(370, 132, 1.3, C.green) + t(354, 176, "IN ROOM", C.green, null, 16) +
           D("s8l", "M54 130 H346", C.navy, 6) + ban("END-TO-END MEASURE", C.navy, 26) +
           H("s8d", R(54, 196, 180, 34, C.red, 6) + t(144, 220, "23 MIN DESK", WH)) +
-          H("s8u", P("M236 213 H346", C.orange, 5, { "stroke-dasharray": "8 6" }) + t(292, 254, "MORE, UNMEASURED", C.orange, null, 16) + I.lock(300, 100, 1.5, C.red)) +
+          H("s8u", P("M236 213 H346", C.orange, 5, { "stroke-dasharray": "8 6" }) + t(286, 254, "MORE, UNMEASURED", C.orange, null, 16) + I.lock(300, 100, 1.5, C.red)) +
           H("s8t", ban("TRIGGER TO OUTCOME", C.green, 276)),
         sh: { s8d: [24, 25], s8u: [25, 25], s8t: [22, 23] }, dr: { s8l: [22, 25] } },
       // template: Awwwards — UI Animation & Microinteractions (morphing decision gate: pass or bounce) — https://www.awwwards.com/awwwards/collections/animation/
@@ -1664,7 +1237,7 @@ var PART = "v3p2";
       // template: Dribbble — Data Workflow Animation (nodes and links activate in sequence) — https://dribbble.com/shots/27247003-Data-Workflow-Animation
       { a: 8, d: bgc("#eef3f8") + fig(200, 170, 1.6, C.plum, { hair: "long", badge: C.sun }) +
           H("x3b", pill(200, 40, "PROCESS OWNER", { sz: 20, bg: C.plum, st: C.plum, fg: WH }) + t(200, 202, "ACCOUNTABLE, CAN IMPROVE", C.plum, null, 16)) +
-          H("x3l", DEPS.map(function (d, j) { var x = 66 + j * 134; return P("M200 150 L" + x + " 238", d[1], 3, { "class": "a-flow" }) + bx(x - 62, 238, 124, 44, WH, d[1]) + t(x, 265, d[0], d[1], null, 14); }).join("")) +
+          H("x3l", DEPS.map(function (d, j) { var x = 66 + j * 134; return P("M200 212 L" + x + " 238", d[1], 3, { "class": "a-flow" }) + bx(x - 62, 238, 124, 44, WH, d[1]) + t(x, 265, d[0], d[1], null, 14); }).join("")) +
           H("x3a", ban("ONE PERSON, WHOLE CHECK-IN", C.orange, 40)),
         sh: { x3a: [8, 8], x3b: [9, 10], x3l: [10, 10] } },
       // template: Motion Array — Infographic Chart Creator (bars grow, values stamp in) — https://motionarray.com/after-effects-templates/infographic-chart-creator-36176/
@@ -1699,7 +1272,7 @@ var PART = "v3p2";
       { a: 25, d: bgc("#f4f6f9") + bx(150, 30, 100, 40, C.navy, C.navy) + t(200, 57, "GM", WH) +
           DEPS.concat([["FINANCE", C.amber]]).map(function (d, j) { var x = 53 + j * 98; return P("M200 70 V90 H" + x + " V120", C.slate, 2) + bx(x - 46, 120, 92, 120, WH, d[1]) + t(x, 146, SH4[j], d[1], null, 14); }).join("") +
           H("ac1", P("M10 196 H390", C.orange, 8, { opacity: 0.9 }) + F("M380 184 L398 196 L380 208 Z", C.orange) + t(200, 272, "PROCESS LAID OVER", C.orange)) +
-          H("ac0", ban("DEPARTMENTS STAY", C.navy, 288)),
+          H("ac0", ban("DEPARTMENTS STAY", C.navy, 282)),
         sh: { ac0: [25, 26], ac1: [27, 27] } },
       // template: LottieFiles — Multi-Step Icon Animation (activate one step after another) — https://lottiefiles.com/free-animation/multi-step-icon-animation-uAM7js17jU
       { a: 28, d: bgc("#14263a") +
@@ -1774,11 +1347,11 @@ var PART = "v3p2";
             bx(208, 60, 186, 170, C.peach, C.red) + t(301, 100, "CANNOT", C.red) + t(301, 126, "IMPROVE", C.red) + I.lock(301, 180, 2, C.red) + ban("APPEARANCE ONLY", C.red, 282)),
         sh: { bh0: [22, 23], bh1: [24, 25], bh2: [26, 26] } },
       // template: LottieFiles — Process Success (activity transforms into a check only at the real end) — https://lottiefiles.com/free-animation/process-success-EhFVqZgUPP
-      { a: 27, d: bgc("#eef6f1") + fig(70, 240, 1.7, C.plum, { hair: "long", badge: C.sun }) + t(70, 274, "OWNER", C.plum) +
+      { a: 27, d: bgc("#eef6f1") + fig(70, 240, 1.7, C.plum, { hair: "long", badge: C.sun }) + t(70, 128, "OWNER", C.plum) +
           [["FLOW OF WORK", 70], ["MEASURES", 150], ["BUDGET", 230]].map(function (c, j) { return P("M100 150 L230 " + c[1], C.green, 4) + bx(236, c[1] - 26, 158, 52, C.mint, C.green) + t(315, c[1] + 6, c[0], C.green, null, 15); }).join("") +
-          H("bi1", ban("COORDINATE, ALIGN TARGETS", C.green, 290)) + H("bi3", ban("REAL OWNERSHIP", C.green, 290)) +
+          H("bi1", ban("COORDINATE, ALIGN TARGETS", C.green, 282)) + H("bi3", ban("REAL OWNERSHIP", C.green, 282)) +
           H("bi2", bx(110, 20, 180, 34, WH, C.green) + t(200, 43, "BOOKING = RATE", C.green, null, 15)) +
-          H("bi4", ban("RESOURCES TO CONNECT", C.green, 290)),
+          H("bi4", ban("RESOURCES TO CONNECT", C.green, 282)),
         sh: { bi1: [28, 28], bi2: [29, 29], bi3: [27, 27], bi4: [29, 29] } },
       // template: Apple HIG Motion — controlled focus pull (subdue context, sharpen one object) — https://developer.apple.com/design/human-interface-guidelines/motion
       { a: 30, d: bgc("#f4f6f9") + bx(6, 40, 188, 180, WH, C.navy) + t(100, 70, "FUNCTIONAL", C.navy) + t(100, 130, "HOW IS EACH", C.ink, null, 16) + t(100, 156, "DEPT DOING?", C.ink, null, 16) +
@@ -1810,7 +1383,7 @@ var PART = "v3p2";
           H("ca3", [["SEARCH", -70], ["RE-ENTER", 0], ["WAIT", 70]].map(function (p) { return pill(200, 118 + (p[1] + 70) * 0.46, p[0], { sz: 18, bg: C.red, st: C.red, fg: WH }); }).join("")),
         sh: { ca0: [0, 2], ca1: [1, 2], ca3: [3, 3] } },
       // template: Motion Array — Project TimeLine (markers advance along a time line) — https://motionarray.com/after-effects-templates/project-timeline-2424919/
-      { a: 4, d: bgc("#f6f4ee") + I.flag(30, 70, 1.6, C.green) + I.flag(372, 70, 1.6, C.red) + t(30, 104, "START", C.green, null, 15) + t(358, 104, "FINISH", C.red, null, 15) + D("cb0", "M44 70 H360", C.navy, 6) +
+      { a: 4, d: bgc("#f6f4ee") + I.flag(30, 70, 1.6, C.green) + I.flag(372, 70, 1.6, C.red) + t(44, 104, "START", C.green, null, 15) + t(358, 104, "FINISH", C.red, null, 15) + D("cb0", "M44 70 H360", C.navy, 6) +
           H("cb1", [["BOOKING CHECKS", "SIMPLER"], ["DATA ENTRY", "ONCE"], ["ROOM-READY", "ALERT"]].map(function (c) { return [c[0].replace("BOOKING CHECKS", "CHECKS"), c[1]]; }).map(function (c, j) { var x = 68 + j * 132; return bx(x - 62, 130, 124, 90, C.mint, C.green) + t(x, 162, c[0], C.ink, null, 14) + t(x, 196, c[1], C.green, null, 18); }).join("")) +
           H("cb2", R(110, 236, 180, 48, WH, 8, { stroke: C.red, "stroke-width": 4 }) + t(200, 268, "PROJECT CLOSED", C.red)) + H("cb3", ban("AN IMPROVEMENT PROJECT", C.navy, 26)),
         sh: { cb1: [5, 7], cb2: [7, 7], cb3: [4, 6] }, dr: { cb0: [4, 7] } },
@@ -1826,12 +1399,12 @@ var PART = "v3p2";
         sh: { cd0: [11, 13], cd1: [12, 13], cd2: [13, 13] } },
       // template: Motion Array — Corporate Timeline by HenlyFx (milestones revealed one by one) — https://motionarray.com/after-effects-templates/corporate-timeline-1939632/
       { a: 14, d: bgc("#f4f2ee") + P("M20 150 H380", C.navy, 4) + bx(20, 110, 100, 80, WH, C.navy) + t(70, 156, "PROJECT", C.navy, null, 15) +
-          t(200, 120, "3 YEARS", C.red) + bx(280, 110, 100, 80, WH, C.red) + t(330, 156, "PROJECT", C.red, null, 15) + t(330, 214, "SAME ISSUES", C.red, null, 15) +
+          t(200, 120, "3 YEARS", C.red) + bx(280, 110, 100, 80, WH, C.red) + t(330, 156, "PROJECT", C.red, null, 15) + t(324, 214, "SAME ISSUES", C.red, null, 15) +
           H("ce1", ban("ONLY OCCASIONAL PROJECTS", C.red, 274)),
         sh: { ce1: [15, 15] } },
       // template: Bartosz Ciechanowski — Gears (one mechanism only works when teeth engage) — https://ciechanow.ski/archives/
       { a: 16, d: bgc("#eef6f1") + O(130, 150, 84, "none", { stroke: C.green, "stroke-width": 6, "class": "a-flow" }) + fig(130, 186, 1.2, C.plum, { hair: "long", badge: C.sun }) + t(130, 210, "OWNER", C.plum, null, 15) +
-          H("cf1", [["WAIT TIME", 46], ["ROOM READY", 100], ["JOURNEY", 154]].map(function (c) { return clock(250, c[1], 12, C.navy) + t(270, c[1] + 6, c[0], C.navy, "start", 15); }).join("")) +
+          H("cf1", [["WAIT TIME", 46], ["ROOM READY", 100], ["JOURNEY", 154]].map(function (c) { return clock(238, c[1], 12, C.navy) + t(254, c[1] + 6, c[0], C.navy, "start", 15); }).join("")) +
           H("cf2", P("M250 230 L280 220 L310 250 L340 220 L370 214", C.orange, 4) + O(310, 250, 8, C.red) + t(310, 284, "DIP, THEN FIX", C.red, null, 15)) +
           H("cf0", ban("KEEP AN OWNER", C.green, 26)),
         sh: { cf0: [16, 17], cf1: [18, 19], cf2: [19, 19] } },
@@ -1841,7 +1414,7 @@ var PART = "v3p2";
           H("cg2", O(200, 170, 100, "none", { stroke: C.green, "stroke-width": 8 }) + bx(140, 146, 120, 48, WH, C.navy) + t(200, 177, "BPI", C.navy) + t(200, 290, "BPI INSIDE BPM", C.green)),
         sh: { cg1: [21, 21], cg2: [22, 22] } },
       // template: 3Blue1Brown (Manim demo) — traced causal path drawn when it becomes relevant — https://www.3blue1brown.com/lessons/manim-demo/
-      { a: 23, d: bgc("#fbf3ea") + ban("YOUR HEALTH", C.plum, 26) + t(30, 70, "WEIGHT", C.slate, "start", 14) + t(380, 252, "TIME", C.slate, "end", 14) +
+      { a: 23, d: bgc("#fbf3ea") + ban("YOUR HEALTH", C.plum, 26) + t(48, 52, "WEIGHT", C.slate, "start", 14) + t(380, 252, "TIME", C.slate, "end", 14) +
           chart("ch0", [[40, 90], [120, 90], [180, 170], [220, 180]], C.green) + D("ch1", "M220 180 L280 140 L350 92", C.red, 5) +
           H("ch2", t(160, 210, "CRASH DIET", C.green, null, 16)) + H("ch3", t(300, 200, "OLD HABITS", C.red, null, 16) + F("M346 80 L358 92 L342 98 Z", C.red)),
         sh: { ch2: [24, 25], ch3: [25, 25] }, dr: { ch0: [24, 25], ch1: [25, 25, 0.3] } },
@@ -1958,7 +1531,7 @@ var PART = "v3p2";
       // template: Dribbble — Data Workflow Animation (nodes and links activate in sequence) — https://dribbble.com/shots/27247003-Data-Workflow-Animation
       { a: 6, d: bgc("#eef3f8") +
           H("ec0", station(1, 40, 40) + t(70, 46, "STRATEGY", C.navy, "start") + bx(20, 90, 150, 70, C.mint, C.green) + t(95, 132, "GUEST GOAL", C.green, null, 16) + arr(176, 125, 220, 125, C.navy, 4) + bx(226, 90, 160, 70, WH, C.navy) + t(306, 122, "GROUP", C.navy, null, 16) + t(306, 146, "AMBITIONS", C.navy, null, 16)) +
-          H("ec1", station(2, 40, 40) + t(70, 46, "ARCHITECTURE", C.navy, "start") + [[60, 120, "SELL"], [200, 100, "CHECK-IN"], [340, 120, "BILL"], [120, 220, "CLEAN"], [280, 220, "DINE"]].map(function (n, j) { return (j ? P("M200 100 L" + n[0] + " " + n[1], C.muted, 3) : "") + bx(n[0] - 50, n[1] - 22, 100, 44, j === 1 ? C.peach : WH, j === 1 ? C.orange : C.slate) + t(n[0], n[1] + 6, n[2], j === 1 ? C.orange : C.slate, null, 15); }).join("") + P("M60 120 L200 100", C.muted, 3)),
+          H("ec1", station(2, 40, 40) + t(70, 46, "ARCHITECTURE", C.navy, "start") + P("M150 104 L110 116 M250 104 L290 116 M172 122 L138 198 M228 122 L262 198", C.muted, 3) + [[60, 120, "SELL"], [200, 100, "CHECK-IN"], [340, 120, "BILL"], [120, 220, "CLEAN"], [280, 220, "DINE"]].map(function (n, j) { return bx(n[0] - 50, n[1] - 22, 100, 44, j === 1 ? C.peach : WH, j === 1 ? C.orange : C.slate) + t(n[0], n[1] + 6, n[2], j === 1 ? C.orange : C.slate, null, 15); }).join("")),
         sh: { ec0: [6, 7], ec1: [8, 9] } },
       // template: Behance — The Process Architectural Motion (an idea grows into nested layers) — https://www.behance.net/gallery/194096661/The-Process-Architectural-Motion
       { a: 10, d: bgc("#f6f4ee") + station(3, 40, 40) + t(70, 46, "LAUNCH PAD", C.navy, "start") +
@@ -1984,12 +1557,12 @@ var PART = "v3p2";
           H("eg2", station(10, 40, 40) + t(70, 46, "SUSTAIN", C.navy, "start") + O(200, 160, 70, "none", { stroke: C.green, "stroke-width": 8, "class": "a-flow" }) + t(200, 166, "KEEP IT", C.green) + t(200, 190, "WORKING", C.green)),
         sh: { eg0: [20, 20], eg1: [21, 21], eg2: [22, 22] } },
       // template: Motion Array — Project TimeLine (markers advance along a time line) — https://motionarray.com/after-effects-templates/project-timeline-2424919/
-      { a: 23, d: bgc("#f4f6f9") + rep(10, function (i) { var x = 22 + i * 39.5; return station(i + 1, x, 80, C.navy2); }) + P("M42 80 H360", C.navy2, 3) +
+      { a: 23, d: bgc("#f4f6f9") + P("M42 80 H360", C.navy2, 3) + rep(10, function (i) { var x = 22 + i * 39.5; return station(i + 1, x, 80, C.navy2); }) +
           [["PROJECT MANAGEMENT", 150, C.amber], ["PEOPLE CHANGE", 196, C.plum], ["LEADERSHIP", 242, C.green]].map(function (b) { return R(6, b[1] - 18, 388, 34, b[2], 8, { opacity: 0.9 }) + t(200, b[1] + 6, b[0], WH, null, 16); }).join("") +
           H("eh1", ban("UNDER EVERY PHASE", C.navy, 284)),
         sh: { eh1: [24, 24] } },
       // template: 3Blue1Brown (Manim demo) — traced causal path drawn when it becomes relevant — https://www.3blue1brown.com/lessons/manim-demo/
-      { a: 25, d: bgc("#eef3f8") + rep(5, function (i) { return station(i + 1, 40 + i * 80, 150, i === 3 ? C.orange : C.navy2); }) + P("M60 150 H340", C.navy2, 3) +
+      { a: 25, d: bgc("#eef3f8") + P("M60 150 H340", C.navy2, 3) + rep(5, function (i) { return station(i + 1, 40 + i * 80, 150, i === 3 ? C.orange : C.navy2); }) +
           t(120, 196, "ARCHITECTURE", C.navy, null, 14) + t(280, 196, "UNDERSTAND", C.orange, null, 14) +
           H("ei0", ban("AN ORDER, NOT A CAGE", C.navy, 26)) +
           H("ei1", bx(200, 220, 190, 60, C.peach, C.red) + t(295, 246, "MISSING LINK", C.red, null, 15) + t(295, 268, "BOOKING-ROOM", C.red, null, 14)) +
