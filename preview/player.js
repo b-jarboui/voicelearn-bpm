@@ -136,11 +136,11 @@
   const synth = window.speechSynthesis;
   // Own settings key: the original prototype lives on the same github.io origin and must not share (or break) our settings.
   const VKEY = "voicelearn.oper621.voice.v2";
-  let VS = { uri: "", rate: 0.95, pitch: 1, look: "board" };
+  let VS = { uri: "", rate: 1, pitch: 1, look: "board" };
   try { VS = Object.assign(VS, JSON.parse(localStorage.getItem(VKEY)) || {}); } catch (e) {}
   // Sanitize saved values: a bad rate/pitch (NaN, a string, out of range) makes some engines silent.
   const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
-  VS.rate = num(VS.rate, 0.5, 2, 0.95); VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
+  VS.rate = num(VS.rate, 0.5, 2, 1); if (VS.rate === 0.95) VS.rate = 1; /* 0.95 was the old default: move it to 1, the natural voice's own speed */ VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
   if (!["notebook", "journey", "board", "motion"].includes(VS.look)) VS.look = "board"; // the removed looks "story" and "codex" move to Animated Whiteboard silently
   if (!["captions", "device"].includes(VS.mode)) VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace; "device" = the phone's own voice even when recordings exist
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
@@ -196,11 +196,13 @@
   // A sentence without a file (scores, shuffled drag-and-drop lists) uses the device voice as before.
   const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(16).padStart(8, "0"); };
   const REC_DIR = "audio/w" + String(window.WEEK || 1).padStart(2, "0") + "/";
-  let REC = null;
-  fetch(REC_DIR + "index.json").then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && Array.isArray(j.files)) { REC = new Set(j.files); try { bar(); } catch (e) {} } }).catch(() => {});
+  // REC_RATE = the speed the clips were recorded at. Near it (the default 1x, and 0.95) a clip plays untouched, because
+  // browser time-stretching adds an audible wobble; only a clearly different speed is stretched. REC_V busts phone caches.
+  let REC = null, REC_RATE = 1, REC_V = 1;
+  fetch(REC_DIR + "index.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && Array.isArray(j.files)) { REC = new Set(j.files); REC_RATE = Number(j.rate) || 1; REC_V = j.v || 1; try { bar(); } catch (e) {} } }).catch(() => {});
   const AUD = new Audio(), PRE = new Audio();
   AUD.preload = "auto"; PRE.preload = "auto";
-  const recUrl = (h) => REC_DIR + h + ".mp3";
+  const recUrl = (h) => REC_DIR + h + ".mp3?v=" + REC_V;
   // A recorded sentence is one clip, or two: an answer-letter lead-in ("B.", "Not quite. The answer is B.") and the option
   // text, recorded once instead of once per shuffled letter.
   const recFor = (s) => {
@@ -220,7 +222,7 @@
     part: 1000,      // pause before a new lesson part, review, result or report screen
     question: 1000,  // pause before each question screen
     feedback: 400,   // pause after answering, before the feedback is spoken
-    rate: 0.95,       // default speaking rate (the Speed slider overrides it)
+    rate: 1,          // default speaking rate (the Speed slider overrides it)
     startTimeout: 6000, // no "start" from the engine within this time = retry, then reading pace
   };
   // Reading pace used only when the device cannot speak: about 170 words per minute, never under 3 seconds a sentence.
@@ -280,7 +282,7 @@
       let ended = false, j = 0;
       const fail = (why) => { if (ended) return; ended = true; log("rec-" + why); hs.forEach((h) => REC.delete(h)); if (my === tok) say(k, 1, 0); };
       const clip = () => {
-        AUD.src = recUrl(hs[j]); AUD.playbackRate = VS.rate; AUD.preservesPitch = true; AUD.volume = window.__vlMute ? 0 : 1;
+        AUD.src = recUrl(hs[j]); const pr = VS.rate / REC_RATE; AUD.playbackRate = Math.abs(pr - 1) <= 0.06 ? 1 : pr; AUD.preservesPitch = true; AUD.volume = window.__vlMute ? 0 : 1;
         const p = AUD.play();
         if (p && p.then) p.then(() => { spoken = true; log("rec-start"); }).catch((e) => {
           if (ended || my !== tok) return;
