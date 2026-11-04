@@ -142,7 +142,7 @@
   const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
   VS.rate = num(VS.rate, 0.5, 2, 0.95); VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
   if (!["notebook", "journey", "board", "motion"].includes(VS.look)) VS.look = "board"; // the removed looks "story" and "codex" move to Animated Whiteboard silently
-  if (VS.mode !== "captions") VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace
+  if (!["captions", "device"].includes(VS.mode)) VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace; "device" = the phone's own voice even when recordings exist
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
   const enVoices = () => (synth ? synth.getVoices().filter((v) => /^en/i.test(v.lang)) : []);
   const UA = navigator.userAgent, IS_EDGE = /\bEdg[A-Za-z]*\//.test(UA), IS_ANDROID = /Android/i.test(UA);
@@ -192,6 +192,25 @@
     [/[*_#`~^|<>]/g, " "], [/\s*\(\s*/g, ", "], [/\s*\)\s*([,.;:!?])/g, "$1"], [/\s*\)\s*/g, ", "], [/,\s*,/g, ","], [/,\s*([.!?])/g, "$1"], [/\s{2,}/g, " "],
   ];
   const sayText = (t) => SAY.reduce((s, [a, b]) => s.replace(a, b), String(t)).trim();
+  // Recorded natural voice (4 Nov 2026): one MP3 per sentence in audio/wNN/, named by an FNV-1a hash of its sayText().
+  // A sentence without a file (scores, shuffled drag-and-drop lists) uses the device voice as before.
+  const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(16).padStart(8, "0"); };
+  const REC_DIR = "audio/w" + String(window.WEEK || 1).padStart(2, "0") + "/";
+  let REC = null;
+  fetch(REC_DIR + "index.json").then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && Array.isArray(j.files)) { REC = new Set(j.files); try { bar(); } catch (e) {} } }).catch(() => {});
+  const AUD = new Audio(), PRE = new Audio();
+  AUD.preload = "auto"; PRE.preload = "auto";
+  const recUrl = (h) => REC_DIR + h + ".mp3";
+  // A recorded sentence is one clip, or two: an answer-letter lead-in ("B.", "Not quite. The answer is B.") and the option
+  // text, recorded once instead of once per shuffled letter.
+  const recFor = (s) => {
+    if (!REC || VS.mode !== "voice") return null;
+    const t = sayText(s), h = fnv(t);
+    if (REC.has(h)) return [h];
+    const m = t.match(/^(.*?\b[ABCD][.:])\s+(.+)$/);
+    if (m) { const a = fnv(m[1].trim()), b = fnv(m[2].trim()); if (REC.has(a) && REC.has(b)) return [a, b]; }
+    return null;
+  };
   // ---------- pacing (all pauses in one place, milliseconds) ----------
   const PACE = {
     lead: 200,       // the visual appears, then this short beat, then the voice (never longer than the gap itself)
@@ -248,7 +267,7 @@
     const canJoin = opts.canJoin || (() => false);
     let i = from;
     // How many sentences (1 or 2) the utterance starting at k carries.
-    const group = (k) => (!FAST && !silent && VS.mode !== "captions" && synth && k + 1 < list.length && canJoin(k) &&
+    const group = (k) => (!FAST && !silent && VS.mode !== "captions" && synth && k + 1 < list.length && canJoin(k) && !recFor(list[k]) && !recFor(list[k + 1]) &&
       ENDS.test(String(list[k]).trim()) && words(list[k]) + words(list[k + 1]) <= PACE.join ? 2 : 1);
     const next = (lead, sync) => { if (i >= list.length) return onDone(); const k = i, n = group(k); i += n; onSentence(k); if (sync && !FAST) return say(k, n, 0); later(FAST ? 40 : lead, () => say(k, n, 0)); };
     // The silence between two utterances equals the gap (the lead beat before the voice is part of it).
@@ -256,11 +275,35 @@
       const gap = last + 1 < list.length ? gapAfter(last) : PACE.sentence, lead = Math.min(PACE.lead, gap);
       later(FAST ? 60 : Math.max(0, gap - lead), () => next(lead));
     };
+    // Recorded sentence: play its MP3 at the chosen speed, then the usual pause. A file that fails falls back to the device voice.
+    const playRec = (k, hs) => {
+      let ended = false, j = 0;
+      const fail = (why) => { if (ended) return; ended = true; log("rec-" + why); hs.forEach((h) => REC.delete(h)); if (my === tok) say(k, 1, 0); };
+      const clip = () => {
+        AUD.src = recUrl(hs[j]); AUD.playbackRate = VS.rate; AUD.preservesPitch = true; AUD.volume = window.__vlMute ? 0 : 1;
+        const p = AUD.play();
+        if (p && p.then) p.then(() => { spoken = true; log("rec-start"); }).catch((e) => {
+          if (ended || my !== tok) return;
+          if (e && e.name === "NotAllowedError") { ended = true; return needTap("not-allowed"); }
+          if (e && e.name === "AbortError") return; // replaced by a newer sentence
+          fail("play");
+        });
+        if (j + 1 < hs.length) { PRE.src = recUrl(hs[j + 1]); PRE.load(); }
+      };
+      AUD.onended = () => { if (ended || my !== tok) return; if (++j < hs.length) return clip(); ended = true; after(k); };
+      AUD.onerror = () => fail("error");
+      clip();
+      const nh = k + 1 < list.length && recFor(list[k + 1]); if (nh && hs.length === 1) { PRE.src = recUrl(nh[0]); PRE.load(); } // warm the next file
+      later(Math.max(15000, speakMs(list[k]) * 3 + 5000), () => { if (!ended) { ended = true; log("rec-no-end"); AUD.pause(); after(k); } });
+    };
     // Reading pace (captions only / no voice): each sentence shown for its own reading time.
     const readOut = (k, n, wait = 0) => later(Math.max(0, readMs(list[k]) - wait), () => { if (n === 2) { onSentence(k + 1); later(readMs(list[k + 1]), () => after(k + 1)); } else after(k); });
     const say = (k, n, attempt) => {
       if (FAST) return later(120, () => { if (n === 2) onSentence(k + 1); after(k + n - 1); });
-      if (silent || VS.mode === "captions") return readOut(k, n);
+      if (VS.mode === "captions") return readOut(k, n);
+      const rh = n === 1 && recFor(list[k]);
+      if (rh) return playRec(k, rh);
+      if (silent) return readOut(k, n);
       const parts = list.slice(k, k + n).map(sayText), text = parts.join(" "), split = parts[0].length + 1;
       const u = new SpeechSynthesisUtterance(text);
       const v = voice();
@@ -324,7 +367,7 @@
   }
   let lastCancel = -1e9;
   // Only cancel when the engine has something to cancel (a needless cancel() can wedge Chrome's engine); remember when.
-  function cancelSpeech(force) { if (!synth) return; try { if (force || synth.speaking || synth.pending) { synth.cancel(); lastCancel = performance.now(); } } catch (e) {} }
+  function cancelSpeech(force) { try { AUD.pause(); } catch (e) {} if (!synth) return; try { if (force || synth.speaking || synth.pending) { synth.cancel(); lastCancel = performance.now(); } } catch (e) {} }
   const stopSpeech = () => { tok++; cancelSpeech(); };
 
   let wake = null;
@@ -437,7 +480,7 @@
     $("toggle").textContent = waiting ? "↻ Repeat question" : playing ? "⏸ Pause" : "▶ Continue";
     const st = cur();
     const where = st.kind === "report" ? "Final report" : st.kind === "review" ? `Fresh explanation · ${A.sections[st.sec].name}` : st.kind === "quiz" ? (st.round ? `Practice round ${st.round}` : `Lesson ${st.l + 1} check`) : `Lesson ${st.l + 1} of ${C.lessons.length}`;
-    $("status").textContent = `${where} · ${waiting ? "Your answer" : playing ? (VS.mode === "captions" ? "Captions only" : silent ? "Reading pace (no voice)" : "Playing") : "Paused"}`;
+    $("status").textContent = `${where} · ${waiting ? "Your answer" : playing ? (VS.mode === "captions" ? "Captions only" : silent && !REC ? "Reading pace (no voice)" : "Playing") : "Paused"}`;
     updateNavigation();updateSkipButton();updateListenControls();updateMediaSession();
   }
   const caption = (t) => { const cc = $("cc"); if (cc) cc.textContent = t || ""; };
@@ -708,7 +751,7 @@
     if (view !== "player") return openPlayer();
     // The first utterance of a page load needs a real user gesture (Chrome autoplay policy); without one, ask for a tap.
     const gesture = fromTap === true || gestureNow();
-    if (!spoken && !FAST && synth && !silent && VS.mode !== "captions" && !gesture) return needTap("no-gesture");
+    if (!spoken && !FAST && (REC || (synth && !silent)) && VS.mode !== "captions" && !gesture) return needTap("no-gesture");
     hideTap();
     playing = true; waiting = false; keepAwake(); bar();
     const st = cur();
@@ -814,7 +857,7 @@
     load();
     if (wasPlaying) play(); else vstep(P.sent - script.offset);
   };
-  $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
+  $("vMode").onchange = (e) => { VS.mode = ["captions", "device"].includes(e.target.value) ? e.target.value : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
   $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "board"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
