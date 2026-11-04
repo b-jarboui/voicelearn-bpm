@@ -1231,7 +1231,7 @@ var PART = "v4p2";
         sh: { v1t0: [4, 5], v1t1: [4, 5, 0.3], v1t2: [4, 5, 0.6], v1n: [5, 5] } },
       // template: 3Blue1Brown (Manim demo) — traced causal path drawn when it becomes relevant — https://www.3blue1brown.com/lessons/manim-demo/
       { a: 6, d: bgc("#f4f6f9") + DEPS.concat([["FINANCE", C.amber]]).map(function (d, j) { var x = 8 + j * 98; return bx(x, 60, 90, 180, "#eef2f7", d[1]) + t(x + 45, 86, SH4[j], d[1], null, 14); }).join("") +
-          H("w2p", D("w2l", "M20 170 H380", C.orange, 7) + I.bell(20, 140, 1.4) + I.bed(374, 140, 1.4, C.green) + t(40, 214, "ARRIVAL", C.orange, "start", 16) + t(380, 214, "IN ROOM", C.green, "end", 16)) +
+          H("w2p", D("w2l", "M20 170 H380", C.orange, 7) + I.bell(20, 140, 1.4) + I.bed(374, 140, 1.4, C.green) + t(8, 268, "ARRIVAL", C.orange, "start", 16) + t(392, 268, "IN ROOM", C.green, "end", 16)) +
           H("w2a", ban("WHAT WOULD CHANGE?", C.navy, 26)) + H("w2b", ban("MANAGE THE WHOLE FLOW", C.orange, 26)),
         sh: { w2p: [7, 7], w2a: [6, 6], w2b: [7, 7] }, dr: { w2l: [7, 7, 0.2] } },
       // template: Dribbble — Data Workflow Animation (nodes and links activate in sequence) — https://dribbble.com/shots/27247003-Data-Workflow-Animation

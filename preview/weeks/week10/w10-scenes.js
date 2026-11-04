@@ -115,10 +115,24 @@
 
   function showText(st, index) {
     if (!st.text) return;
-    const line = st.lines && st.lines[index];
-    const t = momentText(Array.isArray(line) ? line[1] : null);
+    // A null moment keeps the previous picture, so keep the previous words too (never an empty box).
+    let t = null;
+    for (let j = index; j >= 0 && !t; j--) {
+      const line = st.lines && st.lines[j];
+      const c = momentText(Array.isArray(line) ? line[1] : null);
+      if (c && (c.m || c.s)) t = c;
+    }
+    if (!t) {
+      // Nothing to keep yet (opening sentences): show the sentence being spoken.
+      const line = st.lines && st.lines[index];
+      const said = Array.isArray(line) ? line[0] : line;
+      if (said) t = { k: "", m: String(said) };
+    }
+    const key = t ? t.m + "|" + t.s : "";
+    if (key && st.text.dataset.shown === key && st.text.childElementCount) return;
+    st.text.dataset.shown = key;
     st.text.replaceChildren();
-    if (!t || !(t.m || t.s)) return;
+    if (!t) return;
     [["k", t.k], ["m", t.m], ["s", t.s]].forEach(([c, s]) => {
       if (!s) return;
       const p = document.createElement("p");
@@ -127,6 +141,16 @@
       st.text.appendChild(p);
     });
     st.text.classList.remove("in"); void st.text.offsetWidth; st.text.classList.add("in");
+  }
+
+  // Before the first scene step (the part's opening lines): show the part title, not an empty box.
+  function showTitle(st) {
+    if (!st.text || !st.title || st.text.dataset.shown === "title|" + st.title) return;
+    st.text.dataset.shown = "title|" + st.title;
+    const p = document.createElement("p");
+    p.className = "m";
+    p.textContent = st.title;
+    st.text.replaceChildren(p);
   }
 
   const hosts = new WeakMap();
@@ -161,6 +185,7 @@
         const scene = id && window.W10_SCENES[id];
         st.lines = (section && Array.isArray(section.lines)) ? section.lines : linesFor(id);
         st.n = st.lines.length || (section && section.sentences && section.sentences.length) || 0;
+        st.title = (section && section.title) || "";
         const root = st.root;
         if (!root) return r;
         if (!scene) { if (st.host) { st.host.classList.remove("on"); root.removeAttribute("data-w10s"); } st.scene = null; st.id = null; return r; }
@@ -204,7 +229,7 @@
       const r = base.step.apply(this, arguments);
       try {
         if (st.scene && index >= 0) { st.scene.step(index, st.n || 1); showText(st, index); }
-        else if (st.scene && index < 0) st.scene.reset();
+        else if (st.scene && index < 0) { st.scene.reset(); showTitle(st); }
       } catch (e) { console.warn("[w10s] step", st.id, e); }
       return r;
     };
