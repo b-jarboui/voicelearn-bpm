@@ -128,8 +128,8 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 </header>
 <div class="vpanel card" id="vPanel" hidden role="dialog" aria-modal="false" aria-label="Settings">
   <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
-  <div class="muted" id="vNote" role="status" style="font-size:14px"></div>
-  <label class="fld">Narration<select id="vMode"><option value="voice">Natural voice, with captions</option><option value="device">Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
+  <div class="muted" id="vNote" role="status" style="font-size:14px" hidden></div>
+  <label class="fld">Narration<select id="vMode"><option value="voice">Natural voice, with captions</option><option value="device" hidden disabled>Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
   <label class="fld">Look<select id="vLook"><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option><option value="board">Animated Whiteboard</option><option value="motion">Motion Explainer</option></select></label>
   <div class="settings-week-row">
   <label for="settingsWeek">
@@ -140,13 +140,12 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
           aria-label="Select course week">
   </select>
 </div>
-  <label class="fld">Voice<select id="vVoice"></select></label>
+  <label class="fld" hidden>Voice<select id="vVoice"></select></label>
   <label class="fld">Speed <output id="vRateOut">1×</output><input id="vRate" type="range" min="0.5" max="2" step="0.05" value="1"></label>
   <div class="row muted" style="justify-content:space-between;font-size:13px"><span>0.5×</span><span>1×</span><span>1.5×</span><span>2×</span></div>
   <label class="listen-choice"><input id="settingsListen" type="checkbox"> <span>Listen only (hands-free)</span></label>
-  <label class="fld">Tone <output id="vPitchOut">normal</output><input id="vPitch" type="range" min="0.5" max="1.5" step="0.1" value="1"></label>
-  <div class="row muted" style="justify-content:space-between;font-size:13px"><span>Deeper</span><span>Higher</span></div>
-  <button id="vTest">▶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div>
+  <div hidden><label class="fld">Tone <output id="vPitchOut">normal</output><input id="vPitch" type="range" min="0.5" max="1.5" step="0.1" value="1"></label>
+  <button id="vTest">▶ Test selected voice</button><div id="voiceTests" class="voice-tests" aria-label="Test individual voices"></div></div>
   <div class="row settings-help"><button id="vSetup" type="button">Run setup again</button><button id="vFeedback" type="button">Give feedback</button></div>
   <div class="muted" id="vAbout" style="font-size:13px">Privacy: this site uses Microsoft Clarity to measure usage; see <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft's privacy statement</a>.</div>
   <div class="muted" style="font-size:13px">Voices come from your phone. For a male voice on Android: Settings → Text-to-speech → Speech Services by Google → ⚙️ → Install voice data → English → pick a male voice.</div>
@@ -369,7 +368,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=5\"><" + "/script>"); }); document.write("<script src=\"player.js?v=46\"><" + "/script>"); }
+  if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=5\"><" + "/script>"); }); document.write("<script src=\"player.js?v=47\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();

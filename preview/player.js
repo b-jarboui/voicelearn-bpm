@@ -143,7 +143,7 @@
   const num = (x, lo, hi, d) => { x = Number(x); return Number.isFinite(x) ? Math.min(hi, Math.max(lo, x)) : d; };
   VS.rate = num(VS.rate, 0.5, 2, 1); if (VS.rate === 0.95) VS.rate = 1; /* 0.95 was the old default: move it to 1, the natural voice's own speed */ VS.pitch = num(VS.pitch, 0.5, 1.5, 1); if (typeof VS.uri !== "string") VS.uri = "";
   if (!["notebook", "journey", "board", "motion"].includes(VS.look)) VS.look = "board"; // the removed looks "story" and "codex" move to Animated Whiteboard silently
-  if (!["captions", "device"].includes(VS.mode)) VS.mode = "voice"; // "captions" = no speech, captions advance at reading pace; "device" = the phone's own voice even when recordings exist
+  if (VS.mode !== "captions") VS.mode = "voice"; VS.uri = ""; VS.pitch = 1; // "captions" = no speech, captions advance at reading pace; "device" = the phone's own voice even when recordings exist
   const saveVS = () => { try { localStorage.setItem(VKEY, JSON.stringify(VS)); } catch (e) {} };
   const enVoices = () => (synth ? synth.getVoices().filter((v) => /^en/i.test(v.lang)) : []);
   const UA = navigator.userAgent, IS_EDGE = /\bEdg[A-Za-z]*\//.test(UA), IS_ANDROID = /Android/i.test(UA);
@@ -904,7 +904,7 @@
     load();
     if (wasPlaying) play(); else vstep(P.sent - script.offset);
   };
-  $("vMode").onchange = (e) => { VS.mode = ["captions", "device"].includes(e.target.value) ? e.target.value : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
+  $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); if (playing) { stopSpeech(); play(); } bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
   $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "journey"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
@@ -981,9 +981,9 @@
       $("designBack").onclick=welcome;$("designNext").onclick=setupVoice;
     }
     function setupVoice() {
-      showScreen("setupVoice", `<section class="card onboard"><div class="eyebrow">Setup · Step 2 of 3</div><h1>Choose your narrator</h1>
-        <p>The natural voice is recommended. You can also use your phone's own voice, or read captions only. You can change these choices later in Settings.</p>
-        <label class="fld">Narration mode <select id="setupMode"><option value="voice">Natural voice, with captions</option><option value="device">Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
+      showScreen("setupVoice", `<section class="card onboard"><div class="eyebrow">Setup · Step 2 of 3</div><h1>Voice and speed</h1>
+        <p>Every lesson is read by the same natural voice, with captions. Choose captions only if you prefer to read. You can change the speed any time in Settings.</p>
+        <label class="fld">Narration mode <select id="setupMode"><option value="voice">Natural voice, with captions</option><option value="device" hidden disabled>Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
         <div id="setupDevice"><label class="fld">Phone voice <select id="setupVoice"></select></label>
         <div id="setupVoiceTests" class="voice-tests" aria-label="Available voices"></div></div>
         <label class="fld">Speed: <output id="setupRateOut"></output><input id="setupRate" type="range" min="0.5" max="2" step="0.05"></label>
