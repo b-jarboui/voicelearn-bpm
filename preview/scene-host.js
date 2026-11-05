@@ -172,10 +172,11 @@
     if (!active) return;
     const st = active;
     active = null;
+    st.version++;
     window.VL_ART?.current(null);
     window.VL_LAYOUT?.scene(null);
     // reset() owns scene timers/RAF work; remove GSAP work before its SVG is detached.
-    try { st.scene?.reset(); } catch (e) { console.warn("[w10s] release", st.id, e); }
+    try { window.VL_WORK.discard(() => st.scene?.reset()); } catch (e) { console.warn("[w10s] release", st.id, e); }
     if (st.root && window.gsap) gsap.killTweensOf([st.root, ...st.root.querySelectorAll("*")]);
     st.scene = null; st.lastIndex = null;
     if (st.mo) st.mo.disconnect();
@@ -184,7 +185,7 @@
 
   function install(style) {
     if (!style || hosts.has(style) || !["mount", "load", "step"].every(k => typeof style[k] === "function")) return;
-    const st = { root: null, host: null, inner: null, scene: null, id: null, n: 0, built: null, mo: null };
+    const st = { root: null, host: null, inner: null, scene: null, id: null, n: 0, built: null, mo: null, version: 0 };
     hosts.set(style, st);
     const base = { mount: style.mount, load: style.load, step: style.step };
 
@@ -194,22 +195,28 @@
 
     style.mount = function (element) {
       release();
+      st.version++;
       const r = base.mount.apply(this, arguments);
       st.root = element || null; st.host = null; st.scene = null; st.id = null; st.built = null;
       if (st.mo) st.mo.disconnect();
       if (element) {
         css();
-        st.mo = new MutationObserver(() => repairKeys(element));
+        st.mo = new MutationObserver(records => {
+          if (records.some(r => [...r.addedNodes].some(n => n.nodeType === 1 && (n.matches('.nb-key') || n.querySelector('.nb-key'))))) repairKeys(element);
+        });
         st.mo.observe(element, { childList: true, subtree: true });
       }
       return r;
     };
 
-    style.load = function (section) {
-      const r = base.load.apply(this, arguments);
+    function* loadScene(section) {
+      // Registered scenes cover the base renderer: do not also build invisible
+      // sentence cards, diagrams and cinematics underneath the same picture.
+      const sceneId = secIdFor(section);
+      const r = sceneId ? undefined : base.load.apply(this, arguments);
       try {
         css();
-        const id = secIdFor(section);
+        const id = sceneId;
         const scene = id && window.W10_SCENES[id];
         st.lines = (section && Array.isArray(section.lines)) ? section.lines : linesFor(id);
         st.n = st.lines.length || (section && section.sentences && section.sentences.length) || 0;
@@ -219,9 +226,11 @@
         if (!scene) { if (st.host) { st.host.classList.remove("on"); root.removeAttribute("data-w10s"); } st.scene = null; st.id = null; return r; }
         if (!st.host || !root.contains(st.host)) {
           st.host = document.createElement("div");
-          st.host.className = "w10s-host";
+          st.host.className = "w10s-host on";
           root.appendChild(st.host);
         }
+        st.host.classList.add('on');
+        st.host.dataset.look = style.id || '';
         if (st.built !== id) {
           if (st.undress) { st.undress(); st.undress = null; }
           st.host.replaceChildren();
@@ -237,18 +246,28 @@
           st.text.setAttribute("aria-live", "polite");
           st.inner.appendChild(st.text);
           st.host.appendChild(st.inner);
-          try { scene.build(mountEl); } catch (e) { console.warn("[w10s] build", id, e); }
+          // The scene is prepared across yields; show the part title meanwhile, not an empty box.
+          showTitle(st);
+          let built;
+          try { built = scene.build(mountEl); } catch (e) { console.warn("[w10s] build", id, e); }
+          // Own the scene before yielding, so navigation/look changes can cancel
+          // its work even while the rest of its presentation is being prepared.
+          st.scene = scene; st.id = id; active = st;
+          yield built;
           st.art = window.VL_ART?.prepare(mountEl, style.id);
+          yield;
           st.built = id;
         }
         st.scene = scene; st.id = id; st.lastIndex = null; active = st;
-        try { scene.reset(); } catch (e) { console.warn("[w10s] reset", id, e); }
+        // build establishes the opening state; step(-1) owns reset below.
         root.setAttribute("data-w10s", "on");
         st.host.classList.add("on");
         // Each look dresses the same scene its own way (see the [data-look] rules).
         st.host.dataset.look = style.id || "";
+        showTitle(st);
         window.VL_LAYOUT?.scene({host:st.host,mount:st.inner.querySelector('.w10s-mount'),text:st.text,
           states:[noteNodes([{m:st.title}]),...st.lines.map((_,i)=>noteNodes(notesFor(st,i)))]});
+        yield;
         if (style.id === "board" && !st.undress) st.undress = window.VL_BOARD?.dressScene(st.inner.querySelector(".w10s-mount"));
         window.VL_ART?.current({mount:st.inner.querySelector('.w10s-mount'),title:st.title});
         if (!["notebook", "journey", "board", "motion"].includes(style.id)) {
@@ -257,6 +276,17 @@
         }
       } catch (e) { console.warn("[w10s] load", e); }
       return r;
+    }
+    style.load = function(section) {
+      const steps=loadScene.call(this,section),version=st.version;
+      if(window.VL_WORK?.immediate){let result;do{result=steps.next()}while(!result.done);return result.value}
+      return (async()=>{
+        while(true){
+          if(st.version!==version||!st.root?.isConnected){steps.return();return}
+          const result=steps.next();if(result.done)return result.value;
+          if(result.value?.then)await result.value;else await window.VL_WORK.yield();
+        }
+      })();
     };
 
     style.step = function (index) {
@@ -267,8 +297,13 @@
       if (target === st.lastIndex) return;
       st.lastIndex = target;
       try {
+        // The authoring engines and label fitter always run in their own source
+        // coordinates. Recompose their original nodes before the next paint.
+        window.VL_PORTRAIT?.beforeStep(st.inner.querySelector('.w10s-mount'));
         if (st.scene && index >= 0) { st.scene.step(index, st.n || 1); st.art?.refresh(); showText(st, index); }
         else if (st.scene && index < 0) { st.scene.reset(); showTitle(st); }
+        window.VL_PORTRAIT?.refresh(st.inner.querySelector('.w10s-mount'));
+        window.VL_LAYOUT?.refresh();
       } catch (e) { console.warn("[w10s] step", st.id, e); }
     };
   }

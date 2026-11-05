@@ -88,11 +88,23 @@
     function refresh() {
       // Dynamic titles/counters can be rewritten by a scene. Only remeasure
       // changed words; no layout reads or animation restarts for stable labels.
+      // Snapshot geometry for all changed labels before writing any font size.
+      // Otherwise every label invalidates the SVG before its neighbour's read.
+      const measurements = new Map();
+      for (const text of labels) {
+        const key=text.textContent+'|'+text.getAttribute('font-size')+'|'+text.style.fontSize;
+        if(done.get(text)===key)continue;
+        const c=getComputedStyle(text),fontSize=c.fontSize,fill=c.fill,textAnchor=c.textAnchor;
+        const own=text.getBBox(),box=boxFor(text),y=+text.getAttribute('y');
+        const neighbours=[...text.parentElement.children].filter(e=>e!==text&&e.tagName==='text').map(e=>({b:e.getBBox(),gap:Math.abs(+e.getAttribute('y')-y),size:parseFloat(e.getAttribute('font-size'))||parseFloat(fontSize)}));
+        measurements.set(text,{cs:{fontSize,fill,textAnchor},own,box,neighbours});
+      }
       for(const text of labels) {
         const attribute=text.getAttribute('font-size');
         const key=text.textContent+'|'+attribute+'|'+text.style.fontSize;
         if(done.get(text)===key)continue;
-        const cs=getComputedStyle(text);
+        const measured=measurements.get(text);if(!measured)continue;
+        const cs=measured.cs;
         // Some weekly engines already fit a long label with an inline font size.
         // Respect that measured size, including subsequent dynamic refits. The
         // SVG presentation attribute is only the original design's upper bound.
@@ -100,7 +112,7 @@
         if(!source||source.attribute!==attribute||source.applied!==text.style.fontSize)source={size:parseFloat(cs.fontSize),attribute};
         const original=source.size;
         if(!original || !text.textContent.trim() || text.closest('defs'))continue;
-        const box=boxFor(text), own=text.getBBox();
+        const {box,own}=measured;
         if(!own.width)continue;
         let target=box?Math.max(original,Math.min(16*unit,original*1.22)):original;
         if(box?.width>svg.viewBox.baseVal.width*.72)target=original;
@@ -110,7 +122,7 @@
         if(box&&+box.element.getAttribute('rx')>=box.height*.4)target=original;
         if(text.matches('.vlw-gl') || /^[\d?%+×✓✔✕!]{1,3}$/.test(text.textContent.trim()))target=original;
         const y=+text.getAttribute('y');
-        const near=[...text.parentElement.children].filter(e=>e!==text&&e.tagName==='text').map(e=>({b:e.getBBox(),gap:Math.abs(+e.getAttribute('y')-y),size:parseFloat(e.getAttribute('font-size'))||original})).filter(e=>e.gap>0&&e.gap<Math.max(original,e.size)*1.8&&Math.abs(e.b.x+e.b.width/2-own.x-own.width/2)<Math.max(e.b.width,own.width)*.35);
+        const near=measured.neighbours.filter(e=>e.gap>0&&e.gap<Math.max(original,e.size)*1.8&&Math.abs(e.b.x+e.b.width/2-own.x-own.width/2)<Math.max(e.b.width,own.width)*.35);
         if(near.length)target=Math.min(target,...near.map(e=>e.gap*.78));
         target=Math.max(original,target);
         const width=s=>{context.font=`700 ${target}px "Atkinson Hyperlegible"`;return context.measureText(s).width};
@@ -149,33 +161,44 @@
   open.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6M10 7v6M7 10h6"/></svg>';
   document.getElementById('playerSettingsSlot')?.prepend(open);
   function close(){dialog?.close();}
-  open.onclick=()=>{
+  open.onclick=async()=>{
     const source=active?.mount.querySelector('svg');if(!source)return;
     // Use the existing Pause action; there is no independent media state here.
     const toggle=document.getElementById('toggle');if(toggle?.textContent.includes('Pause'))toggle.click();
+    const view={width:source.viewBox.baseVal.width,height:source.viewBox.baseVal.height};
+    dialog=document.createElement('dialog');dialog.className='qdiagram-dialog vl-art-dialog';dialog.setAttribute('aria-label','Enlarged lesson drawing');
+    const opened=dialog;
+    const closeButton=document.createElement('button');closeButton.type='button';closeButton.className='qdiagram-close';closeButton.textContent='Close enlarged view';closeButton.onclick=close;
+    const heading=document.createElement('h2');heading.textContent=active.title;
+    const hint=document.createElement('p');hint.textContent='Scroll to inspect the drawing. Continue the lesson when you’re ready.';
+    const pan=document.createElement('div');pan.className='vl-art-pan';pan.tabIndex=0;pan.setAttribute('aria-label','Lesson drawing. Scroll in either direction to inspect.');pan.setAttribute('aria-busy','true');
+    pan.style.height=`min(70dvh, calc((100vw - 4rem) * ${view.height/view.width}))`;
+    opened.append(closeButton,heading,hint,pan);
+    opened.onclose=()=>{opened.remove();if(dialog===opened)dialog=null;if(open.isConnected&&!open.hidden)open.focus({preventScroll:true})};
+    document.body.appendChild(opened);opened.showModal();closeButton.focus();
+    await new Promise(VL_WORK.afterPaint);
+    if(!opened.isConnected)return;
     const clone=source.cloneNode(true),original=[source,...source.querySelectorAll('*')],copy=[clone,...clone.querySelectorAll('*')];
+    let slice=performance.now();
     for(let i=0;i<original.length;i++){
       const c=getComputedStyle(original[i]);
       for(const k of ['fill','stroke','stroke-width','stroke-linecap','stroke-linejoin','stroke-dasharray','stroke-dashoffset','opacity','visibility','display','font-family','font-size','font-weight','letter-spacing','text-anchor','dominant-baseline','paint-order','transform','transform-origin','transform-box','clip-path','mask','filter','marker-start','marker-end'])copy[i].style.setProperty(k,c.getPropertyValue(k));
       copy[i].style.animation='none';copy[i].style.transition='none';
+      if(performance.now()-slice>6){await VL_WORK.yield();if(!opened.isConnected)return;slice=performance.now();}
     }
     const ids=new Map();for(const el of copy)if(el.id){ids.set(el.id,el.id+'-detail');el.id+='-detail'}
-    for(const el of copy)for(const attr of [...el.attributes]){let value=attr.value;for(const [old,id] of ids)value=value.replaceAll('#'+old,'#'+id);if(value!==attr.value)el.setAttribute(attr.name,value)}
+    for(const el of copy){
+      for(const attr of [...el.attributes]){let value=attr.value;for(const [old,id] of ids)value=value.replaceAll('#'+old,'#'+id);if(value!==attr.value)el.setAttribute(attr.name,value)}
+      if(performance.now()-slice>6){await VL_WORK.yield();if(!opened.isConnected)return;slice=performance.now();}
+    }
     const visible=e=>{for(let n=e;n&&n!==source;n=n.parentElement){const c=getComputedStyle(n);if(c.display==='none'||c.visibility==='hidden'||+c.opacity<.15)return false}return true};
     const screen=source.getBoundingClientRect(),matrix=source.getScreenCTM(),scale=Math.hypot(matrix.a,matrix.b);
     const type=[...source.querySelectorAll('text')].filter(e=>{const r=e.getBoundingClientRect();return visible(e)&&e.textContent.trim().length>3&&r.right>screen.left&&r.left<screen.right&&r.bottom>screen.top&&r.top<screen.bottom}).map(e=>{const m=e.getScreenCTM();return parseFloat(getComputedStyle(e).fontSize)*Math.hypot(m.a,m.b)/scale});
-    const view=source.viewBox.baseVal,minimum=Math.min(16,...type);
+    const minimum=Math.min(16,...type);
     const width=Math.ceil(Math.max(view.width*16/minimum,Math.min(innerWidth-64,1000)));
     clone.style.setProperty('width',width+'px','important');clone.style.setProperty('height',(width*view.height/view.width)+'px','important');
-    dialog=document.createElement('dialog');dialog.className='qdiagram-dialog vl-art-dialog';dialog.setAttribute('aria-label','Enlarged lesson drawing');
-    const closeButton=document.createElement('button');closeButton.type='button';closeButton.className='qdiagram-close';closeButton.textContent='Close enlarged view';closeButton.onclick=close;
-    const heading=document.createElement('h2');heading.textContent=active.title;
-    const hint=document.createElement('p');hint.textContent='Scroll to inspect the drawing. Continue the lesson when you’re ready.';
-    const pan=document.createElement('div');pan.className='vl-art-pan';pan.tabIndex=0;pan.setAttribute('aria-label','Lesson drawing. Scroll in either direction to inspect.');pan.appendChild(clone);
-    dialog.append(closeButton,heading,hint,pan);
-    const opened=dialog;
-    opened.onclose=()=>{opened.remove();if(dialog===opened)dialog=null;if(open.isConnected&&!open.hidden)open.focus({preventScroll:true})};
-    document.body.appendChild(dialog);dialog.showModal();closeButton.focus();
+    if(!opened.isConnected)return;
+    pan.appendChild(clone);pan.removeAttribute('aria-busy');
   };
   window.VL_ART={prepare,refresh:mount=>instances.get(mount)?.refresh(),current(value){active=value;open.hidden=!value;if(!value)close()}};
 })();

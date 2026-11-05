@@ -1,19 +1,94 @@
 /* Content-sized lesson presentation. No scene, narration or assessment state is changed. */
 (() => {
   'use strict';
-  let captions = [], part = '', scene = null, raf = 0, signature = '';
+  // Paint tap feedback before presentation work. Audio activation remains in
+  // the original player handler; only visual work uses this coalescing queue.
+  const jobs = new Map();
+  let immediate = false, discarding = false, lastInput = -Infinity;
+  const afterPaint = fn => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(fn, 0)));
+  const taps = new WeakMap();
+  function tapFeedback(event) {
+    lastInput=performance.now();
+    const el=event.target.closest?.('button,summary');
+    if(!el||el.disabled)return;
+    const token={flip:!taps.get(el)?.flip};taps.set(el,token);el.setAttribute('data-vl-tap',token.flip?'1':'0');
+    // A small fixed ink ring also paints independently of a busy SVG layer.
+    // Pointer coordinates avoid measuring the button during scene layout.
+    let ink;
+    if(event.type==='pointerdown'){
+      ink=document.createElement('canvas');ink.width=48;ink.height=48;ink.className='vl-tap-ink';ink.setAttribute('aria-hidden','true');
+      ink.style.left=event.clientX+'px';ink.style.top=event.clientY+'px';document.body.append(ink);
+      const context=ink.getContext('2d'),start=performance.now();
+      const paint=()=>{
+        if(!ink.isConnected||!context)return;
+        const progress=Math.min(1,(performance.now()-start)/120);
+        context.clearRect(0,0,48,48);context.beginPath();context.arc(24,24,7+progress*13,0,Math.PI*2);
+        context.strokeStyle='#175caa';context.lineWidth=5;context.stroke();
+        context.strokeStyle='#fff';context.lineWidth=2;context.stroke();
+        if(progress<1)requestAnimationFrame(paint);
+      };requestAnimationFrame(paint);
+    }
+    // Keep the feedback through a paint even if preparation delays timers.
+    // Starting a 100 ms timer at pointerdown could remove it before any paint.
+    requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{
+      ink?.remove();
+      if(taps.get(el)===token){el.removeAttribute('data-vl-tap');taps.delete(el)}
+    },100)));
+  }
+  document.addEventListener('pointerdown',tapFeedback,{capture:true,passive:true});
+  document.addEventListener('keydown',event=>{if(!event.repeat&&(event.key==='Enter'||event.key===' '))tapFeedback(event)},{capture:true});
+  window.VL_WORK = {
+    get immediate() { return immediate; },
+    get discarding() { return discarding; },
+    discard(fn) { const was=discarding;discarding=true;try{return fn()}finally{discarding=was} },
+    visual(key, fn) {
+      if (immediate) return fn();
+      const pending = jobs.has(key); jobs.set(key, fn);
+      if (!pending) afterPaint(() => { const job = jobs.get(key); jobs.delete(key); job?.(); });
+    },
+    cancel(key) { jobs.delete(key); },
+    now(fn) { const was = immediate; immediate = true; try { return fn(); } finally { immediate = was; } },
+    afterPaint,
+    // A paint boundary also lets Chromium deliver queued touch input. Merely
+    // chaining scheduler.yield continuations can still postpone that delivery.
+    yield: () => new Promise(resolve => {
+      const resume=()=>{
+        // Incoming transport taps take precedence over preparing an invisible
+        // drawing. Resume after the short burst, without delaying audio actions.
+        const quiet=250-(performance.now()-lastInput);
+        if(quiet>0)setTimeout(resume,quiet);
+        else requestAnimationFrame(()=>setTimeout(resolve,20));
+      };
+      resume();
+    }),
+    wrap(fn) { return function(...args) {
+      const el = this instanceof HTMLElement ? this : null;
+      // Existing interface forwarding and deterministic QA calls keep their
+      // synchronous DOM semantics. Native taps get a paint before navigation.
+      if(args[0] instanceof Event && !args[0].isTrusted)return fn.apply(el,args);
+      if (el?.hasAttribute('data-vl-pending')) return;
+      el?.setAttribute('data-vl-pending', ''); el?.setAttribute('aria-busy', 'true');
+      afterPaint(() => { if(el&&!el.isConnected)return;try { fn.apply(el, args); } finally { el?.removeAttribute('data-vl-pending'); el?.removeAttribute('aria-busy'); } });
+    }; }
+  };
+  let captions = [], part = '', scene = null, raf = 0, signature = '', settling = 0, settleVersion = 0;
   const body = document.body, main = document.getElementById('main');
   const px = n => `${Math.max(0, Math.ceil(n))}px`;
   const number = s => parseFloat(s) || 0;
+  const textSizes = new Map();
+  let settleTask = null;
   function put(el, name, value) { if (el.style.getPropertyValue(name) !== value) el.style.setProperty(name, value); }
-  function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; fit(); }); }
+  function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; if (!settling) window.VL_WORK.visual('layout', () => { if(scene && !scene.fitKey)startSettle();else fit(); }); }); }
   function flush() {
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
-    // Resolve wrapped scene chrome, then its final text band, before the browser paints.
-    fit(); fit();
+    if(window.VL_WORK.immediate)settling=0;
+    fit();
   }
   function measureText(source, texts, width, scales) {
     const style = getComputedStyle(source);
+    const cacheKey = [source.className, source.closest('[data-look]')?.dataset.look, width, style.font, style.lineHeight, style.padding, scales,
+      ...texts.map(t => typeof t === 'string' ? t : t.map(n=>n.outerHTML).join(''))].join('|');
+    if(textSizes.has(cacheKey))return textSizes.get(cacheKey);
     const variants = scales || [null], heights = variants.map(() => 0);
     const fragment = document.createDocumentFragment(), seen = new Set(), clones = [];
     for (const text of texts) {
@@ -42,10 +117,32 @@
     source.parentElement.appendChild(fragment);
     clones.forEach(({clone,index}) => { heights[index] = Math.max(heights[index], clone.getBoundingClientRect().height); });
     clones.forEach(({clone}) => clone.remove());
-    return scales ? heights.map(Math.ceil) : Math.ceil(heights[0]);
+    const result = scales ? heights.map(Math.ceil) : Math.ceil(heights[0]);
+    if(textSizes.size>=96)textSizes.delete(textSizes.keys().next().value);
+    textSizes.set(cacheKey,result);return result;
   }
-  function fit() {
+  function fit() { if(settling)return;for (const phase of fitSteps()) { /* synchronous inspection/resize */ } }
+  function startSettle() {
+    if(settleTask?.scene===scene&&settleTask.part===part)return settleTask.promise;
+    const task={scene,part};task.promise=settle();settleTask=task;
+    task.promise.finally(()=>{if(settleTask===task)settleTask=null});
+    return task.promise;
+  }
+  async function settle() {
+    window.VL_WORK.cancel('layout');
+    const currentScene=scene,currentPart=part,version=++settleVersion,steps=fitSteps();
+    settling=version;
+    try {
+      while(true){
+        if(scene!==currentScene||part!==currentPart||body.dataset.view!=='player'||settling!==version){steps.return();return false}
+        if(steps.next().done)return true;
+        await window.VL_WORK.yield();
+      }
+    } finally { if(settling===version){settling=0;schedule();} }
+  }
+  function* fitSteps() {
     if (body.dataset.view !== 'player') return;
+    if(scene?.host.isConnected && scene.host.classList.contains('on') && !body.classList.contains('vl-measured'))body.classList.add('vl-measured');
     const cc = document.getElementById('cc'), bar = document.querySelector('body > .bar');
     if (!cc || !bar) return;
     const full = body.classList.contains('fs'), off = body.classList.contains('cc-off');
@@ -55,7 +152,7 @@
     const top = full ? (viewport?.offsetTop || 0) : Math.max(0, nav.getBoundingClientRect().bottom);
     const cs = getComputedStyle(main), space = Math.max(1, bottom - top - number(cs.paddingTop) - number(cs.paddingBottom));
     const width = Math.max(1, main.clientWidth - number(cs.paddingLeft) - number(cs.paddingRight));
-    const portrait = !!scene && space > width * 1.25;
+    const portrait = !!scene && space > width;
     const key = [part, width, space, full, off, portrait, getComputedStyle(document.documentElement).fontSize, devicePixelRatio].join('|');
     if (key !== signature) {
       signature = key;
@@ -70,11 +167,17 @@
       put(main, '--vl-lesson-space', px(space));
       put(main, '--vl-page-space', px(bottom - top));
     }
+    yield;
     if (!scene?.host.isConnected || !scene.host.classList.contains('on')) return;
     const {host, mount, text, states} = scene;
     const canvas = mount.firstElementChild, svg = mount.querySelector('svg');
     if (!canvas || !svg) return;
-    body.classList.add('vl-measured');
+    const fitKey = key + '|' + text.dataset.shown + '|' + [...canvas.children].filter(e=>!e.querySelector('svg')&&e!==svg).map(e=>e.textContent).join('|');
+    if (scene.fitKey === fitKey && scene.drawing) {
+      scene.composition?.compose(...scene.drawing);
+      return;
+    }
+    if(!body.classList.contains('vl-measured'))body.classList.add('vl-measured');
     const hcs = getComputedStyle(host), ics = getComputedStyle(host.querySelector('.w10s-inner'));
     const w = Math.max(1, width - number(hcs.paddingLeft) - number(hcs.paddingRight) - number(ics.paddingLeft) - number(ics.paddingRight));
     const band = off ? 0 : number(body.style.getPropertyValue('--vl-caption-size'));
@@ -93,14 +196,15 @@
       scene.chromeReserve = null;
       scene.portraitKey = '';
     }
-    // Freeze the drawing size to the largest explanation of this part. Current notes
-    // keep their natural height; changing a sentence cannot move or shrink the picture.
+    yield;
+    // Wide compositions reserve the largest explanation of this part. Portrait
+    // below measures the current note and composes the remaining drawing space.
     let notes = Math.min(scene.notes, available * (row ? 1 : .42));
     const view = svg.viewBox.baseVal;
     // Some authored scenes adjust their viewBox to fit a label during playback.
     // Keep the presentation box stable while SVG's own meet scaling handles that change.
     if (!scene.ratio) scene.ratio = view.width > 0 && view.height > 0 ? view.width / view.height : 4 / 3;
-    const ratio = scene.ratio;
+    let ratio = scene.ratio;
     // Resolve the authored heading/footer separately from the SVG. Wrapping labels
     // may grow the card downward, but cannot shrink or move the illustration.
     put(mount, '--vl-scene-width', px(row ? w - noteWidth - gap : w));
@@ -116,8 +220,25 @@
     if (scene.chromeReserve == null) scene.chromeReserve = chrome + Math.max(0,...siblings.map(el => number(getComputedStyle(el).lineHeight) || number(getComputedStyle(el).fontSize)*1.4));
     put(mount, '--vl-footer-limit', px(scene.chromeReserve));
     const maxW = row ? w - noteWidth - gap : w;
-    const maxH = Math.max(1, row ? available : available - notes - gap);
-    const drawingW = Math.max(1, Math.min(maxW, Math.max(1, maxH - scene.chromeReserve) * ratio));
+    let maxH = Math.max(1, row ? available : available - notes - gap);
+    // A portrait drawing is composed for its actual available rectangle, after
+    // measuring the caption, explanation and scene chrome. No device breakpoint.
+    const wantsPortraitArt = !row && available > maxW && window.VL_PORTRAIT;
+    yield;
+    const composition = wantsPortraitArt ? window.VL_PORTRAIT.prepare(mount) : scene.composition;
+    yield;
+    // A declined composition uses the complete authored drawing and spare bands.
+    const portraitArt = !!(wantsPortraitArt && composition);
+    if (composition) scene.composition = composition;
+    if (portraitArt && composition) {
+      put(host, '--vl-note-scale', '1');
+      put(host, '--vl-note-label-scale', '1');
+      notes = Math.min(text.scrollHeight, available * .42);
+      maxH = Math.max(1, available - notes - gap);
+      ratio = maxW / Math.max(1, maxH - chrome);
+      host.dataset.presentation = 'portrait';
+    } else composition?.restore();
+    const drawingW = portraitArt ? maxW : Math.max(1, Math.min(maxW, Math.max(1, maxH - scene.chromeReserve) * ratio));
     put(mount, '--vl-scene-width', px(drawingW));
     put(mount, '--vl-art-height', px(drawingW / ratio));
     const finalChrome = number(style.paddingTop) + number(style.paddingBottom) + number(style.borderTopWidth) + number(style.borderBottomWidth)
@@ -125,13 +246,12 @@
       + number(style.rowGap) * siblings.length;
     const drawingH = drawingW / ratio + finalChrome;
     put(mount, '--vl-scene-height', px(drawingH));
-    // The largest base explanation above reserves a stable drawing size. Fit
-    // the CURRENT explanation into its remaining portrait space: a short note
-    // need not stay small just because another note in this part is longer.
+    // For an authored wide composition, fit the current explanation into the
+    // remaining space. A composed portrait keeps the note's natural type size.
     // Never stretch the SVG or shrink accessibility text to make it fit.
-    const noteLimit = portrait && !row ? Math.max(1, available - drawingH - gap) : row ? available : notes;
+    const noteLimit = portraitArt ? notes : portrait && !row ? Math.max(1, available - drawingH - gap) : row ? available : notes;
     const portraitKey = [noteKey, noteLimit, text.innerHTML].join('|');
-    if (portrait && !row && scene.portraitKey !== portraitKey) {
+    if (!portraitArt && portrait && !row && scene.portraitKey !== portraitKey) {
       scene.portraitKey = portraitKey;
       const current = [[...text.children]];
       // Measure type candidates in one DOM batch, without repeatedly reflowing
@@ -151,18 +271,24 @@
     put(host, '--vl-row-height', px(rowHeight));
     const height = (row ? Math.max(rowHeight,drawingH) : drawingH + noteH + gap) + number(hcs.paddingTop) + number(hcs.paddingBottom);
     put(main, '--vl-picture-size', px(height));
-    // When the artwork's proportions leave spare height, centre picture and caption instead of a band at the bottom.
+    // Only authored wide proportions can leave spare bands. A composed portrait
+    // uses its available height, apart from subpixel rounding.
     put(body, '--vl-spare', px(Math.floor(Math.max(0, space - band - height) / 2)));
+    scene.fitKey = fitKey;
+    scene.drawing = portraitArt && composition ? [drawingW, drawingW / ratio] : null;
+    yield;
+    if (scene.drawing) composition.compose(...scene.drawing);
     if (cc.scrollHeight > cc.clientHeight + 1 && !off) { cc.tabIndex = 0; cc.setAttribute('aria-label', 'Caption. Scroll to read the full sentence.'); }
     else { cc.removeAttribute('tabindex'); cc.removeAttribute('aria-label'); }
     if (text.scrollHeight > text.clientHeight + 1) { text.tabIndex = 0; text.setAttribute('role','region'); text.setAttribute('aria-label','Lesson explanation'); }
     else { text.removeAttribute('tabindex'); text.removeAttribute('role'); text.removeAttribute('aria-label'); }
   }
   window.VL_LAYOUT = {
-    part(key, lines) { if (part !== key || captions !== lines) { part = key; captions = lines || []; signature = ''; } flush(); },
+    part(key, lines) { if (part !== key || captions !== lines) { part = key; captions = lines || []; signature = ''; } schedule(); },
     scene(value) { scene = value; if (!scene) body.classList.remove('vl-measured'); schedule(); },
     refresh: schedule,
-    flush
+    flush,
+    settle: startSettle
   };
   const resize = new ResizeObserver(schedule);
   for (const el of [main, document.getElementById('courseNav'), document.querySelector('body > .bar')]) if (el) resize.observe(el);
@@ -171,6 +297,6 @@
   window.addEventListener('orientationchange', schedule);
   document.addEventListener('fullscreenchange', () => { signature = ''; schedule(); });
   window.visualViewport?.addEventListener('resize', schedule);
-  document.fonts?.addEventListener('loadingdone', () => { signature = ''; if (scene) scene.noteKey = ''; schedule(); });
+  document.fonts?.addEventListener('loadingdone', () => { textSizes.clear(); signature = ''; if (scene) { scene.noteKey = ''; scene.fitKey = ''; } schedule(); });
   document.fonts?.ready.then(schedule);
 })();

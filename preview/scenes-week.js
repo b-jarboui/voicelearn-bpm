@@ -149,7 +149,7 @@ var PART = "v4p1";
   // ---- scene factory: build(el), step(i, n), reset() ----
   function makeScene(cfg) {
     var id = cfg.id, N = cfg.N, labels = cfg.labels;
-    var root = null, useG = false, timers = [], rafs = [], cache = {};
+    var root = null, useG = false, timers = [], rafs = [], cache = {}, pendingOps = null, preparation = 0;
     function mapK(i, n) {
       var nn = Math.max(1, Math.floor(num(n, N)));
       var ii = clamp(Math.floor(num(i, 0)), 0, nn - 1);
@@ -162,6 +162,7 @@ var PART = "v4p1";
     }
     function timing(el, t) { el.style.transitionDuration = (t.d == null ? 0.85 : t.d) + "s"; el.style.transitionDelay = (t.dl || 0) + "s"; }
     function tf(el, st, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { tf(el, st, t, snap); }); return; }
       var x = st.x || 0, y = st.y || 0, r = st.r || 0;
       var sx = st.sx != null ? st.sx : (st.s != null ? st.s : 1), sy = st.sy != null ? st.sy : (st.s != null ? st.s : 1);
       if (useG && !snap) {
@@ -179,15 +180,18 @@ var PART = "v4p1";
       el.style.transform = "translate(" + x + "px," + y + "px) rotate(" + r + "deg) scale(" + sx + "," + sy + ")";
     }
     function op(el, o, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { op(el, o, t, snap); }); return; }
       if (useG) { if (snap) W.gsap.set(el, { opacity: o }); else W.gsap.to(el, { opacity: o, duration: t.d == null ? 0.6 : t.d, delay: t.dl || 0, ease: "power1.out", overwrite: false }); }
       else { timing(el, t); el.style.opacity = String(o); }
     }
     function dash(el, f, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { dash(el, f, t, snap); }); return; }
       var v = 100 * (1 - clamp(f, 0, 1));
       if (useG) { if (snap) W.gsap.set(el, { strokeDashoffset: v }); else W.gsap.to(el, { strokeDashoffset: v, duration: t.d == null ? 1.1 : t.d, delay: t.dl || 0, ease: "power2.inOut" }); }
       else { timing(el, t); el.style.strokeDashoffset = String(v); }
     }
     function fill(el, col, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { fill(el, col, t, snap); }); return; }
       if (useG) { if (snap) W.gsap.set(el, { fill: col }); else W.gsap.to(el, { fill: col, duration: t.d == null ? 0.6 : t.d, delay: t.dl || 0 }); }
       else { timing(el, t); el.style.fill = col; }
     }
@@ -246,9 +250,13 @@ var PART = "v4p1";
       root.setAttribute("data-moment", String(k));
     }
     function fitPills(r) {
-      Array.prototype.forEach.call(r.querySelectorAll("[data-pill]"), function (g) {
-        var t = g.querySelector("text"), rc = g.querySelector("rect"); if (!t || !rc) return;
-        var len = 0; try { len = t.getComputedTextLength(); } catch (e) { }
+      var pills = Array.prototype.map.call(r.querySelectorAll("[data-pill]"), function (g) {
+        var t = g.querySelector("text"), rc = g.querySelector("rect"), len = 0;
+        if (t && rc) { try { len = t.getComputedTextLength(); } catch (e) {} }
+        return { g: g, t: t, rc: rc, len: len };
+      });
+      pills.forEach(function (item) {
+        var g = item.g, t = item.t, rc = item.rc, len = item.len;
         if (!(len > 0)) return;
         var fs = parseFloat(t.getAttribute("font-size")) || 16, w = len + fs * 1.3;
         var x = parseFloat(g.getAttribute("data-px")) || 0, an = g.getAttribute("data-pill");
@@ -273,10 +281,24 @@ var PART = "v4p1";
         stopAsync(); cache = {};
         useG = hasG();
         root = mount(el);
-        render(0, true);
+        if (!W.VL_WORK || VL_WORK.immediate) { render(0, true); return; }
+        var owner = root, version = ++preparation, commands = [];
+        return (async function () {
+          await VL_WORK.yield();
+          if (root !== owner || preparation !== version || !owner.isConnected) return;
+          pendingOps = commands;
+          try { render(0, true); } finally { pendingOps = null; }
+          await VL_WORK.yield();
+          var slice = performance.now();
+          for (var command of commands) {
+            if (root !== owner || preparation !== version || !owner.isConnected) return;
+            command();
+            if (performance.now() - slice > 6) { await VL_WORK.yield(); slice = performance.now(); }
+          }
+        })();
       },
       step: function (i, n) { if (root) render(mapK(i, n), false); },
-      reset: function () { if (root) render(0, true); }
+      reset: function () { if (W.VL_WORK?.discarding) { preparation++; stopAsync(); return; } if (root) render(0, true); }
     };
   }
   // which visual (segment) a moment belongs to; cuts = first moment of each segment after the first
@@ -856,7 +878,7 @@ var PART = "v4p2";
   // ---- scene factory: build(el), step(i, n), reset() ----
   function makeScene(cfg) {
     var id = cfg.id, N = cfg.N, labels = cfg.labels;
-    var root = null, useG = false, timers = [], rafs = [], cache = {};
+    var root = null, useG = false, timers = [], rafs = [], cache = {}, pendingOps = null, preparation = 0;
     function mapK(i, n) {
       var nn = Math.max(1, Math.floor(num(n, N)));
       var ii = clamp(Math.floor(num(i, 0)), 0, nn - 1);
@@ -869,6 +891,7 @@ var PART = "v4p2";
     }
     function timing(el, t) { el.style.transitionDuration = (t.d == null ? 0.85 : t.d) + "s"; el.style.transitionDelay = (t.dl || 0) + "s"; }
     function tf(el, st, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { tf(el, st, t, snap); }); return; }
       var x = st.x || 0, y = st.y || 0, r = st.r || 0;
       var sx = st.sx != null ? st.sx : (st.s != null ? st.s : 1), sy = st.sy != null ? st.sy : (st.s != null ? st.s : 1);
       if (useG && !snap) {
@@ -886,15 +909,18 @@ var PART = "v4p2";
       el.style.transform = "translate(" + x + "px," + y + "px) rotate(" + r + "deg) scale(" + sx + "," + sy + ")";
     }
     function op(el, o, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { op(el, o, t, snap); }); return; }
       if (useG) { if (snap) W.gsap.set(el, { opacity: o }); else W.gsap.to(el, { opacity: o, duration: t.d == null ? 0.6 : t.d, delay: t.dl || 0, ease: "power1.out", overwrite: false }); }
       else { timing(el, t); el.style.opacity = String(o); }
     }
     function dash(el, f, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { dash(el, f, t, snap); }); return; }
       var v = 100 * (1 - clamp(f, 0, 1));
       if (useG) { if (snap) W.gsap.set(el, { strokeDashoffset: v }); else W.gsap.to(el, { strokeDashoffset: v, duration: t.d == null ? 1.1 : t.d, delay: t.dl || 0, ease: "power2.inOut" }); }
       else { timing(el, t); el.style.strokeDashoffset = String(v); }
     }
     function fill(el, col, t, snap) {
+      if (pendingOps) { pendingOps.push(function () { fill(el, col, t, snap); }); return; }
       if (useG) { if (snap) W.gsap.set(el, { fill: col }); else W.gsap.to(el, { fill: col, duration: t.d == null ? 0.6 : t.d, delay: t.dl || 0 }); }
       else { timing(el, t); el.style.fill = col; }
     }
@@ -953,9 +979,13 @@ var PART = "v4p2";
       root.setAttribute("data-moment", String(k));
     }
     function fitPills(r) {
-      Array.prototype.forEach.call(r.querySelectorAll("[data-pill]"), function (g) {
-        var t = g.querySelector("text"), rc = g.querySelector("rect"); if (!t || !rc) return;
-        var len = 0; try { len = t.getComputedTextLength(); } catch (e) { }
+      var pills = Array.prototype.map.call(r.querySelectorAll("[data-pill]"), function (g) {
+        var t = g.querySelector("text"), rc = g.querySelector("rect"), len = 0;
+        if (t && rc) { try { len = t.getComputedTextLength(); } catch (e) {} }
+        return { g: g, t: t, rc: rc, len: len };
+      });
+      pills.forEach(function (item) {
+        var g = item.g, t = item.t, rc = item.rc, len = item.len;
         if (!(len > 0)) return;
         var fs = parseFloat(t.getAttribute("font-size")) || 16, w = len + fs * 1.3;
         var x = parseFloat(g.getAttribute("data-px")) || 0, an = g.getAttribute("data-pill");
@@ -980,10 +1010,24 @@ var PART = "v4p2";
         stopAsync(); cache = {};
         useG = hasG();
         root = mount(el);
-        render(0, true);
+        if (!W.VL_WORK || VL_WORK.immediate) { render(0, true); return; }
+        var owner = root, version = ++preparation, commands = [];
+        return (async function () {
+          await VL_WORK.yield();
+          if (root !== owner || preparation !== version || !owner.isConnected) return;
+          pendingOps = commands;
+          try { render(0, true); } finally { pendingOps = null; }
+          await VL_WORK.yield();
+          var slice = performance.now();
+          for (var command of commands) {
+            if (root !== owner || preparation !== version || !owner.isConnected) return;
+            command();
+            if (performance.now() - slice > 6) { await VL_WORK.yield(); slice = performance.now(); }
+          }
+        })();
       },
       step: function (i, n) { if (root) render(mapK(i, n), false); },
-      reset: function () { if (root) render(0, true); }
+      reset: function () { if (W.VL_WORK?.discarding) { preparation++; stopAsync(); return; } if (root) render(0, true); }
     };
   }
   // which visual (segment) a moment belongs to; cuts = first moment of each segment after the first

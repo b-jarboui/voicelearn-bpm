@@ -2027,6 +2027,8 @@ body .player .look.vb-root {
   function markerRole(el, color, fillColor) {
     // Prefer the nearest named teaching element, not a whole scene's prose.
     for (let n = el; n && n.tagName.toLowerCase() !== "svg"; n = n.parentElement) {
+      // Portrait layout wrappers carry geometry, not a new teaching role.
+      if (n.hasAttribute("data-vl-portrait-object")) continue;
       const explicit = n.getAttribute("data-vl-role");
       if (MARKERS[explicit]) return explicit;
       // Week 14 names the ink of sustained gains explicitly (fG/sG).
@@ -2171,7 +2173,12 @@ body .player .look.vb-root {
       }
       for(const [el,attrs] of changed)if(mount.contains(el))for(const attr of attrs)paint(el,attr);
       const fresh=[];
-      for(const n of added)if(mount.contains(n))fresh.push(n,...n.querySelectorAll("*"));
+      for(const n of added)if(mount.contains(n)) {
+        const layoutMove=n.hasAttribute("data-vl-portrait-object")||n.parentElement?.hasAttribute("data-vl-portrait-object");
+        fresh.push(...[n,...n.querySelectorAll("*")].filter(el=>!layoutMove||!originals.has(el)));
+      }
+      // Moving an existing drawing into a layout wrapper must not reinterpret
+      // its marker colour. Authored paint changes are handled above as usual.
       fresh.forEach(remember);fresh.forEach(el=>paint(el));
     });
     observer.observe(mount,{subtree:true,childList:true,attributes:true,attributeFilter:["fill","stroke","style"]});

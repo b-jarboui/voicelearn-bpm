@@ -15,6 +15,19 @@
   const plain = (s) => String(s).replace(/\|/g, " ");
   const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
   const smooth = () => (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
+  function responsiveNavigation() {
+    queueMicrotask(() => document.querySelectorAll('#welcomeNext,#welcomeSkip,#designNext,#designBack,#voiceBack,#setupDone,#aiBack,#aiSkip,#aiDone,#navHome,#home,#navPrevPart,#navNextPart,.s2-open,.s2-answer-open,.s2-back,.s2-switch-case').forEach(el => {
+      if (el.onclick && !el.onclick.vlResponsive) { const handler = VL_WORK.wrap(el.onclick); handler.vlResponsive = true; el.onclick = handler; }
+    }));
+  }
+  // Session 2 binds navigation with addEventListener rather than onclick.
+  // Forward the same control after its pressed state has painted.
+  document.addEventListener('click',event=>{
+    const button=event.target.closest?.('.s2-open,.s2-answer-open,.s2-switch-case,#s2-back-week,#s2-back-case');
+    if(!event.isTrusted||!button||button.disabled)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    VL_WORK.wrap(()=>button.click()).call(button,event);
+  },true);
 
   // Stable pseudo-random numbers from a string (per learner seed), used for shuffles and item choice.
   const hash = (s) => { let h = 2166136261; for (const ch of s) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0; return h; };
@@ -437,7 +450,7 @@
   Scenes.mount(stageEl);
   const lookEl = document.createElement("div");
   lookEl.className = "look";
-  let look = null, lookStep = -1, pendingPlayer = 0;
+  let look = null, lookStep = -1, pendingPlayer = 0, preparingLook = false, lookGeneration = 0;
   const lookStyle = () => (window.STYLES || []).find((s) => s.id === (VS.look || "journey")) || null;
   function fitLook() {
     const k = Math.max(1, Math.min(lookEl.clientHeight / 600, lookEl.clientWidth / 300, 2.2));
@@ -447,17 +460,52 @@
   // The quiz/result stage takes the colours of the chosen look (the other looks keep the default dark blue).
   // Questions and other stage screens wear the same look the learner chose for the lessons.
   function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey", "look-board", "look-motion"); stageEl.classList.add("look-" + (VS.look || "journey")); }
-  function showLook(on) { lookEl.hidden = !on; stageEl.hidden = on; }
-  function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); window.VL_LAYOUT?.flush(); }
+  function showLook(on) {
+    if (!on) { lookGeneration++; VL_WORK.cancel('mount'); VL_WORK.cancel('step'); preparingLook = false; lookEl.removeAttribute('aria-busy'); }
+    lookEl.hidden = !on; stageEl.hidden = on;
+  }
+  function vstep(j) {
+    lookStep = j;
+    if (look) {
+      if (!preparingLook) VL_WORK.visual('step', () => { if (view === 'player' && look) { look.step(lookStep); VL_LAYOUT.refresh(); } });
+    } else Scenes.step(Math.max(0, j));
+  }
   function loadLook(key, lessonLabel, title, body) {
     const s = lookStyle(), moments = window.MOMENTS && MOMENTS[key];
-    if (window.W10_SCENES_HOST) W10_SCENES_HOST.release();
+    VL_WORK.cancel('step'); VL_WORK.cancel('mount');
     look = null;
-    if (!s || !moments) { showLook(false); return false; }
+    if (!s || !moments) { if (window.W10_SCENES_HOST) W10_SCENES_HOST.release(); showLook(false); return false; }
     showLook(true);
-    lookEl.className = "look"; s.mount(lookEl); fitLook();
-    s.load({ lesson: lessonLabel, title, sentences: body, moments });
-    look = s; lookStep = -1; s.step(-1);
+    look = s; lookStep = -1; preparingLook = true;
+    const generation = ++lookGeneration;
+    lookEl.setAttribute('aria-busy', 'true');
+    const valid = () => view === 'player' && look === s && generation === lookGeneration;
+    const mount = () => {
+      if (window.W10_SCENES_HOST) W10_SCENES_HOST.release();
+      lookEl.className = 'look'; s.mount(lookEl); fitLook();
+    };
+    const section = { lesson: lessonLabel, title, sentences: body, moments };
+    VL_WORK.visual('mount', () => {
+      if (!valid()) return;
+      mount();
+      if (VL_WORK.immediate) {
+        s.load(section); s.step(lookStep); VL_LAYOUT.flush();
+        preparingLook = false; lookEl.removeAttribute('aria-busy');
+        return;
+      }
+      (async () => {
+        // load() creates the scene host and its title synchronously; yielding first would show an empty box.
+        await s.load(section);
+        await VL_WORK.yield(); if (!valid()) return;
+        let shown;
+        do {
+          shown = lookStep; s.step(shown);
+          await VL_LAYOUT.settle();
+          if (!valid()) return;
+        } while (shown !== lookStep);
+        preparingLook = false; lookEl.removeAttribute('aria-busy');
+      })().catch(error => { if (valid()) { preparingLook = false; lookEl.removeAttribute('aria-busy'); console.error('Lesson presentation', error); } });
+    });
     return true;
   }
 
@@ -480,6 +528,8 @@
   }
   const NEW_UI = true; // the adopted design (Week 1, 4 Nov 2026) is the interface of every week
   function renderHome() {
+    lookGeneration++; VL_WORK.cancel('mount'); VL_WORK.cancel('step'); preparingLook = false;
+    if (window.W10_SCENES_HOST) W10_SCENES_HOST.release();
     const returningHome = view !== "home";
     view = "home"; setRoute("home"); updateNavigation();
     const st = cur(), les = C.lessons[st.l] || C.lessons[0];
@@ -528,6 +578,7 @@
     bar();
     if (returningHome) window.scrollTo({ top: 0, behavior: "instant" });
     if (!$("vPanel").contains(document.activeElement)) $("main").focus({ preventScroll: true });
+    responsiveNavigation();
   }
   // Called inside click handlers: the first utterance of the page is queued during a real user gesture.
   let primed = false;
@@ -1066,11 +1117,14 @@
       (replace ? history.replaceState : history.pushState).call(history, routeState(screen), "", location.href);
     }
     function showScreen(screen, markup, replace = false) {
+      lookGeneration++; VL_WORK.cancel('mount'); VL_WORK.cancel('step'); preparingLook = false;
+      if (window.W10_SCENES_HOST) W10_SCENES_HOST.release();
       pause(); waiting = false; view = screen; setRoute(screen, replace);
       $("main").innerHTML = markup;
       window.scrollTo({ top: 0, behavior: "instant" });
       $("main").focus({ preventScroll: true });
       updateNavigation();
+      responsiveNavigation();
     }
     function welcome() {
       const mins = Math.max(5, Math.round(C.lessons.reduce((n,l)=>n+l.sections.reduce((m,sec)=>m+words(sec.lines ? sec.lines.map(x=>x[0]).join(" ") : sec.script || ""),0),0)/150));
@@ -1497,7 +1551,7 @@ if (settingsWeek) {
       if (on !== null) b.setAttribute("aria-checked", String(on));
       b.textContent = label + (on === null ? "" : on ? ": on" : ": off");
       b.disabled = !!src.disabled;
-      b.onclick = () => { close(true); src.click(); };
+      b.onclick = VL_WORK.wrap(() => { close(true); src.click(); });
       menu.appendChild(b);
     });
   }
@@ -1543,16 +1597,16 @@ positionSettingsButton();
   // QA hooks (not used by the page itself).
   const qaHooks = { state: () => P, cur, advance, reportText, secM, loM, cloM, respond: (ok) => submit(ok), skip: () => { stopSpeech(); if (cur().kind !== "quiz" || P.part === "feedback") advance(); },
     // show sentence i of the current step, paused (for screenshots)
-    at: (i) => { pause(); P.sent = i; caption(script.main[i]); vstep(i - script.offset); },
+    at: (i) => VL_WORK.now(() => { pause(); P.sent = i; caption(script.main[i]); vstep(i - script.offset); VL_LAYOUT.flush(); }),
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
-    jump: (l, s = 0) => { pause(); P.queue = lessonPlan(l); P.idx = Math.max(0, P.queue.findIndex((q) => q.kind === "sec" && q.s === s)); P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(false); updateNavigation(); },
+    jump: (l, s = 0) => VL_WORK.now(() => { pause(); P.queue = lessonPlan(l); P.idx = Math.max(0, P.queue.findIndex((q) => q.kind === "sec" && q.s === s)); P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(false); updateNavigation(); VL_LAYOUT.flush(); }),
     showQ: (id) => { pause(); const st = cur(); st.qs = [id]; P.q = 0; P.part = "main"; P.sent = 0; load(); }, // QA: show one specific question (current step must be a quiz)
     setLook: (id) => { VS.look = id; saveVS(); },
     fast: (on) => { FAST = !!on; }, speech: () => ({ available: !!synth, silent, why: silentWhy, voices: enVoices().length, chosen: voice() && voice().name, ranked: rankedVoices().slice(0, 6).map((v) => v.name + " [" + vScore(v) + "]"), sayText, rate: VS.rate, log: SLOG.slice(-12) }) };
   if (window.S2) S2.init({ week: WK, esc, smooth,
-    showScreen: (name, html, st) => { pause(); waiting = false; view = name; const was = restoringRoute; restoringRoute = true; try { setRoute(name); } finally { restoringRoute = was; }
+    showScreen: (name, html, st) => { lookGeneration++; VL_WORK.cancel('mount'); VL_WORK.cancel('step'); preparingLook=false; if(window.W10_SCENES_HOST)W10_SCENES_HOST.release(); pause(); waiting = false; view = name; const was = restoringRoute; restoringRoute = true; try { setRoute(name); } finally { restoringRoute = was; }
       const s2 = st && st.s2; if (!(st && st.fromPop) && !was) { const cur = history.state; if (!(cur && cur.s2 && JSON.stringify(cur.s2) === JSON.stringify(s2) && cur.screen === name)) history.pushState(Object.assign(routeState(name), { s2 }), "", location.href); }
-      $("main").innerHTML = html; window.scrollTo({ top: 0, behavior: "instant" }); $("main").focus({ preventScroll: true }); updateNavigation(); },
+      $("main").innerHTML = html; window.scrollTo({ top: 0, behavior: "instant" }); $("main").focus({ preventScroll: true }); updateNavigation(); responsiveNavigation(); },
     goHome: () => renderHome(),
     openSettings: () => { if ($("vPanel").hidden) $("vBtn").click(); const a = $("aiSettings"); if (a) a.scrollIntoView({ block: "center" }); } });
   initOnboarding();

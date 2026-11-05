@@ -112,9 +112,12 @@
   // ---------- motion core ----------
   const reduced = () => { try { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); } catch (e) { return false; } };
   const G = () => (window.gsap && typeof window.gsap.to === "function" && typeof window.gsap.set === "function") ? window.gsap : null;
+  // Initial snap commands are applied in small batches while the host is hidden.
+  let pendingSets = null;
   // p: {x,y,s,sx,sy,r,o,d,og,view,t,dl}
   function anim(el, p, now) {
     if (!el) return;
+    if (pendingSets) { pendingSets.push([el, Object.assign({}, p), now]); return; }
     const g = G(), x = num(p.x, 0), y = num(p.y, 0), r = num(p.r, 0);
     const sx = num(p.sx, num(p.s, 1)), sy = num(p.sy, num(p.s, 1));
     if (g) {
@@ -180,7 +183,7 @@
   }
 
   function buildScene(id, N0, shots) {
-    let root = null, svg = null, groups = [], active = -1, lastN = N0;
+    let root = null, svg = null, groups = [], active = -1, lastN = N0, preparation = 0;
     const cls = `vls-w06-${id}`;
     function mount(el) {
       installCSS();
@@ -260,22 +263,35 @@
         d.classList.toggle("on", j === a); d.classList.toggle("done", j < a);
       });
     }
-    function instant(fn) {
-      root.classList.add("w6-inst");
-      fn();
-      void root.getBoundingClientRect();
-      if (!reduced()) root.classList.remove("w6-inst");
+    function instant(fn, prepare = false) {
+      const owner = root, version = ++preparation;
+      owner.classList.add("w6-inst");
+      const finish = () => { void owner.getBoundingClientRect(); if (!reduced()) owner.classList.remove("w6-inst"); };
+      if (!prepare || !window.VL_WORK || VL_WORK.immediate) { fn(); finish(); return; }
+      const commands = [];
+      pendingSets = commands;
+      try { fn(); } finally { pendingSets = null; }
+      return (async () => {
+        let slice = performance.now();
+        for (const [el, state, now] of commands) {
+          if (root !== owner || preparation !== version || !owner.isConnected) return;
+          anim(el, state, now);
+          if (performance.now() - slice > 6) { await VL_WORK.yield(); slice = performance.now(); }
+        }
+        if (root === owner && owner.isConnected) finish();
+      })();
     }
     return {
       build(el) {
         if (!mount(el)) return;
-        instant(() => render(0, N0, true));
+        return instant(() => render(0, N0, true), true);
       },
       step(i, n) { if (root) render(i, n, false); },
       reset() {
         if (!root) return;
         const g = G();
         if (g) { try { g.killTweensOf(root.querySelectorAll("*")); } catch (e) { /* ignore */ } }
+        if (window.VL_WORK?.discarding) { preparation++; return; }
         active = -1;
         instant(() => render(0, lastN, true));
       }
@@ -377,7 +393,9 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
       return {
         at: 4, tag: "Known tasks, hidden links", L: 1, svg: s,
         tick(api, k) {
-          api.qa(".jg").forEach((c, j) => api.anim(c, { x: Math.sin(j * 1.7 + k * 2.1) * 4, y: Math.cos(j * 1.3 + k * 1.9) * 4, r: Math.sin(j + k) * 2 }));
+          // These cards share fixed connector endpoints. Keep their authored grid
+          // stable instead of rotating distant cards into their neighbours.
+          api.qa(".jg").forEach(c => api.anim(c, { x: 0, y: 0, r: 0 }));
         }
       };
     })(),
@@ -1335,9 +1353,12 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
   // ---------- motion core ----------
   const reduced = () => { try { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); } catch (e) { return false; } };
   const G = () => (window.gsap && typeof window.gsap.to === "function" && typeof window.gsap.set === "function") ? window.gsap : null;
+  // Initial snap commands are applied in small batches while the host is hidden.
+  let pendingSets = null;
   // p: {x,y,s,sx,sy,r,o,d,og,view,t,dl}
   function anim(el, p, now) {
     if (!el) return;
+    if (pendingSets) { pendingSets.push([el, Object.assign({}, p), now]); return; }
     const g = G(), x = num(p.x, 0), y = num(p.y, 0), r = num(p.r, 0);
     const sx = num(p.sx, num(p.s, 1)), sy = num(p.sy, num(p.s, 1));
     if (g) {
@@ -1403,7 +1424,7 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
   }
 
   function buildScene(id, N0, shots) {
-    let root = null, svg = null, groups = [], active = -1, lastN = N0;
+    let root = null, svg = null, groups = [], active = -1, lastN = N0, preparation = 0;
     const cls = `vls-w06-${id}`;
     function mount(el) {
       installCSS();
@@ -1483,22 +1504,35 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
         d.classList.toggle("on", j === a); d.classList.toggle("done", j < a);
       });
     }
-    function instant(fn) {
-      root.classList.add("w6-inst");
-      fn();
-      void root.getBoundingClientRect();
-      if (!reduced()) root.classList.remove("w6-inst");
+    function instant(fn, prepare = false) {
+      const owner = root, version = ++preparation;
+      owner.classList.add("w6-inst");
+      const finish = () => { void owner.getBoundingClientRect(); if (!reduced()) owner.classList.remove("w6-inst"); };
+      if (!prepare || !window.VL_WORK || VL_WORK.immediate) { fn(); finish(); return; }
+      const commands = [];
+      pendingSets = commands;
+      try { fn(); } finally { pendingSets = null; }
+      return (async () => {
+        let slice = performance.now();
+        for (const [el, state, now] of commands) {
+          if (root !== owner || preparation !== version || !owner.isConnected) return;
+          anim(el, state, now);
+          if (performance.now() - slice > 6) { await VL_WORK.yield(); slice = performance.now(); }
+        }
+        if (root === owner && owner.isConnected) finish();
+      })();
     }
     return {
       build(el) {
         if (!mount(el)) return;
-        instant(() => render(0, N0, true));
+        return instant(() => render(0, N0, true), true);
       },
       step(i, n) { if (root) render(i, n, false); },
       reset() {
         if (!root) return;
         const g = G();
         if (g) { try { g.killTweensOf(root.querySelectorAll("*")); } catch (e) { /* ignore */ } }
+        if (window.VL_WORK?.discarding) { preparation++; return; }
         active = -1;
         instant(() => render(0, lastN, true));
       }
@@ -2414,9 +2448,12 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
   // ---------- motion core ----------
   const reduced = () => { try { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); } catch (e) { return false; } };
   const G = () => (window.gsap && typeof window.gsap.to === "function" && typeof window.gsap.set === "function") ? window.gsap : null;
+  // Initial snap commands are applied in small batches while the host is hidden.
+  let pendingSets = null;
   // p: {x,y,s,sx,sy,r,o,d,og,view,t,dl}
   function anim(el, p, now) {
     if (!el) return;
+    if (pendingSets) { pendingSets.push([el, Object.assign({}, p), now]); return; }
     const g = G(), x = num(p.x, 0), y = num(p.y, 0), r = num(p.r, 0);
     const sx = num(p.sx, num(p.s, 1)), sy = num(p.sy, num(p.s, 1));
     if (g) {
@@ -2482,7 +2519,7 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
   }
 
   function buildScene(id, N0, shots) {
-    let root = null, svg = null, groups = [], active = -1, lastN = N0;
+    let root = null, svg = null, groups = [], active = -1, lastN = N0, preparation = 0;
     const cls = `vls-w06-${id}`;
     function mount(el) {
       installCSS();
@@ -2562,22 +2599,35 @@ ${SC}.w6-inst *,${SC} .w6-inst,${SC} .w6-inst *{transition:none!important}
         d.classList.toggle("on", j === a); d.classList.toggle("done", j < a);
       });
     }
-    function instant(fn) {
-      root.classList.add("w6-inst");
-      fn();
-      void root.getBoundingClientRect();
-      if (!reduced()) root.classList.remove("w6-inst");
+    function instant(fn, prepare = false) {
+      const owner = root, version = ++preparation;
+      owner.classList.add("w6-inst");
+      const finish = () => { void owner.getBoundingClientRect(); if (!reduced()) owner.classList.remove("w6-inst"); };
+      if (!prepare || !window.VL_WORK || VL_WORK.immediate) { fn(); finish(); return; }
+      const commands = [];
+      pendingSets = commands;
+      try { fn(); } finally { pendingSets = null; }
+      return (async () => {
+        let slice = performance.now();
+        for (const [el, state, now] of commands) {
+          if (root !== owner || preparation !== version || !owner.isConnected) return;
+          anim(el, state, now);
+          if (performance.now() - slice > 6) { await VL_WORK.yield(); slice = performance.now(); }
+        }
+        if (root === owner && owner.isConnected) finish();
+      })();
     }
     return {
       build(el) {
         if (!mount(el)) return;
-        instant(() => render(0, N0, true));
+        return instant(() => render(0, N0, true), true);
       },
       step(i, n) { if (root) render(i, n, false); },
       reset() {
         if (!root) return;
         const g = G();
         if (g) { try { g.killTweensOf(root.querySelectorAll("*")); } catch (e) { /* ignore */ } }
+        if (window.VL_WORK?.discarding) { preparation++; return; }
         active = -1;
         instant(() => render(0, lastN, true));
       }

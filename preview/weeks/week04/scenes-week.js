@@ -1725,7 +1725,8 @@ const BG = [];
     return s;
   }, play: (c, j) => {
       c.vis({ pc: j === 0, cp: j === 1, co: j >= 2, ap: j === 2, cg: j === 3 });
-    c.op("ap", j === 3 ? 0.6 : 0);
+    // The superseded approval caption shares the co-design caption's position.
+    c.op("ap", j === 2 ? 1 : 0);
     c.mv("b83", { sx: j === 0 ? 1 : 0.02, pv: [40, 90] }, { d: 1.1 });
     for (let i = 0; i < 9; i++) c.mv("lf" + i, j === 1 ? { y: 10 } : { y: -20 }, { d: 1, dl: i * 0.08 });
     c.mv("bk1", j === 3 ? { x: 78 } : {}, { d: 1, dl: 0.8 }); c.mv("bk2", j === 3 ? { x: -78 } : {}, { d: 1, dl: 0.8 });

@@ -386,6 +386,35 @@ html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-inner
 html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-mount { align-self: flex-start; }
 html[data-week] body.vl-measured .player .w10s-host[data-flow="row"] .w10s-text { align-self: center; }
 .vl-measure { pointer-events: none !important; }
+
+/* Round 11: isolate scene layout from the shared shell and keep tap feedback
+   entirely in paint/compositing, including while a presentation is prepared. */
+.w10s-host { contain: layout style paint; }
+button, summary, a, select, input[type="checkbox"], input[type="range"] { touch-action: manipulation; }
+button:active, button[data-vl-pending], button[data-vl-tap], summary[data-vl-tap] { filter: brightness(.9) !important; }
+button[data-vl-tap], summary[data-vl-tap] { box-shadow: inset 0 0 0 2px currentColor !important; }
+button[data-vl-tap="0"], summary[data-vl-tap="0"] { box-shadow: inset 0 0 0 3px currentColor !important; }
+.vl-tap-ink { position: fixed; z-index: 2147483647; width: 1.1rem; height: 1.1rem; opacity: .8; transform: translate(-50%, -50%); pointer-events: none; contain: strict; }
+button[data-vl-pending] { cursor: progress; }
+.look[aria-busy="true"] > * { clip-path: inset(50%) !important; }
+.look[aria-busy="true"]::after {
+  content: 'Preparing lesson…'; visibility: visible; position: absolute; inset: 0;
+  display: grid; place-items: center; color: var(--ink); background: var(--surface);
+  font: 700 1rem/1.4 var(--body);
+}
+.player:has(.look[aria-busy="true"]) + #cc { visibility: hidden; }
+html[data-week] body[data-view="player"]:is([data-step="sec"],[data-step="review"]) main {
+  display: flex !important; flex-direction: column; justify-content: flex-start;
+  padding: .4rem .35rem !important; height: auto !important;
+  min-height: var(--vl-page-space, calc(100dvh - var(--vl25-controls-h) - 5rem)) !important;
+}
+body[data-view="player"]:is([data-step="sec"],[data-step="review"]) #playerSettingsSlot {
+  min-inline-size: calc(5.5rem + .35rem); justify-content: flex-end;
+}
+html[data-week] .presentation-status {
+  position: fixed; inset: auto .75rem calc(var(--vl25-controls-h, 0px) + 1rem);
+  z-index: 45; margin: 0; pointer-events: none;
+}
 /* Report links use the button's readable foreground in every look and theme. */
 html[data-week] .stage .st-next.primary :is(b,span) { color: var(--accent-ink) !important; opacity: 1; }
 /* One status meaning on the shared question surface, including wrapping pickers. */

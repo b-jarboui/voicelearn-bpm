@@ -489,10 +489,14 @@
         else { while (host.firstChild) host.removeChild(host.firstChild); host.appendChild(node); }
         root = node; cur = -1; curP = -1;
         panels = Array.prototype.slice.call(node.querySelectorAll(".pn"));
-        apply(0, N, true);
+        if (!W.VL_WORK || VL_WORK.immediate) { apply(0, N, true); return; }
+        var owner = node, version = ++gen;
+        return VL_WORK.yield().then(function () {
+          if (root === owner && gen === version && owner.isConnected) apply(0, N, true);
+        });
       },
       step: function (i, n) { if (root) apply(i, n === undefined ? N : n, false); },
-      reset: function () { if (!root) return; stopLoops(); cur = -1; curP = -1; apply(0, N, true); }
+      reset: function () { if (!root) return; stopLoops(); if (W.VL_WORK?.discarding) { gen++; return; } cur = -1; curP = -1; apply(0, N, true); }
     };
   }
   function define(def) {
@@ -1713,10 +1717,14 @@
         else { while (host.firstChild) host.removeChild(host.firstChild); host.appendChild(node); }
         root = node; cur = -1; curP = -1;
         panels = Array.prototype.slice.call(node.querySelectorAll(".pn"));
-        apply(0, N, true);
+        if (!W.VL_WORK || VL_WORK.immediate) { apply(0, N, true); return; }
+        var owner = node, version = ++gen;
+        return VL_WORK.yield().then(function () {
+          if (root === owner && gen === version && owner.isConnected) apply(0, N, true);
+        });
       },
       step: function (i, n) { if (root) apply(i, n === undefined ? N : n, false); },
-      reset: function () { if (!root) return; stopLoops(); cur = -1; curP = -1; apply(0, N, true); }
+      reset: function () { if (!root) return; stopLoops(); if (W.VL_WORK?.discarding) { gen++; return; } cur = -1; curP = -1; apply(0, N, true); }
     };
   }
   function define(def) {
@@ -2801,10 +2809,14 @@
         else { while (host.firstChild) host.removeChild(host.firstChild); host.appendChild(node); }
         root = node; cur = -1; curP = -1;
         panels = Array.prototype.slice.call(node.querySelectorAll(".pn"));
-        apply(0, N, true);
+        if (!W.VL_WORK || VL_WORK.immediate) { apply(0, N, true); return; }
+        var owner = node, version = ++gen;
+        return VL_WORK.yield().then(function () {
+          if (root === owner && gen === version && owner.isConnected) apply(0, N, true);
+        });
       },
       step: function (i, n) { if (root) apply(i, n === undefined ? N : n, false); },
-      reset: function () { if (!root) return; stopLoops(); cur = -1; curP = -1; apply(0, N, true); }
+      reset: function () { if (!root) return; stopLoops(); if (W.VL_WORK?.discarding) { gen++; return; } cur = -1; curP = -1; apply(0, N, true); }
     };
   }
   function define(def) {
@@ -3872,10 +3884,14 @@
         else { while (host.firstChild) host.removeChild(host.firstChild); host.appendChild(node); }
         root = node; cur = -1; curP = -1;
         panels = Array.prototype.slice.call(node.querySelectorAll(".pn"));
-        apply(0, N, true);
+        if (!W.VL_WORK || VL_WORK.immediate) { apply(0, N, true); return; }
+        var owner = node, version = ++gen;
+        return VL_WORK.yield().then(function () {
+          if (root === owner && gen === version && owner.isConnected) apply(0, N, true);
+        });
       },
       step: function (i, n) { if (root) apply(i, n === undefined ? N : n, false); },
-      reset: function () { if (!root) return; stopLoops(); cur = -1; curP = -1; apply(0, N, true); }
+      reset: function () { if (!root) return; stopLoops(); if (W.VL_WORK?.discarding) { gen++; return; } cur = -1; curP = -1; apply(0, N, true); }
     };
   }
   function define(def) {

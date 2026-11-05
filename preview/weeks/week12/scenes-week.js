@@ -385,7 +385,9 @@
       /* camera */
       let cam = [-520, 0, 1];
       if (b === 0 || b === 3 || b === 4 || b === 12 || b === 13 || b === 14) cam = [0, 0, 1];
-      if (b === 2) cam = [-529, -10, 1.15];
+      // Keep the complete lobby in frame: zooming about the world origin pushed
+      // the assisted desk past the right edge of the camera.
+      if (b === 2) cam = [-520, 0, 1];
       if (b === 11) cam = half ? [-490, 0, 1] : [-520, 0, 1];
       a.to(".a-cam", { x: cam[0] - (half && b !== 11 ? 6 : 0), y: cam[1], s: cam[2], ox: 210, oy: 186, d: 1.15 });
       /* left world: framework metro */
