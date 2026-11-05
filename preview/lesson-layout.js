@@ -7,6 +7,11 @@
   const number = s => parseFloat(s) || 0;
   function put(el, name, value) { if (el.style.getPropertyValue(name) !== value) el.style.setProperty(name, value); }
   function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; fit(); }); }
+  function flush() {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    // Resolve wrapped scene chrome, then its final text band, before the browser paints.
+    fit(); fit();
+  }
   function measureText(source, texts, width, scales) {
     const style = getComputedStyle(source);
     const variants = scales || [null], heights = variants.map(() => 0);
@@ -63,6 +68,7 @@
       put(body, '--vl-caption-size', px(height));
       put(body, '--vl-controls-size', px(bar.getBoundingClientRect().height));
       put(main, '--vl-lesson-space', px(space));
+      put(main, '--vl-page-space', px(bottom - top));
     }
     if (!scene?.host.isConnected || !scene.host.classList.contains('on')) return;
     const {host, mount, text, states} = scene;
@@ -153,9 +159,10 @@
     else { text.removeAttribute('tabindex'); text.removeAttribute('role'); text.removeAttribute('aria-label'); }
   }
   window.VL_LAYOUT = {
-    part(key, lines) { if (part !== key || captions !== lines) { part = key; captions = lines || []; signature = ''; } schedule(); },
+    part(key, lines) { if (part !== key || captions !== lines) { part = key; captions = lines || []; signature = ''; } flush(); },
     scene(value) { scene = value; if (!scene) body.classList.remove('vl-measured'); schedule(); },
-    refresh: schedule
+    refresh: schedule,
+    flush
   };
   const resize = new ResizeObserver(schedule);
   for (const el of [main, document.getElementById('courseNav'), document.querySelector('body > .bar')]) if (el) resize.observe(el);

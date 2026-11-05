@@ -1067,3 +1067,35 @@ html[data-week] #main .s2-page .s2-situation p { margin-bottom: 16px; }
 @media (orientation: landscape) and (max-height: 500px) {
   .s2-page .s2-writing textarea { height: 180px; min-height: 180px; }
 }
+
+/* Round 8: use the shell's spacing scale and content-sized writing surfaces. */
+html[data-week] .s2-home { gap: 1rem; }
+html[data-week] .s2-home > :is(h2,p) { margin: 0; }
+.s2-home-rows { margin-top: 0; gap: .75rem; }
+.s2-home-row { gap: 1rem; padding: 1rem; }
+.s2-home-info > strong { font-size: 1rem; line-height: 1.45; }
+html[data-week] .s2-home .pill { font-size: .8125rem; }
+.s2-page { padding-block: 0 1rem; }
+html[data-week] #main .s2-page .card { margin-bottom: 1rem; border-radius: 18px; }
+.s2-page :is(.s2-back,.s2-case-nav) { margin-block: 0 1rem; }
+html[data-week] #main .s2-page h1 { margin-block: .5rem 1rem; }
+.s2-page .s2-writing textarea {
+  min-height: 0; height: clamp(8lh, 32dvh, 16lh); font-size: 1rem; line-height: 1.6;
+  resize: vertical; scroll-margin-block: 1rem;
+}
+.s2-page .s2-writing textarea:focus-visible { outline-offset: 3px; }
+.s2-page .s2-writing label { display: block; margin-bottom: .5rem; }
+.s2-page .s2-question-stem { font-size: 1.0625rem; line-height: 1.6; }
+.s2-page .s2-read-case summary { min-height: 44px; line-height: 1.5; }
+.s2-page :is(.s2-notice,.s2-request-status):empty { display: none; }
+.s2-page #s2-local:empty, .s2-page #s2-results:empty { display: none; }
+.s2-page .s2-local .h { font-size: 1.0625rem; line-height: 1.4; }
+.s2-page #s2-local { scroll-margin-top: 1rem; }
+@media (max-width: 600px) {
+  .s2-home-row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: .75rem; }
+  .s2-home-info { display: contents; }
+  .s2-home-info > :is(strong,p) { grid-column: 1/-1; }
+  .s2-home-row .s2-open { grid-column: 2; min-width: 5rem; }
+  .s2-home-info > strong { margin-bottom: .5rem; }
+  .s2-home-row .s2-progress { grid-column: 1; justify-self: start; align-self: center; }
+}

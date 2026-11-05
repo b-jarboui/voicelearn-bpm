@@ -15,7 +15,7 @@
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="scenes.css?v=26"><link rel="stylesheet" href="visual-v25.css?v=36"><link rel="stylesheet" href="s2/s2.css?v=3">
+<link rel="stylesheet" href="scenes.css?v=26"><link rel="stylesheet" href="visual-v25.css?v=36"><link rel="stylesheet" href="s2/s2.css?v=4">
 <style>
 /* Narrated presentation: the stage plays like a video; one Pause/Continue control. */
 :root{
@@ -107,7 +107,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 </style>
 <link rel="stylesheet" href="week1-design.css?v=4">
 <link rel="stylesheet" href="weeks-design.css?v=2">
-<link rel="stylesheet" href="qa-fixes.css?v=14">
+<link rel="stylesheet" href="qa-fixes.css?v=15">
 </head>
 <body>
 <header id="siteHeader">
@@ -124,10 +124,10 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   </span>
 
   <span id="headerSettingsSlot"
-        class="settings-slot"><button id="vBtn" class="vbtn" type="button" aria-expanded="false" aria-controls="vPanel" aria-label="Voice, speed and look settings">⚙ Settings</button></span>
+        class="settings-slot"><button id="vBtn" class="vbtn" type="button" aria-expanded="false" aria-controls="vPanel" aria-label="Voice, speed and look settings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 3-.6 2.2-2 .9-2.1-.6-2 3.5 1.5 1.6v2.8l-1.5 1.6 2 3.5 2.1-.6 2 .9L9 21h4l.6-2.2 2-.9 2.1.6 2-3.5-1.5-1.6v-2.8L19.7 9l-2-3.5-2.1.6-2-.9L13 3Z"/><circle cx="11" cy="12" r="3"/></svg><span class="settings-label">Settings</span></button></span>
 </header>
 <div class="vpanel card" id="vPanel" hidden role="dialog" aria-modal="false" aria-label="Settings">
-  <div class="row" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
+  <div class="row settings-heading" style="justify-content:space-between"><b>Voice, speed &amp; look</b><button id="vClose" aria-label="Close">✕</button></div>
   <div class="muted" id="vNote" role="status" style="font-size:14px" hidden></div>
   <label class="fld">Narration<select id="vMode"><option value="voice">Natural voice, with captions</option><option value="device" hidden disabled>Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
   <label class="fld">Look<select id="vLook"><option value="notebook">Teacher's Notebook</option><option value="journey">Process Journey</option><option value="board">Animated Whiteboard</option><option value="motion">Motion Explainer</option></select></label>
@@ -343,7 +343,7 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
   </div>
 </div>
 
-<script src="lesson-layout.js?v=3"></script>
+<script src="lesson-layout.js?v=4"></script>
 <script src="diagrams.js?v=41"></script>
 <script src="weeks/manifest.js?v=9"></script>
 <script>
@@ -359,17 +359,51 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 </script>
 <script src="question-ui.js?v=3"></script>
 <script src="scenes.js?v=25"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="lab/content.js?v=25"></script>
-<script src="lab/style-notebook.js?v=31"></script>
-<script src="lab/style-journey.js?v=31"></script>
-<script src="lab/style-board.js?v=4"></script>
-<script src="lab/style-motion.js?v=3"></script><script src="weeks/week10/cinematics.js?v=34"></script><script src="weeks/week10/w10-scenes.js?v=14"></script><script>window.__wkWrite(["scenes-week.js?v=" + ([3, 6, 12].includes(window.WEEK) ? "11" : "10")]);</script>
+<script>
+/* Welcome and Home can paint before the presentation engine downloads/parses.
+   Fetch in parallel, execute in authored order; the same promise gates an early Play tap. */
+(function () {
+  var ready, files = new Map();
+  var list = ["https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js", "lab/content.js?v=25",
+    "lab/style-notebook.js?v=31", "lab/style-journey.js?v=31", "lab/style-board.js?v=4", "lab/style-motion.js?v=3",
+    "weeks/week10/cinematics.js?v=34", "scene-host.js?v=1"];
+  if (window.WEEK === 10) list.push("weeks/week10/w10-scenes.js?v=15");
+  list.push(window.WEEKDIR + "scenes-week.js?v=" + ([3, 6, 12].includes(window.WEEK) ? "11" : "10"));
+  window.VL_PRESENTATION = { ready: false, load: function () {
+    if (!ready) ready = new Promise(function (resolve) {
+      requestAnimationFrame(function () { requestAnimationFrame(resolve); });
+    }).then(function () {
+      return Promise.all(list.map(function (src) {
+        if (!files.has(src)) files.set(src, new Promise(function (resolve, reject) {
+          var script = document.createElement("script"); script.src = src; script.async = false;
+          script.onload = resolve; script.onerror = function () { files.delete(src); script.remove(); reject(new Error("Presentation could not load")); };
+          document.head.appendChild(script);
+        }));
+        return files.get(src);
+      }));
+    }).then(function () { window.VL_PRESENTATION.ready = true; })
+      .catch(function (error) { ready = null; throw error; });
+    return ready;
+  }};
+})();
+</script>
 <script>window.__wkWrite(["moments.js" + (window.WEEK === 1 ? "?v=9" : "")]);</script>
 <script>
 (function () {
   var ok = window.COURSE && window.ADAPTIVE && window.ADAPTIVE.bank && window.MOMENTS;
-    if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-prompt.js", "s2/s2-providers.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=" + (s === "s2/s2-ui.js" ? "6" : "5") + "\"><" + "/script>"); }); document.write("<script src=\"player.js?v=52\"><" + "/script>"); }
+    // The optional AI engines are needed only by case-study essay feedback.
+    var feedbackLoad;
+    window.VL_LOAD_FEEDBACK = function () {
+      if (!feedbackLoad) feedbackLoad = ["s2/s2-prompt.js?v=5", "s2/s2-providers.js?v=5"].reduce(function (ready, src) {
+        return ready.then(function () { return new Promise(function (resolve, reject) {
+          var script = document.createElement("script"); script.src = src;
+          script.onload = resolve; script.onerror = function () { script.remove(); reject(new Error("Feedback engine could not load")); };
+          document.head.appendChild(script);
+        }); });
+      }, Promise.resolve()).catch(function (error) { feedbackLoad = null; throw error; });
+      return feedbackLoad;
+    };
+    if (ok) { var nn = window.WEEK < 10 ? "0" + window.WEEK : "" + window.WEEK; ["s2/data/week" + nn + ".js", "s2/s2-local.js", "s2/s2-ui.js"].forEach(function (s) { document.write("<script src=\"" + s + "?v=" + (s === "s2/s2-ui.js" ? "7" : "5") + "\"><" + "/script>"); }); document.write("<script src=\"player.js?v=53\"><" + "/script>"); }
   else if (window.WEEK !== 1) { location.replace(location.pathname + "?week=1"); }
   else { document.getElementById("main").innerHTML = "<div class=\"card\"><h1>This week could not be loaded.</h1></div>"; }
 })();

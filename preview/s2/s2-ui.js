@@ -4,6 +4,12 @@
   const S2 = {};
   let host = null, active = null, timer = null, running = null, tableObserver = null;
   const P = () => window.S2Providers;
+  // Key availability stays immediate while the optional feedback engines load.
+  const hasKey = id => {
+    if (P()) return P().hasKey(id);
+    try { return !!String(localStorage.getItem(`voicelearn.ai.${id}`) || "").trim(); }
+    catch (_) { return false; }
+  };
   const L = () => window.S2Local;
   const data = () => window.S2_DATA?.[host?.week];
   const esc = value => host.esc(String(value ?? ""));
@@ -91,7 +97,7 @@
     clearTimeout(timer);
     timer = null;
     const text = active.textarea.value;
-    if (!force && text === active.lastSaved) return active.saved;
+    if (text === active.lastSaved && active.saved !== false) return active.saved;
     const store = readStore();
     store.drafts[active.id] = { text, at: Date.now() };
     const ok = writeStore(store);
@@ -425,7 +431,11 @@
       root, c, q, id, textarea: root.querySelector("#s2-answer"),
       saved: storageWorks(), lastSaved: draft(store, id)
     };
-    active.textarea.addEventListener("input", scheduleSave);
+    active.textarea.addEventListener("input", () => {
+      scheduleSave();
+      // A local check describes the checked draft, so remove it when editing.
+      root.querySelector("#s2-local").replaceChildren();
+    });
     active.textarea.addEventListener("blur", () => saveDraft(true));
     root.querySelector("#s2-back-case").addEventListener("click", () =>
       open({ v: "case", c })
@@ -445,6 +455,7 @@
     refreshKeys();
     renderRate();
     renderSavedFeedback();
+    if (Number(store.local?.[id]) >= Number(store.drafts?.[id]?.at || Infinity)) checkLocal(true);
   }
 
   // Rate-limit pause per provider (kept while the student moves between questions).
@@ -515,7 +526,7 @@
   function refreshKeys() {
     if (!active?.root?.isConnected) return;
     active.root.querySelectorAll(".s2-provider-group").forEach(group => {
-      const id = group.dataset.provider, available = P().hasKey(id);
+      const id = group.dataset.provider, available = hasKey(id);
       const button = group.querySelector(".s2-fb");
       const settings = group.querySelector(".s2-settings-link");
       const wait = remaining(id);
@@ -553,8 +564,11 @@
     return { answer, n };
   }
 
-  function checkLocal() {
-    const prepared = preparedAnswer();
+  function checkLocal(restoring = false) {
+    const restore = restoring === true;
+    const prepared = restore
+      ? { answer: active.textarea.value.trim(), n: words(active.textarea.value) }
+      : preparedAnswer();
     if (!prepared) return;
     const cd = caseData(active.c);
     let html;
@@ -577,10 +591,15 @@
     }
     active.root.querySelector("#s2-local").innerHTML =
       `<section class="card"><h2>Local check</h2>${html}</section>`;
-    const store = readStore();
-    store.local[active.id] = Date.now();
-    writeStore(store);
-    announce("Your local check is ready below the writing box.");
+    if (!restore) {
+      const store = readStore();
+      store.local[active.id] = Date.now();
+      writeStore(store);
+      announce("Your local check is ready below the writing box.");
+      const local = active.root.querySelector("#s2-local");
+      local.tabIndex = -1; local.focus({ preventScroll: true });
+      local.scrollIntoView({ behavior: host.smooth(), block: "start" });
+    }
   }
 
   const statusLabels = {
@@ -734,9 +753,15 @@
 
   async function requestFeedback(provider) {
     if (!active || running || !["gemini", "groq"].includes(provider)) return;
-    if (!P().hasKey(provider)) {
+    if (!hasKey(provider)) {
       host.openSettings();
       return;
+    }
+    if (!P()) {
+      const screen = active;
+      try { await window.VL_LOAD_FEEDBACK(); }
+      catch (_) { if (active === screen) announce("Feedback could not load. Your answer and the local check are still available. Try again when connected."); return; }
+      if (active !== screen || running) return;
     }
     if (remaining(provider) > 0) return;
     const prepared = preparedAnswer();

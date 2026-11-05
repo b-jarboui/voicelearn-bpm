@@ -176,13 +176,13 @@ html[data-week] .player .look.vb-root:not([data-w10s]) svg.dg {
 body:has(.vb-root) .cc,body:has(.stage.look-board) .cc {
   background:#fff!important;color:#202f39!important;border-top:1px solid #d3dde6!important;text-shadow:none!important;
 }
-.lookbtn.board .sw,.mini.board { background:#fff;border:1px solid #abb8c4;color:#202f39;box-shadow:none; }
+html[data-week] .lookbtn.board .sw,.mini.board { background:#fff;border:1px solid #abb8c4;color:#202f39;box-shadow:none; }
 .mini.board .tile {
   background:#edf4fc;border:2px solid #175caa;border-radius:10px;box-shadow:none;
   font-family:"Segoe Print","Comic Sans MS","Atkinson Hyperlegible",sans-serif;
 }
 .mini.board .tile::after { background:#175caa;transform:none; }
-.lookbtn.board .sw {
+html[data-week] .lookbtn.board .sw {
   background:linear-gradient(#175caa,#175caa) 16% 50%/24% 14px no-repeat,
     linear-gradient(#175caa,#175caa) 50% 50%/20% 2px no-repeat,
     linear-gradient(#175caa,#175caa) 84% 50%/24% 14px no-repeat,#fff;
@@ -402,4 +402,129 @@ html[data-week] .stage .st-score.pending span { color: inherit; }
 /* Full-screen's illustration clipping must not trap dense question/report pages. */
 html[data-week] body.fs[data-view="player"] .player .stage.scroll {
   overflow-y: auto !important; overscroll-behavior: contain;
+}
+
+/* Round 8: the shared shell follows content, just as the measured lesson does. */
+html[data-week] body:not([data-view="player"]) {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+}
+html[data-week] body:not([data-view="player"]) main { align-items: start; }
+html[data-week] body[data-view="home"] main { padding-bottom: 0; }
+html[data-week] .s1-card { grid-row: auto; }
+html[data-week] .home-summary { display: grid; gap: 1rem; grid-column: 2; order: 3; min-width: 0; }
+html[data-week] .presentation-status { grid-column: 1/-1; order: -1; color: var(--accent); }
+/* Keep the measured frame stationary; authored scene animations remain inside it. */
+html[data-week] body[data-view="player"] .player .look[data-w10s] { animation: none; }
+html[data-week] :is(button,select,input,textarea,summary,a):focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 3px;
+}
+html[data-week] :is(button,select,summary) { touch-action: manipulation; }
+html[data-week] :is(.onboard,.vpanel,.send) :is(button,select,input:not([type="checkbox"])) { min-height: 44px; }
+html[data-week] :is(.onboard,.vpanel,.send) :is(input,select) { min-width: 0; max-width: 100%; font-size: 1rem; }
+html[data-week] .onboard {
+  margin: 0 auto; padding: clamp(1.1rem, 3vw, 2rem); gap: 1rem;
+}
+html[data-week] .onboard h1 { margin: 0; font-size: clamp(1.85rem, 4vw, 3.25rem); line-height: 1.12; }
+html[data-week] .onboard p { line-height: 1.6; }
+html[data-week] .onboard .actions { margin-top: .5rem; gap: .65rem; }
+html[data-week] .onboard .actions button { border-radius: 12px; padding: .7rem 1rem; }
+html[data-week] .onboard .fld { gap: .5rem; }
+html[data-week] .onboard input[type="range"] { padding: 0; margin: 0; width: 100%; }
+html[data-week] .setup-looks { gap: .75rem; margin-top: 0; }
+html[data-week] .setup-look {
+  display: grid; grid-template-columns: 5rem minmax(0,1fr); align-content: center;
+  align-items: center; gap: .25rem .75rem; padding: .75rem; border-radius: 14px;
+}
+html[data-week] .setup-look > .mini { grid-column: 1; grid-row: 1/3; width: 100%; height: 4.5rem; margin: 0; padding: .4rem; }
+html[data-week] .setup-look > b { grid-column: 2; font-size: 1rem; }
+html[data-week] .setup-look > .muted { grid-column: 2; font-size: .875rem; line-height: 1.4; }
+html[data-week] .setup-look .mini .tile { width: 100%; min-width: 0; padding: .4rem; font-size: .65rem; line-height: 1.3; }
+html[data-week] .setup-look .mini .tile b { font-size: .7rem; }
+html[data-week] .setup-look .mini > span:last-child:not(.tile) { display: none; }
+html[data-week] .setup-look[aria-pressed="true"] { box-shadow: 0 0 0 1px var(--accent) inset; }
+html[data-week] .onboard .listen-choice { font-size: 1rem; line-height: 1.5; }
+html[data-week] .onboard .listen-choice span { font-weight: 400; }
+html[data-week] .ai-provider-grid { align-items: start; gap: 1rem; }
+html[data-week] .ai-provider { min-width: 0; }
+html[data-week] .ai-provider h2 { font-size: 1.25rem; line-height: 1.3; }
+html[data-week] .ai-provider p { font-size: 1rem; }
+html[data-week] :is(.ai-provider,.vpanel) a { display: inline-flex; align-items: center; min-height: 44px; }
+html[data-week] #vAbout a { display: inline-flex !important; }
+html[data-week] .ai-key-actions { gap: .5rem; }
+html[data-week] .ai-key-actions button { font-size: .9rem; }
+html[data-week] .vpanel {
+  inset: max(.75rem, env(safe-area-inset-top, 0px)) .75rem auto auto;
+  width: min(27.5rem, calc(100% - 1.5rem)); margin: 0;
+  max-height: calc(100dvh - max(.75rem, env(safe-area-inset-top, 0px)) - max(.75rem, env(safe-area-inset-bottom, 0px)));
+  gap: 1rem; padding: 1rem; scroll-padding-block: 5rem 1rem;
+}
+html[data-week] .vpanel > .settings-heading {
+  position: sticky; top: -1rem; z-index: 2; background: var(--surface);
+  padding-block: .5rem; margin-top: -.5rem; border-bottom: 1px solid var(--line);
+}
+html[data-week] .vpanel .fld { margin: 0; gap: .4rem; }
+html[data-week] .vpanel .fld:has(input[type="range"]) { grid-template-columns: minmax(0,1fr) auto; }
+html[data-week] .vpanel .fld input[type="range"] { grid-column: 1/-1; margin: 0; padding: 0; }
+html[data-week] #vClose { display: grid; place-items: center; flex: none; width: 44px; min-width: 44px; padding: 0; font-size: 1.2rem; }
+html[data-week] .settings-week-row { font-size: .9375rem; color: var(--muted); }
+html[data-week] .settings-week-row label { font-weight: 400; }
+html[data-week] .settings-help { gap: .5rem; }
+html[data-week] #vBtn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; font-size: .875rem; }
+html[data-week] #vBtn::before { content: none; }
+html[data-week] #vBtn svg { width: 20px; height: 20px; flex: none; }
+html[data-week] body[data-view="player"] #vBtn .settings-label { display: none; }
+html[data-week] .settings-help button { flex: 1 1 auto; border-radius: 10px; font-size: .9375rem; }
+html[data-week] .ai-settings { min-width: 0; }
+html[data-week] .w1-hero { padding: clamp(1.25rem, 3vw, 2rem); }
+html[data-week] .w1-hero-body { margin-top: .75rem; gap: 1.5rem; }
+html[data-week] .w1-facts { margin-top: 1.25rem; padding-top: 1rem; }
+html[data-week] .s1-card h2 { margin-bottom: 0; }
+html[data-week] .lesson { gap: .75rem; padding-block: 1rem; }
+html[data-week] .lesson:first-child { padding-top: .25rem; }
+html[data-week] .lesson:last-child { padding-bottom: .25rem; }
+html[data-week] :is(.lesson .muted,.lesson .pill,.mastery-card .pill) { font-size: .8125rem !important; }
+html[data-week] .lesson b { font-size: 1rem; line-height: 1.4; }
+html[data-week] .lookbtn b { font-size: .9375rem; line-height: 1.35; }
+html[data-week] .lookbtn .muted { font-size: .875rem; line-height: 1.45; }
+html[data-week] .lookbtn[aria-pressed="true"] b::after { white-space: nowrap; }
+html[data-week] .week-picker select { text-overflow: ellipsis; }
+/* Results use one document scroll, including short landscape viewports. */
+html:has(body[data-step="result"]:not(.fs)),
+html body[data-view="player"][data-step="result"]:not(.fs) { overflow-y: auto !important; }
+html[data-week] body[data-view="player"][data-step="result"]:not(.fs) main {
+  height: auto !important; min-height: var(--vl-page-space, 0px) !important;
+  display: flex !important; flex-direction: column; justify-content: center;
+}
+html[data-week] body[data-view="player"][data-step="result"]:not(.fs) { padding-bottom: var(--vl-controls-size, var(--vl25-controls-h)); }
+html[data-week] body[data-view="player"][data-step="result"]:not(.fs) .player { display: block; flex: none; }
+html[data-week] body[data-view="player"][data-step="result"]:not(.fs) .player .stage.scroll {
+  height: auto !important; min-height: 0 !important; overflow: visible; margin: 0 !important; width: 100%;
+}
+html[data-week] body:is([data-step="result"],[data-step="report"]) .stage.scroll .st-track { gap: 1.25rem; padding: clamp(1rem, 2.5vw, 2rem); }
+html[data-week] .stage.scroll .st-lo-h { gap: .75rem; align-items: baseline; }
+html[data-week] .stage.scroll .st-lo-h b { min-width: 0; overflow-wrap: anywhere; }
+html[data-week] .stage.scroll .st-lo-h span { font-size: .9375rem; }
+html[data-week] .stage.scroll :is(.st-card,.st-send,.st-next) { min-height: 44px; }
+html[data-week] .stage.scroll :is(.st-card,.st-send,.st-next):focus-visible { outline-offset: -4px; }
+@media (max-width: 600px) {
+  html[data-week] .setup-looks { grid-template-columns: minmax(0,1fr); }
+  html[data-week] .onboard .actions > .primary { flex: 1 1 12rem; }
+  html[data-week] body[data-view="home"] .looks { grid-template-columns: minmax(0,1fr); }
+  html[data-week] .lookbtn { grid-template-columns: 5rem minmax(0,1fr); gap: .25rem .75rem; align-items: center; }
+  html[data-week] .lookbtn .sw { grid-column: 1; grid-row: 1/3; height: 4.5rem; }
+  html[data-week] .lookbtn b, html[data-week] .lookbtn .muted { grid-column: 2; }
+  html[data-week] .resume-card { padding: 1.25rem !important; }
+}
+@media (max-width: 760px) {
+  html[data-week] .home-summary { grid-column: 1/-1; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  html[data-week] body:not([data-view="player"]) #siteHeader { min-height: 60px; padding-block: .5rem; }
+  html[data-week] .onboard h1 { max-width: 28ch; }
+  html[data-week] .setup-look > .mini { height: 4rem; }
+  html[data-week] .w1-hero-body { grid-template-columns: minmax(0,1fr); }
+  html[data-week] .w1-route { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-week] :is(button,select,input,textarea) { transition: none; }
 }

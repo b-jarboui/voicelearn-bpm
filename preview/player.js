@@ -437,7 +437,7 @@
   Scenes.mount(stageEl);
   const lookEl = document.createElement("div");
   lookEl.className = "look";
-  let look = null, lookStep = -1;
+  let look = null, lookStep = -1, pendingPlayer = 0;
   const lookStyle = () => (window.STYLES || []).find((s) => s.id === (VS.look || "journey")) || null;
   function fitLook() {
     const k = Math.max(1, Math.min(lookEl.clientHeight / 600, lookEl.clientWidth / 300, 2.2));
@@ -448,7 +448,7 @@
   // Questions and other stage screens wear the same look the learner chose for the lessons.
   function updateLookClass() { stageEl.classList.remove("look-notebook", "look-journey", "look-board", "look-motion"); stageEl.classList.add("look-" + (VS.look || "journey")); }
   function showLook(on) { lookEl.hidden = !on; stageEl.hidden = on; }
-  function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); }
+  function vstep(j) { if (look) { lookStep = j; look.step(j); } else Scenes.step(Math.max(0, j)); window.VL_LAYOUT?.flush(); }
   function loadLook(key, lessonLabel, title, body) {
     const s = lookStyle(), moments = window.MOMENTS && MOMENTS[key];
     if (window.W10_SCENES_HOST) W10_SCENES_HOST.release();
@@ -480,6 +480,7 @@
   }
   const NEW_UI = true; // the adopted design (Week 1, 4 Nov 2026) is the interface of every week
   function renderHome() {
+    const returningHome = view !== "home";
     view = "home"; setRoute("home"); updateNavigation();
     const st = cur(), les = C.lessons[st.l] || C.lessons[0];
     const flagged = SECS.filter((s) => P.flags[s]);
@@ -508,6 +509,11 @@
       [".w1-hero", ".resume-card", ".later-card.has-pending", ".s1-card", ".mastery-card", ".later-card:not(.has-pending)", ".s2-home", ".look-card", ".week-picker"].forEach(selector => {
         const card = $("main").querySelector(selector); if (card) $("main").appendChild(card);
       });
+      const summary = document.createElement("div"); summary.className = "home-summary";
+      $("main").querySelector(".s1-card").after(summary);
+      [".mastery-card", ".later-card:not(.has-pending)"].forEach(selector => {
+        const card = $("main").querySelector(selector); if (card) summary.appendChild(card);
+      });
     }
     $("wkSel").onchange = (e) => switchWeek(e.target.value);
     document.querySelectorAll("[data-later]").forEach(b=>b.onclick=()=>resumeDeferred(b.dataset.later));
@@ -520,6 +526,7 @@
     // Answered questions stay in the history, so a check only asks what is still fresh.
     document.querySelectorAll("[data-l]").forEach((b) => (b.onclick = () => { const l = +b.dataset.l; P.queue = P.queue.slice(0, cur().kind === "report" ? P.idx + 1 : P.idx).concat(lessonPlan(l)); if (cur().kind === "report") P.idx++; P.part = "main"; P.sent = 0; P.q = 0; save(); openPlayer(); }));
     bar();
+    if (returningHome) window.scrollTo({ top: 0, behavior: "instant" });
     if (!$("vPanel").contains(document.activeElement)) $("main").focus({ preventScroll: true });
   }
   // Called inside click handlers: the first utterance of the page is queued during a real user gesture.
@@ -530,6 +537,15 @@
   function primeSpeech() { return; /* disabled: the zero-volume priming utterance + cancel wedged Chrome's speech engine */ if (primed || !synth || FAST) return; primed = true; try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; window.__vlPrime = u; synth.speak(u); } catch (e) {} }
   document.addEventListener("pointerdown", primeSpeech, { capture: true }); document.addEventListener("keydown", primeSpeech, { capture: true });
   function openPlayer(autoPlay = true) {
+    if (window.VL_PRESENTATION && !VL_PRESENTATION.ready) {
+      const request = ++pendingPlayer, main = $("main");
+      let status = $("presentationStatus");
+      if (!status) { status = document.createElement("div"); status.id = "presentationStatus"; status.className = "presentation-status card"; status.setAttribute("role", "status"); main.prepend(status); }
+      status.textContent = "Preparing lesson…"; main.setAttribute("aria-busy", "true");
+      VL_PRESENTATION.load().then(() => { if (request === pendingPlayer) openPlayer(autoPlay); })
+        .catch(() => { if (request !== pendingPlayer) return; main.removeAttribute("aria-busy"); status.textContent = "The lesson could not load. Check your connection and try again."; });
+      return;
+    }
     view = "player"; setRoute(cur().kind === "report" ? "report" : "player");
     $("main").innerHTML = `<div class="player"><div id="slot"></div></div><div class="cc" id="cc" aria-live="polite"></div><div class="card send" id="send" hidden></div>`;
     $("slot").replaceWith(stageEl);
@@ -575,6 +591,11 @@
     $("main").querySelectorAll("#rateCard, #s2ReportCard, .pending-report").forEach(el => el.remove());
     const st = cur();
     if (NEW_UI) document.body.dataset.step = st.kind; // Presentation hooks only.
+    const frameKey = `${st.kind}:${st.l}:${st.s ?? st.sec ?? ""}:${P.q}`;
+    if ($("main").dataset.frame !== frameKey) {
+      $("main").dataset.frame = frameKey;
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
     if (view === "player") { setRoute(st.kind === "report" ? "report" : "player", true); }
     waiting = false;
     updateLookClass();
@@ -1000,7 +1021,7 @@
   $("vMode").onchange = (e) => { VS.mode = e.target.value === "captions" ? "captions" : "voice"; saveVS(); const resume = playing; stopSpeech(); if (resume) play(); bar(); };
   // Repeat the current sentence without losing your place.
   $("repBtn").onclick = () => { if (view !== "player") return; if (waiting) return $("toggle").click(); stopSpeech(); play(); };
-  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "journey"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) $("vClose").focus(); };
+  $("vBtn").onclick = () => { $("vMode").value = VS.mode; $("vLook").value = VS.look || "journey"; fillVoices(); renderVoiceTests(); openAISettings(); updateListenControls(); $("vRate").value = VS.rate; $("vPitch").value = VS.pitch; showRate(); showPitch(); $("vPanel").hidden = !$("vPanel").hidden; const open = !$("vPanel").hidden; $("vBtn").setAttribute("aria-expanded", String(open)); if (open) { $("vPanel").scrollTop = 0; $("vClose").focus(); } };
   $("vPitch").oninput = (e) => { VS.pitch = +e.target.value; showPitch(); };
   $("vPitch").onchange = () => { saveVS(); applyLive(); };
   $("vClose").onclick = () => { $("vPanel").hidden = true; $("vBtn").setAttribute("aria-expanded", "false"); $("vBtn").focus(); };
@@ -1036,6 +1057,7 @@
     let onboardingFinishedThisVisit = false;
     const routeState = (screen) => ({ voicelearn: true, screen, week: WK });
     function setRoute(screen, replace = false) {
+      pendingPlayer++; $("main").removeAttribute("aria-busy"); $("presentationStatus")?.remove();
       document.body.dataset.view = screen === "report" ? "player" : screen;
       const nav = $("courseNav"); if (nav) nav.hidden = screen !== "player" && screen !== "report";
       const bottom = document.querySelector(".bar"); if (bottom) bottom.hidden = !["home", "player", "report"].includes(screen);
@@ -1079,7 +1101,7 @@
         <label class="fld">Narration mode <select id="setupMode"><option value="voice">Natural voice, with captions</option><option value="device" hidden disabled>Phone's own voice, with captions</option><option value="captions">Captions only (no voice, reading pace)</option></select></label>
         <div id="setupDevice"><label class="fld">Phone voice <select id="setupVoice"></select></label>
         <div id="setupVoiceTests" class="voice-tests" aria-label="Available voices"></div></div>
-        <label class="fld">Speed: <output id="setupRateOut"></output><input id="setupRate" type="range" min="0.5" max="2" step="0.05"></label>
+        <label class="fld"><span>Speed: <output id="setupRateOut"></output></span><input id="setupRate" type="range" min="0.5" max="2" step="0.05"></label>
         <div id="setupVoiceNote" role="status" class="muted"></div>
         <label class="listen-choice"><input id="setupListen" type="checkbox"> <span><strong>Listen only (hands-free)</strong><br>Play lessons continuously and save checks to answer later. A single Play tap starts narration.</span></label>
         <div class="actions"><button id="voiceBack" type="button">← Design</button><button class="primary" id="setupDone" type="button">Next: AI feedback →</button></div></section>`);
@@ -1519,7 +1541,7 @@ positionSettingsButton();
       welcome();
     }
   // QA hooks (not used by the page itself).
-  window.__vl = { state: () => P, cur, advance, reportText, secM, loM, cloM, respond: (ok) => submit(ok), skip: () => { stopSpeech(); if (cur().kind !== "quiz" || P.part === "feedback") advance(); },
+  const qaHooks = { state: () => P, cur, advance, reportText, secM, loM, cloM, respond: (ok) => submit(ok), skip: () => { stopSpeech(); if (cur().kind !== "quiz" || P.part === "feedback") advance(); },
     // show sentence i of the current step, paused (for screenshots)
     at: (i) => { pause(); P.sent = i; caption(script.main[i]); vstep(i - script.offset); },
     // open lesson l at step s (0..sections-1 = parts, then quiz, result), paused
@@ -1534,4 +1556,8 @@ positionSettingsButton();
     goHome: () => renderHome(),
     openSettings: () => { if ($("vPanel").hidden) $("vBtn").click(); const a = $("aiSettings"); if (a) a.scrollIntoView({ block: "center" }); } });
   initOnboarding();
+  window.VL_UI_READY = performance.now();
+  // QA state navigation is synchronous once all four registered renderers are ready.
+  if (window.VL_PRESENTATION) VL_PRESENTATION.load().then(() => { window.__vl = qaHooks; }).catch(() => { window.__vl = qaHooks; });
+  else window.__vl = qaHooks;
 })();
