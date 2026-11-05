@@ -925,7 +925,7 @@
     }
     P.push({
       svg: function () {
-        var s = G("tilesG hl", tiles(true));
+        var s = R("0-1", "f", G("tilesG hl", tiles(true)));
         s += R("0-0", "f", carrow(348, 240, 360, 140, 352, 52, "sG", 3, true));
         s += R("1-1", "f", line(180, 236, 180, 58, "sO", { "stroke-width": 4 }) + [59, 103, 147, 235].map(function (y) { return arrow(180, y, 172, y, "sO", 3); }).join(""));
         s += R("2-2", "pop", card(30, 56, 300, 180, "p") + TX(180, 84, "Conditions keep changing", 16, "fN") +
@@ -1084,8 +1084,8 @@
        Template: https://observablehq.com/@d3/transition-end (move, wait, recolour in sequence) */
     P.push({
       svg: function () {
-        var s = card(14, 38, 332, 220, "p") + rect(56, 66, 26, 140, "fW sN", { rx: 13, "stroke-width": 2 }) + circ(69, 214, 18, "fO") +
-          rect(62, 140, 12, 76, "merc fO", { rx: 4 }) + TX(92, 250, "Room thermometer", 13, "fN");
+          var s = card(14, 38, 332, 232, "p") + rect(56, 66, 26, 140, "fW sN", { rx: 13, "stroke-width": 2 }) + circ(69, 214, 18, "fO") +
+            rect(62, 140, 12, 76, "merc fO", { rx: 4 }) + TX(69, 246, "Room", 14, "fN") + TX(69, 264, "thermometer", 14, "fN");
         s += rect(206, 64, 120, 46, "fL sN", { rx: 6, "stroke-width": 2 }) + [76, 86, 96].map(function (y) { return line(218, y, 314, y, "sM", { "stroke-width": 2 }); }).join("") +
           TX(266, 134, "Cooling unit", 14, "fN") + rect(244, 156, 44, 26, "fM", { rx: 13 }) + circ(256, 169, 10, "fW") + TX(266, 204, "Switch untouched", 14, "fM");
         s += G("rise", path("M140 200 q-8 -12 0 -24 q8 -12 0 -24", "sO f0", { "stroke-width": 3, "stroke-linecap": "round" })) +
@@ -3282,7 +3282,7 @@
         var b = card(14, 152, 332, 104, "pg") + icon("key", 42, 186, 1.1) + TX(66, 180, "Restore ownership", 16, "fG s") +
           TX(66, 206, "Documented gap", 13, "fM s") + meter(66, 216, 180, 1, "fG") + okB(326, 172, 11);
         var c = card(14, 152, 332, 104, "g") + person(52, 238, 1.3, "W") + TX(66, 168, "Named owner", 13, "nh fW");
-        ["Organise reviews", "Investigate adoption", "Evaluate changes"].forEach(function (t, j) { c += R("3", "l", TX(96, 180 + j * 26, "• " + t, 15, "nh fW s")); });
+        ["Organise reviews", "Investigate adoption", "Evaluate changes"].forEach(function (t, j) { c += R("3", "l", TX(96, 190 + j * 24, "• " + t, 15, "nh fW s")); });
         return R("0-3", "f", a) + R("2-2", "l", b) + R("3", "pop", c);
       }
     });
@@ -4411,4 +4411,3 @@
 
 })();
 // END FILE: w14-claude-v2-part4.js
-

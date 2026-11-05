@@ -2416,7 +2416,7 @@
           R(44, 254, 122, 10, C.navy, { rx: 4 }) + L(105, 214, "UNCHANGED", { z: 13, s: C.navy }), { o0: 0 });
         s += M("mgr", 244, 210, person(C.green, 1.3) + P("M10 -6 L0 -60", C.green, 4), { o0: 0 });
         s += M("who", 320, 226, L(0, 0, "WHO DECIDES?", { z: 14, s: C.green }), { o0: 0 });
-        s += M("nev", 343, 210, stamp("NEVER APPEARS", C.red, 12), { o0: 0 });
+          s += M("nev", 316, 210, stamp("NEVER APPEARS", C.red, 12), { o0: 0 });
         s += M("theo", 176, 250, L(0, 0, "THEORETICALLY AVAILABLE", { z: 13, s: C.teal }), { o0: 0 });
         return s;
       }, function (b, S) {
@@ -5231,7 +5231,7 @@
         return s;
       }, function (b, S) {
         V(S, "tl", b === 0); S("own", { d: b === 0 ? 1 : 0, o: b === 0 ? 1 : 0, dur: 1.6 }); V(S, "ot", b === 0, { del: 0.5 });
-        for (var i = 0; i < 3; i++) V(S, "l" + i, b >= 1, { del: i * 0.2, y: b === 2 ? (1 - i) * 20 : 0, s: b === 2 ? 0.9 : 1, o: b === 2 ? 0.25 : b >= 1 ? 1 : 0 });
+        for (var i = 0; i < 3; i++) V(S, "l" + i, b >= 1, { del: i * 0.2, y: b === 2 ? (1 - i) * 20 : 0, s: b === 2 ? 0.9 : 1, o: b === 2 ? 0 : b >= 1 ? 1 : 0 });
         V(S, "mg", b === 2, { del: 0.6 });
       }),
       /* 6. Lines 16-17. Seven recent go-lives deserve examination; an hourglass does not guarantee the rest.
@@ -5352,4 +5352,3 @@
   installCSS("w13-claude-v2-part4");
 })();
 // END FILE: w13-claude-v2-part4.js
-

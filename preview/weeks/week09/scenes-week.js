@@ -1056,7 +1056,7 @@
           G("feaA", TAGOK(CA, 296), CA, 296) + G("feaB", C(CB, 296, 10, "#fff", 'stroke="' + K.orange + '" stroke-width="2.5"') + T(CB, 301, "?", 15, K.orange, "middle", 'class="vw-n"'), CB, 296) +
           G("feaB2", TAGOK(CB, 296), CB, 296), 200, 230);
         B += PILL("p82", 92, 100, "Today: 82 min", K.orange, "#fff", 15);
-        B += PILL("pEst", 150, 168, "Estimates", "#fff", K.navy, 15, 'stroke="' + K.navy + '" stroke-width="1.5" stroke-dasharray="4 3"');
+          B += PILL("pEst", 92, 100, "Estimates", "#fff", K.navy, 15, 'stroke="' + K.navy + '" stroke-width="1.5" stroke-dasharray="4 3"');
         B += PILL("p14", 150, 264, "14 months", "#fff", K.green, 15);
         B += PILL("pCheap", 92, 100, "Cheaper, easier", "#fff", K.navy, 15);
         B += PILL("pCause", 92, 100, "Queue remains", K.red, "#fff", 15);
@@ -3185,10 +3185,10 @@
           { L: "Implement tests backup", a: M(pb("pImp"), ON("test5")), e: "back", p: "test5" },
           { L: "Every item answers someone", a: M(pb("pQs"), tab(null), view(null), { vf: { o: 0.4 }, qq0: { o: 1 }, qq1: { o: 1, w: 0.1 }, qq2: { o: 1, w: 0.2 }, qq3: { o: 1, w: 0.3 }, qq4: { o: 1, w: 0.4 } }), p: "doss" },
           { L: "Name the owners", a: M(pb("pOwn"), OFF("qq0", "qq1", "qq2", "qq3", "qq4"), { ow0: { o: 1 }, ow1: { o: 1, w: 0.1 }, ow2: { o: 1, w: 0.2 }, ow3: { o: 1, w: 0.3 }, ow4: { o: 1, w: 0.4 } }), p: ["ow0", "ow4"] },
-          { L: "Routes, owners, target", a: M(pb("pGood"), view("v1"), { vf: { o: 1 }, t1: { f: "#ffd479" }, t3: { f: "#ffd479" } }), p: ["t1", "t3"] },
-          { L: "Not proven yet", dur: 1.6, a: M(pb("pNot"), tab(null), view("vEnd"), { vf: { o: 1 }, ph0: { f: "#ffd479" }, pkt: { o: 1, y: 0 } }), p: "ph0" },
+            { L: "Routes, owners, target", a: M(pb("pGood"), view("v1"), OFF("ow0", "ow1", "ow2", "ow3", "ow4"), { vf: { o: 1 }, t1: { f: "#ffd479" }, t3: { f: "#ffd479" } }), p: ["t1", "t3"] },
+            { L: "Not proven yet", dur: 1.6, a: M(pb("pNot"), tab(null), view("vEnd"), OFF("ow0", "ow1", "ow2", "ow3", "ow4"), { vf: { o: 1 }, ph0: { f: "#ffd479" }, pkt: { o: 1, y: 0 } }), p: "ph0" },
           { L: "Next: the People phase", dur: 1.2, a: M(pb("pPeople"), { ph0: { f: "#fff" }, ph1: { f: "#ffd479" }, pkt: { y: 38 } }), p: "ph1" },
-          { L: "Forum: a new case", a: M(pb("pForum"), view(null), OFF("pkt"), ON("forum")), e: "back", p: "forum" },
+            { L: "Forum: a new case", a: M(pb("pForum"), view(null), OFF("pkt", "ph0", "ph1", "ph2", "ph3", "ph4"), ON("forum")), e: "back", p: "forum" },
           { L: "Defend your ambition", dur: 1.2, a: M(pb("pDefend"), ON("scaleE"), { forum: { o: 0.3 } }), e: "back", p: "scaleE" }
         ];
       })()

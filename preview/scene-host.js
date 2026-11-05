@@ -172,6 +172,7 @@
     if (!active) return;
     const st = active;
     active = null;
+    window.VL_ART?.current(null);
     window.VL_LAYOUT?.scene(null);
     // reset() owns scene timers/RAF work; remove GSAP work before its SVG is detached.
     try { st.scene?.reset(); } catch (e) { console.warn("[w10s] release", st.id, e); }
@@ -237,6 +238,7 @@
           st.inner.appendChild(st.text);
           st.host.appendChild(st.inner);
           try { scene.build(mountEl); } catch (e) { console.warn("[w10s] build", id, e); }
+          st.art = window.VL_ART?.prepare(mountEl, style.id);
           st.built = id;
         }
         st.scene = scene; st.id = id; st.lastIndex = null; active = st;
@@ -248,6 +250,7 @@
         window.VL_LAYOUT?.scene({host:st.host,mount:st.inner.querySelector('.w10s-mount'),text:st.text,
           states:[noteNodes([{m:st.title}]),...st.lines.map((_,i)=>noteNodes(notesFor(st,i)))]});
         if (style.id === "board" && !st.undress) st.undress = window.VL_BOARD?.dressScene(st.inner.querySelector(".w10s-mount"));
+        window.VL_ART?.current({mount:st.inner.querySelector('.w10s-mount'),title:st.title});
         if (!["notebook", "journey", "board", "motion"].includes(style.id)) {
           const bg = getComputedStyle(root).backgroundColor;
           if (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) st.host.style.backgroundColor = bg;
@@ -264,7 +267,7 @@
       if (target === st.lastIndex) return;
       st.lastIndex = target;
       try {
-        if (st.scene && index >= 0) { st.scene.step(index, st.n || 1); showText(st, index); }
+        if (st.scene && index >= 0) { st.scene.step(index, st.n || 1); st.art?.refresh(); showText(st, index); }
         else if (st.scene && index < 0) { st.scene.reset(); showTitle(st); }
       } catch (e) { console.warn("[w10s] step", st.id, e); }
     };

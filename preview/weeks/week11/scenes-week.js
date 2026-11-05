@@ -320,7 +320,7 @@ function F_RULES(p) {
       s += f.H("spin", O(380, 212, 8, "none", `stroke="${C.orange}" stroke-width="2.5" stroke-dasharray="12 8" class="a-spin"`));
       s += f.H("env", envelope(0, 0));
       s += f.H("tok", bookTok());
-      s += noteSVG(f, "nt", 204, 22) + noteSVG(f, "nl", 104, 22) + noteSVG(f, "nr", 316, 168) + noteSVG(f, "nb", 320, 278);
+      s += noteSVG(f, "nt", 268, 22) + noteSVG(f, "nl", 104, 22) + noteSVG(f, "nr", 316, 168) + noteSVG(f, "nb", 320, 278);
       return s;
     },
     render(c, s) {
@@ -682,7 +682,7 @@ function F_DEV(p) {
       s += f.H("gA", R(8, 28, 384, 60, "none", 12, `stroke="${C.gold}" stroke-width="3" class="a-pulse"`));
       s += f.H("own", person(34, 246, 1.25, C.plum) + T(36, 290, "Owner", 13, C.plum));
       s += f.H("log", R(76, 188, 196, 106, C.white, 8, `stroke="${C.slate}" stroke-width="1.8"`) + R(76, 188, 196, 22, C.slate, 8) + R(76, 200, 196, 10, C.slate) + T(174, 204, "Deviation record", 13, C.white) +
-        rep(4, (i) => f.H("l" + i, f.TK("lT" + i, 88, 230 + i * 18, "", 12.5, C.ink, "start"))));
+        rep(4, (i) => f.H("l" + i, f.TK("lT" + i, 88, 230 + i * 18, "", 12.5, C.ink, "start"))), 'data-vl-fit="authored"');
       const stamp = (key, txt, col) => f.H(key, `<g transform="rotate(-10 334 246)">${O(334, 246, 38, "rgba(255,255,255,.9)", `stroke="${col}" stroke-width="3"`)}${O(334, 246, 31, "none", `stroke="${col}" stroke-width="1.2"`)}${T(334, 251, txt, 13, col)}</g>`);
       s += stamp("sOK", "Approved", C.green) + stamp("sNO", "Rejected", C.red) + stamp("sQ", "Decision?", C.orange);
       s += noteSVG(f, "nr", 292, 18) + noteSVG(f, "nt", 300, 110);
@@ -1889,7 +1889,7 @@ function F_RULES(p) {
       s += f.H("spin", O(380, 212, 8, "none", `stroke="${C.orange}" stroke-width="2.5" stroke-dasharray="12 8" class="a-spin"`));
       s += f.H("env", envelope(0, 0));
       s += f.H("tok", bookTok());
-      s += noteSVG(f, "nt", 204, 22) + noteSVG(f, "nl", 104, 22) + noteSVG(f, "nr", 316, 168) + noteSVG(f, "nb", 320, 278);
+      s += noteSVG(f, "nt", 268, 22) + noteSVG(f, "nl", 104, 22) + noteSVG(f, "nr", 316, 168) + noteSVG(f, "nb", 320, 278);
       return s;
     },
     render(c, s) {
@@ -2251,7 +2251,7 @@ function F_DEV(p) {
       s += f.H("gA", R(8, 28, 384, 60, "none", 12, `stroke="${C.gold}" stroke-width="3" class="a-pulse"`));
       s += f.H("own", person(34, 246, 1.25, C.plum) + T(36, 290, "Owner", 13, C.plum));
       s += f.H("log", R(76, 188, 196, 106, C.white, 8, `stroke="${C.slate}" stroke-width="1.8"`) + R(76, 188, 196, 22, C.slate, 8) + R(76, 200, 196, 10, C.slate) + T(174, 204, "Deviation record", 13, C.white) +
-        rep(4, (i) => f.H("l" + i, f.TK("lT" + i, 88, 230 + i * 18, "", 12.5, C.ink, "start"))));
+        rep(4, (i) => f.H("l" + i, f.TK("lT" + i, 88, 230 + i * 18, "", 12.5, C.ink, "start"))), 'data-vl-fit="authored"');
       const stamp = (key, txt, col) => f.H(key, `<g transform="rotate(-10 334 246)">${O(334, 246, 38, "rgba(255,255,255,.9)", `stroke="${col}" stroke-width="3"`)}${O(334, 246, 31, "none", `stroke="${col}" stroke-width="1.2"`)}${T(334, 251, txt, 13, col)}</g>`);
       s += stamp("sOK", "Approved", C.green) + stamp("sNO", "Rejected", C.red) + stamp("sQ", "Decision?", C.orange);
       s += noteSVG(f, "nr", 292, 18) + noteSVG(f, "nt", 300, 110);
@@ -3452,7 +3452,7 @@ function F_RULES(p) {
       s += f.H("spin", O(380, 212, 8, "none", `stroke="${C.orange}" stroke-width="2.5" stroke-dasharray="12 8" class="a-spin"`));
       s += f.H("env", envelope(0, 0));
       s += f.H("tok", bookTok());
-      s += noteSVG(f, "nt", 204, 22) + noteSVG(f, "nl", 104, 22) + noteSVG(f, "nr", 316, 168) + noteSVG(f, "nb", 320, 278);
+      s += noteSVG(f, "nt", 268, 22) + noteSVG(f, "nl", 104, 22) + noteSVG(f, "nr", 316, 168) + noteSVG(f, "nb", 320, 278);
       return s;
     },
     render(c, s) {
@@ -3814,7 +3814,7 @@ function F_DEV(p) {
       s += f.H("gA", R(8, 28, 384, 60, "none", 12, `stroke="${C.gold}" stroke-width="3" class="a-pulse"`));
       s += f.H("own", person(34, 246, 1.25, C.plum) + T(36, 290, "Owner", 13, C.plum));
       s += f.H("log", R(76, 188, 196, 106, C.white, 8, `stroke="${C.slate}" stroke-width="1.8"`) + R(76, 188, 196, 22, C.slate, 8) + R(76, 200, 196, 10, C.slate) + T(174, 204, "Deviation record", 13, C.white) +
-        rep(4, (i) => f.H("l" + i, f.TK("lT" + i, 88, 230 + i * 18, "", 12.5, C.ink, "start"))));
+        rep(4, (i) => f.H("l" + i, f.TK("lT" + i, 88, 230 + i * 18, "", 12.5, C.ink, "start"))), 'data-vl-fit="authored"');
       const stamp = (key, txt, col) => f.H(key, `<g transform="rotate(-10 334 246)">${O(334, 246, 38, "rgba(255,255,255,.9)", `stroke="${col}" stroke-width="3"`)}${O(334, 246, 31, "none", `stroke="${col}" stroke-width="1.2"`)}${T(334, 251, txt, 13, col)}</g>`);
       s += stamp("sOK", "Approved", C.green) + stamp("sNO", "Rejected", C.red) + stamp("sQ", "Decision?", C.orange);
       s += noteSVG(f, "nr", 292, 18) + noteSVG(f, "nt", 300, 110);

@@ -1431,7 +1431,7 @@
     ], [
       { t: "Software isn't process", on: ["sw", "ne", "mp"], hot: ["mp"] },
       { t: "Trigger shapes expectations", off: ["sw", "ne", "mp"], on: ["t1", "t2", "t3", "t4", "t5", "k1", "k2", "k3", "k4", "k5", "x1", "x2", "x3", "x4", "x5"], hot: ["x1", "x2", "x3", "x4", "x5"], f: "x3" },
-      { t: "First ask: why now?", on: ["wq"], s: { t1: { dim: 1 }, t2: { dim: 1 }, t3: { dim: 1 }, t4: { dim: 1 }, t5: { dim: 1 }, x1: { dim: 1 }, x2: { dim: 1 }, x3: { dim: 1 }, x4: { dim: 1 }, x5: { dim: 1 } }, hot: ["wq"] }
+        { t: "First ask: why now?", on: ["wq"], off: ["t1", "t2", "t3", "t4", "t5", "k1", "k2", "k3", "k4", "k5", "x1", "x2", "x3", "x4", "x5"], hot: ["wq"] }
     ]),
     // Act 10 (moments 33-35). Benchmark Part2 #078 "Data Workflow Animation"
     // https://dribbble.com/shots/27247003-Data-Workflow-Animation

@@ -1448,7 +1448,7 @@ const BG = [];
   // V3 (7-9) · adapted from https://lottiefiles.com/free-animation/business-solution-pNyNfkcRsa — boxes on a conveyor through a control station
   vis.push({ r: [7, 9], art: () => {
     let s = R(-400, 218, 1200, 22, C.slate) + rep(30, (i) => O(-390 + i * 40, 229, 6, "#8798aa")) + R(210, 70, 150, 148, "#dbe5ee", 12) + R(226, 86, 118, 60, C.night, 8) + T(285, 122, "Gate 1", 16, C.gold);
-    s += K("mc", card(60, 188, "Marina claim", C.coral));
+      s += K("mc", card(90, 264, "Marina claim", C.coral));
     s += H("spec", R(220, 152, 130, 52, C.white, 8, `stroke="${C.coral}" stroke-width="2"`) + T(285, 174, "30% of corporate", 12.5, C.coral) + T(285, 194, "arrivals", 13, C.coral) + okDot(350, 86, 13));
     s += H("rec", R(20, 40, 150, 150, C.wood, 10) + R(32, 52, 126, 38, "#c79e6c", 6) + R(32, 98, 126, 38, "#c79e6c", 6) + R(32, 144, 126, 38, "#c79e6c", 6) + R(80, 66, 30, 8, C.ink, 3) +
       T(95, 30, "Last month", 15, C.navy) + rep(6, (i) => H("sl" + i, R(60 + (i % 3) * 30, 200, 24, 16, C.white, 2, `stroke="${C.navy}" stroke-width="1.4"`))) +
@@ -1724,7 +1724,7 @@ const BG = [];
     s += H("co", cd + T(200, 36, "Co-design", 17, C.green));
     return s;
   }, play: (c, j) => {
-    c.vis({ pc: j === 0, cp: j === 1, co: j >= 2, ap: j === 3, cg: j === 3 });
+      c.vis({ pc: j === 0, cp: j === 1, co: j >= 2, ap: j === 2, cg: j === 3 });
     c.op("ap", j === 3 ? 0.6 : 0);
     c.mv("b83", { sx: j === 0 ? 1 : 0.02, pv: [40, 90] }, { d: 1.1 });
     for (let i = 0; i < 9; i++) c.mv("lf" + i, j === 1 ? { y: 10 } : { y: -20 }, { d: 1, dl: i * 0.08 });

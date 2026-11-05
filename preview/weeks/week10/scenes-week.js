@@ -3677,7 +3677,7 @@ function mirror(id) {
 {
   const id = "W10O3d";
   const BOARD = "#14263a";
-  const tile = (x, y, w, h, col, title) => R(x, y, w, h, "#1d3550", 12, `stroke="${col}" stroke-width="2.5"`) + T(x + w / 2, y + 26, title, 15, col);
+  const tile = (x, y, w, h, col, title) => R(x, y, w, h, "#1d3550", 12, `stroke="${col}" stroke-width="2.5"`) + R(x + 12, y + 12, 4, 20, col, 2) + T(x + w / 2 + 4, y + 26, title, 15, C.white);
   const panels = [
     // V1 · moments 0–3 · SVGator animation templates (keyframed states) — https://www.svgator.com/animation-templates
     // Adapted: a template card cycles through keyframed states and finally flips to its reverse.

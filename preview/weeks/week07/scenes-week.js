@@ -1055,7 +1055,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
         G("gl", 104, 196, R(40, 96, 128, 170, 10, C.gold, C.ink, 3) + R(40, 96, 22, 170, 6, C.ink) + trophy(110, 160, 1.4, C.paper) + noB(160, 100, 14) + T2(104, 300, "GLOSSY", "REPORT", { c: C.orange })) +
         G("pp", 296, 196, doc(296, 176, 2.6, C.green, 4) + okB(340, 112, 14) + T2(296, 300, "PRACTICAL", "HANDOVER", { c: C.green })) +
         G("iv", 200, 210, [0, 1, 2, 3].map((i) => node(60 + i * 94, 200, 22, C.navy, [JI.book, JI.room, JI.key, JI.bill][i](60 + i * 94, 200)) + (i < 3 ? Pa(`M${84 + i * 94} 200H${130 + i * 94}`, C.navy, 3) : "")).join("") +
-          clock(200, 150, 14, C.orange, 150) + lens(110, 250, 22, C.green) + T(104, 330, "HOW IT WORKS", { c: C.green }) + T(296, 330, "WHY PROBLEMS OCCUR", { a: "middle", z: 17, c: C.orange })) +
+          clock(200, 150, 14, C.orange, 150) + lens(110, 250, 22, C.green) + T(104, 316, "HOW IT WORKS", { c: C.green }) + T(296, 350, "WHY PROBLEMS OCCUR", { a: "middle", z: 17, c: C.orange })) +
         G("cc", 200, 220, [0, 1, 2, 3].map((i) => node(70 + i * 87, 140, 30, CCOL[i], CAND[i](70 + i * 87, 142, 0.95))).join("") +
           person(200, 290, 1.6, C.navy) + Pa("M70 172L190 258M157 172L196 256M244 172L204 256M331 172L210 258", C.navy, 2, 'stroke-dasharray="4 5"') + T(200, 352, "ONE DELIVERY TEAM", { c: C.navy })),
       steps: [
@@ -2038,7 +2038,7 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
           Ln("Lx2", "M60 115C160 115 160 265 340 265", C.green, 6) + eye(330, 90, 1.6, C.green) +
           person(60, 120, 1, C.green) + T(200, 330, "FOUR DEPARTMENTS CROSSED", { z: 17, c: C.green })) +
         G("ch", 200, 200, [["WEEK 5", "STRATEGY", C.navy], ["WEEK 6", "ARCHITECTURE", C.navy], ["GUEST", "ARRIVAL", C.green]].map(([a, b, c], i) =>
-          R(8 + i * 128, 140, 128, 100, 12, C.paper, c, 3.5) + T2(72 + i * 128, 184, a, b, { z: 17, c }) + (i < 2 ? Ci(136 + i * 128, 190, 7, C.navy) : "")).join("") + link(200, 290, 1.6, C.green)) +
+            R(52, 76 + i * 84, 296, 68, 9, C.paper, c, 3.5) + T2(200, 102 + i * 84, a, b, { z: 18, c }) + (i < 2 ? Ci(200, 152 + i * 84, 6, C.navy) : "")).join("") + link(200, 350, 1.3, C.green)) +
         G("cd", 200, 210, brk(40, 360, 250, C.green, 4) + Pa("M60 250Q200 120 340 250", C.gold, 3, 'stroke-dasharray="6 5"') + person(200, 180, 1.4, C.gold) + crown(200, 148, 0.8) + qB(244, 150, 14) +
           pill(200, 300, "CONDITIONAL APPROVAL", C.orange)) +
         G("mc", 200, 210, Pa("M60 220A60 60 0 0 1 180 220", C.navy, 10) + Pa("M120 220L150 180", C.orange, 4) + Ci(120, 220, 7, C.ink) + T2(120, 262, "REALISTIC", "MEASURES", { c: C.navy }) +
@@ -4205,4 +4205,3 @@ ${S} .vlw-blink{animation:vlw7v2-blink 1.6s ease-in-out infinite}
 
   addStyle("w07-claude-v2-part4", ["O3d","O3e","O3f"]);
 })();
-

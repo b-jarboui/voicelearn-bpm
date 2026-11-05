@@ -365,10 +365,10 @@ body.fs #repBtn{background:rgba(20,20,24,.55);color:#fff;border-color:rgba(255,2
 (function () {
   var ready, files = new Map();
   var list = ["https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js", "lab/content.js?v=25",
-    "lab/style-notebook.js?v=31", "lab/style-journey.js?v=31", "lab/style-board.js?v=4", "lab/style-motion.js?v=3",
-    "weeks/week10/cinematics.js?v=34", "scene-host.js?v=1"];
+    "lab/style-notebook.js?v=31", "lab/style-journey.js?v=31", "lab/style-board.js?v=5", "lab/style-motion.js?v=3",
+    "weeks/week10/cinematics.js?v=34", "lesson-art.js?v=1", "scene-host.js?v=2"];
   if (window.WEEK === 10) list.push("weeks/week10/w10-scenes.js?v=15");
-  list.push(window.WEEKDIR + "scenes-week.js?v=" + ([3, 6, 12].includes(window.WEEK) ? "11" : "10"));
+  list.push(window.WEEKDIR + "scenes-week.js?v=12");
   window.VL_PRESENTATION = { ready: false, load: function () {
     if (!ready) ready = new Promise(function (resolve) {
       requestAnimationFrame(function () { requestAnimationFrame(resolve); });

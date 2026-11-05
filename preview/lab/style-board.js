@@ -2035,7 +2035,7 @@ body .player .look.vb-root {
       const key = ["data-k","data-h","data-prop","data-name","data-id","id","class"].map(a=>n.getAttribute(a)||"").join(" ").toLowerCase();
       if (/bi-ok|bi-open/.test(key)) return "good";
       if (/bi-bad|bi-warn|bi-lock/.test(key)) return "problem";
-      if (/problem|risk|bad|fail|error|delay|backlog|block|queue|bottleneck|reject|alarm|waste|issue|broken|wait|gap|warn|stuck|incorrect|incomplete|unhappy|unsustainable|not-ready/.test(key)) return "problem";
+      if (/problem|risk|bad(?!ge)|fail|error|delay|backlog|block|queue|bottleneck|reject|alarm|waste|issue|broken|wait|gap|warn|stuck|incorrect|incomplete|unhappy|unsustainable|not-ready/.test(key)) return "problem";
       if (/customer|guest|client|visitor|traveller|traveler/.test(key)) return "customer";
       if (/good|positive|done|ready|success|approve|complete|solved|benefit|correct|happy|tick|checkmark|tested|resolved/.test(key)) return "good";
       // Several weekly engines use short keys and unkeyed labelled groups.

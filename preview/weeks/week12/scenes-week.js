@@ -374,7 +374,7 @@
 
       let threads = "";
       [C.navy, C.teal, C.goldD].forEach((c, k) => {
-        threads += G(`a-th a-th${k}`, P(wave(-260, 1200, 304, 6, 34, k * 2.09), c, 4));
+        threads += G(`a-th a-th${k}`, P(wave(-260, 1200, 294 + k * 8, 4, 120, k * 2.09), c, 2.25));
       });
       threads = G("a-ths", threads);
       return G("a-cam", threads + G("a-left", left) + G("a-rightw", AT(520, 0, G("a-right", right)))) +
@@ -452,7 +452,7 @@
       const worldOpacity = b === 11 ? 0.28 : b === 12 ? 0.5 : 1;
       a.to(".a-left", { o: cam[0] > -400 ? worldOpacity : 0 });
       a.to(".a-right", { o: cam[0] < -400 ? worldOpacity : 0 });
-      for (let k = 0; k < 3; k++) a.to(".a-th" + k, { o: thr || (b === 10 && half) ? 1 : 0.28 });
+      for (let k = 0; k < 3; k++) a.to(".a-th" + k, { o: thr || (b === 10 && half) ? 1 : 0.16 });
       a.vis(".a-thl", b === 11, { y: b === 11 ? 0 : 10 });
       a.to(".a-ths", { y: b === 11 ? -120 : 0, sy: b === 11 ? 2.4 : 1, d: 1.1 });
       a.to(".a-lead", { s: b === 11 && half ? 1.12 : 1, e: "back" });
@@ -1282,7 +1282,7 @@ function F_WEEKS(p) {
       s += f.H("near", person(160, 208, 1.05, C.plum) + chip(160, 172, "Coach on floor", { sz: 12, st: C.plum, fg: C.plum }));
       s += f.H("far", P("M188 236 C240 286 300 286 334 244", C.slate, 2, 'stroke-dasharray="4 5"') + R(296, 196, 96, 46, C.white, 6, `stroke="${C.slate}" stroke-width="2"`) + T(344, 215, "Remote helpdesk", 11.5, C.slate) + T(344, 233, "Ticket #42", 12, C.red) + clockI(386, 196, 10, C.red));
       s += f.H("farX", cross(344, 220, 2, C.red, 4));
-      s += f.H("cap", person(214, 210, 1, C.green) + person(240, 210, 1, C.green) + chip(227, 174, "+2 staff", { sz: 12, st: C.green, fg: C.green }));
+      s += f.H("cap", person(214, 210, 1, C.green) + person(240, 210, 1, C.green) + chip(227, 238, "+2 staff", { sz: 12, st: C.green, fg: C.green }));
       s += noteSVG(f, "nt", 250, 22) + noteSVG(f, "nb", 200, 284) + noteSVG(f, "nm", 250, 168);
       return s;
     },
@@ -1310,7 +1310,7 @@ function F_WEEKS(p) {
 // =====================================================================
 function F_ROUTER(p) {
   const f = pfx(p);
-  const POS = { start: [54, 150], dia: [150, 150], tech: [236, 78], proc: [236, 222] };
+  const POS = { start: [54, 150], dia: [62, 150], tech: [236, 78], proc: [236, 222] };
   return {
     p, bench: "Flowchart + Choosing a path (LottieFiles)",
     draw() {
@@ -2726,7 +2726,7 @@ function F_WEEKS(p) {
       s += f.H("near", person(160, 208, 1.05, C.plum) + chip(160, 172, "Coach on floor", { sz: 12, st: C.plum, fg: C.plum }));
       s += f.H("far", P("M188 236 C240 286 300 286 334 244", C.slate, 2, 'stroke-dasharray="4 5"') + R(296, 196, 96, 46, C.white, 6, `stroke="${C.slate}" stroke-width="2"`) + T(344, 215, "Remote helpdesk", 11.5, C.slate) + T(344, 233, "Ticket #42", 12, C.red) + clockI(386, 196, 10, C.red));
       s += f.H("farX", cross(344, 220, 2, C.red, 4));
-      s += f.H("cap", person(214, 210, 1, C.green) + person(240, 210, 1, C.green) + chip(227, 174, "+2 staff", { sz: 12, st: C.green, fg: C.green }));
+      s += f.H("cap", person(214, 210, 1, C.green) + person(240, 210, 1, C.green) + chip(227, 238, "+2 staff", { sz: 12, st: C.green, fg: C.green }));
       s += noteSVG(f, "nt", 250, 22) + noteSVG(f, "nb", 200, 284) + noteSVG(f, "nm", 250, 168);
       return s;
     },
@@ -2754,7 +2754,7 @@ function F_WEEKS(p) {
 // =====================================================================
 function F_ROUTER(p) {
   const f = pfx(p);
-  const POS = { start: [54, 150], dia: [150, 150], tech: [236, 78], proc: [236, 222] };
+  const POS = { start: [54, 150], dia: [62, 150], tech: [236, 78], proc: [236, 222] };
   return {
     p, bench: "Flowchart + Choosing a path (LottieFiles)",
     draw() {
@@ -4179,7 +4179,7 @@ function F_WEEKS(p) {
       s += f.H("near", person(160, 208, 1.05, C.plum) + chip(160, 172, "Coach on floor", { sz: 12, st: C.plum, fg: C.plum }));
       s += f.H("far", P("M188 236 C240 286 300 286 334 244", C.slate, 2, 'stroke-dasharray="4 5"') + R(296, 196, 96, 46, C.white, 6, `stroke="${C.slate}" stroke-width="2"`) + T(344, 215, "Remote helpdesk", 11.5, C.slate) + T(344, 233, "Ticket #42", 12, C.red) + clockI(386, 196, 10, C.red));
       s += f.H("farX", cross(344, 220, 2, C.red, 4));
-      s += f.H("cap", person(214, 210, 1, C.green) + person(240, 210, 1, C.green) + chip(227, 174, "+2 staff", { sz: 12, st: C.green, fg: C.green }));
+      s += f.H("cap", person(214, 210, 1, C.green) + person(240, 210, 1, C.green) + chip(227, 238, "+2 staff", { sz: 12, st: C.green, fg: C.green }));
       s += noteSVG(f, "nt", 250, 22) + noteSVG(f, "nb", 200, 284) + noteSVG(f, "nm", 250, 168);
       return s;
     },
@@ -4207,7 +4207,7 @@ function F_WEEKS(p) {
 // =====================================================================
 function F_ROUTER(p) {
   const f = pfx(p);
-  const POS = { start: [54, 150], dia: [150, 150], tech: [236, 78], proc: [236, 222] };
+  const POS = { start: [54, 150], dia: [62, 150], tech: [236, 78], proc: [236, 222] };
   return {
     p, bench: "Flowchart + Choosing a path (LottieFiles)",
     draw() {
